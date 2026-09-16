@@ -37,7 +37,14 @@ API는 저장소 루트의 `.env`를 시작할 때 자동으로 읽습니다. Ne
 ```powershell
 corepack pnpm typecheck
 corepack pnpm test
+corepack pnpm test:e2e
+corepack pnpm test:e2e:browser
 $env:EXPO_NO_TELEMETRY='1'; $env:EXPO_OFFLINE='1'; $env:CI='1'; corepack pnpm --filter @pastlife/mobile exec expo export --platform web
 ```
+
+`test:e2e:browser`는 API, Expo web, 관리자 앱을 자동으로 시작하고 Chromium에서
+모바일 전체 결과 여정과 관리자 초안·게시·롤백 여정을 검증한 뒤 모든 프로세스를
+종료합니다. 테스트는 메모리 저장소를 강제하므로 로컬 또는 Neon 데이터에 영향을
+주지 않습니다. 실패 스크린샷과 trace는 `output/playwright/`에 생성됩니다.
 
 자세한 구현 범위와 제한은 [첫 구현 보고서](docs/first-slice-report.md)와 [실행 계획](docs/superpowers/plans/2026-09-16-past-life-vertical-slice.md)을 참고하세요.
