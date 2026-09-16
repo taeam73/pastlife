@@ -16,6 +16,13 @@ corepack pnpm --filter @pastlife/content generate
 
 PostgreSQL을 사용할 때는 `.env`의 `USE_IN_MEMORY_DB=false`, 런타임용 `DATABASE_URL`, migration용 `DIRECT_URL`을 설정하고 Prisma migration/seed를 실행합니다. 로컬 PostgreSQL에서는 두 URL이 같아도 됩니다.
 
+기존 `.env`에 Neon direct URL만 들어 있다면 다음 명령으로 비밀값을 출력하지
+않고 pooled/direct 설정으로 분리할 수 있습니다.
+
+```powershell
+corepack pnpm env:neon
+```
+
 ```powershell
 docker compose -f infra/docker-compose.yml up -d
 corepack pnpm db:migrate

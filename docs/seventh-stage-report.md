@@ -16,10 +16,12 @@
 - API vertical E2E 통과
 - Prisma schema validate 통과
 - Expo SDK 57 web static export 통과(10개 라우트)
+- 실제 Neon migration 상태가 최신임을 확인
+- pooled URL로 API 실행 후 콘텐츠 36문항·216선택지·버전 2.0.0 조회 확인
 
-현재 로컬 비밀 설정 파일은 기존 Neon direct URL만 보유하고 있습니다. 실제 API를
-Neon에 연결하기 전 Neon Dashboard에서 pooled URL을 발급해 `DATABASE_URL`에 넣고,
-기존 direct URL을 `DIRECT_URL`로 옮겨야 합니다.
+로컬 `.env`는 기존 direct URL을 `DIRECT_URL`로 보존하고, 동일한 Neon endpoint의
+pooled URL을 `DATABASE_URL`로 분리했습니다. 변환 과정과 검증 출력에는 자격 증명을
+노출하지 않았습니다.
 
 ## 다음 범위
 

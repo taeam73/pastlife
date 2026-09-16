@@ -10,6 +10,10 @@ corepack pnpm db:seed
 corepack pnpm --filter @pastlife/api start
 ```
 
+기존 `.env`에 Neon direct URL만 설정된 환경은 `corepack pnpm env:neon`으로
+`DATABASE_URL`과 `DIRECT_URL`을 안전하게 분리할 수 있습니다. 이 명령은 URL을
+콘솔에 출력하지 않으며 반복 실행해도 같은 구성을 유지합니다.
+
 API는 `DATABASE_URL`만 사용하며 Neon에서는 `-pooler` 호스트와
 `sslmode=require`를 시작 시 검증합니다. Prisma migration과 seed는
 `schema.prisma`의 `directUrl`을 통해 `DIRECT_URL`을 사용합니다. 따라서 migration

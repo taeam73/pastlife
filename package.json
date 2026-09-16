@@ -12,6 +12,7 @@
     "typecheck": "corepack pnpm -r --if-present typecheck",
     "test": "corepack pnpm -r --if-present test",
     "test:e2e": "corepack pnpm --filter @pastlife/api test:e2e",
+    "env:neon": "node scripts/configure-neon-env.mjs",
     "db:migrate": "corepack pnpm exec prisma migrate dev --schema prisma/schema.prisma",
     "db:seed": "corepack pnpm exec prisma db seed --schema prisma/schema.prisma"
   },
