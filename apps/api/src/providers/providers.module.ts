@@ -17,6 +17,7 @@ import { ASSESSMENT_REPOSITORY } from '../repositories/assessment.repository.js'
 import { MemoryAssessmentRepository } from '../repositories/memory-assessment.repository.js';
 import { PrismaAssessmentRepository } from '../repositories/prisma-assessment.repository.js';
 import { resolveDatabaseRuntimeConfig } from '../config/database.js';
+import { resolveAuthRuntimeConfig } from '../config/auth.js';
 
 @Global()
 @Module({
@@ -44,7 +45,8 @@ import { resolveDatabaseRuntimeConfig } from '../config/database.js';
     {
       provide: GOOGLE_IDENTITY_PROVIDER,
       inject: [MockGoogleProvider, GoogleOAuthProvider],
-      useFactory: (mock: MockGoogleProvider, oauth: GoogleOAuthProvider) => process.env.GOOGLE_CLIENT_ID && process.env.USE_MOCK_GOOGLE !== 'true' ? oauth : mock,
+      useFactory: (mock: MockGoogleProvider, oauth: GoogleOAuthProvider) =>
+        resolveAuthRuntimeConfig().googleMode === 'mock' ? mock : oauth,
     },
   ],
   exports: [ASSESSMENT_REPOSITORY, AD_PROVIDER, NARRATIVE_PROVIDER, IMAGE_PROVIDER, GOOGLE_IDENTITY_PROVIDER, IMAGE_STORAGE],

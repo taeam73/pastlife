@@ -17,6 +17,7 @@
     "@pastlife/contracts": "workspace:*",
     "@pastlife/scoring": "workspace:*",
     "@prisma/client": "^6.0.0",
+    "google-auth-library": "^11.0.2",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.0",
     "zod": "^4.0.0"

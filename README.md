@@ -32,6 +32,21 @@ corepack pnpm --filter @pastlife/api start
 
 API는 저장소 루트의 `.env`를 시작할 때 자동으로 읽습니다. Neon에서는 `DATABASE_URL`에 pooled URL, `DIRECT_URL`에 direct URL을 지정합니다. API는 Neon direct URL이나 SSL 누락을 거부하며, 운영 모드에서는 메모리 저장소를 허용하지 않습니다. Docker가 없는 개발 환경에서 `USE_IN_MEMORY_DB=true`를 지정하면 메모리 저장소를 사용합니다. API는 `4000`, Expo는 `8081`, 관리자는 `3000` 포트를 사용합니다.
 
+## Google 로그인 설정
+
+로컬 브라우저 테스트는 `.env.example`처럼 `USE_MOCK_GOOGLE=true`와
+`EXPO_PUBLIC_USE_MOCK_GOOGLE=true`를 명시해야만 테스트 계정 로그인을 노출합니다.
+운영 환경에서는 두 값을 `false`로 두고 다음 값을 설정합니다.
+
+- API `GOOGLE_CLIENT_IDS`: 허용할 Web, iOS, Android OAuth 클라이언트 ID를 쉼표로 연결
+- 앱 `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`, `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`, `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`
+- 32자 이상의 임의 문자열인 `JWT_SECRET`
+
+Google Cloud Console의 승인된 리디렉션 URI에는 웹 배포 주소의 `/login`을 등록하고,
+iOS·Android는 `pastlife://login` 스킴을 사용합니다. 모바일 OAuth는 Expo Go가 아닌
+development build 또는 배포 빌드에서 확인합니다. 실제 비밀값과 배포 URL은 Git에
+추가하지 않고 로컬 `.env` 또는 배포 플랫폼의 secret/environment 설정에만 저장합니다.
+
 ## 검증
 
 ```powershell

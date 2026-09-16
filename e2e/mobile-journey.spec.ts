@@ -22,9 +22,12 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   await expect(page.getByRole('button', { name: '결과 공유하기' })).toBeVisible();
 
   await page.getByRole('button', { name: '아카이브에 저장하기' }).click();
+  await expect(page).toHaveURL(/\/login\?resultId=/);
+  await expect(page.getByText('Google 계정으로 로그인')).toBeVisible();
+  await page.getByRole('button', { name: '테스트 계정으로 계속' }).click();
   await expect(page).toHaveURL(/\/archive$/);
   await expect(page.getByText('나의 아카이브')).toBeVisible();
-  await expect(page.getByText(/No\.\d{2}/)).toBeVisible();
+  await expect(page.getByText(/^No\.\d{2}$/)).toBeVisible();
 
   await page.goto('/result');
   await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();

@@ -9,9 +9,11 @@ describe('anonymous vertical flow', () => {
   let app!: INestApplication;
   const originalDatabaseUrl = process.env.DATABASE_URL;
   const originalUseInMemoryDb = process.env.USE_IN_MEMORY_DB;
+  const originalUseMockGoogle = process.env.USE_MOCK_GOOGLE;
 
   beforeAll(async () => {
     process.env.USE_IN_MEMORY_DB = 'true';
+    process.env.USE_MOCK_GOOGLE = 'true';
     delete process.env.DATABASE_URL;
     const module = await Test.createTestingModule({ imports: [AppModule] }).compile();
     app = module.createNestApplication();
@@ -25,6 +27,8 @@ describe('anonymous vertical flow', () => {
     else process.env.DATABASE_URL = originalDatabaseUrl;
     if (originalUseInMemoryDb === undefined) delete process.env.USE_IN_MEMORY_DB;
     else process.env.USE_IN_MEMORY_DB = originalUseInMemoryDb;
+    if (originalUseMockGoogle === undefined) delete process.env.USE_MOCK_GOOGLE;
+    else process.env.USE_MOCK_GOOGLE = originalUseMockGoogle;
   });
 
   it('completes six stages, remains idempotent, and unlocks basic once', async () => {
@@ -86,6 +90,8 @@ describe('anonymous vertical flow', () => {
     const shareAgain = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/share`).expect(200);
     expect(shareAgain.body.shareToken).toBe(share.body.shareToken);
     const auth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:test@example.com' }).expect(201);
+    const repeatedAuth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:test@example.com' }).expect(201);
+    expect(repeatedAuth.body.user.id).toBe(auth.body.user.id);
     const bearer = { Authorization: `Bearer ${auth.body.accessToken}` };
     await request(app.getHttpServer()).post(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(201);
     await request(app.getHttpServer()).get('/api/v1/auth/archive').set(bearer).expect(200).expect(({ body }) => expect(body.items[0].resultId).toBe(resultId));

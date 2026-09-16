@@ -247,6 +247,7 @@ model User {
   updatedAt   DateTime       @updatedAt
   archives    ArchiveEntry[]
 
+  @@unique([provider, providerSub])
   @@map("users")
 }
 
