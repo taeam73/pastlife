@@ -13,3 +13,4 @@ apps/mobile/dist/
 prisma/*.db
 prisma/*.db-journal
 .git-codex-backup/
+output/playwright/

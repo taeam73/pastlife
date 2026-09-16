@@ -12,15 +12,17 @@
     "typecheck": "corepack pnpm -r --if-present typecheck",
     "test": "corepack pnpm -r --if-present test",
     "test:e2e": "corepack pnpm --filter @pastlife/api test:e2e",
+    "test:e2e:browser": "node scripts/run-browser-e2e.mjs",
     "env:neon": "node scripts/configure-neon-env.mjs",
     "db:migrate": "corepack pnpm exec prisma migrate dev --schema prisma/schema.prisma",
     "db:seed": "corepack pnpm exec prisma db seed --schema prisma/schema.prisma"
   },
   "dependencies": {
-    "@prisma/client": "^6.0.0",
-    "@pastlife/content": "workspace:*"
+    "@pastlife/content": "workspace:*",
+    "@prisma/client": "^6.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/node": "^24.0.0",
     "prisma": "^6.0.0",
     "tsx": "^4.0.0",
