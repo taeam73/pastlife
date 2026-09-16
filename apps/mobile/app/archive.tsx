@@ -1,0 +1,9 @@
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { api } from '../src/api/client';
+import { Screen } from '../src/components/Screen';
+import { loadAuth } from '../src/session/store';
+import { colors, spacing } from '../src/theme/tokens';
+type Item = { resultId: string; recordNo: number; headline: string; createdAt: string };
+export default function ArchiveScreen() { const [items, setItems] = useState<Item[] | null>(null); const [error, setError] = useState<string | null>(null); useEffect(() => { void (async () => { const auth = await loadAuth(); if (!auth) return setError('로그인이 필요합니다.'); try { setItems((await api.archiveList(auth.accessToken)).items); } catch { setError('아카이브를 불러오지 못했습니다.'); } })(); }, []); if (error) return <Screen><Text style={styles.error}>{error}</Text></Screen>; if (!items) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>; return <Screen><Text style={styles.title}>나의 아카이브</Text>{items.length === 0 ? <Text style={styles.empty}>저장된 전생 기록이 없습니다.</Text> : items.map((item) => <View key={item.resultId} style={styles.card}><Text style={styles.record}>No.{String(item.recordNo).padStart(2, '0')}</Text><Text style={styles.headline}>{item.headline}</Text><Text style={styles.date}>{new Date(item.createdAt).toLocaleDateString('ko-KR')}</Text></View>)}</Screen>; }
+const styles = StyleSheet.create({ title: { color: colors.text, fontSize: 28, fontWeight: '700', marginBottom: spacing.lg }, card: { backgroundColor: colors.surfaceRaised, borderRadius: 16, padding: spacing.md, marginBottom: spacing.md }, record: { color: colors.accent }, headline: { color: colors.text, fontSize: 18, marginTop: 4 }, date: { color: colors.muted, marginTop: 8 }, empty: { color: colors.muted }, error: { color: colors.error } });

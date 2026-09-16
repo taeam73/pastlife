@@ -1,0 +1,29 @@
+{
+  "name": "past-life-archive",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@12.4.2",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "corepack pnpm --parallel --filter @pastlife/api --filter @pastlife/mobile --filter @pastlife/admin --filter @pastlife/worker dev",
+    "lint": "corepack pnpm -r --if-present lint",
+    "typecheck": "corepack pnpm -r --if-present typecheck",
+    "test": "corepack pnpm -r --if-present test",
+    "test:e2e": "corepack pnpm --filter @pastlife/api test:e2e",
+    "db:migrate": "corepack pnpm exec prisma migrate dev --schema prisma/schema.prisma",
+    "db:seed": "corepack pnpm exec prisma db seed --schema prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "@pastlife/content": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "prisma": "^6.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.0.0"
+  }
+}

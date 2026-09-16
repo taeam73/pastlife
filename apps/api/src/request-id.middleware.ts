@@ -1,0 +1,2 @@
+import { randomUUID } from 'node:crypto';
+export function requestIdMiddleware(request: { headers: Record<string, string | string[] | undefined> }, response: { setHeader: (name: string, value: string) => void }, next: () => void) { const incoming = request.headers['x-request-id']; const id = typeof incoming === 'string' && incoming.length < 100 ? incoming : randomUUID(); response.setHeader('x-request-id', id); next(); }

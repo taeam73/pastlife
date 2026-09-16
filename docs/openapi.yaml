@@ -1,0 +1,196 @@
+openapi: 3.1.0
+info:
+  title: Past Life Archive API
+  version: 0.1.0
+  description: Anonymous first-slice assessment API.
+servers:
+  - url: http://localhost:4000/api/v1
+paths:
+  /admin/content/summary:
+    get:
+      operationId: getContentSummary
+      responses:
+        '200': { description: Content catalog counts and active version }
+  /sessions:
+    post:
+      operationId: createSession
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateSessionRequest' }
+      responses:
+        '201':
+          description: Anonymous session created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CreateSessionResponse' }
+  /sessions/{sessionId}/questions/{stage}:
+    get:
+      operationId: getQuestion
+      parameters:
+        - { $ref: '#/components/parameters/SessionId' }
+        - { $ref: '#/components/parameters/Stage' }
+      responses:
+        '200':
+          description: One of six deterministic stage questions
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Question' }
+  /sessions/{sessionId}/answers/{stage}:
+    put:
+      operationId: saveAnswer
+      parameters:
+        - { $ref: '#/components/parameters/SessionId' }
+        - { $ref: '#/components/parameters/Stage' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SaveAnswerRequest' }
+      responses:
+        '200': { description: Answer saved }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /sessions/{sessionId}/complete:
+    post:
+      operationId: completeSession
+      parameters: [{ $ref: '#/components/parameters/SessionId' }]
+      responses:
+        '202': { description: Result snapshot accepted }
+        '409': { description: Invalid session state }
+  /results/{resultId}/status:
+    get:
+      operationId: getResultStatus
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      responses:
+        '200': { description: Result status }
+  /sessions/{sessionId}/ads/{slot}/complete:
+    post:
+      operationId: completeAd
+      parameters:
+        - { $ref: '#/components/parameters/SessionId' }
+        - name: slot
+          in: path
+          required: true
+          schema: { type: integer, minimum: 1, maximum: 3 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [providerEventId]
+              properties: { providerEventId: { type: string } }
+      responses:
+        '201': { description: Idempotent unlock response }
+        '409': { description: Ad not verified }
+  /results/{resultId}/basic:
+    get:
+      operationId: getBasicResult
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      responses:
+        '200':
+          description: Seven basic result blocks
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BasicResult' }
+        '403': { description: UNLOCK_REQUIRED until AD 1 is verified }
+  /results/{resultId}/deep:
+    get:
+      operationId: getDeepResult
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      responses:
+        '200': { description: Four deep result blocks, content: { application/json: { schema: { $ref: '#/components/schemas/ExtendedResult' } } } }
+        '403': { description: UNLOCK_REQUIRED until AD 2 is verified }
+  /results/{resultId}/guide:
+    get:
+      operationId: getGuideResult
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      responses:
+        '200': { description: Four present-life guide blocks, content: { application/json: { schema: { $ref: '#/components/schemas/ExtendedResult' } } } }
+        '403': { description: UNLOCK_REQUIRED until AD 3 is verified }
+  /results/{resultId}/share:
+    get:
+      operationId: createResultShareLink
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      responses:
+        '200': { description: Stable share link, content: { application/json: { schema: { $ref: '#/components/schemas/ShareResult' } } } }
+        '404': { description: Result not found }
+components:
+  parameters:
+    SessionId: { name: sessionId, in: path, required: true, schema: { type: string } }
+    ResultId: { name: resultId, in: path, required: true, schema: { type: string } }
+    Stage: { name: stage, in: path, required: true, schema: { type: integer, minimum: 1, maximum: 6 } }
+  responses:
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+  schemas:
+    CreateSessionRequest:
+      type: object
+      properties: { locale: { type: string, default: ko } }
+    CreateSessionResponse:
+      type: object
+      required: [sessionId, seed, contentVersion, status]
+      properties:
+        sessionId: { type: string }
+        seed: { type: string }
+        contentVersion: { type: string, example: 2.0.0 }
+        status: { type: string, example: CREATED }
+    Question:
+      type: object
+      required: [id, stage, text, choices]
+      properties:
+        id: { type: string }
+        stage: { type: integer }
+        text: { type: string }
+        choices:
+          type: array
+          minItems: 6
+          maxItems: 6
+          items:
+            type: object
+            required: [id, text, displayOrder]
+            properties:
+              id: { type: string }
+              text: { type: string }
+              displayOrder: { type: integer }
+    SaveAnswerRequest:
+      type: object
+      required: [questionId, choiceId]
+      properties:
+        questionId: { type: string }
+        choiceId: { type: string }
+    BasicResult:
+      type: object
+      required: [resultId, recordNo, headline, image, blocks, disclaimer]
+      properties:
+        resultId: { type: string }
+        recordNo: { type: integer, minimum: 1, maximum: 99 }
+        headline: { type: string }
+        image: { type: object }
+        blocks: { type: array, minItems: 7, maxItems: 7, items: { type: object } }
+        disclaimer: { type: string }
+    ExtendedResult:
+      type: object
+      required: [resultId, blocks, disclaimer]
+      properties:
+        resultId: { type: string }
+        blocks: { type: array, minItems: 4, maxItems: 4, items: { type: object } }
+        disclaimer: { type: string }
+    ShareResult:
+      type: object
+      required: [resultId, shareToken, shareUrl, expiresAt]
+      properties:
+        resultId: { type: string }
+        shareToken: { type: string, minLength: 8 }
+        shareUrl: { type: string, format: uri }
+        expiresAt: { type: string, format: date-time }
+    ApiError:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string }
+        message: { type: string }

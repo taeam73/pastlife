@@ -1,0 +1,13 @@
+{
+  "name": "@pastlife/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./vitest": "./vitest/base.ts",
+    "./typescript": "./typescript/base.json"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  }
+}

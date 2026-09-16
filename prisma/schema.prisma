@@ -1,0 +1,376 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SessionStatus {
+  CREATED
+  QUESTION_IN_PROGRESS
+  QUESTION_COMPLETE
+  CALCULATING
+  NARRATIVE_GENERATING
+  RESULT_READY
+  BASIC_UNLOCKED
+  DEEP_UNLOCKED
+  GUIDE_UNLOCKED
+  IMAGE_GENERATING
+  IMAGE_READY
+  IMAGE_FAILED
+  COMPLETED
+  ARCHIVED
+  FAILED
+}
+
+enum ResultStatus {
+  NARRATIVE_GENERATING
+  READY
+  FAILED
+}
+
+enum AdEventStatus {
+  VERIFIED
+  REJECTED
+}
+
+enum UnlockType {
+  BASIC
+  DEEP
+  GUIDE
+}
+
+model ContentVersion {
+  id          String        @id @default(cuid())
+  version     String        @unique
+  status      ContentStatus @default(DRAFT)
+  digest      String
+  publishedAt DateTime?
+  questions   Question[]
+  createdAt   DateTime      @default(now())
+
+  @@map("content_versions")
+}
+
+model Question {
+  id               String         @id
+  stage            Int
+  translationKey   String
+  weightProfile    String
+  status           ContentStatus  @default(PUBLISHED)
+  contentVersion   ContentVersion @relation(fields: [contentVersionId], references: [id], onDelete: Restrict)
+  contentVersionId String
+  choices          Choice[]
+
+  @@index([stage, contentVersionId])
+  @@map("questions")
+}
+
+model Choice {
+  id             String            @id
+  question       Question          @relation(fields: [questionId], references: [id], onDelete: Restrict)
+  questionId     String
+  translationKey String
+  displayOrder   Int
+  tagScores      ChoiceTagScore[]
+  axisScores     ChoiceAxisScore[]
+
+  @@unique([questionId, displayOrder])
+  @@map("choices")
+}
+
+model Tag {
+  id      String           @id @default(cuid())
+  code    String           @unique
+  group   String
+  choices ChoiceTagScore[]
+
+  @@map("tags")
+}
+
+model ChoiceTagScore {
+  choice   Choice @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+  choiceId String
+  tag      Tag    @relation(fields: [tagId], references: [id], onDelete: Restrict)
+  tagId    String
+  score    Int
+
+  @@id([choiceId, tagId])
+  @@map("choice_tag_scores")
+}
+
+model ChoiceAxisScore {
+  choice   Choice @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+  choiceId String
+  axisCode String
+  score    Int
+
+  @@id([choiceId, axisCode])
+  @@map("choice_axis_scores")
+}
+
+model Era {
+  id             String               @id
+  code           String               @unique
+  yearStart      Int
+  yearEnd        Int
+  translationKey String
+  affinityTags   Json
+  locations      HistoricalLocation[]
+
+  @@map("eras")
+}
+
+model Region {
+  id             String               @id
+  code           String               @unique
+  translationKey String
+  affinityTags   Json
+  locations      HistoricalLocation[]
+
+  @@map("regions")
+}
+
+model HistoricalLocation {
+  id                String @id
+  era               Era    @relation(fields: [eraId], references: [id], onDelete: Restrict)
+  eraId             String
+  region            Region @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  regionId          String
+  historicalNameKey String
+  presentContextKey String
+  affinityTags      Json
+
+  @@unique([id, eraId, regionId])
+  @@index([eraId, regionId])
+  @@map("historical_locations")
+}
+
+model SocialClass {
+  id             String @id
+  code           String @unique
+  translationKey String
+  affinityTags   Json
+
+  @@map("social_classes")
+}
+
+model Occupation {
+  id             String           @id
+  classId        String
+  translationKey String
+  promptTags     Json
+  rules          OccupationRule[]
+
+  @@map("occupations")
+}
+
+model OccupationRule {
+  id           String     @id @default(cuid())
+  occupation   Occupation @relation(fields: [occupationId], references: [id], onDelete: Cascade)
+  occupationId String
+  eraId        String
+  locationId   String
+  minScores    Json
+  exclusions   Json
+
+  @@unique([occupationId, eraId, locationId])
+  @@map("occupation_rules")
+}
+
+model Personality {
+  id             String @id
+  translationKey String
+  tagRules       Json
+
+  @@map("personalities")
+}
+
+model Relationship {
+  id             String @id
+  translationKey String
+  tagRules       Json
+  exclusions     Json
+
+  @@map("relationships")
+}
+
+model LifeEvent {
+  id             String @id
+  translationKey String
+  eraRules       Json
+  locationRules  Json
+  tagRules       Json
+
+  @@map("life_events")
+}
+
+model LastMemory {
+  id           String @id
+  placeKey     String
+  companionKey String
+  emotionKey   String
+  regretKey    String
+  tagRules     Json
+
+  @@map("last_memories")
+}
+
+model Translation {
+  id      String        @id @default(cuid())
+  locale  String
+  key     String
+  text    String
+  status  ContentStatus @default(PUBLISHED)
+  version String
+
+  @@unique([locale, key, version])
+  @@map("translations")
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  displayName  String
+  provider     String         @default("google")
+  providerSub  String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  archives     ArchiveEntry[]
+
+  @@map("users")
+}
+
+model ArchiveEntry {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  result    Result   @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  resultId  String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, resultId])
+  @@index([userId, createdAt])
+  @@map("archive_entries")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  target    String?
+  requestId String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([action, createdAt])
+  @@map("audit_logs")
+}
+
+model Session {
+  id             String          @id @default(cuid())
+  anonymousId    String          @unique
+  locale         String          @default("ko")
+  seed           String
+  contentVersion String
+  status         SessionStatus   @default(CREATED)
+  expiresAt      DateTime
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  answers        SessionAnswer[]
+  result         Result?
+  adEvents       AdEvent[]
+  unlocks        SessionUnlock[]
+
+  @@index([contentVersion, status])
+  @@map("sessions")
+}
+
+model SessionAnswer {
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId  String
+  stage      Int
+  questionId String
+  choiceId   String
+  answeredAt DateTime @default(now())
+
+  @@id([sessionId, stage])
+  @@map("session_answers")
+}
+
+model Result {
+  id             String        @id @default(cuid())
+  session        Session       @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  sessionId      String        @unique
+  answerHash     String
+  contentVersion String
+  recordNo       Int
+  coreJson       Json
+  status         ResultStatus  @default(NARRATIVE_GENERATING)
+  createdAt      DateTime      @default(now())
+  texts          ResultText[]
+  images         ResultImage[]
+  archives       ArchiveEntry[]
+
+  @@index([answerHash, contentVersion])
+  @@map("results")
+}
+
+model ResultText {
+  id               String @id @default(cuid())
+  result           Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  resultId         String
+  locale           String
+  blocksJson       Json
+  generatorVersion String
+
+  @@unique([resultId, locale])
+  @@map("result_texts")
+}
+
+model ResultImage {
+  id         String @id @default(cuid())
+  result     Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  resultId   String
+  sourceType String
+  storageUrl String
+  promptHash String
+  status     String
+
+  @@unique([resultId, sourceType])
+  @@map("result_images")
+}
+
+model AdEvent {
+  id              String         @id @default(cuid())
+  session         Session        @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId       String
+  slot            Int
+  providerEventId String         @unique
+  status          AdEventStatus
+  occurredAt      DateTime       @default(now())
+  unlock          SessionUnlock?
+
+  @@index([sessionId, slot])
+  @@map("ad_events")
+}
+
+model SessionUnlock {
+  id         String     @id @default(cuid())
+  session    Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId  String
+  unlockType UnlockType
+  adEvent    AdEvent    @relation(fields: [adEventId], references: [id], onDelete: Restrict)
+  adEventId  String     @unique
+  unlockedAt DateTime   @default(now())
+
+  @@unique([sessionId, unlockType])
+  @@map("session_unlocks")
+}

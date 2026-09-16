@@ -1,0 +1,83 @@
+import 'reflect-metadata';
+import type { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import request from 'supertest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { AppModule } from '../src/app.module.js';
+
+describe('anonymous vertical flow', () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({ imports: [AppModule] }).compile();
+    app = module.createNestApplication();
+    app.setGlobalPrefix('api/v1');
+    await app.init();
+  });
+
+  afterAll(async () => app.close());
+
+  it('completes six stages, remains idempotent, and unlocks basic once', async () => {
+    await request(app.getHttpServer()).get('/api/v1/auth/archive').expect(401);
+    process.env.ADMIN_TOKEN = 'test-admin-token';
+    await request(app.getHttpServer()).get('/api/v1/admin/content/summary').expect(401);
+    await request(app.getHttpServer()).get('/api/v1/admin/content/summary').set('x-admin-token', 'test-admin-token').expect(200);
+    delete process.env.ADMIN_TOKEN;
+    await request(app.getHttpServer()).get('/api/v1/admin/content/summary').expect(200).expect(({ body }) => { expect(body.questions).toBe(36); expect(body.choices).toBe(216); });
+    await request(app.getHttpServer()).get('/api/v1/admin/content/questions').expect(200).expect(({ body }) => expect(body.items).toHaveLength(36));
+    await request(app.getHttpServer()).put('/api/v1/admin/content/questions/Q1_01/draft').send({ text: 'draft' }).expect(200);
+    await request(app.getHttpServer()).get('/api/v1/admin/content/drafts').expect(200).expect(({ body }) => expect(body.items).toHaveLength(1));
+    await request(app.getHttpServer()).post('/api/v1/admin/content/publish').send().expect(201).expect(({ body }) => expect(body.published).toBe(1));
+    const history = await request(app.getHttpServer()).get('/api/v1/admin/content/publish-history').expect(200);
+    expect(history.body.items[0].published).toBe(1);
+    await request(app.getHttpServer()).post(`/api/v1/admin/content/rollback?digest=${history.body.items[0].digest}`).expect(201).expect(({ body }) => expect(body.restored).toBe(1));
+    const created = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko' }).expect(201);
+    const sessionId = created.body.sessionId as string;
+
+    for (let stage = 1; stage <= 6; stage += 1) {
+      const question = await request(app.getHttpServer()).get(`/api/v1/sessions/${sessionId}/questions/${stage}`).expect(200);
+      expect(question.body.choices).toHaveLength(6);
+      await request(app.getHttpServer())
+        .put(`/api/v1/sessions/${sessionId}/answers/${stage}`)
+        .send({ questionId: question.body.id, choiceId: question.body.choices[0].id })
+        .expect(200);
+    }
+
+    const completions = await Promise.all([1, 2, 3].map(() => request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/complete`).send().expect(202)));
+    const resultIds = completions.map(({ body }) => body.resultId);
+    expect(new Set(resultIds).size).toBe(1);
+    const resultId = resultIds[0];
+
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/status`).expect(200).expect(({ body }) => expect(body.status).toBe('RESULT_READY'));
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(403).expect(({ body }) => expect(body.slot).toBe(1));
+
+    const providerEventId = `fake-ad-1-${sessionId}`;
+    await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/1/complete`).send({ providerEventId }).expect(201);
+    await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/1/complete`).send({ providerEventId }).expect(201);
+
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(200).expect(({ body }) => {
+      expect(body.blocks).toHaveLength(7);
+      expect(body.recordNo).toBeGreaterThanOrEqual(1);
+      expect(body.disclaimer).toContain('창작 스토리텔링');
+      expect(body.image.sourceType).toBe('LIBRARY');
+    });
+
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/deep`).expect(403).expect(({ body }) => expect(body.slot).toBe(2));
+    await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${sessionId}` }).expect(201);
+    await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${sessionId}` }).expect(201);
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/deep`).expect(200).expect(({ body }) => expect(body.blocks).toHaveLength(4));
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/guide`).expect(403).expect(({ body }) => expect(body.slot).toBe(3));
+    await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/3/complete`).send({ providerEventId: `fake-ad-3-${sessionId}` }).expect(201);
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/guide`).expect(200).expect(({ body }) => expect(body.blocks).toHaveLength(4));
+    const share = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/share`).expect(200);
+    expect(share.body.resultId).toBe(resultId);
+    expect(share.body.shareToken).toHaveLength(24);
+    expect(share.body.shareUrl).toContain(share.body.shareToken);
+    const shareAgain = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/share`).expect(200);
+    expect(shareAgain.body.shareToken).toBe(share.body.shareToken);
+    const auth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:test@example.com' }).expect(201);
+    const bearer = { Authorization: `Bearer ${auth.body.accessToken}` };
+    await request(app.getHttpServer()).post(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(201);
+    await request(app.getHttpServer()).get('/api/v1/auth/archive').set(bearer).expect(200).expect(({ body }) => expect(body.items[0].resultId).toBe(resultId));
+  });
+});

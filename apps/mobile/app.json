@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "전생록",
+    "slug": "past-life-archive",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "pastlife",
+    "userInterfaceStyle": "dark",
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": true },
+    "web": { "bundler": "metro", "output": "static" }
+  }
+}

@@ -1,0 +1,3840 @@
+[
+  {
+    "id": "Q1_01",
+    "stage": 1,
+    "text": "눈을 떠보니 낯선 장소에 서 있습니다. 가장 먼저 어디로 향하고 싶나요?",
+    "choices": [
+      {
+        "id": "Q1_01_C1",
+        "text": "오래된 골목길",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "urbanity",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q1_01_C2",
+        "text": "끝없이 펼쳐진 바다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "adventure",
+            "score": 2
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "mobility",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q1_01_C3",
+        "text": "깊은 숲",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 2
+          },
+          {
+            "tag": "survival",
+            "score": 2
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "urbanity",
+            "score": -2
+          }
+        ]
+      },
+      {
+        "id": "Q1_01_C4",
+        "text": "높은 산길",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "independence",
+            "score": 2
+          },
+          {
+            "tag": "courage",
+            "score": 2
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "risk",
+            "score": 1
+          }
+        ]
+      },
+      {
+        "id": "Q1_01_C5",
+        "text": "사람들이 모인 광장",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "urbanity",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q1_01_C6",
+        "text": "희미한 불빛이 보이는 집",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "mobility",
+            "score": -1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Q1_02",
+    "stage": 1,
+    "text": "멀리서 하나의 소리가 들립니다. 가장 먼저 끌리는 소리는 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q1_02_C1",
+        "text": "파도가 바위에 부딪히는 소리",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "adventure",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_02_C2",
+        "text": "시장 사람들의 웅성거림",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_02_C3",
+        "text": "종이나 목탁이 울리는 소리",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_02_C4",
+        "text": "말발굽과 수레가 지나가는 소리",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 1
+          },
+          {
+            "tag": "adventure",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "mobility",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q1_02_C5",
+        "text": "망치로 금속을 두드리는 소리",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_02_C6",
+        "text": "장작불이 타는 소리",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q1_03",
+    "stage": 1,
+    "text": "손에 하나의 물건이 쥐어져 있습니다. 무엇이 가장 익숙하게 느껴지나요?",
+    "choices": [
+      {
+        "id": "Q1_03_C1",
+        "text": "낡은 지도",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "adventure",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_03_C2",
+        "text": "작은 열쇠",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "independence",
+            "score": 2
+          },
+          {
+            "tag": "longing",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_03_C3",
+        "text": "반듯한 붓과 먹",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "creativity",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_03_C4",
+        "text": "짧은 칼",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "courage",
+            "score": 2
+          },
+          {
+            "tag": "survival",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_03_C5",
+        "text": "바늘과 실",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 2
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_03_C6",
+        "text": "씨앗이 든 주머니",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q1_04",
+    "stage": 1,
+    "text": "당신 앞에 네 계절이 동시에 펼쳐집니다. 어느 쪽으로 걸어가고 싶나요?",
+    "choices": [
+      {
+        "id": "Q1_04_C1",
+        "text": "꽃이 막 피는 봄",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "longing",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_04_C2",
+        "text": "빛이 강한 여름",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 2
+          },
+          {
+            "tag": "courage",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_04_C3",
+        "text": "바람이 선선한 가을",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 2
+          },
+          {
+            "tag": "knowledge",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_04_C4",
+        "text": "눈이 깊게 쌓인 겨울",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "independence",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_04_C5",
+        "text": "비가 내리는 경계의 계절",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_04_C6",
+        "text": "계절이 느껴지지 않는 실내",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "urbanity",
+            "score": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Q1_05",
+    "stage": 1,
+    "text": "낯선 길에서 잠시 머물 곳을 골라야 합니다. 어디가 편안한가요?",
+    "choices": [
+      {
+        "id": "Q1_05_C1",
+        "text": "성벽 안의 작은 방",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "authority",
+            "score": 1
+          }
+        ]
+      },
+      {
+        "id": "Q1_05_C2",
+        "text": "강가의 나무집",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_05_C3",
+        "text": "항구의 여관",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_05_C4",
+        "text": "산사의 빈 방",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_05_C5",
+        "text": "공방 한쪽의 침상",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_05_C6",
+        "text": "들판의 천막",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "survival",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q1_06",
+    "stage": 1,
+    "text": "새벽빛 속에서 한 가지 풍경만 선명하게 보입니다. 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q1_06_C1",
+        "text": "도시의 지붕들",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "urbanity",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q1_06_C2",
+        "text": "논과 밭의 물결",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_06_C3",
+        "text": "사막의 긴 길",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "spirituality",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_06_C4",
+        "text": "눈 덮인 초원",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "adventure",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "mobility",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q1_06_C5",
+        "text": "커다란 강과 배",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q1_06_C6",
+        "text": "돌로 지은 궁전",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 2
+          },
+          {
+            "tag": "freedom",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "authority",
+            "score": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Q2_01",
+    "stage": 2,
+    "text": "오랜 시간 찾던 사람을 만났습니다. 가장 먼저 드는 감정은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q2_01_C1",
+        "text": "안도",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_01_C2",
+        "text": "그리움",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "longing",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_01_C3",
+        "text": "미안함",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "regret",
+            "score": 3
+          },
+          {
+            "tag": "empathy",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_01_C4",
+        "text": "경계심",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_01_C5",
+        "text": "벅찬 기쁨",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_01_C6",
+        "text": "말로 설명하기 어려운 평온",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 3
+          },
+          {
+            "tag": "spirituality",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q2_02",
+    "stage": 2,
+    "text": "누군가가 위험에 처했습니다. 당신은 어떻게 하나요?",
+    "choices": [
+      {
+        "id": "Q2_02_C1",
+        "text": "생각하기 전에 몸을 던진다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "courage",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_02_C2",
+        "text": "주변 사람을 모아 함께 돕는다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_02_C3",
+        "text": "가장 안전한 방법부터 찾는다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "knowledge",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_02_C4",
+        "text": "멀리서 상황을 읽고 길을 만든다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_02_C5",
+        "text": "내가 대신 책임지겠다고 한다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "devotion",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_02_C6",
+        "text": "상대가 스스로 나올 수 있도록 손을 내민다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "freedom",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q2_03",
+    "stage": 2,
+    "text": "가장 소중한 사람이 먼 길을 떠나려 합니다. 당신의 선택은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q2_03_C1",
+        "text": "함께 떠난다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "devotion",
+            "score": 3
+          },
+          {
+            "tag": "adventure",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_03_C2",
+        "text": "돌아올 곳을 지킨다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_03_C3",
+        "text": "떠나지 말라고 붙잡는다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "longing",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_03_C4",
+        "text": "말없이 필요한 것을 챙겨준다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 2
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_03_C5",
+        "text": "각자의 길을 존중한다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_03_C6",
+        "text": "나중에 만날 약속을 기록한다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 1
+          },
+          {
+            "tag": "longing",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q2_04",
+    "stage": 2,
+    "text": "많은 사람 사이에서 유독 눈에 들어오는 사람은 누구인가요?",
+    "choices": [
+      {
+        "id": "Q2_04_C1",
+        "text": "말없이 주변을 돌보는 사람",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 2
+          },
+          {
+            "tag": "empathy",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_04_C2",
+        "text": "모두를 이끄는 사람",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 2
+          },
+          {
+            "tag": "freedom",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "authority",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q2_04_C3",
+        "text": "혼자 기록을 읽는 사람",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_04_C4",
+        "text": "낯선 이야기를 들려주는 여행자",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 2
+          },
+          {
+            "tag": "freedom",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_04_C5",
+        "text": "손으로 무언가를 만드는 사람",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_04_C6",
+        "text": "슬픔을 숨기고 웃는 사람",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "regret",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q2_05",
+    "stage": 2,
+    "text": "갈등이 생겼을 때 가장 먼저 지키고 싶은 것은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q2_05_C1",
+        "text": "서로의 믿음",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "devotion",
+            "score": 2
+          },
+          {
+            "tag": "honor",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_05_C2",
+        "text": "가족과 공동체",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "collectivism",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q2_05_C3",
+        "text": "내 선택의 자유",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_05_C4",
+        "text": "약속과 원칙",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 3
+          },
+          {
+            "tag": "stability",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_05_C5",
+        "text": "상대의 마음",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_05_C6",
+        "text": "사실과 기록",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q2_06",
+    "stage": 2,
+    "text": "누군가 당신에게 비밀을 맡깁니다. 어떻게 간직하나요?",
+    "choices": [
+      {
+        "id": "Q2_06_C1",
+        "text": "평생 말하지 않는다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "devotion",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_06_C2",
+        "text": "기록하되 누구도 찾지 못하게 한다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_06_C3",
+        "text": "위험해지면 진실을 밝힌다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "courage",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_06_C4",
+        "text": "상대가 다시 선택할 때까지 기다린다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 2
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_06_C5",
+        "text": "함께 책임질 사람 한 명에게만 말한다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "stability",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q2_06_C6",
+        "text": "비밀이 사람을 해치면 약속을 깨더라도 막는다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "courage",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q3_01",
+    "stage": 3,
+    "text": "무엇이든 하나를 얻을 수 있다면 무엇을 원하나요?",
+    "choices": [
+      {
+        "id": "Q3_01_C1",
+        "text": "누구에게도 얽매이지 않는 자유",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_01_C2",
+        "text": "오래 지속되는 사랑",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_01_C3",
+        "text": "세상에 남을 명예",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_01_C4",
+        "text": "감춰진 지식",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "spirituality",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_01_C5",
+        "text": "가족을 지킬 풍요",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_01_C6",
+        "text": "새로운 세계를 만날 기회",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 3
+          },
+          {
+            "tag": "stability",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "mobility",
+            "score": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Q3_02",
+    "stage": 3,
+    "text": "당신의 이름이 어떤 방식으로 남기를 바라나요?",
+    "choices": [
+      {
+        "id": "Q3_02_C1",
+        "text": "사람들을 지킨 이름",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_02_C2",
+        "text": "새 길을 연 이름",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_02_C3",
+        "text": "아름다운 것을 만든 이름",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_02_C4",
+        "text": "지혜를 전한 이름",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_02_C5",
+        "text": "큰 권한을 가졌던 이름",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 2
+          },
+          {
+            "tag": "freedom",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "authority",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q3_02_C6",
+        "text": "아무 기록 없이 자유롭게 살다 간 이름",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q3_03",
+    "stage": 3,
+    "text": "하루를 온전히 쓸 수 있다면 무엇을 하고 싶나요?",
+    "choices": [
+      {
+        "id": "Q3_03_C1",
+        "text": "새로운 기술을 익힌다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_03_C2",
+        "text": "사람들과 잔치를 연다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "collectivism",
+            "score": 1
+          }
+        ]
+      },
+      {
+        "id": "Q3_03_C3",
+        "text": "혼자 먼 곳까지 걷는다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_03_C4",
+        "text": "가족의 집을 고친다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 2
+          },
+          {
+            "tag": "stability",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_03_C5",
+        "text": "기도하거나 명상한다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_03_C6",
+        "text": "아무도 해보지 않은 일을 시도한다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 3
+          },
+          {
+            "tag": "creativity",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q3_04",
+    "stage": 3,
+    "text": "당신에게 가장 큰 힘이 되는 것은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q3_04_C1",
+        "text": "사람들의 신뢰",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_04_C2",
+        "text": "쌓아온 기술",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 2
+          },
+          {
+            "tag": "creativity",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_04_C3",
+        "text": "내가 가진 지식",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_04_C4",
+        "text": "위기에서 버틴 경험",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 3
+          },
+          {
+            "tag": "courage",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_04_C5",
+        "text": "신념과 기도",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_04_C6",
+        "text": "선택할 수 있다는 감각",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q3_05",
+    "stage": 3,
+    "text": "많은 자원을 맡게 된다면 어디에 먼저 쓰나요?",
+    "choices": [
+      {
+        "id": "Q3_05_C1",
+        "text": "가족과 마을의 안전",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "collectivism",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q3_05_C2",
+        "text": "학교와 기록 보관소",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_05_C3",
+        "text": "길과 배를 만드는 일",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_05_C4",
+        "text": "예술과 축제",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_05_C5",
+        "text": "군대와 성벽",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "authority",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q3_05_C6",
+        "text": "굶주린 사람을 돕는 일",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q3_06",
+    "stage": 3,
+    "text": "가장 견디기 어려운 삶은 어떤 삶인가요?",
+    "choices": [
+      {
+        "id": "Q3_06_C1",
+        "text": "선택권이 없는 삶",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "authority",
+            "score": -2
+          }
+        ]
+      },
+      {
+        "id": "Q3_06_C2",
+        "text": "사랑하는 이를 지키지 못하는 삶",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "regret",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_06_C3",
+        "text": "아무것도 배우지 못하는 삶",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_06_C4",
+        "text": "아무도 나를 기억하지 않는 삶",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_06_C5",
+        "text": "계속 불안한 삶",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 3
+          },
+          {
+            "tag": "survival",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q3_06_C6",
+        "text": "만든 것을 세상에 남기지 못하는 삶",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "longing",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q4_01",
+    "stage": 4,
+    "text": "지키던 것이 위협받을 때 어떻게 하나요?",
+    "choices": [
+      {
+        "id": "Q4_01_C1",
+        "text": "앞에 서서 맞선다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "courage",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_01_C2",
+        "text": "사람들을 먼저 피신시킨다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "collectivism",
+            "score": 1
+          }
+        ]
+      },
+      {
+        "id": "Q4_01_C3",
+        "text": "협상할 방법을 찾는다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_01_C4",
+        "text": "상대의 약점을 관찰한다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_01_C5",
+        "text": "중요한 것만 챙겨 떠난다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "adventure",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "mobility",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q4_01_C6",
+        "text": "끝까지 자리를 지킨다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "devotion",
+            "score": 3
+          },
+          {
+            "tag": "stability",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q4_02",
+    "stage": 4,
+    "text": "두 길 중 하나를 골라야 합니다. 무엇을 따르나요?",
+    "choices": [
+      {
+        "id": "Q4_02_C1",
+        "text": "오래 지켜온 약속",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "devotion",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_02_C2",
+        "text": "새롭게 열린 기회",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_02_C3",
+        "text": "가족의 필요",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "stability",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_02_C4",
+        "text": "내 안의 직감",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "independence",
+            "score": 3
+          },
+          {
+            "tag": "spirituality",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_02_C5",
+        "text": "가장 많은 사람에게 도움이 되는 길",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "collectivism",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q4_02_C6",
+        "text": "사실과 증거가 가리키는 길",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q4_03",
+    "stage": 4,
+    "text": "큰 실패 뒤에 가장 먼저 하는 일은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q4_03_C1",
+        "text": "원인을 기록하고 다시 시도한다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 3
+          },
+          {
+            "tag": "knowledge",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_03_C2",
+        "text": "혼자 멀리 떠나 마음을 정리한다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_03_C3",
+        "text": "함께한 사람을 먼저 돌본다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_03_C4",
+        "text": "실패를 감추고 버틴다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_03_C5",
+        "text": "새로운 방식으로 바꾼다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "courage",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_03_C6",
+        "text": "운명으로 받아들이고 기도한다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 2
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q4_04",
+    "stage": 4,
+    "text": "권력자가 부당한 명령을 내립니다. 당신은 어떻게 하나요?",
+    "choices": [
+      {
+        "id": "Q4_04_C1",
+        "text": "공개적으로 거부한다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "courage",
+            "score": 3
+          },
+          {
+            "tag": "freedom",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_04_C2",
+        "text": "조용히 명령을 바꿀 방법을 찾는다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_04_C3",
+        "text": "사람들을 데리고 떠난다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_04_C4",
+        "text": "피해를 줄이기 위해 일단 따른다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "stability",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_04_C5",
+        "text": "다른 권력자와 연대한다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "authority",
+            "score": 1
+          }
+        ]
+      },
+      {
+        "id": "Q4_04_C6",
+        "text": "기록을 남겨 훗날 진실을 밝힌다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q4_05",
+    "stage": 4,
+    "text": "낯선 이가 도움을 청하지만 위험할 수 있습니다. 어떻게 하나요?",
+    "choices": [
+      {
+        "id": "Q4_05_C1",
+        "text": "조건 없이 돕는다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "courage",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_05_C2",
+        "text": "안전한 장소와 음식을 건넨다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 2
+          },
+          {
+            "tag": "stability",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_05_C3",
+        "text": "먼저 정체를 확인한다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "survival",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_05_C4",
+        "text": "다른 사람과 함께 돕는다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "collectivism",
+            "score": 2
+          }
+        ]
+      },
+      {
+        "id": "Q4_05_C5",
+        "text": "위험하면 거절한다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "independence",
+            "score": 2
+          },
+          {
+            "tag": "survival",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_05_C6",
+        "text": "길만 알려주고 떠난다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 1
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q4_06",
+    "stage": 4,
+    "text": "당신의 성취가 다른 사람의 희생 위에 놓였음을 알게 됩니다. 어떻게 하나요?",
+    "choices": [
+      {
+        "id": "Q4_06_C1",
+        "text": "모든 것을 내려놓고 사과한다",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "regret",
+            "score": 3
+          },
+          {
+            "tag": "empathy",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_06_C2",
+        "text": "피해를 되돌릴 방법을 찾는다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_06_C3",
+        "text": "진실을 공개한다",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 3
+          },
+          {
+            "tag": "courage",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_06_C4",
+        "text": "당시에는 어쩔 수 없었다고 받아들인다",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 2
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_06_C5",
+        "text": "앞으로 같은 일이 없도록 규칙을 만든다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "stability",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q4_06_C6",
+        "text": "내가 가진 것을 나누며 갚는다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "devotion",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q5_01",
+    "stage": 5,
+    "text": "삶에서 가장 오래 기억하고 싶은 순간은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q5_01_C1",
+        "text": "사랑하는 사람과 웃던 저녁",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_01_C2",
+        "text": "긴 노력 끝에 완성한 작품",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_01_C3",
+        "text": "위험에서 모두를 구한 순간",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "courage",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_01_C4",
+        "text": "처음 낯선 땅에 닿은 순간",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 3
+          },
+          {
+            "tag": "freedom",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_01_C5",
+        "text": "오래 찾던 진실을 깨달은 순간",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "spirituality",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_01_C6",
+        "text": "조용히 내 삶을 선택한 순간",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "independence",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q5_02",
+    "stage": 5,
+    "text": "돌아갈 수 있다면 바꾸고 싶은 것은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q5_02_C1",
+        "text": "말하지 못한 마음",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "regret",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_02_C2",
+        "text": "지키지 못한 약속",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "regret",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_02_C3",
+        "text": "두려워 포기한 도전",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "courage",
+            "score": 2
+          },
+          {
+            "tag": "longing",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_02_C4",
+        "text": "가족보다 일을 택한 선택",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_02_C5",
+        "text": "진실을 너무 늦게 밝힌 일",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_02_C6",
+        "text": "나 자신을 돌보지 않은 시간",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 2
+          },
+          {
+            "tag": "empathy",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q5_03",
+    "stage": 5,
+    "text": "당신이 남기고 싶은 것은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q5_03_C1",
+        "text": "사람들이 함께 살 수 있는 터전",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_03_C2",
+        "text": "후대가 읽을 기록",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_03_C3",
+        "text": "누군가 이어갈 기술",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 2
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_03_C4",
+        "text": "멀리 이어지는 길",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_03_C5",
+        "text": "마음을 위로하는 노래",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "empathy",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_03_C6",
+        "text": "어떤 것에도 얽매이지 않은 기억",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q5_04",
+    "stage": 5,
+    "text": "당신을 가장 깊이 흔드는 상실은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q5_04_C1",
+        "text": "가족의 부재",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "longing",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_04_C2",
+        "text": "친구의 배신",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_04_C3",
+        "text": "고향을 떠나야 하는 일",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 3
+          },
+          {
+            "tag": "adventure",
+            "score": 1
+          }
+        ],
+        "axisScores": [
+          {
+            "axis": "mobility",
+            "score": -1
+          }
+        ]
+      },
+      {
+        "id": "Q5_04_C4",
+        "text": "평생 만든 것이 사라지는 일",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 2
+          },
+          {
+            "tag": "achievement",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_04_C5",
+        "text": "믿었던 신념이 무너지는 일",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_04_C6",
+        "text": "내 이름과 기록이 지워지는 일",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 3
+          },
+          {
+            "tag": "knowledge",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q5_05",
+    "stage": 5,
+    "text": "삶이 끝나기 전에 꼭 하고 싶은 일은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q5_05_C1",
+        "text": "사랑한다고 말하기",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_05_C2",
+        "text": "멀리 있는 곳을 보기",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 3
+          },
+          {
+            "tag": "freedom",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_05_C3",
+        "text": "배운 것을 전하기",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_05_C4",
+        "text": "가족이 안전한지 확인하기",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "stability",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_05_C5",
+        "text": "완성하지 못한 것을 마치기",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 3
+          },
+          {
+            "tag": "creativity",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_05_C6",
+        "text": "용서하거나 용서받기",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "regret",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q5_06",
+    "stage": 5,
+    "text": "당신의 마음에 가장 오래 남는 한마디는 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q5_06_C1",
+        "text": "기다릴게",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "longing",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_06_C2",
+        "text": "너는 잘못이 없어",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_06_C3",
+        "text": "우리의 이름을 기억해",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "honor",
+            "score": 2
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_06_C4",
+        "text": "두려워도 가야 해",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "courage",
+            "score": 3
+          },
+          {
+            "tag": "adventure",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_06_C5",
+        "text": "이 기록을 지켜줘",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q5_06_C6",
+        "text": "이제 자유로워",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q6_01",
+    "stage": 6,
+    "text": "기억 속 마지막 장면에서 무엇을 보고 있었나요?",
+    "choices": [
+      {
+        "id": "Q6_01_C1",
+        "text": "창밖의 비",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_01_C2",
+        "text": "해 질 무렵의 바다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "longing",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_01_C3",
+        "text": "사람들이 밝힌 등불",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_01_C4",
+        "text": "눈 덮인 산",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "independence",
+            "score": 2
+          },
+          {
+            "tag": "spirituality",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_01_C5",
+        "text": "완성하지 못한 물건",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 2
+          },
+          {
+            "tag": "regret",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_01_C6",
+        "text": "누군가의 얼굴",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q6_02",
+    "stage": 6,
+    "text": "마지막 순간 곁에 있던 존재는 누구인가요?",
+    "choices": [
+      {
+        "id": "Q6_02_C1",
+        "text": "가족",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_02_C2",
+        "text": "오랜 동료",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "honor",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_02_C3",
+        "text": "사랑했던 사람",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "longing",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_02_C4",
+        "text": "나를 돌보던 낯선 이",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "empathy",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_02_C5",
+        "text": "아무도 없었다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "independence",
+            "score": 3
+          },
+          {
+            "tag": "regret",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_02_C6",
+        "text": "이름을 모르는 아이",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "protection",
+            "score": 2
+          },
+          {
+            "tag": "spirituality",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q6_03",
+    "stage": 6,
+    "text": "마지막에 가장 강하게 남은 감정은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q6_03_C1",
+        "text": "평온",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 3
+          },
+          {
+            "tag": "spirituality",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_03_C2",
+        "text": "아쉬움",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "regret",
+            "score": 3
+          },
+          {
+            "tag": "longing",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_03_C3",
+        "text": "사랑",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_03_C4",
+        "text": "두려움",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "survival",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_03_C5",
+        "text": "해방감",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 3
+          },
+          {
+            "tag": "independence",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_03_C6",
+        "text": "해냈다는 안도",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q6_04",
+    "stage": 6,
+    "text": "마지막으로 손에 닿아 있던 것은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q6_04_C1",
+        "text": "누군가의 손",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_04_C2",
+        "text": "낡은 책이나 문서",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_04_C3",
+        "text": "작업 도구",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "creativity",
+            "score": 3
+          },
+          {
+            "tag": "achievement",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_04_C4",
+        "text": "작은 부적이나 묵주",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_04_C5",
+        "text": "흙과 풀",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 2
+          },
+          {
+            "tag": "protection",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_04_C6",
+        "text": "여행 가방이나 지도",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 2
+          },
+          {
+            "tag": "freedom",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q6_05",
+    "stage": 6,
+    "text": "마지막으로 남기고 싶은 말은 무엇인가요?",
+    "choices": [
+      {
+        "id": "Q6_05_C1",
+        "text": "다시 만나자",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "longing",
+            "score": 3
+          },
+          {
+            "tag": "connection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_05_C2",
+        "text": "내가 지키지 못해 미안하다",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "regret",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_05_C3",
+        "text": "이 일을 이어가 달라",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 2
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_05_C4",
+        "text": "진실을 잊지 말라",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "knowledge",
+            "score": 3
+          },
+          {
+            "tag": "honor",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_05_C5",
+        "text": "나는 내 선택을 후회하지 않는다",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "freedom",
+            "score": 2
+          },
+          {
+            "tag": "courage",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_05_C6",
+        "text": "이제 모두 괜찮다",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "calm",
+            "score": 3
+          },
+          {
+            "tag": "empathy",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  },
+  {
+    "id": "Q6_06",
+    "stage": 6,
+    "text": "기억이 사라지기 전 마지막으로 향하고 싶은 곳은 어디인가요?",
+    "choices": [
+      {
+        "id": "Q6_06_C1",
+        "text": "태어난 집",
+        "displayOrder": 1,
+        "tagScores": [
+          {
+            "tag": "stability",
+            "score": 3
+          },
+          {
+            "tag": "protection",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_06_C2",
+        "text": "사랑하는 사람이 있는 곳",
+        "displayOrder": 2,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 3
+          },
+          {
+            "tag": "devotion",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_06_C3",
+        "text": "평생 일한 공간",
+        "displayOrder": 3,
+        "tagScores": [
+          {
+            "tag": "achievement",
+            "score": 2
+          },
+          {
+            "tag": "creativity",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_06_C4",
+        "text": "한 번도 가보지 못한 먼 곳",
+        "displayOrder": 4,
+        "tagScores": [
+          {
+            "tag": "adventure",
+            "score": 3
+          },
+          {
+            "tag": "freedom",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_06_C5",
+        "text": "조용한 사원이나 숲",
+        "displayOrder": 5,
+        "tagScores": [
+          {
+            "tag": "spirituality",
+            "score": 3
+          },
+          {
+            "tag": "calm",
+            "score": 2
+          }
+        ],
+        "axisScores": []
+      },
+      {
+        "id": "Q6_06_C6",
+        "text": "사람들이 모여 있는 광장",
+        "displayOrder": 6,
+        "tagScores": [
+          {
+            "tag": "connection",
+            "score": 2
+          },
+          {
+            "tag": "honor",
+            "score": 1
+          }
+        ],
+        "axisScores": []
+      }
+    ]
+  }
+]

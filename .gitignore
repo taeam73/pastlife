@@ -1,0 +1,15 @@
+node_modules/
+.pnpm-store/
+.env
+.expo/
+.next/
+dist/
+coverage/
+web-build/
+*.log
+*.tsbuildinfo
+apps/mobile/.expo/
+apps/mobile/dist/
+prisma/*.db
+prisma/*.db-journal
+.git-codex-backup/
