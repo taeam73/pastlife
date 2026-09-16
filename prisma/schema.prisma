@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum ContentStatus {
@@ -237,14 +238,14 @@ model Translation {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  email        String         @unique
-  displayName  String
-  provider     String         @default("google")
-  providerSub  String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  archives     ArchiveEntry[]
+  id          String         @id @default(cuid())
+  email       String         @unique
+  displayName String
+  provider    String         @default("google")
+  providerSub String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  archives    ArchiveEntry[]
 
   @@map("users")
 }
@@ -306,15 +307,15 @@ model SessionAnswer {
 }
 
 model Result {
-  id             String        @id @default(cuid())
-  session        Session       @relation(fields: [sessionId], references: [id], onDelete: Restrict)
-  sessionId      String        @unique
+  id             String         @id @default(cuid())
+  session        Session        @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  sessionId      String         @unique
   answerHash     String
   contentVersion String
   recordNo       Int
   coreJson       Json
-  status         ResultStatus  @default(NARRATIVE_GENERATING)
-  createdAt      DateTime      @default(now())
+  status         ResultStatus   @default(NARRATIVE_GENERATING)
+  createdAt      DateTime       @default(now())
   texts          ResultText[]
   images         ResultImage[]
   archives       ArchiveEntry[]

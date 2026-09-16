@@ -6,16 +6,26 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { AppModule } from '../src/app.module.js';
 
 describe('anonymous vertical flow', () => {
-  let app: INestApplication;
+  let app!: INestApplication;
+  const originalDatabaseUrl = process.env.DATABASE_URL;
+  const originalUseInMemoryDb = process.env.USE_IN_MEMORY_DB;
 
   beforeAll(async () => {
+    process.env.USE_IN_MEMORY_DB = 'true';
+    delete process.env.DATABASE_URL;
     const module = await Test.createTestingModule({ imports: [AppModule] }).compile();
     app = module.createNestApplication();
     app.setGlobalPrefix('api/v1');
     await app.init();
   });
 
-  afterAll(async () => app.close());
+  afterAll(async () => {
+    if (app) await app.close();
+    if (originalDatabaseUrl === undefined) delete process.env.DATABASE_URL;
+    else process.env.DATABASE_URL = originalDatabaseUrl;
+    if (originalUseInMemoryDb === undefined) delete process.env.USE_IN_MEMORY_DB;
+    else process.env.USE_IN_MEMORY_DB = originalUseInMemoryDb;
+  });
 
   it('completes six stages, remains idempotent, and unlocks basic once', async () => {
     await request(app.getHttpServer()).get('/api/v1/auth/archive').expect(401);

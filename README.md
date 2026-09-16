@@ -14,7 +14,7 @@ corepack pnpm test
 corepack pnpm --filter @pastlife/content generate
 ```
 
-PostgreSQL을 사용할 때는 `.env`의 `USE_IN_MEMORY_DB=false`와 `DATABASE_URL`을 설정하고 Prisma migration/seed를 실행합니다.
+PostgreSQL을 사용할 때는 `.env`의 `USE_IN_MEMORY_DB=false`, 런타임용 `DATABASE_URL`, migration용 `DIRECT_URL`을 설정하고 Prisma migration/seed를 실행합니다. 로컬 PostgreSQL에서는 두 URL이 같아도 됩니다.
 
 ```powershell
 docker compose -f infra/docker-compose.yml up -d
@@ -23,7 +23,7 @@ corepack pnpm db:seed
 corepack pnpm --filter @pastlife/api start
 ```
 
-API는 저장소 루트의 `.env`를 시작할 때 자동으로 읽습니다. Neon에서는 migration·seed에 direct URL을 사용하고, 일반 API 실행에는 pooled URL 사용을 권장합니다. Docker가 없는 개발 환경에서 `USE_IN_MEMORY_DB=true`를 지정하면 메모리 저장소를 사용합니다. API는 `4000`, Expo는 `8081`, 관리자는 `3000` 포트를 사용합니다.
+API는 저장소 루트의 `.env`를 시작할 때 자동으로 읽습니다. Neon에서는 `DATABASE_URL`에 pooled URL, `DIRECT_URL`에 direct URL을 지정합니다. API는 Neon direct URL이나 SSL 누락을 거부하며, 운영 모드에서는 메모리 저장소를 허용하지 않습니다. Docker가 없는 개발 환경에서 `USE_IN_MEMORY_DB=true`를 지정하면 메모리 저장소를 사용합니다. API는 `4000`, Expo는 `8081`, 관리자는 `3000` 포트를 사용합니다.
 
 ## 검증
 

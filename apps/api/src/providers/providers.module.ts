@@ -16,6 +16,7 @@ import { S3StorageProvider } from './s3-storage.provider.js';
 import { ASSESSMENT_REPOSITORY } from '../repositories/assessment.repository.js';
 import { MemoryAssessmentRepository } from '../repositories/memory-assessment.repository.js';
 import { PrismaAssessmentRepository } from '../repositories/prisma-assessment.repository.js';
+import { resolveDatabaseRuntimeConfig } from '../config/database.js';
 
 @Global()
 @Module({
@@ -27,7 +28,7 @@ import { PrismaAssessmentRepository } from '../repositories/prisma-assessment.re
       provide: ASSESSMENT_REPOSITORY,
       inject: [MemoryAssessmentRepository, PrismaAssessmentRepository],
       useFactory: (memory: MemoryAssessmentRepository, prisma: PrismaAssessmentRepository) =>
-        process.env.DATABASE_URL && process.env.USE_IN_MEMORY_DB !== 'true' ? prisma : memory,
+        resolveDatabaseRuntimeConfig().mode === 'prisma' ? prisma : memory,
     },
     { provide: AD_PROVIDER, useClass: FakeAdProvider },
     TemplateNarrativeProvider,
