@@ -1,6 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { BadRequestException, ConflictException, GoneException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { questionsByStage, type Stage } from '@pastlife/content';
+import { questions, selectQuestion, type Stage } from '@pastlife/content';
 import { calculateResult } from '@pastlife/scoring';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { NARRATIVE_PROVIDER, type NarrativeProvider } from '../providers/narrative.provider.js';
@@ -12,23 +12,37 @@ export class SessionsService {
     @Inject(NARRATIVE_PROVIDER) private readonly narrativeProvider: NarrativeProvider,
   ) {}
 
-  async create(locale = 'ko') {
+  async create(locale = 'ko', deviceId?: string, preferredViewMode: 'VIDEO' | 'TEXT' = 'VIDEO') {
     const session = await this.repository.createSession({
       id: randomUUID(),
-      anonymousId: randomUUID(),
+      anonymousId: deviceId ?? randomUUID(),
       locale,
       seed: randomBytes(16).toString('hex'),
-      contentVersion: process.env.CONTENT_VERSION ?? '2.0.0',
+      contentVersion: process.env.CONTENT_VERSION ?? '2.5.0',
       status: 'CREATED',
+      viewMode: preferredViewMode,
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
-    return { sessionId: session.id, seed: session.seed, contentVersion: session.contentVersion, status: session.status };
+    return { sessionId: session.id, seed: session.seed, contentVersion: session.contentVersion, status: session.status, viewMode: session.viewMode };
   }
 
   async question(sessionId: string, stageNumber: number) {
     const session = await this.requireSession(sessionId);
     if (!Number.isInteger(stageNumber) || stageNumber < 1 || stageNumber > 6) throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'stage must be between 1 and 6' });
-    const question = questionsByStage(stageNumber as Stage, session.seed, session.contentVersion);
+    const locked = session.questions.find(({ stage }) => stage === stageNumber);
+    const history = await this.repository.getQuestionHistory(session.anonymousId, session.id, 10);
+    const selected = locked
+      ? questions.find(({ id }) => id === locked.questionId)
+      : selectQuestion({
+          stage: stageNumber as Stage,
+          sessionSeed: session.seed,
+          contentVersion: session.contentVersion,
+          excludedQuestionIds: [...history, ...session.questions.map(({ questionId }) => questionId)],
+        });
+    if (!selected) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Question not found' });
+    const lockedQuestionId = await this.repository.lockQuestion(sessionId, stageNumber, selected.id);
+    const question = questions.find(({ id }) => id === lockedQuestionId);
+    if (!question) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Question not found' });
     return {
       id: question.id,
       stage: question.stage,
@@ -43,12 +57,19 @@ export class SessionsService {
       throw new ConflictException({ code: 'INVALID_STATE', message: 'Answers are locked after completion' });
     }
     if (!Number.isInteger(stageNumber) || stageNumber < 1 || stageNumber > 6) throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Invalid stage' });
-    const expected = questionsByStage(stageNumber as Stage, session.seed, session.contentVersion);
+    const locked = session.questions.find(({ stage }) => stage === stageNumber);
+    const expected = locked ? questions.find(({ id }) => id === locked.questionId) : undefined;
+    if (!expected) throw new ConflictException({ code: 'INVALID_STATE', message: 'Question must be requested before answering' });
     if (expected.id !== questionId || !expected.choices.some(({ id }) => id === choiceId)) {
       throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Question or choice does not match this session stage' });
     }
     const saved = await this.repository.saveAnswer(sessionId, { stage: stageNumber as Stage, questionId, choiceId });
     return { sessionId, answeredStages: saved.answers.map(({ stage }) => stage), status: saved.status };
+  }
+
+  async setViewMode(sessionId: string, viewMode: 'VIDEO' | 'TEXT') {
+    await this.requireSession(sessionId);
+    return { sessionId, viewMode: await this.repository.setViewMode(sessionId, viewMode) };
   }
 
   async complete(sessionId: string) {

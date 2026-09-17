@@ -45,7 +45,7 @@ let exitCode = 1;
 try {
   const api = start(
     ['node_modules/tsx/dist/cli.mjs', '--tsconfig', 'apps/api/tsconfig.json', 'apps/api/src/main.ts'],
-    { USE_IN_MEMORY_DB: 'true', USE_MOCK_GOOGLE: 'true', ADMIN_TOKEN: 'e2e-admin-token', CONTENT_VERSION: '2.0.0', NODE_OPTIONS: shim },
+    { USE_IN_MEMORY_DB: 'true', USE_MOCK_GOOGLE: 'true', ADMIN_TOKEN: 'e2e-admin-token', CONTENT_VERSION: '2.5.0', NODE_OPTIONS: shim },
   );
   await waitFor(`${apiUrl}/admin/content/summary`, api, 120_000);
 

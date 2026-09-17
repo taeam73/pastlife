@@ -49,6 +49,11 @@ enum UnlockType {
   GUIDE
 }
 
+enum ViewMode {
+  VIDEO
+  TEXT
+}
+
 model ContentVersion {
   id          String        @id @default(cuid())
   version     String        @unique
@@ -276,23 +281,57 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+model AnalyticsEvent {
+  id             String   @id @default(cuid())
+  name           String
+  sessionId      String?
+  resultId       String?
+  contentVersion String?
+  locale         String?
+  platform       String?
+  metadata       Json
+  occurredAt     DateTime
+  receivedAt     DateTime @default(now())
+
+  @@index([name, occurredAt])
+  @@index([sessionId, occurredAt])
+  @@index([resultId, occurredAt])
+  @@map("analytics_events")
+}
+
 model Session {
   id             String          @id @default(cuid())
-  anonymousId    String          @unique
+  anonymousId    String
   locale         String          @default("ko")
   seed           String
   contentVersion String
   status         SessionStatus   @default(CREATED)
+  viewMode       ViewMode        @default(VIDEO)
   expiresAt      DateTime
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   answers        SessionAnswer[]
+  questions      SessionQuestion[]
   result         Result?
   adEvents       AdEvent[]
   unlocks        SessionUnlock[]
 
   @@index([contentVersion, status])
+  @@index([anonymousId, createdAt])
   @@map("sessions")
+}
+
+model SessionQuestion {
+  session         Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId       String
+  stage           Int
+  questionId      String
+  questionVersion Int      @default(1)
+  selectedAt      DateTime @default(now())
+
+  @@id([sessionId, stage])
+  @@index([questionId, selectedAt])
+  @@map("session_questions")
 }
 
 model SessionAnswer {
@@ -318,7 +357,7 @@ model Result {
   status         ResultStatus   @default(NARRATIVE_GENERATING)
   createdAt      DateTime       @default(now())
   texts          ResultText[]
-  images         ResultImage[]
+  image          ResultImage?
   archives       ArchiveEntry[]
 
   @@index([answerHash, contentVersion])
@@ -340,13 +379,15 @@ model ResultText {
 model ResultImage {
   id         String @id @default(cuid())
   result     Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
-  resultId   String
+  resultId   String @unique
   sourceType String
   storageUrl String
   promptHash String
   status     String
+  altText    String @default("")
+  attemptCount Int @default(0)
+  errorCode  String?
 
-  @@unique([resultId, sourceType])
   @@map("result_images")
 }
 

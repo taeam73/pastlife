@@ -20,6 +20,21 @@ describe('provider fallbacks', () => {
     expect(image.sourceType).toBe('LIBRARY');
     expect(image.uri).toContain('asset://');
   });
+  it('retries image generation once before using the library fallback', async () => {
+    process.env.AI_IMAGE_API_URL = 'https://images.invalid/generate';
+    const original = globalThis.fetch;
+    let calls = 0;
+    globalThis.fetch = (async () => { calls += 1; return new Response(null, { status: 503 }); }) as typeof fetch;
+    try {
+      const image = await new AiImageProvider(new LibraryImageProvider()).getImage(fixture);
+      expect(calls).toBe(2);
+      expect(image.sourceType).toBe('LIBRARY');
+      expect(image.status).toBe('FALLBACK');
+      expect(image.errorCode).toBe('IMAGE_GENERATION_FAILED');
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
   it('uploads objects to the configured S3-compatible endpoint', async () => {
     process.env.S3_ENDPOINT = 'http://minio:9000'; process.env.S3_BUCKET = 'pastlife-test';
     const original = globalThis.fetch;

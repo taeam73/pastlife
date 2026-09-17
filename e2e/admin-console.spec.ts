@@ -16,7 +16,7 @@ test('authenticates and manages the draft publish rollback lifecycle', async ({ 
 
   await page.getByRole('button', { name: '초안 게시' }).click();
   await expect(page.getByRole('status')).toContainText('게시 완료: 1건');
-  await expect(page.getByRole('row', { name: /2\.0\.0 1/ })).toBeVisible();
+  await expect(page.getByRole('row', { name: /2\.5\.0 1/ })).toBeVisible();
 
   await page.getByRole('button', { name: '게시본 롤백 준비' }).first().click();
   await expect(page.getByRole('status')).toContainText('롤백 준비 완료: 1건');

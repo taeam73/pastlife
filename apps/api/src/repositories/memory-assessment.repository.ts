@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { AnswerInput } from '@pastlife/scoring';
-import type { AssessmentRepository, StoredResult, StoredSession } from './assessment.repository.js';
+import type { AssessmentRepository, StoredImage, StoredResult, StoredSession } from './assessment.repository.js';
 
 @Injectable()
 export class MemoryAssessmentRepository implements AssessmentRepository {
@@ -8,8 +8,8 @@ export class MemoryAssessmentRepository implements AssessmentRepository {
   private readonly results = new Map<string, StoredResult>();
   private readonly adEvents = new Map<string, { sessionId: string; slot: number }>();
 
-  async createSession(input: Omit<StoredSession, 'answers' | 'unlocks'>) {
-    const session: StoredSession = { ...input, answers: [], unlocks: [] };
+  async createSession(input: Omit<StoredSession, 'answers' | 'questions' | 'unlocks'>) {
+    const session: StoredSession = { ...input, answers: [], questions: [], unlocks: [] };
     this.sessions.set(session.id, session);
     return structuredClone(session);
   }
@@ -25,6 +25,28 @@ export class MemoryAssessmentRepository implements AssessmentRepository {
     session.answers = [...withoutStage, answer].sort((left, right) => left.stage - right.stage);
     session.status = session.answers.length === 6 ? 'QUESTION_COMPLETE' : 'QUESTION_IN_PROGRESS';
     return structuredClone(session);
+  }
+
+  async lockQuestion(sessionId: string, stage: number, questionId: string) {
+    const session = this.requireSession(sessionId);
+    const existing = session.questions.find((question) => question.stage === stage);
+    if (existing) return existing.questionId;
+    session.questions.push({ stage, questionId });
+    session.questions.sort((left, right) => left.stage - right.stage);
+    return questionId;
+  }
+
+  async getQuestionHistory(subjectKey: string, excludeSessionId: string, sessionLimit: number) {
+    return [...this.sessions.values()]
+      .filter((session) => session.anonymousId === subjectKey && session.id !== excludeSessionId)
+      .reverse()
+      .slice(0, sessionLimit)
+      .flatMap((session) => session.questions.map(({ questionId }) => questionId));
+  }
+
+  async setViewMode(sessionId: string, viewMode: 'VIDEO' | 'TEXT') {
+    this.requireSession(sessionId).viewMode = viewMode;
+    return viewMode;
   }
 
   async setSessionStatus(sessionId: string, status: string) {
@@ -49,6 +71,14 @@ export class MemoryAssessmentRepository implements AssessmentRepository {
   async getResultBySession(sessionId: string) {
     const result = [...this.results.values()].find((candidate) => candidate.sessionId === sessionId);
     return result ? structuredClone(result) : undefined;
+  }
+
+  async saveResultImage(resultId: string, image: StoredImage) {
+    const result = this.results.get(resultId);
+    if (!result) throw new Error(`Result ${resultId} not found`);
+    if (result.image) return structuredClone(result.image);
+    result.image = image;
+    return structuredClone(image);
   }
 
   async completeAd(sessionId: string, slot: number, providerEventId: string) {

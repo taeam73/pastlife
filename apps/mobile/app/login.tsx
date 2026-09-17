@@ -7,8 +7,9 @@ import { api } from '../src/api/client';
 import { googleClientConfig, hasGoogleClientForPlatform, useMockGoogle } from '../src/auth/google';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
-import { saveAuth } from '../src/session/store';
+import { loadSession, saveAuth } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
+import { trackEvent } from '../src/analytics/track';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -59,10 +60,13 @@ export default function LoginScreen() {
     if (busy) return;
     setBusy(true);
     setError(null);
+    const session = await loadSession();
+    void trackEvent('google_login_started', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), ...(resultId ? { resultId } : {}) });
     try {
       const auth = await api.exchangeGoogle(idToken);
       await saveAuth(auth);
-      if (resultId) await api.archive(resultId, auth.accessToken);
+      void trackEvent('google_login_completed', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), ...(resultId ? { resultId } : {}) });
+      if (resultId) { await api.archive(resultId, auth.accessToken); void trackEvent('archive_saved', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), resultId }); }
       router.replace(resultId ? '/archive' : '/');
     } catch {
       setError('로그인 또는 아카이브 저장에 실패했습니다. 다시 시도해 주세요.');

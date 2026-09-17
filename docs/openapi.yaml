@@ -1,16 +1,40 @@
 openapi: 3.1.0
 info:
   title: Past Life Archive API
-  version: 0.1.0
-  description: Anonymous first-slice assessment API.
+  version: 0.2.5
+  description: PRD 2.5 assessment, result presentation, unlock, and share-asset API.
 servers:
   - url: http://localhost:4000/api/v1
 paths:
+  /analytics/events:
+    post:
+      operationId: createAnalyticsEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateAnalyticsEvent' }
+      responses:
+        '201': { description: Privacy-bounded analytics event accepted }
+        '400': { $ref: '#/components/responses/ValidationError' }
   /admin/content/summary:
     get:
       operationId: getContentSummary
       responses:
         '200': { description: Content catalog counts and active version }
+  /auth/archive/{resultId}:
+    get:
+      operationId: getArchiveDetail
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      responses:
+        '200':
+          description: Full basic result for an archive entry owned by the signed-in user
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ArchiveDetail' }
+        '401': { description: Authentication required }
+        '403': { description: Archive entry is not owned by the signed-in user }
   /sessions:
     post:
       operationId: createSession
@@ -58,6 +82,20 @@ paths:
       responses:
         '202': { description: Result snapshot accepted }
         '409': { description: Invalid session state }
+  /sessions/{sessionId}/view-mode:
+    patch:
+      operationId: updateViewMode
+      parameters: [{ $ref: '#/components/parameters/SessionId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [viewMode]
+              properties: { viewMode: { $ref: '#/components/schemas/ViewMode' } }
+      responses:
+        '200': { description: Session viewing preference saved }
   /results/{resultId}/status:
     get:
       operationId: getResultStatus
@@ -116,7 +154,28 @@ paths:
       responses:
         '200': { description: Stable share link, content: { application/json: { schema: { $ref: '#/components/schemas/ShareResult' } } } }
         '404': { description: Result not found }
+  /results/{resultId}/share-assets:
+    post:
+      operationId: createShareAsset
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type, locale]
+              properties:
+                type: { type: string, enum: [VIDEO, IMAGE] }
+                locale: { type: string, default: ko }
+      responses:
+        '201': { description: Stable image or video template share asset }
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   parameters:
     SessionId: { name: sessionId, in: path, required: true, schema: { type: string } }
     ResultId: { name: resultId, in: path, required: true, schema: { type: string } }
@@ -128,17 +187,50 @@ components:
         application/json:
           schema: { $ref: '#/components/schemas/ApiError' }
   schemas:
+    CreateAnalyticsEvent:
+      type: object
+      additionalProperties: false
+      required: [name, metadata]
+      properties:
+        name:
+          type: string
+          enum: [session_started, question_shown, answer_selected, questions_completed, ad_started, ad_completed, ad_failed, basic_result_viewed, view_mode_changed, deep_cta_clicked, deep_unlocked, guide_cta_clicked, guide_unlocked, image_ready, image_fallback_used, share_format_selected, share_asset_ready, share_completed, new_past_life_clicked, google_login_started, google_login_completed, archive_saved, deep_link_opened, store_redirected]
+        occurredAt: { type: string, format: date-time }
+        metadata:
+          type: object
+          additionalProperties: false
+          properties:
+            sessionId: { type: string, format: uuid }
+            resultId: { type: string, format: uuid }
+            questionId: { type: string }
+            choiceId: { type: string }
+            contentVersion: { type: string }
+            sessionStatus: { type: string }
+            locale: { type: string }
+            platform: { type: string, enum: [android, ios, web, unknown] }
+            viewMode: { $ref: '#/components/schemas/ViewMode' }
+            shareFormat: { type: string, enum: [VIDEO, IMAGE] }
+            adPlacement: { type: integer, minimum: 1, maximum: 3 }
+            stage: { type: integer, minimum: 1, maximum: 6 }
+            imageStatus: { type: string, enum: [READY, FALLBACK] }
     CreateSessionRequest:
       type: object
-      properties: { locale: { type: string, default: ko } }
+      properties:
+        locale: { type: string, default: ko }
+        deviceId: { type: string, minLength: 8 }
+        preferredViewMode: { $ref: '#/components/schemas/ViewMode' }
     CreateSessionResponse:
       type: object
-      required: [sessionId, seed, contentVersion, status]
+      required: [sessionId, seed, contentVersion, status, viewMode]
       properties:
         sessionId: { type: string }
         seed: { type: string }
-        contentVersion: { type: string, example: 2.0.0 }
+        contentVersion: { type: string, example: 2.5.0 }
         status: { type: string, example: CREATED }
+        viewMode: { $ref: '#/components/schemas/ViewMode' }
+    ViewMode:
+      type: string
+      enum: [VIDEO, TEXT]
     Question:
       type: object
       required: [id, stage, text, choices]
@@ -173,11 +265,19 @@ components:
         image: { type: object }
         blocks: { type: array, minItems: 7, maxItems: 7, items: { type: object } }
         disclaimer: { type: string }
+    ArchiveDetail:
+      allOf:
+        - { $ref: '#/components/schemas/BasicResult' }
+        - type: object
+          required: [viewMode]
+          properties:
+            viewMode: { $ref: '#/components/schemas/ViewMode' }
     ExtendedResult:
       type: object
-      required: [resultId, blocks, disclaimer]
+      required: [resultId, image, blocks, disclaimer]
       properties:
         resultId: { type: string }
+        image: { type: object }
         blocks: { type: array, minItems: 4, maxItems: 4, items: { type: object } }
         disclaimer: { type: string }
     ShareResult:

@@ -1,4 +1,5 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { CreateShareAssetRequestSchema } from '@pastlife/contracts';
 import { ResultsService } from './results.service.js';
 
 @Controller('results')
@@ -19,4 +20,10 @@ export class ResultsController {
 
   @Get(':id/share')
   share(@Param('id') id: string) { return this.results.share(id); }
+
+  @Post(':id/share-assets')
+  createShareAsset(@Param('id') id: string, @Body() body: unknown) {
+    const parsed = CreateShareAssetRequestSchema.parse(body);
+    return this.results.createShareAsset(id, parsed.type, parsed.locale);
+  }
 }

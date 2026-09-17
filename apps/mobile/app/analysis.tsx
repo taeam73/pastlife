@@ -6,6 +6,7 @@ import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
 import { loadSession, saveResultId } from '../src/session/store';
 import { colors } from '../src/theme/tokens';
+import { trackEvent } from '../src/analytics/track';
 
 export default function AnalysisScreen() {
   const router = useRouter();
@@ -20,8 +21,12 @@ export default function AnalysisScreen() {
       try {
         const completed = session.resultId ? { resultId: session.resultId } : await api.complete(session.sessionId);
         await saveResultId(completed.resultId);
-        await api.status(completed.resultId);
-        await api.fakeAd1(session.sessionId);
+        const status = await api.status(completed.resultId);
+        void trackEvent(status.imageStatus === 'FALLBACK' ? 'image_fallback_used' : 'image_ready', { sessionId: session.sessionId, resultId: completed.resultId, contentVersion: session.contentVersion, imageStatus: status.imageStatus === 'FALLBACK' ? 'FALLBACK' : 'READY' });
+        void trackEvent('ad_started', { sessionId: session.sessionId, resultId: completed.resultId, adPlacement: 1, contentVersion: session.contentVersion });
+        try { await api.fakeAd1(session.sessionId); }
+        catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: completed.resultId, adPlacement: 1, contentVersion: session.contentVersion }); throw error; }
+        void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: completed.resultId, adPlacement: 1, contentVersion: session.contentVersion });
         if (active) router.replace('/result');
       } catch { if (active) setError('복원 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.'); }
     })();

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, HttpCode, Inject, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { CreateSessionRequestSchema, SaveAnswerRequestSchema } from '@pastlife/contracts';
+import { Body, Controller, Get, HttpCode, Inject, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
+import { CreateSessionRequestSchema, SaveAnswerRequestSchema, UpdateViewModeRequestSchema } from '@pastlife/contracts';
 import { SessionsService } from './sessions.service.js';
 
 @Controller('sessions')
@@ -9,7 +9,13 @@ export class SessionsController {
   @Post()
   create(@Body() body: unknown) {
     const parsed = CreateSessionRequestSchema.parse(body ?? {});
-    return this.sessions.create(parsed.locale);
+    return this.sessions.create(parsed.locale, parsed.deviceId, parsed.preferredViewMode);
+  }
+
+  @Patch(':id/view-mode')
+  viewMode(@Param('id') id: string, @Body() body: unknown) {
+    const parsed = UpdateViewModeRequestSchema.parse(body);
+    return this.sessions.setViewMode(id, parsed.viewMode);
   }
 
   @Get(':id/questions/:stage')

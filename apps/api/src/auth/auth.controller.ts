@@ -7,5 +7,6 @@ export class AuthController {
   @Post('google/exchange') exchange(@Body() body: unknown) { const input = GoogleExchangeRequestSchema.parse(body); return this.auth.exchange(input.idToken); }
   @Post('archive/:resultId') archive(@Param('resultId') resultId: string, @Headers('authorization') auth: string | undefined) { return this.auth.archive(resultId, this.token(auth)); }
   @Get('archive') list(@Headers('authorization') auth: string | undefined) { return this.auth.list(this.token(auth)); }
+  @Get('archive/:resultId') detail(@Param('resultId') resultId: string, @Headers('authorization') auth: string | undefined) { return this.auth.detail(resultId, this.token(auth)); }
   private token(value?: string) { if (!value?.startsWith('Bearer ') || value.length <= 7) throw new UnauthorizedException({ code: 'UNAUTHORIZED', message: 'Bearer token required' }); return value.slice(7); }
 }

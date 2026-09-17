@@ -1,6 +1,6 @@
 # 전생록 (Past Life Archive)
 
-PRD 2.0의 실행 가능한 MVP입니다. 익명 질문 6단계, 결정론적 서버 판정, Fake AD 1~3, 기본·심화·현생 가이드 결과, 공유, Google 로그인 교환과 사용자 아카이브를 확인할 수 있습니다. 외부 AI·이미지 공급자가 없으면 템플릿 문장과 라이브러리 이미지로 안전하게 대체됩니다.
+PRD 2.5를 반영한 실행 가능한 MVP입니다. 익명 질문 6단계, 이전 세션과 겹치지 않는 서버 질문 선택, 결정론적 판정, Fake AD 1~3, 영상형·텍스트형 기본/심화/현생 가이드, 이미지·영상 공유 템플릿, Google 로그인과 사용자 아카이브를 확인할 수 있습니다. 외부 AI·이미지 공급자가 없거나 두 번 실패하면 템플릿 문장과 라이브러리 이미지로 안전하게 대체됩니다.
 
 ## 시작
 
@@ -63,3 +63,15 @@ $env:EXPO_NO_TELEMETRY='1'; $env:EXPO_OFFLINE='1'; $env:CI='1'; corepack pnpm --
 주지 않습니다. 실패 스크린샷과 trace는 `output/playwright/`에 생성됩니다.
 
 자세한 구현 범위와 제한은 [첫 구현 보고서](docs/first-slice-report.md)와 [실행 계획](docs/superpowers/plans/2026-09-16-past-life-vertical-slice.md)을 참고하세요.
+
+## PRD 2.5 운영 설정
+
+다음 값은 기획서에서 출시 전 운영 결정으로 남긴 항목이므로 코드에 확정값으로 묻지 않습니다.
+
+- `AI_IMAGE_API_URL`, `AI_IMAGE_API_KEY`: 이미지 공급자와 인증
+- `PUBLIC_SHARE_URL`: 공개 공유 링크 및 Android App Links 기준 URL
+- `GOOGLE_PLAY_URL`: 미설치 Android 사용자의 스토어 폴백
+- `EXPO_PUBLIC_ANDROID_PACKAGE`, `EXPO_PUBLIC_APP_LINK_HOST`: Android 패키지와 검증된 링크 호스트
+- 라이선스가 확인된 BGM·효과음 바이너리와 지역별 기본 재생 정책
+
+`VIDEO` 공유 응답의 `TEMPLATE_READY`는 동일한 결과 이미지와 텍스트로 MP4를 만들 입력이 고정됐다는 뜻입니다. 실제 H.264/AAC 인코딩은 배포 환경의 렌더 워커가 연결된 뒤 `READY`로 승격해야 합니다. 자세한 반영 내역은 [PRD 2.5 구현 보고서](docs/prd-2.5-implementation-report.md)를 참고하세요.

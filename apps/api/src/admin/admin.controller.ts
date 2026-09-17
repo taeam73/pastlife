@@ -6,7 +6,7 @@ import { AdminService } from './admin.service.js';
 export class AdminController {
   constructor(@Inject(AdminService) private readonly service: AdminService) {}
   @Get('summary')
-  summary(@Headers('x-admin-token') token?: string) { this.authorize(token); return { contentVersion: process.env.CONTENT_VERSION ?? '2.0.0', questions: questions.length, choices: questions.reduce((sum, q) => sum + q.choices.length, 0), tags: tags.length, axes: axes.length, eras: eras.length, regions: regions.length, generatedAt: new Date().toISOString() }; }
+  summary(@Headers('x-admin-token') token?: string) { this.authorize(token); return { contentVersion: process.env.CONTENT_VERSION ?? '2.5.0', questions: questions.length, choices: questions.reduce((sum, q) => sum + q.choices.length, 0), tags: tags.length, axes: axes.length, eras: eras.length, regions: regions.length, generatedAt: new Date().toISOString() }; }
   @Get('questions')
   listQuestions(@Headers('x-admin-token') token?: string) { this.authorize(token); return { items: questions.map(({ id, stage, text, choices }) => ({ id, stage, text, choiceCount: choices.length })) }; }
   @Get('questions/:id')

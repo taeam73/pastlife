@@ -16,7 +16,7 @@ import {
 } from '@pastlife/content';
 
 const prisma = new PrismaClient();
-const version = process.env.CONTENT_VERSION ?? '2.0.0';
+const version = process.env.CONTENT_VERSION ?? '2.5.0';
 const digest = createHash('sha256').update(JSON.stringify(questions)).digest('hex');
 
 const tagGroup = (tag: string) => {

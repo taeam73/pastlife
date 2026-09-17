@@ -7,6 +7,12 @@ import type { ImageProvider } from './image.provider.js';
 export class LibraryImageProvider implements ImageProvider {
   async getImage(core: ResultCore) {
     const location = historicalLocations.find(({ id }) => id === core.locationId)!;
-    return { sourceType: 'LIBRARY' as const, uri: `asset://${core.libraryImage.key}`, alt: `${location.label}을 표현한 역사 일러스트` };
+    return {
+      sourceType: 'LIBRARY' as const,
+      uri: `asset://${core.libraryImage.key}`,
+      alt: `${location.label}을 표현한 역사 일러스트`,
+      status: 'FALLBACK' as const,
+      attemptCount: 0,
+    };
   }
 }

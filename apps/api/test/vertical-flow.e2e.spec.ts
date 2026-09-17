@@ -45,11 +45,19 @@ describe('anonymous vertical flow', () => {
     const history = await request(app.getHttpServer()).get('/api/v1/admin/content/publish-history').expect(200);
     expect(history.body.items[0].published).toBe(1);
     await request(app.getHttpServer()).post(`/api/v1/admin/content/rollback?digest=${history.body.items[0].digest}`).expect(201).expect(({ body }) => expect(body.restored).toBe(1));
-    const created = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko' }).expect(201);
+    const created = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko', deviceId: 'test-install-0001' }).expect(201);
     const sessionId = created.body.sessionId as string;
+    expect(created.body.viewMode).toBe('VIDEO');
+
+    await request(app.getHttpServer()).patch(`/api/v1/sessions/${sessionId}/view-mode`).send({ viewMode: 'TEXT' }).expect(200).expect(({ body }) => expect(body.viewMode).toBe('TEXT'));
+
+    const firstSessionQuestionIds: string[] = [];
 
     for (let stage = 1; stage <= 6; stage += 1) {
       const question = await request(app.getHttpServer()).get(`/api/v1/sessions/${sessionId}/questions/${stage}`).expect(200);
+      const retry = await request(app.getHttpServer()).get(`/api/v1/sessions/${sessionId}/questions/${stage}`).expect(200);
+      expect(retry.body.id).toBe(question.body.id);
+      firstSessionQuestionIds.push(question.body.id);
       expect(question.body.choices).toHaveLength(6);
       await request(app.getHttpServer())
         .put(`/api/v1/sessions/${sessionId}/answers/${stage}`)
@@ -62,19 +70,25 @@ describe('anonymous vertical flow', () => {
     expect(new Set(resultIds).size).toBe(1);
     const resultId = resultIds[0];
 
-    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/status`).expect(200).expect(({ body }) => expect(body.status).toBe('RESULT_READY'));
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/status`).expect(200).expect(({ body }) => {
+      expect(body.status).toBe('RESULT_READY');
+      expect(body.viewMode).toBe('TEXT');
+      expect(body.imageStatus).toBe('FALLBACK');
+    });
     await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(403).expect(({ body }) => expect(body.slot).toBe(1));
 
     const providerEventId = `fake-ad-1-${sessionId}`;
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/1/complete`).send({ providerEventId }).expect(201);
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/1/complete`).send({ providerEventId }).expect(201);
 
-    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(200).expect(({ body }) => {
-      expect(body.blocks).toHaveLength(7);
-      expect(body.recordNo).toBeGreaterThanOrEqual(1);
-      expect(body.disclaimer).toContain('창작 스토리텔링');
-      expect(body.image.sourceType).toBe('LIBRARY');
+    const basic = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(200);
+    expect(basic.body).toMatchObject({
+      resultId,
+      image: { sourceType: 'LIBRARY', status: 'FALLBACK' },
     });
+    expect(basic.body.blocks).toHaveLength(7);
+    expect(basic.body.recordNo).toBeGreaterThanOrEqual(1);
+    expect(basic.body.disclaimer).toContain('창작 스토리텔링');
 
     await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/deep`).expect(403).expect(({ body }) => expect(body.slot).toBe(2));
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${sessionId}` }).expect(201);
@@ -89,11 +103,30 @@ describe('anonymous vertical flow', () => {
     expect(share.body.shareUrl).toContain(share.body.shareToken);
     const shareAgain = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/share`).expect(200);
     expect(shareAgain.body.shareToken).toBe(share.body.shareToken);
+    const imageShare = await request(app.getHttpServer()).post(`/api/v1/results/${resultId}/share-assets`).send({ type: 'IMAGE', locale: 'ko' }).expect(201);
+    expect(imageShare.body.type).toBe('IMAGE');
+    expect(imageShare.body.sourceImageUri).toBe(basic.body.image.uri);
+    const videoShare = await request(app.getHttpServer()).post(`/api/v1/results/${resultId}/share-assets`).send({ type: 'VIDEO', locale: 'ko' }).expect(201);
+    expect(videoShare.body.type).toBe('VIDEO');
+    expect(videoShare.body.sourceImageUri).toBe(basic.body.image.uri);
+
+    const nextSession = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko', deviceId: 'test-install-0001' }).expect(201);
+    for (let stage = 1; stage <= 6; stage += 1) {
+      const question = await request(app.getHttpServer()).get(`/api/v1/sessions/${nextSession.body.sessionId}/questions/${stage}`).expect(200);
+      expect(question.body.id).not.toBe(firstSessionQuestionIds[stage - 1]);
+    }
     const auth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:test@example.com' }).expect(201);
     const repeatedAuth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:test@example.com' }).expect(201);
     expect(repeatedAuth.body.user.id).toBe(auth.body.user.id);
     const bearer = { Authorization: `Bearer ${auth.body.accessToken}` };
     await request(app.getHttpServer()).post(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(201);
     await request(app.getHttpServer()).get('/api/v1/auth/archive').set(bearer).expect(200).expect(({ body }) => expect(body.items[0].resultId).toBe(resultId));
+    await request(app.getHttpServer()).get(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(200).expect(({ body }) => {
+      expect(body.resultId).toBe(resultId);
+      expect(body.blocks).toHaveLength(7);
+      expect(body.viewMode).toBe('TEXT');
+    });
+    const otherAuth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:other@example.com' }).expect(201);
+    await request(app.getHttpServer()).get(`/api/v1/auth/archive/${resultId}`).set({ Authorization: `Bearer ${otherAuth.body.accessToken}` }).expect(403);
   });
 });

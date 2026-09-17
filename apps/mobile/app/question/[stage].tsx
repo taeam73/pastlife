@@ -9,6 +9,7 @@ import { loadSession } from '../../src/session/store';
 import { colors } from '../../src/theme/tokens';
 import type { z } from 'zod';
 import type { QuestionResponseSchema } from '@pastlife/contracts';
+import { trackEvent } from '../../src/analytics/track';
 
 type Question = z.infer<typeof QuestionResponseSchema>;
 
@@ -24,7 +25,7 @@ export default function QuestionScreen() {
     let active = true;
     void loadSession().then(async (session) => {
       if (!session) { router.replace('/'); return; }
-      try { const value = await api.question(session.sessionId, stage); if (active) setQuestion(value); }
+      try { const value = await api.question(session.sessionId, stage); if (active) setQuestion(value); void trackEvent('question_shown', { sessionId: session.sessionId, questionId: value.id, stage: value.stage, contentVersion: session.contentVersion, locale: 'ko' }); }
       catch { if (active) setError('질문을 불러오지 못했습니다. 다시 시도해 주세요.'); }
     });
     return () => { active = false; };
@@ -37,6 +38,8 @@ export default function QuestionScreen() {
       const session = await loadSession();
       if (!session) { router.replace('/'); return; }
       await api.answer(session.sessionId, stage, question.id, choiceId);
+      void trackEvent('answer_selected', { sessionId: session.sessionId, questionId: question.id, choiceId, stage, contentVersion: session.contentVersion, locale: 'ko' });
+      if (stage === 6) void trackEvent('questions_completed', { sessionId: session.sessionId, contentVersion: session.contentVersion, locale: 'ko', sessionStatus: 'QUESTION_COMPLETE' });
       router.replace(stage === 6 ? '/analysis' : `/question/${stage + 1}`);
     } catch { setBusy(false); setError('선택을 저장하지 못했습니다. 다시 선택해 주세요.'); }
   };
