@@ -13,8 +13,12 @@
     "test": "corepack pnpm -r --if-present test",
     "test:e2e": "corepack pnpm --filter @pastlife/api test:e2e",
     "test:e2e:browser": "node scripts/run-browser-e2e.mjs",
+    "test:staging-config": "node --test scripts/staging-env.test.mjs",
     "env:neon": "node scripts/configure-neon-env.mjs",
+    "staging:preflight": "node --env-file=.env scripts/check-staging-env.mjs",
     "db:migrate": "corepack pnpm exec prisma migrate dev --schema prisma/schema.prisma",
+    "db:migrate:status": "corepack pnpm exec prisma migrate status --schema prisma/schema.prisma",
+    "db:migrate:deploy": "corepack pnpm exec prisma migrate deploy --schema prisma/schema.prisma",
     "db:seed": "corepack pnpm exec prisma db seed --schema prisma/schema.prisma"
   },
   "dependencies": {

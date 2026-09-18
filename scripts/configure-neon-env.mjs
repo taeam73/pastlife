@@ -28,7 +28,8 @@ function setValue(name, value) {
 
 const configuredRuntime = readValue('DATABASE_URL');
 const configuredDirect = readValue('DIRECT_URL');
-const sourceUrl = configuredDirect ?? configuredRuntime;
+const configuredUnpooled = readValue('DATABASE_URL_UNPOOLED');
+const sourceUrl = configuredUnpooled ?? configuredDirect ?? configuredRuntime;
 
 if (!sourceUrl) throw new Error('DATABASE_URL or DIRECT_URL is required in .env');
 
