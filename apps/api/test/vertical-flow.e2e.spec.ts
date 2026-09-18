@@ -2,8 +2,9 @@ import 'reflect-metadata';
 import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { AppModule } from '../src/app.module.js';
+import { IMAGE_PROVIDER, type ImageProvider } from '../src/providers/image.provider.js';
 
 describe('anonymous vertical flow', () => {
   let app!: INestApplication;
@@ -70,11 +71,18 @@ describe('anonymous vertical flow', () => {
     expect(new Set(resultIds).size).toBe(1);
     const resultId = resultIds[0];
 
+    const imageProvider = app.get<ImageProvider>(IMAGE_PROVIDER);
+    const imageGeneration = vi.spyOn(imageProvider, 'getImage');
     await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/status`).expect(200).expect(({ body }) => {
       expect(body.status).toBe('RESULT_READY');
       expect(body.viewMode).toBe('TEXT');
       expect(body.imageStatus).toBe('FALLBACK');
     });
+    expect(imageGeneration).toHaveBeenCalledTimes(1);
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/status`).expect(200).expect(({ body }) => {
+      expect(body.imageStatus).toBe('FALLBACK');
+    });
+    expect(imageGeneration).toHaveBeenCalledTimes(1);
     await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(403).expect(({ body }) => expect(body.slot).toBe(1));
 
     const providerEventId = `fake-ad-1-${sessionId}`;

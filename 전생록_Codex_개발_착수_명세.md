@@ -33,7 +33,7 @@ maximum_ads_per_run: 3
 
 이 문서는 전생록의 제품 방향, 콘텐츠 구조, 판정 로직, 화면 흐름, 데이터 모델, API, 운영 도구와 품질 기준을 하나의 구현 기준으로 정의한다. 기획, 디자인, 콘텐츠 제작, 모바일 앱 개발, 서버 개발, 관리자 개발과 QA는 이 문서를 공통 기준으로 사용한다.
 
-문서의 규범 용어는 다음과 같다. 반드시 는 출시 요건, 권장 은 기본 구현안, 선택 은 운영 설정으로 켜거나 끌 수 있는 기능을 뜻한다. 핵심 결과는 DB와 판정 로직이 결정하며 AI는 문장 표현과 선택적 이미지 생성만 담당한다.
+문서의 규범 용어는 다음과 같다. 반드시 는 출시 요건, 권장 은 기본 구현안, 선택 은 운영 설정으로 켜거나 끌 수 있는 기능을 뜻한다. 핵심 결과는 DB와 판정 로직이 결정하며 AI는 문장 표현과 결과별 대표 이미지 생성만 담당한다.
 
 ### 문서 구성
 
@@ -59,7 +59,7 @@ maximum_ads_per_run: 3
 
 - 광고는 1회 체험당 최대 3회다. 광고 1 이후 기본 결과, 광고 2 이후 심화 결과, 광고 3 이후 현생 가이드를 공개한다.
 
-- AI 이미지는 사용자가 선택할 때 1장만 생성하고 저장된 이미지를 재사용한다. 네 번째 광고는 추가하지 않는다.
+- AI 이미지는 결과 상태를 최초 조회할 때 결과별로 1장만 low 품질로 자동 생성하고 저장된 이미지를 재사용한다. 네 번째 광고나 별도 이미지 생성 선택 단계는 추가하지 않는다.
 
 - Google 로그인은 저장 시점에만 제안하며 취소해도 결과 열람은 유지한다.
 
@@ -157,7 +157,7 @@ maximum_ads_per_run: 3
 
 7. 사용자가 광고 보고 현생 가이드 보기를 선택하고 광고 3을 완료하면 현생 가이드 4개를 공개한다.
 
-8. 사용자가 AI로 내 전생 모습 만들기를 선택하면 확정 결과로 대표 이미지 1장을 생성한다. 생성하지 않아도 기본 라이브러리 이미지를 유지한다.
+8. 결과 상태를 최초 조회하면 확정 결과로 AI 대표 이미지 1장을 low 품질로 자동 생성한다. 생성 API가 구성되지 않았거나 재시도 후에도 실패하면 기본 라이브러리 이미지를 유지한다.
 
 9. 사용자는 결과 카드와 이미지를 기기에 저장하거나 공유할 수 있다.
 
@@ -381,7 +381,7 @@ maximum_ads_per_run: 3
 
 ### 8 1 하이브리드 이미지 정책
 
-기본 결과는 검수된 이미지 라이브러리에서 시대, 권역, 직업, 분위기에 맞는 대표 이미지를 즉시 표시한다. 사용자가 AI로 내 전생 모습 만들기를 선택하면 확정 결과를 바탕으로 개인화된 대표 이미지 1장을 생성한다. 생성된 이미지는 resultId에 저장하고 재방문, 공유, 다운로드 시 재생성하지 않는다.
+결과 상태 최초 조회는 확정 결과를 바탕으로 개인화된 AI 대표 이미지 1장을 low 품질로 자동 생성한다. 생성 중복은 resultId 단위로 차단하며 생성된 이미지는 저장해 기본 결과, 심화 결과, 현생 가이드, 재방문, 공유, 다운로드에서 재사용한다. 생성 API가 구성되지 않았거나 재시도 후에도 실패하면 시대, 권역, 직업, 분위기에 맞는 검수된 라이브러리 이미지를 저장해 사용한다.
 
 ### 8 2 AI 이미지 입력
 
@@ -472,7 +472,7 @@ maximum_ads_per_run: 3
 | 분석 | 당신의 전생 기록을 복원하고 있습니다 |
 | 심화 CTA | 광고 보고 심화 내용 보기 |
 | 가이드 CTA | 광고 보고 현생 가이드 보기 |
-| 이미지 CTA | AI로 내 전생 모습 만들기 |
+| 이미지 생성 상태 | AI로 전생 대표 이미지를 만들고 있습니다 |
 | 로그인 | 로그인하고 나의 전생 목록 생성하기 |
 | 종료 | 저장 없이 종료하기 |
 
@@ -483,11 +483,11 @@ maximum_ads_per_run: 3
 | SCR 001 | 시작 | 브랜드, 카피, 내 전생 찾아보기 | POST /sessions | SCR 002 |
 | SCR 002 | 직감 안내 | 안내 문구, 질문 시작하기 | 없음 | SCR 101 |
 | SCR 101 106 | 질문 1 6 | 단계, 질문, 선택지 6개 | GET question, POST answer | 다음 질문 또는 SCR 200 |
-| SCR 200 | 분석 | 복원 연출, 오류 재시도 | POST complete, GET status | AD 1 |
+| SCR 200 | 분석 | 복원 연출, AI 대표 이미지 자동 생성, 오류 재시도 | POST complete, GET status | AD 1 |
 | SCR 300 | 기본 결과 | 대표 이미지, 7개 블록, 심화 CTA | GET basic | AD 2 또는 공유 |
 | SCR 310 | 심화 결과 | 보너스 4개, 가이드 CTA | GET deep | AD 3 |
-| SCR 320 | 현생 가이드 | 가이드 4개, 이미지와 저장 CTA | GET guide | SCR 330 또는 SCR 400 |
-| SCR 330 | AI 이미지 | 선택 생성, 진행, 실패 대체 | POST image, GET image status | SCR 320 |
+| SCR 320 | 현생 가이드 | 가이드 4개, 자동 생성된 대표 이미지와 저장 CTA | GET guide | SCR 400 |
+| SCR 330 | AI 이미지 | 별도 선택 화면 없이 SCR 200의 결과 상태 조회에 통합 | GET status | SCR 300 |
 | SCR 400 | 저장 선택 | 로그인 저장, 저장 없이 종료 | POST auth google | SCR 410 또는 종료 |
 | SCR 410 | 나의 전생 | 기록 목록, 다시 보기 | GET archives | SCR 420 |
 | SCR 420 | 아카이브 상세 | 저장된 결과, 이미지, 공유 | GET archive detail | SCR 410 |
@@ -505,7 +505,7 @@ maximum_ads_per_run: 3
 | BASIC_UNLOCKED | AD 1 해금 | 기본 열람, AD 2 | DEEP_UNLOCKED |
 | DEEP_UNLOCKED | AD 2 해금 | 심화 열람, AD 3 | GUIDE_UNLOCKED |
 | GUIDE_UNLOCKED | AD 3 해금 | 가이드, 이미지, 저장 공유 | COMPLETED 또는 ARCHIVED |
-| IMAGE_GENERATING | 이미지 선택 생성 | 상태 조회, 취소 후 결과 복귀 | IMAGE_READY 또는 IMAGE_FAILED |
+| IMAGE_GENERATING | 저장 이미지가 없는 결과의 최초 상태 조회 | 동일 resultId 상태 재조회 | IMAGE_READY 또는 IMAGE_FAILED |
 | ARCHIVED | 로그인 후 저장 | 재열람, 공유, 삭제 | 사용자 삭제 |
 | FAILED | 복구 불가 오류 | 같은 resultId로 재시도 | 이전 정상 상태 또는 취소 |
 
@@ -566,12 +566,11 @@ maximum_ads_per_run: 3
 | GET | /api/v1/sessions/{id}/questions/{stage} | 단계 질문과 선택지 6개 | 200 question |
 | PUT | /api/v1/sessions/{id}/answers/{stage} | 선택 저장 또는 확정 전 수정 | 200 progress |
 | POST | /api/v1/sessions/{id}/complete | 응답 잠금과 결과 계산 | 202 resultId |
-| GET | /api/v1/results/{id}/status | 결과와 이미지 상태 | 200 status |
+| GET | /api/v1/results/{id}/status | 결과 상태 조회와 결과별 대표 이미지 1장 생성 보장 | 200 status |
 | POST | /api/v1/sessions/{id}/ads/{slot}/complete | 검증된 광고 완료 기록 | 200 unlock |
 | GET | /api/v1/results/{id}/basic | 기본 결과 7개 | 200 or 403 |
 | GET | /api/v1/results/{id}/deep | 심화 결과 4개 | 200 or 403 |
 | GET | /api/v1/results/{id}/guide | 현생 가이드 4개 | 200 or 403 |
-| POST | /api/v1/results/{id}/image | 선택적 AI 이미지 생성 | 202 image status |
 | GET | /api/v1/results/{id}/share-card | 공유 카드 URL 또는 파일 | 200 asset |
 | POST | /api/v1/auth/google | Google ID 토큰 검증과 계정 연결 | 200 access session |
 | POST | /api/v1/me/archives | 결과 중복 없이 저장 | 201 or 200 existing |
@@ -706,7 +705,7 @@ maximum_ads_per_run: 3
 | 결과 | 기본 7개, 심화 4개, 가이드 4개가 정해진 광고 unlock 뒤에만 열린다. |
 | 광고 | 완료, 취소, 실패, 중복 콜백에서 unlock 상태가 정확하다. |
 | 복구 | 앱 종료, 네트워크 단절, complete 재시도 후 같은 resultId로 복구된다. |
-| 이미지 | 선택 생성은 최대 1장, 실패 시 라이브러리 이미지로 대체되고 재방문 때 재생성하지 않는다. |
+| 이미지 | 최초 결과 상태 조회에서 AI 이미지가 low 품질로 최대 1장 생성되고, 실패 시 라이브러리 이미지로 대체되며 재방문 때 재생성하지 않는다. |
 | 계정 | 로그인 취소 시 결과가 유지되고 같은 결과가 중복 저장되지 않는다. |
 | 다국어 | 필수 locale에 누락 키가 없고 긴 문자열에서도 레이아웃이 깨지지 않는다. |
 | 접근성 | 핵심 흐름이 스크린리더와 글자 확대, 모션 감소 설정에서 사용 가능하다. |
@@ -1246,7 +1245,7 @@ maximum_ads_per_run: 3
 | ADMOB_APP_ID | 모바일 광고 | 테스트 ID |
 | ADMOB_SLOT_1, ADMOB_SLOT_2, ADMOB_SLOT_3 | 광고 슬롯 | 테스트 ID |
 | AI_TEXT_API_KEY | 선택적 문장 생성 | 없으면 템플릿 사용 |
-| AI_IMAGE_API_KEY | 선택적 이미지 생성 | 없으면 라이브러리 사용 |
+| AI_IMAGE_API_KEY | 자동 대표 이미지 생성 | 없으면 라이브러리 사용 |
 | S3_ENDPOINT, S3_BUCKET, S3_ACCESS_KEY, S3_SECRET_KEY | 비공개 자산 저장 | 로컬 S3 호환 저장소 |
 | CONTENT_VERSION | 판정과 seed 버전 | 2.0.0 |
 

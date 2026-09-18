@@ -20,6 +20,23 @@ describe('provider fallbacks', () => {
     expect(image.sourceType).toBe('LIBRARY');
     expect(image.uri).toContain('asset://');
   });
+  it('requests exactly one low-quality AI image', async () => {
+    process.env.AI_IMAGE_API_URL = 'https://images.invalid/generate';
+    const original = globalThis.fetch;
+    let requestBody: unknown;
+    globalThis.fetch = (async (_input, init) => {
+      requestBody = JSON.parse(String(init?.body));
+      return new Response(JSON.stringify({ uri: 'https://images.invalid/result.webp', alt: 'generated result' }), { status: 200 });
+    }) as typeof fetch;
+    try {
+      const image = await new AiImageProvider(new LibraryImageProvider()).getImage(fixture);
+      expect(requestBody).toMatchObject({ n: 1, quality: 'low', idempotencyKey: fixture.answerHash });
+      expect(image.sourceType).toBe('AI');
+      expect(image.attemptCount).toBe(1);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
   it('retries image generation once before using the library fallback', async () => {
     process.env.AI_IMAGE_API_URL = 'https://images.invalid/generate';
     const original = globalThis.fetch;

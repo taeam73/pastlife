@@ -99,6 +99,7 @@ paths:
   /results/{resultId}/status:
     get:
       operationId: getResultStatus
+      description: Idempotently ensures one low-quality AI representative image for the result, or stores a library fallback when generation is unavailable or fails.
       parameters: [{ $ref: '#/components/parameters/ResultId' }]
       responses:
         '200': { description: Result status }

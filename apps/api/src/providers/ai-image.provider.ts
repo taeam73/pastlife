@@ -14,7 +14,13 @@ export class AiImageProvider implements ImageProvider {
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', ...(process.env.AI_IMAGE_API_KEY ? { Authorization: `Bearer ${process.env.AI_IMAGE_API_KEY}` } : {}) },
-          body: JSON.stringify({ core, version: process.env.CONTENT_VERSION ?? '2.5.0', idempotencyKey: core.answerHash }),
+          body: JSON.stringify({
+            core,
+            version: process.env.CONTENT_VERSION ?? '2.5.0',
+            idempotencyKey: core.answerHash,
+            n: 1,
+            quality: 'low',
+          }),
         });
         if (!response.ok) continue;
         const body = (await response.json()) as Partial<ImageAsset>;
