@@ -16,11 +16,16 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
 
   await expect(page).toHaveURL(/\/result$/);
   await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();
-  await page.getByRole('tab', { name: '텍스트로 보기' }).click();
-  await expect(page.getByText('나는 어떤 사람이었는가').first()).toBeVisible();
-  await expect(page.getByText('현생에 남은 흔적')).toBeVisible();
+  await expect(page.getByRole('tab', { name: '이미지와 텍스트' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tab', { name: /영상으로 보기/ })).toBeDisabled();
+  await expect(page.getByText('당신의 전생 이야기')).toBeVisible();
+  await expect(page.getByText(/당신의 \d+번째 전생은/)).toBeVisible();
+  await expect(page.getByText('탄생 · 세상에 처음 닿은 날')).toBeVisible();
+  await expect(page.getByText('죽음 · 마지막으로 떠오른 장면')).toBeVisible();
+  await expect(page.getByText('이 삶에서 가장 깊게 남은 것들')).toBeVisible();
+  await expect(page.getByText('가장 중요한 인연')).toBeVisible();
   await expect(page.getByText(/창작 스토리텔링입니다/)).toBeVisible();
-  await expect(page.getByRole('button', { name: '영상 공유' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '영상 공유 · 출시 예정' })).toBeDisabled();
   await expect(page.getByRole('button', { name: '이미지 공유' })).toBeVisible();
 
   await page.getByRole('button', { name: '아카이브에 저장하기' }).click();
@@ -32,7 +37,12 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   await page.getByText('기록 열기').click();
   await expect(page).toHaveURL(/\/archive\/[0-9a-f-]+$/);
   await expect(page.getByText(/저장된 전생 기록 No\.\d{2}/)).toBeVisible();
-  await expect(page.getByText('나는 어떤 사람이었는가').nth(1)).toBeVisible();
+  await expect(page.getByText('탄생 · 세상에 처음 닿은 날')).toBeVisible();
+  await page.getByRole('button', { name: '기록 삭제' }).click();
+  await expect(page.getByText('이 기록을 아카이브에서 삭제할까요? 현재 결과와 익명 판정 데이터는 삭제되지 않습니다.')).toBeVisible();
+  await page.getByRole('button', { name: '삭제 확인' }).click();
+  await expect(page).toHaveURL(/\/archive$/);
+  await expect(page.getByText('저장된 전생 기록이 없습니다.')).toBeVisible();
 
   await page.goto('/result');
   await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();

@@ -1,4 +1,5 @@
 import type { ResultCore, AnswerInput } from '@pastlife/scoring';
+import type { StoryProfile } from '../story-profile.js';
 
 export type StoredSession = {
   id: string;
@@ -22,6 +23,7 @@ export type StoredResult = {
   status: 'READY' | 'FAILED';
   core: ResultCore;
   blocks: NarrativeBlock[];
+  storyProfile?: StoryProfile;
   image?: StoredImage;
 };
 

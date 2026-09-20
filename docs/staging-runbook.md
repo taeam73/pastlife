@@ -35,6 +35,25 @@ API는 `DATABASE_URL`만 사용하며 Neon에서는 `-pooler` 호스트와
 전후에 URL을 수동으로 교체하지 않습니다. 운영 모드에서는 DB 설정 누락이나
 `USE_IN_MEMORY_DB=true`가 즉시 시작 오류가 됩니다.
 
+## AI 이미지와 비공개 저장소 검증
+
+staging `.env`에는 `AI_IMAGE_API_URL`, `AI_IMAGE_API_KEY`, `S3_ENDPOINT`,
+`S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`를 모두 지정합니다.
+staging의 AI 및 S3 endpoint는 HTTPS여야 하며 S3 버킷은 비공개로 유지합니다.
+
+```powershell
+corepack pnpm test:staging-config
+corepack pnpm staging:preflight
+corepack pnpm staging:storage-smoke
+```
+
+`staging:preflight`는 DB 설정과 함께 AI/S3 필수값을 검사하지만 endpoint의 호스트,
+버킷, 리전만 출력합니다. 키, 비밀번호, 전체 URL은 출력하지 않습니다.
+`staging:storage-smoke`는 고유한 `smoke/` 경로에 1픽셀 PNG를 올리고, 15분 유효
+서명 URL로 다시 받아 바이트를 비교한 뒤 `finally`에서 객체를 삭제합니다. 성공
+로그에도 서명 URL이나 자격 증명은 포함하지 않습니다. 실패 후 cleanup 로그가
+없다면 버킷의 해당 `smoke/` 키를 확인해 수동으로 삭제합니다.
+
 Docker가 설치된 환경에서 로컬 인프라를 사용할 때는 다음 순서로 실행합니다.
 
 ```powershell
@@ -48,7 +67,7 @@ corepack pnpm test
 corepack pnpm test:e2e
 ```
 
-운영 설정에서는 `USE_IN_MEMORY_DB=false`, `USE_MOCK_GOOGLE=false`, `GOOGLE_CLIENT_IDS`, AI endpoint/key, S3 endpoint/key, `ADMIN_TOKEN`, `JWT_SECRET`을 반드시 지정합니다. migration 적용 전 백업 또는 Neon 복구 지점을 준비하고, publish/rollback은 staging에서 먼저 검증합니다. `staging:preflight`는 URL의 사용자명·비밀번호·쿼리 토큰을 출력하지 않고 provider, 호스트, 콘텐츠 버전만 표시합니다.
+운영 설정에서는 `USE_IN_MEMORY_DB=false`, `USE_MOCK_GOOGLE=false`, `GOOGLE_CLIENT_IDS`, AI endpoint/key, S3 endpoint/key, `ADMIN_TOKEN`, `JWT_SECRET`을 반드시 지정합니다. migration 적용 전 백업 또는 Neon 복구 지점을 준비하고, publish/rollback은 staging에서 먼저 검증합니다. `staging:preflight`는 사용자명·비밀번호·API 키·쿼리 토큰을 출력하지 않고 provider, 호스트, 버킷, 리전, 콘텐츠 버전만 표시합니다.
 
 이미 만들어진 스테이징/운영 데이터베이스에는 `db:migrate`(`prisma migrate dev`)를 사용하지 않습니다. 읽기 전용 상태 확인은 `db:migrate:status`, 승인된 배포는 `db:migrate:deploy`를 사용합니다.
 

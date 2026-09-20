@@ -1,0 +1,2 @@
+ALTER TABLE "sessions"
+ALTER COLUMN "viewMode" SET DEFAULT 'TEXT';

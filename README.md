@@ -69,9 +69,32 @@ $env:EXPO_NO_TELEMETRY='1'; $env:EXPO_OFFLINE='1'; $env:CI='1'; corepack pnpm --
 다음 값은 기획서에서 출시 전 운영 결정으로 남긴 항목이므로 코드에 확정값으로 묻지 않습니다.
 
 - `AI_IMAGE_API_URL`, `AI_IMAGE_API_KEY`: 이미지 공급자와 인증
+- `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`: 생성 이미지 비공개 저장소
 - `PUBLIC_SHARE_URL`: 공개 공유 링크 및 Android App Links 기준 URL
 - `GOOGLE_PLAY_URL`: 미설치 Android 사용자의 스토어 폴백
 - `EXPO_PUBLIC_ANDROID_PACKAGE`, `EXPO_PUBLIC_APP_LINK_HOST`: Android 패키지와 검증된 링크 호스트
 - 라이선스가 확인된 BGM·효과음 바이너리와 지역별 기본 재생 정책
+
+`AI_IMAGE_API_URL`은 다음 JSON 요청을 받는 HTTPS 서비스여야 합니다. API는 요청마다
+한 장과 low 품질을 고정하고 30초 안에 응답하지 않으면 한 번 재시도합니다.
+
+```json
+{
+  "prompt": "controlled historical illustration prompt",
+  "version": "2.5.0",
+  "idempotencyKey": "result answer hash",
+  "n": 1,
+  "quality": "low"
+}
+```
+
+성공 응답은 `{"uri":"https://...","alt":"..."}` 형식이어야 하며, HTTPS가 아닌
+URI, 빈 대체 텍스트, 500자를 넘는 대체 텍스트는 실패로 처리됩니다. 공급자가 없거나
+두 요청이 모두 실패하면 결과 흐름을 중단하지 않고 라이브러리 이미지를 저장합니다.
+
+성공한 AI 이미지는 지원 형식(PNG, JPEG, WebP)과 10MB 제한을 검사한 뒤 비공개
+S3 호환 버킷에 저장합니다. DB에는 만료되지 않는 `s3://bucket/key` 참조만 보관하고,
+API 응답 시점에 15분 동안 유효한 서명 URL을 생성합니다. S3 자격 증명과 서명 URL은
+로그에 기록하지 않으며, 저장 또는 서명 실패 시 검수된 라이브러리 이미지를 사용합니다.
 
 `VIDEO` 공유 응답의 `TEMPLATE_READY`는 동일한 결과 이미지와 텍스트로 MP4를 만들 입력이 고정됐다는 뜻입니다. 실제 H.264/AAC 인코딩은 배포 환경의 렌더 워커가 연결된 뒤 `READY`로 승격해야 합니다. 자세한 반영 내역은 [PRD 2.5 구현 보고서](docs/prd-2.5-implementation-report.md)를 참고하세요.

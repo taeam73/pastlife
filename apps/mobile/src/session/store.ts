@@ -21,7 +21,7 @@ export async function loadSession(): Promise<SessionState | null> {
   const value = await AsyncStorage.getItem(STORAGE_KEY);
   if (!value) return null;
   const parsed = JSON.parse(value) as Omit<SessionState, 'viewMode'> & { viewMode?: ViewMode };
-  return { ...parsed, viewMode: parsed.viewMode ?? 'VIDEO' };
+  return { ...parsed, viewMode: parsed.viewMode ?? 'TEXT' };
 }
 
 export async function saveResultId(resultId: string) {

@@ -300,16 +300,16 @@ model AnalyticsEvent {
 }
 
 model Session {
-  id             String          @id @default(cuid())
+  id             String            @id @default(cuid())
   anonymousId    String
-  locale         String          @default("ko")
+  locale         String            @default("ko")
   seed           String
   contentVersion String
-  status         SessionStatus   @default(CREATED)
-  viewMode       ViewMode        @default(VIDEO)
+  status         SessionStatus     @default(CREATED)
+  viewMode       ViewMode          @default(TEXT)
   expiresAt      DateTime
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
   answers        SessionAnswer[]
   questions      SessionQuestion[]
   result         Result?
@@ -347,18 +347,19 @@ model SessionAnswer {
 }
 
 model Result {
-  id             String         @id @default(cuid())
-  session        Session        @relation(fields: [sessionId], references: [id], onDelete: Restrict)
-  sessionId      String         @unique
-  answerHash     String
-  contentVersion String
-  recordNo       Int
-  coreJson       Json
-  status         ResultStatus   @default(NARRATIVE_GENERATING)
-  createdAt      DateTime       @default(now())
-  texts          ResultText[]
-  image          ResultImage?
-  archives       ArchiveEntry[]
+  id               String         @id @default(cuid())
+  session          Session        @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  sessionId        String         @unique
+  answerHash       String
+  contentVersion   String
+  recordNo         Int
+  coreJson         Json
+  storyProfileJson Json?
+  status           ResultStatus   @default(NARRATIVE_GENERATING)
+  createdAt        DateTime       @default(now())
+  texts            ResultText[]
+  image            ResultImage?
+  archives         ArchiveEntry[]
 
   @@index([answerHash, contentVersion])
   @@map("results")
@@ -377,16 +378,16 @@ model ResultText {
 }
 
 model ResultImage {
-  id         String @id @default(cuid())
-  result     Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
-  resultId   String @unique
-  sourceType String
-  storageUrl String
-  promptHash String
-  status     String
-  altText    String @default("")
-  attemptCount Int @default(0)
-  errorCode  String?
+  id           String  @id @default(cuid())
+  result       Result  @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  resultId     String  @unique
+  sourceType   String
+  storageUrl   String
+  promptHash   String
+  status       String
+  altText      String  @default("")
+  attemptCount Int     @default(0)
+  errorCode    String?
 
   @@map("result_images")
 }

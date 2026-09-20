@@ -26,6 +26,32 @@ function requireNeonTls(url, name) {
   }
 }
 
+function requireValue(env, name) {
+  const value = env[name]?.trim();
+  if (!value) throw new Error(`${name} is required for staging`);
+  return value;
+}
+
+function parseHttpsUrl(value, name) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`${name} must be a valid URL`);
+  }
+  if (url.protocol !== 'https:') throw new Error(`${name} must use https:// for staging`);
+  if (url.username || url.password) throw new Error(`${name} must not contain embedded credentials`);
+  return url;
+}
+
+function requireBucketName(value) {
+  const isIpAddress = /^\d{1,3}(?:\.\d{1,3}){3}$/.test(value);
+  if (!/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/.test(value) || value.includes('..') || isIpAddress) {
+    throw new Error('S3_BUCKET must be a safe DNS-compatible bucket name');
+  }
+  return value;
+}
+
 export function inspectStagingEnv(env = process.env) {
   if (env.USE_IN_MEMORY_DB !== 'false') {
     throw new Error('USE_IN_MEMORY_DB must be false for staging');
@@ -58,10 +84,22 @@ export function inspectStagingEnv(env = process.env) {
     }
   }
 
+  const aiImageEndpoint = parseHttpsUrl(requireValue(env, 'AI_IMAGE_API_URL'), 'AI_IMAGE_API_URL');
+  requireValue(env, 'AI_IMAGE_API_KEY');
+  const storageEndpoint = parseHttpsUrl(requireValue(env, 'S3_ENDPOINT'), 'S3_ENDPOINT');
+  const storageRegion = requireValue(env, 'S3_REGION');
+  const storageBucket = requireBucketName(requireValue(env, 'S3_BUCKET'));
+  requireValue(env, 'S3_ACCESS_KEY');
+  requireValue(env, 'S3_SECRET_KEY');
+
   return {
     runtimeHost: runtime.hostname,
     migrationHost: migration.hostname,
     provider: runtimeIsNeon ? 'neon' : 'postgresql',
     contentVersion: env.CONTENT_VERSION,
+    aiImageEndpointHost: aiImageEndpoint.hostname,
+    storageEndpointHost: storageEndpoint.hostname,
+    storageBucket,
+    storageRegion,
   };
 }

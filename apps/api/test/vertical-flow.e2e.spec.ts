@@ -46,11 +46,12 @@ describe('anonymous vertical flow', () => {
     const history = await request(app.getHttpServer()).get('/api/v1/admin/content/publish-history').expect(200);
     expect(history.body.items[0].published).toBe(1);
     await request(app.getHttpServer()).post(`/api/v1/admin/content/rollback?digest=${history.body.items[0].digest}`).expect(201).expect(({ body }) => expect(body.restored).toBe(1));
-    const created = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko', deviceId: 'test-install-0001' }).expect(201);
+    const created = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko', deviceId: 'test-install-0001', preferredViewMode: 'VIDEO' }).expect(201);
     const sessionId = created.body.sessionId as string;
-    expect(created.body.viewMode).toBe('VIDEO');
+    expect(created.body.viewMode).toBe('TEXT');
 
     await request(app.getHttpServer()).patch(`/api/v1/sessions/${sessionId}/view-mode`).send({ viewMode: 'TEXT' }).expect(200).expect(({ body }) => expect(body.viewMode).toBe('TEXT'));
+    await request(app.getHttpServer()).patch(`/api/v1/sessions/${sessionId}/view-mode`).send({ viewMode: 'VIDEO' }).expect(400).expect(({ body }) => expect(body.code).toBe('FEATURE_UNAVAILABLE'));
 
     const firstSessionQuestionIds: string[] = [];
 
@@ -94,7 +95,11 @@ describe('anonymous vertical flow', () => {
       resultId,
       image: { sourceType: 'LIBRARY', status: 'FALLBACK' },
     });
-    expect(basic.body.blocks).toHaveLength(7);
+    expect(basic.body.blocks).toHaveLength(6);
+    expect(basic.body.blocks.map(({ body }: { body: string }) => body).join('\n').length).toBeGreaterThanOrEqual(1_600);
+    expect(basic.body.blocks[0].body).toContain(`당신의 ${basic.body.recordNo}번째 삶`);
+    expect(basic.body.character.fictional).toBe(true);
+    expect(basic.body.highlights).toHaveLength(8);
     expect(basic.body.recordNo).toBeGreaterThanOrEqual(1);
     expect(basic.body.disclaimer).toContain('창작 스토리텔링');
 
@@ -114,9 +119,7 @@ describe('anonymous vertical flow', () => {
     const imageShare = await request(app.getHttpServer()).post(`/api/v1/results/${resultId}/share-assets`).send({ type: 'IMAGE', locale: 'ko' }).expect(201);
     expect(imageShare.body.type).toBe('IMAGE');
     expect(imageShare.body.sourceImageUri).toBe(basic.body.image.uri);
-    const videoShare = await request(app.getHttpServer()).post(`/api/v1/results/${resultId}/share-assets`).send({ type: 'VIDEO', locale: 'ko' }).expect(201);
-    expect(videoShare.body.type).toBe('VIDEO');
-    expect(videoShare.body.sourceImageUri).toBe(basic.body.image.uri);
+    await request(app.getHttpServer()).post(`/api/v1/results/${resultId}/share-assets`).send({ type: 'VIDEO', locale: 'ko' }).expect(400).expect(({ body }) => expect(body.code).toBe('FEATURE_UNAVAILABLE'));
 
     const nextSession = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko', deviceId: 'test-install-0001' }).expect(201);
     for (let stage = 1; stage <= 6; stage += 1) {
@@ -131,10 +134,15 @@ describe('anonymous vertical flow', () => {
     await request(app.getHttpServer()).get('/api/v1/auth/archive').set(bearer).expect(200).expect(({ body }) => expect(body.items[0].resultId).toBe(resultId));
     await request(app.getHttpServer()).get(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(200).expect(({ body }) => {
       expect(body.resultId).toBe(resultId);
-      expect(body.blocks).toHaveLength(7);
+      expect(body.blocks).toHaveLength(6);
       expect(body.viewMode).toBe('TEXT');
     });
     const otherAuth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:other@example.com' }).expect(201);
     await request(app.getHttpServer()).get(`/api/v1/auth/archive/${resultId}`).set({ Authorization: `Bearer ${otherAuth.body.accessToken}` }).expect(403);
+    await request(app.getHttpServer()).delete(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(204);
+    await request(app.getHttpServer()).delete(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(204);
+    await request(app.getHttpServer()).get('/api/v1/auth/archive').set(bearer).expect(200).expect(({ body }) => expect(body.items).toHaveLength(0));
+    await request(app.getHttpServer()).get(`/api/v1/auth/archive/${resultId}`).set(bearer).expect(403);
+    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(200);
   });
 });

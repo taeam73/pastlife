@@ -49,6 +49,6 @@ import { resolveAuthRuntimeConfig } from '../config/auth.js';
         resolveAuthRuntimeConfig().googleMode === 'mock' ? mock : oauth,
     },
   ],
-  exports: [ASSESSMENT_REPOSITORY, AD_PROVIDER, NARRATIVE_PROVIDER, IMAGE_PROVIDER, GOOGLE_IDENTITY_PROVIDER, IMAGE_STORAGE],
+  exports: [ASSESSMENT_REPOSITORY, AD_PROVIDER, NARRATIVE_PROVIDER, IMAGE_PROVIDER, IMAGE_STORAGE, LibraryImageProvider, GOOGLE_IDENTITY_PROVIDER],
 })
 export class ProvidersModule {}

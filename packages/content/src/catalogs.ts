@@ -102,7 +102,7 @@ const socialClassRows = [
 
 export const socialClasses = socialClassRows.map(([id, label], index) => ({ id, label, affinityTags: tagSets[index % tagSets.length]! }));
 
-const occupationLabels = ['서기관', '기록 교사', '의례 담당자', '지도 제작자', '항해사', '공방 기술자', '공동체 돌봄이', '별과 바람을 읽는 길잡이'];
+const occupationLabels = ['서기관', '기록 교사', '의례 담당자', '지도 제작자', '항해사', '공방 기술자', '공동체 돌봄 담당자', '별과 바람을 읽는 길잡이'];
 export const occupations: Occupation[] = historicalLocations.map((location, index) => ({
   id: `OCC_${String(index + 1).padStart(2, '0')}`,
   label: occupationLabels[index]!,
@@ -144,13 +144,12 @@ export const lastMemories: Candidate[] = [
 ];
 
 export const basicTemplates = [
-  { id: 'BASIC_COVER', title: '전생 기록 표지' },
-  { id: 'BASIC_PERSON', title: '나는 어떤 사람이었는가' },
-  { id: 'BASIC_DAILY', title: '삶의 풍경' },
-  { id: 'BASIC_RELATIONSHIP', title: '중요한 인연' },
-  { id: 'BASIC_EVENT', title: '삶을 바꾼 사건' },
-  { id: 'BASIC_LAST_MEMORY', title: '마지막 기억' },
-  { id: 'BASIC_TRACE', title: '현생에 남은 흔적' },
+  { id: 'LIFE_BIRTH', title: '탄생 · 세상에 처음 닿은 날' },
+  { id: 'LIFE_CHILDHOOD', title: '유년기 · 마음의 결이 만들어진 시절' },
+  { id: 'LIFE_YOUTH', title: '청년기 · 자신의 길과 인연을 만난 때' },
+  { id: 'LIFE_MIDLIFE', title: '삶의 전환기 · 운명을 바꾼 선택' },
+  { id: 'LIFE_LATER_YEARS', title: '삶의 끝자락 · 남겨진 것들' },
+  { id: 'LIFE_DEATH', title: '죽음 · 마지막으로 떠오른 장면' },
 ] as const;
 
 export const bonusTemplates = [

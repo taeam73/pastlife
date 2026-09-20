@@ -29,19 +29,19 @@
 - Consumes: `ResultCore` from `@pastlife/scoring`.
 - Produces: `buildAiImagePrompt(core: ResultCore): string`.
 
-- [ ] **Step 1: Write a failing test for deterministic prompt content**
+- [x] **Step 1: Write a failing test for deterministic prompt content**
 
 Assert that the prompt contains the result IDs and `libraryImage.promptTags`, requests a cinematic historical illustration, and contains the required negative safety instructions.
 
-- [ ] **Step 2: Run `corepack pnpm --filter @pastlife/api test -- provider-fallback.spec.ts`**
+- [x] **Step 2: Run `corepack pnpm --filter @pastlife/api test -- provider-fallback.spec.ts`**
 
 Expected: fail because `buildAiImagePrompt` does not exist.
 
-- [ ] **Step 3: Implement `buildAiImagePrompt` as a pure function**
+- [x] **Step 3: Implement `buildAiImagePrompt` as a pure function**
 
 Join only immutable catalog IDs and controlled prompt tags. Do not include emails, tokens, free-form user text, or runtime secrets.
 
-- [ ] **Step 4: Re-run the focused API test**
+- [x] **Step 4: Re-run the focused API test**
 
 Expected: prompt test passes.
 
@@ -55,19 +55,19 @@ Expected: prompt test passes.
 - Consumes: `buildAiImagePrompt(core)` and `AI_IMAGE_API_URL`/`AI_IMAGE_API_KEY`.
 - Produces: the existing `ImageProvider.getImage(core): Promise<ImageAsset>` contract.
 
-- [ ] **Step 1: Extend the request-contract test**
+- [x] **Step 1: Extend the request-contract test**
 
 Assert that the body contains `prompt`, `n: 1`, `quality: "low"`, `idempotencyKey`, and the content version, and that the fetch request carries an abort signal.
 
-- [ ] **Step 2: Add malformed-response tests**
+- [x] **Step 2: Add malformed-response tests**
 
 Return an invalid URI and an empty alt value from the fake endpoint; assert two attempts followed by `IMAGE_GENERATION_FAILED` library fallback.
 
-- [ ] **Step 3: Implement timeout and response validation**
+- [x] **Step 3: Implement timeout and response validation**
 
 Use `AbortSignal.timeout(30_000)`. Accept only `https:` image URIs and a non-empty alt string of at most 500 characters. Retry once on HTTP, JSON, timeout, or validation failure.
 
-- [ ] **Step 4: Run focused tests and API typecheck**
+- [x] **Step 4: Run focused tests and API typecheck**
 
 Run `corepack pnpm --filter @pastlife/api test -- provider-fallback.spec.ts` and `corepack pnpm --filter @pastlife/api typecheck`.
 
@@ -84,16 +84,16 @@ Expected: all checks pass.
 - Consumes: the finalized request and response shapes from Task 2.
 - Produces: an operator-facing contract that does not contain credentials.
 
-- [ ] **Step 1: Document the endpoint request and response shapes**
+- [x] **Step 1: Document the endpoint request and response shapes**
 
 Document `prompt`, `n`, `quality`, `version`, and `idempotencyKey`; document the required `{ "uri": "https://...", "alt": "..." }` response.
 
-- [ ] **Step 2: Run full verification**
+- [x] **Step 2: Run full verification**
 
 Run `corepack pnpm typecheck`, `corepack pnpm test`, `corepack pnpm test:e2e`, and `git diff --check`.
 
 Expected: all commands pass.
 
-- [ ] **Step 3: Review the plan and mark only completed steps**
+- [x] **Step 3: Review the plan and mark only completed steps**
 
 Confirm no unchecked implementation step remains and no secret or real endpoint value was committed.

@@ -35,6 +35,14 @@ paths:
               schema: { $ref: '#/components/schemas/ArchiveDetail' }
         '401': { description: Authentication required }
         '403': { description: Archive entry is not owned by the signed-in user }
+    delete:
+      operationId: deleteArchiveEntry
+      description: Removes only the authenticated user's archive association. The anonymous result and other users' archive entries are retained. Repeated deletion is idempotent.
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ResultId' }]
+      responses:
+        '204': { description: Archive association is absent after the request }
+        '401': { description: Authentication required }
   /sessions:
     post:
       operationId: createSession
@@ -258,13 +266,24 @@ components:
         choiceId: { type: string }
     BasicResult:
       type: object
-      required: [resultId, recordNo, headline, image, blocks, disclaimer]
+      required: [resultId, recordNo, headline, character, lifeSummary, highlights, image, blocks, disclaimer]
       properties:
         resultId: { type: string }
         recordNo: { type: integer, minimum: 1, maximum: 99 }
         headline: { type: string }
+        character:
+          type: object
+          description: Fictional character dossier; it does not infer the user's real identity.
+        lifeSummary:
+          type: object
+          required: [ageAtDeath, lifespanLabel, endingTitle]
+          properties:
+            ageAtDeath: { type: integer, minimum: 1 }
+            lifespanLabel: { type: string }
+            endingTitle: { type: string }
+        highlights: { type: array, minItems: 8, maxItems: 8, items: { type: object } }
         image: { type: object }
-        blocks: { type: array, minItems: 7, maxItems: 7, items: { type: object } }
+        blocks: { type: array, minItems: 6, maxItems: 6, items: { type: object } }
         disclaimer: { type: string }
     ArchiveDetail:
       allOf:

@@ -13,10 +13,17 @@ async function request<S extends z.ZodType>(path: string, init: RequestInit, sch
   return schema.parse(body);
 }
 
+async function requestNoContent(path: string, init: RequestInit): Promise<void> {
+  const response = await fetch(`${baseUrl}${path}`, { ...init, headers: { ...jsonHeaders, ...init.headers } });
+  if (response.ok) return;
+  const body = await response.json().catch(() => ({})) as { message?: string };
+  throw Object.assign(new Error(body.message ?? '요청에 실패했습니다.'), { status: response.status, body });
+}
+
 export const api = {
   analytics: (name: AnalyticsEventName, metadata: AnalyticsMetadata) => request('/analytics/events', { method: 'POST', body: JSON.stringify(CreateAnalyticsEventRequestSchema.parse({ name, metadata, occurredAt: new Date().toISOString() })) }, AnalyticsEventResponseSchema),
   exchangeGoogle: (idToken: string) => request('/auth/google/exchange', { method: 'POST', body: JSON.stringify(GoogleExchangeRequestSchema.parse({ idToken })) }, AuthResponseSchema),
-  createSession: (deviceId: string, preferredViewMode: ViewMode = 'VIDEO') => request('/sessions', { method: 'POST', body: JSON.stringify({ locale: 'ko', deviceId, preferredViewMode }) }, CreateSessionResponseSchema),
+  createSession: (deviceId: string, preferredViewMode: ViewMode = 'TEXT') => request('/sessions', { method: 'POST', body: JSON.stringify({ locale: 'ko', deviceId, preferredViewMode }) }, CreateSessionResponseSchema),
   question: (sessionId: string, stage: number) => request(`/sessions/${sessionId}/questions/${stage}`, { method: 'GET' }, QuestionResponseSchema),
   answer: (sessionId: string, stage: number, questionId: string, choiceId: string) => request(`/sessions/${sessionId}/answers/${stage}`, { method: 'PUT', body: JSON.stringify({ questionId, choiceId }) }, ProgressResponseSchema),
   complete: (sessionId: string) => request(`/sessions/${sessionId}/complete`, { method: 'POST' }, CompleteResponseSchema),
@@ -32,4 +39,5 @@ export const api = {
   archive: (resultId: string, accessToken: string) => request(`/auth/archive/${resultId}`, { method: 'POST', headers: { Authorization: `Bearer ${accessToken}` } }, ArchiveSaveResponseSchema),
   archiveList: (accessToken: string) => request('/auth/archive', { method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } }, ArchiveResponseSchema),
   archiveDetail: (resultId: string, accessToken: string) => request(`/auth/archive/${resultId}`, { method: 'GET', headers: { Authorization: `Bearer ${accessToken}` } }, ArchiveDetailResponseSchema),
+  deleteArchive: (resultId: string, accessToken: string) => requestNoContent(`/auth/archive/${resultId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } }),
 };

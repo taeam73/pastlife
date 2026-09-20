@@ -16,6 +16,7 @@
     "test:staging-config": "node --test scripts/staging-env.test.mjs",
     "env:neon": "node scripts/configure-neon-env.mjs",
     "staging:preflight": "node --env-file=.env scripts/check-staging-env.mjs",
+    "staging:storage-smoke": "corepack pnpm --filter @pastlife/api storage:smoke",
     "db:migrate": "corepack pnpm exec prisma migrate dev --schema prisma/schema.prisma",
     "db:migrate:status": "corepack pnpm exec prisma migrate status --schema prisma/schema.prisma",
     "db:migrate:deploy": "corepack pnpm exec prisma migrate deploy --schema prisma/schema.prisma",

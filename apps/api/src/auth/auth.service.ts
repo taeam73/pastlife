@@ -48,7 +48,15 @@ export class AuthService {
     const result = await this.repository.getResult(resultId);
     if (!result) throw new BadRequestException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' });
     const session = await this.repository.getSession(result.sessionId);
-    return { ...(await this.results.basic(resultId)), viewMode: session?.viewMode ?? 'VIDEO' };
+    return { ...(await this.results.basic(resultId)), viewMode: session?.viewMode ?? 'TEXT' };
+  }
+  async deleteArchive(resultId: string, token: string) {
+    const userId = this.verify(token);
+    if (this.dbEnabled) {
+      await this.prisma.archiveEntry.deleteMany({ where: { userId, resultId } });
+    } else {
+      this.archives.get(userId)?.delete(resultId);
+    }
   }
   private get dbEnabled() { return Boolean(process.env.DATABASE_URL && process.env.USE_IN_MEMORY_DB !== 'true'); }
   private sign(userId: string) {

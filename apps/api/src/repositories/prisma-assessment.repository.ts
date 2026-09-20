@@ -4,6 +4,7 @@ import type { Stage } from '@pastlife/content';
 import type { AnswerInput, ResultCore } from '@pastlife/scoring';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { AssessmentRepository, NarrativeBlock, StoredImage, StoredResult, StoredSession } from './assessment.repository.js';
+import type { StoryProfile } from '../story-profile.js';
 
 @Injectable()
 export class PrismaAssessmentRepository implements AssessmentRepository {
@@ -89,6 +90,7 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
             contentVersion: result.core.contentVersion,
             recordNo: result.core.recordNo,
             coreJson: result.core as unknown as Prisma.InputJsonValue,
+            storyProfileJson: result.storyProfile as unknown as Prisma.InputJsonValue,
             status: 'READY',
             texts: { create: { locale: 'ko', blocksJson: result.blocks as unknown as Prisma.InputJsonValue, generatorVersion: 'template-v1' } },
           },
@@ -179,12 +181,13 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
     };
   }
 
-  private toResult(row: { id: string; sessionId: string; status: string; coreJson: Prisma.JsonValue; texts: Array<{ blocksJson: Prisma.JsonValue }>; image: { sourceType: string; storageUrl: string; altText: string; status: string; attemptCount: number; errorCode: string | null } | null }): StoredResult {
+  private toResult(row: { id: string; sessionId: string; status: string; coreJson: Prisma.JsonValue; storyProfileJson: Prisma.JsonValue | null; texts: Array<{ blocksJson: Prisma.JsonValue }>; image: { sourceType: string; storageUrl: string; altText: string; status: string; attemptCount: number; errorCode: string | null } | null }): StoredResult {
     return {
       id: row.id,
       sessionId: row.sessionId,
       status: row.status === 'READY' ? 'READY' : 'FAILED',
       core: row.coreJson as unknown as ResultCore,
+      ...(row.storyProfileJson ? { storyProfile: row.storyProfileJson as unknown as StoryProfile } : {}),
       blocks: (row.texts[0]?.blocksJson ?? []) as unknown as NarrativeBlock[],
       ...(row.image ? { image: {
         sourceType: row.image.sourceType === 'AI' ? 'AI' : 'LIBRARY',

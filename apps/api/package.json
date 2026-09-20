@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "start": "tsx src/main.ts",
+    "storage:smoke": "node --env-file=../../.env scripts/storage-smoke.mjs",
     "test": "vitest run --exclude test/**/*.e2e.spec.ts",
     "test:e2e": "vitest run test/vertical-flow.e2e.spec.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1134.0",
+    "@aws-sdk/s3-request-presigner": "^3.1134.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",

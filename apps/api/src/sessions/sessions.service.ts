@@ -12,7 +12,7 @@ export class SessionsService {
     @Inject(NARRATIVE_PROVIDER) private readonly narrativeProvider: NarrativeProvider,
   ) {}
 
-  async create(locale = 'ko', deviceId?: string, preferredViewMode: 'VIDEO' | 'TEXT' = 'VIDEO') {
+  async create(locale = 'ko', deviceId?: string, _preferredViewMode: 'VIDEO' | 'TEXT' = 'TEXT') {
     const session = await this.repository.createSession({
       id: randomUUID(),
       anonymousId: deviceId ?? randomUUID(),
@@ -20,7 +20,7 @@ export class SessionsService {
       seed: randomBytes(16).toString('hex'),
       contentVersion: process.env.CONTENT_VERSION ?? '2.5.0',
       status: 'CREATED',
-      viewMode: preferredViewMode,
+      viewMode: 'TEXT',
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
     return { sessionId: session.id, seed: session.seed, contentVersion: session.contentVersion, status: session.status, viewMode: session.viewMode };
@@ -69,6 +69,9 @@ export class SessionsService {
 
   async setViewMode(sessionId: string, viewMode: 'VIDEO' | 'TEXT') {
     await this.requireSession(sessionId);
+    if (viewMode === 'VIDEO') {
+      throw new BadRequestException({ code: 'FEATURE_UNAVAILABLE', message: '영상 보기는 첫 출시 이후 제공됩니다.' });
+    }
     return { sessionId, viewMode: await this.repository.setViewMode(sessionId, viewMode) };
   }
 
@@ -81,8 +84,8 @@ export class SessionsService {
     await this.repository.setSessionStatus(sessionId, 'CALCULATING');
     const core = calculateResult({ answers: session.answers, sessionSeed: session.seed, contentVersion: session.contentVersion });
     await this.repository.setSessionStatus(sessionId, 'NARRATIVE_GENERATING');
-    const blocks = await this.narrativeProvider.createBasic(core);
-    const result = await this.repository.saveResult({ id: randomUUID(), sessionId, status: 'READY', core, blocks });
+    const narrative = await this.narrativeProvider.createBasic(core);
+    const result = await this.repository.saveResult({ id: randomUUID(), sessionId, status: 'READY', core, blocks: narrative.blocks, storyProfile: narrative.storyProfile });
     return { resultId: result.id, status: 'RESULT_READY' };
   }
 
