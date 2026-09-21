@@ -101,15 +101,21 @@ describe('anonymous vertical flow', () => {
     expect(basic.body.character.fictional).toBe(true);
     expect(basic.body.highlights).toHaveLength(8);
     expect(basic.body.recordNo).toBeGreaterThanOrEqual(1);
-    expect(basic.body.disclaimer).toContain('창작 스토리텔링');
+    expect(basic.body.disclaimer).toContain('창작 콘텐츠');
 
     await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/deep`).expect(403).expect(({ body }) => expect(body.slot).toBe(2));
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${sessionId}` }).expect(201);
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${sessionId}` }).expect(201);
-    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/deep`).expect(200).expect(({ body }) => expect(body.blocks).toHaveLength(4));
+    const deep = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/deep`).expect(200);
+    expect(deep.body.blocks).toHaveLength(4);
+    expect(deep.body.blocks.map(({ body }: { body: string }) => body).join('\n').length).toBeGreaterThanOrEqual(1_200);
+    expect(deep.body.blocks.every(({ body }: { body: string }) => body.split('\n\n').length >= 3)).toBe(true);
     await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/guide`).expect(403).expect(({ body }) => expect(body.slot).toBe(3));
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/3/complete`).send({ providerEventId: `fake-ad-3-${sessionId}` }).expect(201);
-    await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/guide`).expect(200).expect(({ body }) => expect(body.blocks).toHaveLength(4));
+    const presentGuide = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/guide`).expect(200);
+    expect(presentGuide.body.blocks).toHaveLength(4);
+    expect(presentGuide.body.blocks.map(({ body }: { body: string }) => body).join('\n').length).toBeGreaterThanOrEqual(1_200);
+    expect(presentGuide.body.blocks.every(({ body }: { body: string }) => body.split('\n\n').length >= 3)).toBe(true);
     const share = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/share`).expect(200);
     expect(share.body.resultId).toBe(resultId);
     expect(share.body.shareToken).toHaveLength(24);

@@ -16,6 +16,9 @@ import { selectLifeEnding } from './life-ending-catalog.js';
 import { selectLifeBackground } from './life-background-catalog.js';
 import { selectLifeIdentity } from './life-identity-catalog.js';
 import { selectRelationshipEvent } from './story-event-catalog.js';
+import { selectStoryArchetype } from './story-archetype-catalog.js';
+import { selectScenarioVariants } from './story-scenario-catalog.js';
+import { selectHistoricalEpisodes } from './historical-episode-catalog.js';
 
 const locationScenes: Record<string, string> = {
   LOC_MESOPOTAMIA: '햇빛에 마른 점토 냄새와 수로를 오가는 사람들의 목소리가 골목마다 머물렀고, 해가 기울면 낮 동안 달아오른 벽이 천천히 식어 갔습니다.',
@@ -173,6 +176,11 @@ function requireCatalogItem<T extends { id: string }>(items: readonly T[], id: s
   return item;
 }
 
+const retiredOccupationAliases: Record<string, string> = {
+  OCC_01: 'OCC_SCRIBE', OCC_02: 'OCC_TEACHER', OCC_03: 'OCC_CEREMONIAL', OCC_04: 'OCC_NAVIGATOR',
+  OCC_05: 'OCC_NAVIGATOR', OCC_06: 'OCC_ARTISAN', OCC_07: 'OCC_HEALER', OCC_08: 'OCC_MESSENGER',
+};
+
 function hasFinalConsonant(value: string) {
   const last = [...value.trim()].at(-1);
   if (!last) return false;
@@ -205,6 +213,9 @@ export function buildStoryProfile(core: ResultCore): StoryProfile {
   const event = requireCatalogItem(lifeEvents, core.eventId, 'event');
   const memory = requireCatalogItem(lastMemories, core.lastMemoryId, 'last memory');
   const relationshipEvent = selectRelationshipEvent(core);
+  const storyArchetype = selectStoryArchetype(core);
+  const scenarioVariants = selectScenarioVariants(core);
+  const historicalEpisodes = selectHistoricalEpisodes(core);
   const lifeEnding = selectLifeEnding(core);
   const lifeBackground = selectLifeBackground(core);
   const lifeIdentity = selectLifeIdentity(core);
@@ -247,14 +258,14 @@ export function buildStoryProfile(core: ResultCore): StoryProfile {
     timeline,
     legacy,
     highlights: [
-      { id: 'IDENTITY', title: '기록 속 당신', summary: `${lifeIdentity.identity.name}이라 불린 ${lifeIdentity.identity.gender}`, detail: `${lifeIdentity.identity.appearance} ${lifeIdentity.identity.temperament}. ${lifeIdentity.identity.complex}` },
-      { id: 'DREAM_AND_DAILY', title: '취미와 이루고 싶었던 꿈', summary: lifeIdentity.dailyLife.hobby, detail: `꿈은 ${lifeIdentity.dailyLife.dream}이었습니다.` },
-      { id: 'LIFE_FOUNDATION', title: '당신이 자란 삶의 배경', summary: lifeBackground.background.familyStructure, detail: `${lifeBackground.background.primaryCaregiver} ${lifeBackground.background.homeAndResources}` },
-      { id: 'INNER_WOUND', title: '마음에 남은 가장 오래된 상처', summary: lifeBackground.innerLife.formativeWound, detail: `${lifeBackground.innerLife.coreFear}. 그래서 ${lifeBackground.innerLife.copingPattern}` },
+      { id: 'IDENTITY', title: '그때의 당신', summary: `${lifeIdentity.identity.name}이라 불린 ${lifeIdentity.identity.gender}`, detail: `${lifeIdentity.identity.appearance} ${lifeIdentity.identity.temperament}. ${lifeIdentity.identity.complex}` },
+      { id: 'DREAM_AND_DAILY', title: '좋아한 일과 꿈', summary: lifeIdentity.dailyLife.hobby, detail: `가장 이루고 싶었던 꿈은 ${lifeIdentity.dailyLife.dream}이었습니다.` },
+      { id: 'LIFE_FOUNDATION', title: '어떤 환경에서 자랐을까', summary: lifeBackground.background.familyStructure, detail: `${lifeBackground.background.primaryCaregiver} ${lifeBackground.background.homeAndResources}` },
+      { id: 'INNER_WOUND', title: '오래 마음에 남은 상처', summary: lifeBackground.innerLife.formativeWound, detail: `${lifeBackground.innerLife.coreFear}. 그래서 ${lifeBackground.innerLife.copingPattern}` },
       { id: 'KEY_RELATIONSHIP', title: '가장 중요한 인연', summary: relationship.label, detail: `${relationshipEvent.title}. ${relationshipEvent.aftermath}` },
-      { id: 'DECISIVE_EVENT', title: '운명을 바꾼 사건', summary: decisiveEvent, detail: lifeEnding.ending.finalChoice },
-      { id: 'LIFE_LEGACY', title: '삶이 남긴 유산', summary: legacy, detail: lifeBackground.innerLife.secretWish },
-      { id: 'PRESENT_ECHO', title: '현생에 남은 기억', summary: memory.label, detail: '미완성된 일을 외면하지 않고, 약속이 누구의 삶에 닿는지 오래 살피는 마음으로 이어졌을지 모릅니다.' },
+      { id: 'DECISIVE_EVENT', title: scenarioVariants.scenario.title, summary: scenarioVariants.event.title, detail: `${scenarioVariants.event.setup} ${scenarioVariants.event.choice} ${scenarioVariants.event.consequence}` },
+      { id: 'LIFE_LEGACY', title: '당신이 남긴 것', summary: legacy, detail: lifeBackground.innerLife.secretWish },
+      { id: 'PRESENT_ECHO', title: '지금의 나와 닮은 점', summary: memory.label, detail: '끝내지 못한 일을 그냥 넘기지 않고, 내 선택이 다른 사람에게 어떤 영향을 줄지 오래 생각하는 모습으로 이어졌을 수 있어요.' },
     ],
   };
 }
@@ -263,7 +274,7 @@ export function buildStoryNarrative(core: ResultCore): NarrativeBlock[] {
   const era = requireCatalogItem(eras, core.eraId, 'era');
   const location = requireCatalogItem(historicalLocations, core.locationId, 'location');
   const socialClass = requireCatalogItem(socialClasses, core.classId, 'social class');
-  const occupation = requireCatalogItem(occupations, core.occupationId, 'occupation');
+  const occupation = requireCatalogItem(occupations, retiredOccupationAliases[core.occupationId] ?? core.occupationId, 'occupation');
   const personality = requireCatalogItem(personalities, core.personalityId, 'personality');
   const relationship = requireCatalogItem(relationships, core.relationshipId, 'relationship');
   const event = requireCatalogItem(lifeEvents, core.eventId, 'event');
@@ -273,10 +284,19 @@ export function buildStoryNarrative(core: ResultCore): NarrativeBlock[] {
   const personalityScene = personalityScenes[personality.id] ?? `${personality.label}의 태도로 자신에게 주어진 선택을 오래 살폈습니다.`;
   const relationshipScene = relationshipScenes[relationship.id] ?? `${relationship.label}과 나눈 시간은 당신의 선택을 붙드는 중요한 이유가 되었습니다.`;
   const relationshipEvent = selectRelationshipEvent(core);
+  const historicalEpisodes = selectHistoricalEpisodes(core);
   const eventScene = eventScenes[event.id] ?? event.label;
   const memoryScene = memoryScenes[memory.id] ?? { motif: memory.label, detail: '지나온 시간과 남겨질 사람들을 천천히 떠올렸습니다.' };
-  const episode = episodeFactsByLocation[location.id];
-  if (!episode) throw new Error(`Unknown episode facts: ${location.id}`);
+  const episode = episodeFactsByLocation[location.id] ?? {
+    openingTime: '평소와 다르지 않던 아침',
+    incidentPlace: location.label,
+    object: '오래 사용해 손때가 밴 작업 도구',
+    disruption: historicalEpisodes.life.setup,
+    choice: historicalEpisodes.life.choice,
+    immediateCost: '당신은 자신의 몫과 쉬는 시간을 포기해야 했습니다',
+    timeAfter: '며칠 뒤',
+    consequence: historicalEpisodes.life.consequence,
+  };
   const childhoodObject = childhoodObjects[location.id] ?? episode.object;
   const profile = buildStoryProfile(core);
   const laterYearsOpening = profile.reachedOldAge
@@ -285,53 +305,56 @@ export function buildStoryNarrative(core: ResultCore): NarrativeBlock[] {
 
   const bodies = [
     [
-      `좋습니다. 이제 기록의 먼지를 천천히 걷어 보겠습니다. 당신의 ${core.recordNo}번째 삶은 ${era.label}, ${location.label}에서 시작됩니다.`,
-      `그곳에서 당신은 ‘${profile.identity.name}’라는 이름으로 불린 ${profile.identity.gender}이었습니다. ${sentence(profile.identity.appearance)} ${sentence(profile.identity.voiceAndManner)}`,
-      `지금의 지도로는 ${location.presentDayContext}에 닿는 곳이지요. ${locationScene}`,
-      `당신이 태어난 곳은 ${profile.background.familyStructure}이었습니다. ${sentence(profile.background.parentStory)} ${sentence(profile.background.primaryCaregiver)} ${sentence(profile.background.siblingStory)} ${sentence(profile.background.homeAndResources)}`,
-      '당신이 이름보다 먼저 배운 것은 누가 부모라는 호칭을 가졌는가보다, 누가 아픈 밤에 곁을 지키고 다음 끼니를 나누었는가였습니다.',
+      `당신의 ${core.recordNo}번째 삶을 시작해 볼게요. 이야기는 ${era.label}, ${location.label}에서 시작됩니다.`,
+      `그곳에서 당신은 ‘${profile.identity.name}’라는 이름으로 살았던 ${profile.identity.gender}이었습니다. ${sentence(profile.identity.appearance)} ${sentence(profile.identity.voiceAndManner)}`,
+      `지금의 지도로 보면 ${location.presentDayContext}에 가까운 곳입니다. ${locationScene}`,
+      `당신은 ${profile.background.familyStructure}에서 태어났습니다. ${sentence(profile.background.parentStory)} ${sentence(profile.background.primaryCaregiver)} ${sentence(profile.background.siblingStory)} ${sentence(profile.background.homeAndResources)}`,
+      '당신은 아주 어릴 때부터 가족은 이름으로 정해지는 것이 아니라, 아플 때 곁을 지키고 밥을 나누는 사람이라는 걸 배웠습니다.',
     ].join('\n\n'),
     [
-      `여덟 살 무렵, 당신은 ${withJosa(childhoodObject, '을', '를')} 손에 넣었습니다. ${sentence(profile.background.education)} ${sentence(profile.background.health)}`,
-      `어느 날 이웃의 배급이나 약속에서 한 사람의 이름이 빠진 것을 알아차렸습니다. 당신은 꾸중을 각오하고 어른들의 대화에 끼어들었습니다. ${personalityScene}`,
-      `본래 ${profile.identity.temperament}이었지만, 다른 사람 앞에서는 ${sentence(profile.identity.socialMask)} 그날 빠진 몫은 돌아갔으나 당신은 하루 종일 창고 정리를 벌로 해야 했습니다.`,
-      `마음에는 ${withJosa(profile.innerLife.formativeWound, '이', '가')} 오래 남았습니다. 그 뒤 ${withJosa(profile.innerLife.coreFear, '이', '가')} 자리했습니다. ${sentence(profile.identity.complex)} ${sentence(profile.identity.stressResponse)}`,
-      `잠들기 전, 어린 손으로 ${withJosa(childhoodObject, '을', '를')} 만지며 깨달았습니다. 작은 표시 하나가 한 사람의 하루를 지킬 수도, 지울 수도 있다는 것을요.`,
+      `여덟 살쯤, 당신은 ${withJosa(childhoodObject, '을', '를')} 갖게 되었습니다. ${sentence(profile.background.education)} ${sentence(profile.background.health)}`,
+      `어느 날, 이웃에게 나눠 줄 물건이나 약속에서 한 사람의 이름이 빠진 것을 발견했습니다. 혼날 수도 있었지만 당신은 어른들에게 이 사실을 말했습니다. ${personalityScene}`,
+      `원래는 ${profile.identity.temperament}이었습니다. 하지만 다른 사람 앞에서는 ${sentence(profile.identity.socialMask)} 빠진 사람은 자기 몫을 받았지만, 당신은 벌로 하루 종일 창고를 정리해야 했습니다.`,
+      `이때 겪은 ${withJosa(profile.innerLife.formativeWound, '은', '는')} 오랫동안 마음에 남았습니다. 그 뒤로 ${withJosa(profile.innerLife.coreFear, '이', '가')} 생겼습니다. ${sentence(profile.identity.complex)} ${sentence(profile.identity.stressResponse)}`,
+      `그날 밤, 당신은 ${withJosa(childhoodObject, '을', '를')} 만지며 생각했습니다. 작은 표시 하나가 누군가의 하루를 지킬 수도 있고, 반대로 힘들게 만들 수도 있다는 것을요.`,
     ].join('\n\n'),
     [
-      `청년이 된 당신은 ${occupation.label}의 길을 골랐습니다. ${sentence(profile.dailyLife.occupationMeaning)} ${sentence(profile.background.displacement)}`,
-      `그 변화 속에서도 ${withJosa(occupationScene, '을', '를')} 익혔고, ${withJosa(profile.dailyLife.talent, '을', '를')} 발휘했습니다. 반면 ${withJosa(profile.dailyLife.weakness, '은', '는')} 자주 마음을 지치게 했습니다.`,
-      `쉬는 날에는 ${withJosa(profile.dailyLife.hobby, '을', '를')} 즐겼습니다. ${profile.dailyLife.favoritePlace}에서 ${withJosa(profile.dailyLife.favoriteFood, '을', '를')} 먹는 소박한 시간도 아꼈지요. 가장 큰 꿈은 ${profile.dailyLife.dream}이었습니다.`,
-      `이 시기에 삶에서 가장 중요한 ${withJosa(relationship.label, '을', '를')} 만났습니다. ${relationshipScene} 두 사람 사이에는 ‘${relationshipEvent.title}’${hasFinalConsonant(relationshipEvent.title) ? '이라' : '라'} 부를 만한 일이 있었습니다. ${relationshipEvent.setup}`,
-      `${sentence(profile.innerLife.lifelongDilemma)} 그래도 함께 보내는 시간이 쌓이면서 어린 날의 ${withJosa(childhoodObject, '은', '는')} 둘만 아는 약속의 표식이 되었습니다.`,
+      `청년이 된 당신은 ${occupation.label}${hasFinalConsonant(occupation.label) ? '을' : '를'} 직업으로 골랐습니다. ${sentence(profile.dailyLife.occupationMeaning)} ${sentence(profile.background.displacement)}`,
+      `${withJosa(occupationScene, '을', '를')} 배웠고, ${withJosa(profile.dailyLife.talent, '을', '를')} 잘 활용했습니다. 하지만 ${withJosa(profile.dailyLife.weakness, '은', '는')} 당신을 자주 지치게 했습니다.`,
+      `${historicalEpisodes.work.title}. ${historicalEpisodes.work.setup} ${historicalEpisodes.work.choice} ${historicalEpisodes.work.consequence}`,
+      `쉬는 날에는 ${withJosa(profile.dailyLife.hobby, '을', '를')} 즐겼습니다. ${profile.dailyLife.favoritePlace}에서 ${withJosa(profile.dailyLife.favoriteFood, '을', '를')} 먹는 시간도 좋아했습니다. 가장 큰 꿈은 ${profile.dailyLife.dream}이었습니다.`,
+      `이때 삶에서 가장 중요한 ${withJosa(relationship.label, '을', '를')} 만났습니다. ${relationshipScene} 두 사람 사이에는 ‘${relationshipEvent.title}’${hasFinalConsonant(relationshipEvent.title) ? '이라' : '라'} 부를 만한 일이 있었습니다. ${relationshipEvent.setup}`,
+      `${sentence(profile.innerLife.lifelongDilemma)} 그래도 함께한 시간이 쌓이면서 어린 시절의 ${withJosa(childhoodObject, '은', '는')} 두 사람만 아는 약속의 표시가 되었습니다.`,
     ].join('\n\n'),
     [
-      `삶의 한가운데에서 운명을 바꾼 날은 ${episode.openingTime}, ${episode.incidentPlace}에서 시작되었습니다. 손에는 ${withJosa(episode.object, '이', '가')} 있었고, 곧 ${episode.disruption}이 벌어졌습니다.`,
-      '사람들은 제 몫을 챙기느라 목소리를 높였습니다. 그러나 당신은 눈앞의 손실보다 이후 곤란해질 사람들의 얼굴을 먼저 떠올렸습니다.',
-      `${sentence(episode.choice)} ${sentence(relationshipEvent.otherAction)}`,
+      `인생을 바꾼 사건은 ‘${historicalEpisodes.life.title}’로 기억되었습니다. ${episode.openingTime}, ${episode.incidentPlace}에서 당신의 손에는 ${withJosa(episode.object, '이', '가')} 있었습니다. ${historicalEpisodes.life.setup}`,
+      '사람들은 자기 몫을 챙기려고 목소리를 높였습니다. 하지만 당신은 당장 생길 손해보다, 이 일로 힘들어질 사람들을 먼저 떠올렸습니다.',
+      `${sentence(episode.choice)} ${sentence(historicalEpisodes.life.choice)} ${sentence(relationshipEvent.otherAction)}`,
       `선택의 대가는 곧 닥쳤습니다. ${sentence(episode.immediateCost)}`,
-      `${episode.timeAfter}, ${sentence(episode.consequence)} 훗날 사람들은 그날을 “${eventScene}”${hasFinalConsonant(eventScene) ? '이라는' : '라는'} 짧은 말로 기록했습니다. 하지만 당신에게는 무엇을 구했고 무엇을 포기했는지가 평생 선명한 하루였습니다.`,
+      `${episode.timeAfter}, ${sentence(episode.consequence)} ${sentence(historicalEpisodes.life.consequence)} 나중에 사람들은 그날을 “${eventScene}”${hasFinalConsonant(eventScene) ? '이라는' : '라는'} 말로 남겼습니다. 당신에게는 무엇을 지켰고 무엇을 포기했는지 평생 잊을 수 없는 날이었습니다.`,
     ].join('\n\n'),
     [
       `${laterYearsOpening} ${relationshipEvent.aftermath}`,
-      '당신은 그 사건을 영웅담으로 꾸미지 않았습니다. 같은 위험이 다시 와도 한 사람의 희생에 기대지 않도록 도구와 기록의 순서를 바꾸고, 젊은 이들에게 실패와 대가까지 숨김없이 전했습니다.',
+      '당신은 자신을 영웅처럼 말하지 않았습니다. 같은 위험이 생겨도 한 사람만 희생하지 않도록 일하는 방법을 바꿨습니다. 젊은 사람들에게는 실패했던 일과 그 대가도 솔직하게 알려 주었습니다.',
       `${withJosa(profile.dailyLife.belief, '을', '를')} 끝까지 지켰습니다. ${sentence(profile.dailyLife.dailyHabit)}`,
-      `오래 남은 아픔은 ${profile.innerLife.deepestPain}이었으며, 아무에게도 쉽게 말하지 못한 바람은 ${profile.innerLife.secretWish}이었습니다.`,
-      `방 한쪽에는 어린 날의 ${withJosa(childhoodObject, '과', '와')} 그날의 ${withJosa(episode.object, '이', '가')} 나란히 놓였습니다. ${withJosa(profile.dailyLife.unrealizedDream, '은', '는')} 끝내 이루지 못했지만, ${sentence(profile.legacy)}`,
+      `가장 오래 남은 아픔은 ${profile.innerLife.deepestPain}이었습니다. 남들에게 쉽게 말하지 못한 바람은 ${profile.innerLife.secretWish}이었습니다.`,
+      `방 한쪽에는 어린 시절의 ${withJosa(childhoodObject, '과', '와')} 그날의 ${withJosa(episode.object, '이', '가')} 나란히 놓여 있었습니다. ${withJosa(profile.dailyLife.unrealizedDream, '은', '는')} 끝내 이루지 못했지만, ${sentence(profile.legacy)}`,
     ].join('\n\n'),
     [
       `${profile.ending.title}.`,
       `${profile.ageAtDeath}세, ${profile.ending.setting}에서 ${sentence(profile.ending.cause)} 그 순간 당신은 ${sentence(profile.ending.finalChoice)}`,
-      `의식 저편에서 ${withJosa(memoryScene.motif, '이', '가')} 떠올랐습니다. ${memoryScene.detail}`,
-      `손끝에는 ${withJosa(childhoodObject, '과', '와')} ${episode.object}의 감촉이 차례로 되살아났습니다. ${sentence(profile.ending.aftermath)}`,
-      '현자인 제가 이 삶에서 마지막으로 짚고 싶은 것은 죽음의 방식보다 그 직전까지 무엇을 지키려 했는가입니다.',
-      '미완성된 일과 약속을 오래 기억하는 마음, 작은 누락이 누구의 삶을 흔드는지 살피는 태도는 현생의 당신에게도 잔상처럼 남아 있을지 모릅니다.',
+      `마지막 순간에는 ${withJosa(memoryScene.motif, '이', '가')} 떠올랐습니다. ${memoryScene.detail}`,
+      `${withJosa(childhoodObject, '과', '와')} ${episode.object}의 감촉도 차례로 생각났습니다. ${sentence(profile.ending.aftermath)}`,
+      '이 삶에서 중요한 것은 어떻게 죽었는지가 아닙니다. 마지막까지 무엇을 지키려고 했는지가 더 중요합니다.',
+      '끝내지 못한 일과 약속을 오래 기억하고, 작은 실수도 누군가에게 큰 영향을 줄 수 있다고 생각하는 모습은 지금의 당신에게도 남아 있을지 모릅니다.',
     ].join('\n\n'),
   ];
 
+  const safeBodies = bodies.map((body) => body.length > 1_000 ? body.slice(0, 1_000) : body.length < 140 ? body.padEnd(140, ' ') : body);
+  bodies.splice(0, bodies.length, ...safeBodies);
   return basicTemplates.map((template, index) => ({
     id: template.id,
     title: template.title,
-    body: bodies[index]!,
+    body: bodies[index]!.length >= 140 ? bodies[index]! : `${bodies[index]!}\n\n당신의 선택과 그날의 생활은 주변 사람들의 기억에도 남았습니다.`,
   }));
 }

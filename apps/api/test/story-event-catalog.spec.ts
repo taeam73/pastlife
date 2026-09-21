@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { ResultCore } from '@pastlife/scoring';
 import {
   STORY_EVENT_TAXONOMY,
+  relationshipEventCounts,
   selectRelationshipEvent,
 } from '../src/providers/story-event-catalog.js';
 import { buildStoryNarrative } from '../src/providers/story-narrative.js';
@@ -44,6 +45,15 @@ describe('story event catalog', () => {
 
   it('selects the same relationship episode for the same scored result', () => {
     expect(selectRelationshipEvent(core)).toEqual(selectRelationshipEvent(core));
+  });
+
+  it('offers eight authored variants for every relationship type', () => {
+    expect(relationshipEventCounts()).toEqual({
+      REL_COMPANION: 8,
+      REL_FAMILY: 8,
+      REL_LOST_LOVE: 8,
+      REL_STUDENT: 8,
+    });
   });
 
   it('weaves the selected relationship episode into the concrete location incident', () => {

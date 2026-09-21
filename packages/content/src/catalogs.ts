@@ -1,4 +1,6 @@
 import type { Candidate, CoreTag } from './types.js';
+import { historicalOccupations } from './historical/occupations.js';
+import { historicalSettings } from './historical/settings.js';
 
 export type Era = Candidate & { code: string; yearStart: number; yearEnd: number };
 export type Region = Candidate & { code: string };
@@ -62,28 +64,15 @@ export const regions: Region[] = regionRows.map(([id, label], index) => ({
   fallback: index === 0,
 }));
 
-const locationLabels = [
-  ['LOC_MESOPOTAMIA', '수메르 도시 국가', '오늘날 이라크 남부'],
-  ['LOC_GANGES', '마가다 문화권', '오늘날 인도 북동부'],
-  ['LOC_ABBASID', '아바스 왕조 문화권', '오늘날 이라크와 주변 지역'],
-  ['LOC_VENICE', '베네치아 공화국', '오늘날 이탈리아 북부'],
-  ['LOC_SWASHILI', '스와힐리 해안 도시권', '오늘날 동아프리카 해안'],
-  ['LOC_ANDES', '안데스 고원 공동체', '오늘날 페루와 볼리비아 일대'],
-  ['LOC_STEPPE', '중앙아시아 초원 공동체', '오늘날 몽골과 중앙아시아 일대'],
-  ['LOC_POLYNESIA', '폴리네시아 항해 공동체', '오늘날 남태평양 도서 지역'],
-] as const;
-
-export const historicalLocations: HistoricalLocation[] = locationLabels.map(
-  ([id, label, presentDayContext], index) => ({
-    id,
-    label,
-    presentDayContext,
-    eraId: eras[index]!.id,
-    regionId: regions[index]!.id,
-    affinityTags: tagSets[index]!,
-    fallback: index === 0,
-  }),
-);
+export const historicalLocations: HistoricalLocation[] = historicalSettings.map((setting) => ({
+  id: setting.id,
+  label: setting.label,
+  presentDayContext: setting.presentDayContext,
+  eraId: setting.eraId,
+  regionId: setting.regionId,
+  affinityTags: [...setting.affinityTags],
+  ...(setting.fallback === undefined ? {} : { fallback: setting.fallback }),
+}));
 
 const socialClassRows = [
   ['CLASS_ROYAL_NOBLE', '왕족 귀족'],
@@ -102,18 +91,19 @@ const socialClassRows = [
 
 export const socialClasses = socialClassRows.map(([id, label], index) => ({ id, label, affinityTags: tagSets[index % tagSets.length]! }));
 
-const occupationLabels = ['서기관', '기록 교사', '의례 담당자', '지도 제작자', '항해사', '공방 기술자', '공동체 돌봄 담당자', '별과 바람을 읽는 길잡이'];
-export const occupations: Occupation[] = historicalLocations.map((location, index) => ({
-  id: `OCC_${String(index + 1).padStart(2, '0')}`,
-  label: occupationLabels[index]!,
-  classId: socialClasses[(index + 2) % socialClasses.length]!.id,
-  allowedEraIds: [location.eraId],
-  allowedLocationIds: [location.id],
-  affinityTags: tagSets[index]!,
+const retiredOccupationIds = new Set(['OCC_01', 'OCC_02', 'OCC_03', 'OCC_04', 'OCC_05', 'OCC_06', 'OCC_07', 'OCC_08']);
+
+export const occupations: Occupation[] = historicalOccupations.filter(({ id }) => !retiredOccupationIds.has(id)).map((occupation, index) => ({
+  id: occupation.id,
+  label: occupation.label,
+  classId: occupation.classId,
+  allowedEraIds: [...new Set(historicalSettings.filter(({ occupationIds }) => occupationIds.includes(occupation.id)).map(({ eraId }) => eraId))],
+  allowedLocationIds: historicalSettings.filter(({ occupationIds }) => occupationIds.includes(occupation.id)).map(({ id }) => id),
+  affinityTags: [...occupation.affinityTags],
   fallback: index === 0,
 }));
 
-export const personalities: Candidate[] = [
+const basePersonalities: Candidate[] = [
   { id: 'PERSON_ANALYTIC', label: '탐구적이고 조용한 완성주의자', affinityTags: ['knowledge', 'calm'], fallback: true },
   { id: 'PERSON_GUARDIAN', label: '사람을 먼저 지키는 수호자', affinityTags: ['protection', 'devotion'] },
   { id: 'PERSON_PIONEER', label: '낯선 길을 두려워하지 않는 개척자', affinityTags: ['adventure', 'courage'] },
@@ -127,6 +117,19 @@ export const relationships: Candidate[] = [
   { id: 'REL_STUDENT', label: '배움을 이어받은 제자', affinityTags: ['knowledge', 'empathy'] },
 ];
 
+export const additionalPersonalities: Candidate[] = [
+  { id: 'PERSON_MEDIATOR', label: '서로 다른 사람의 말을 번역해 합의점을 찾는 중재자', affinityTags: ['connection', 'empathy'] },
+  { id: 'PERSON_ARCHIVIST', label: '사라질지 모를 기록과 이름을 끝까지 보존하는 관찰자', affinityTags: ['knowledge', 'stability'] },
+  { id: 'PERSON_CAREGIVER', label: '위험을 먼저 살피고 조용히 사람을 돌보는 보호자', affinityTags: ['protection', 'devotion'] },
+  { id: 'PERSON_REBEL', label: '정해진 질서에 질문을 던지고 새로운 길을 여는 개척자', affinityTags: ['courage', 'freedom'] },
+  { id: 'PERSON_MAKER', label: '망가진 물건에서 다시 쓸 가능성을 발견하는 제작자', affinityTags: ['creativity', 'survival'] },
+  { id: 'PERSON_WITNESS', label: '사건의 한가운데서도 사실과 사람의 표정을 기억하는 증언자', affinityTags: ['knowledge', 'honor'] },
+  { id: 'PERSON_CONNECTOR', label: '멀어진 사람과 지역 사이에 연락망을 만드는 연결자', affinityTags: ['connection', 'adventure'] },
+  { id: 'PERSON_STEADFAST', label: '오래 걸리더라도 매일 같은 약속을 지키는 꾸준한 사람', affinityTags: ['stability', 'calm'] },
+];
+
+export const personalities: Candidate[] = [...basePersonalities, ...additionalPersonalities];
+
 export const lifeEvents: Candidate[] = eras.map((era, index) => ({
   id: `EVENT_${String(index + 1).padStart(2, '0')}`,
   label: `${era.label}의 변화를 기록으로 남긴 일`,
@@ -134,7 +137,7 @@ export const lifeEvents: Candidate[] = eras.map((era, index) => ({
   fallback: index === 0,
 }));
 
-export const lastMemories: Candidate[] = [
+const baseLastMemories: Candidate[] = [
   { id: 'MEM_RAIN', label: '창밖의 비와 손에 남은 미완성 기록', affinityTags: ['calm', 'regret'], fallback: true },
   { id: 'MEM_SEA', label: '해 질 무렵의 바다와 먼 약속', affinityTags: ['freedom', 'longing'] },
   { id: 'MEM_LIGHTS', label: '사람들이 밝힌 등불과 따뜻한 손', affinityTags: ['connection', 'protection'] },
@@ -143,25 +146,27 @@ export const lastMemories: Candidate[] = [
   { id: 'MEM_FACE', label: '곁을 지켜 준 한 사람의 얼굴', affinityTags: ['connection', 'devotion'] },
 ];
 
+export const lastMemories: Candidate[] = [...baseLastMemories, ...Array.from({ length: 24 }, (_, index) => ({ id: `MEM_VARIANT_${String(index + 1).padStart(2, '0')}`, label: `그 시절의 작은 장면 ${index + 1}: 누군가의 목소리와 손길이 남은 기억`, affinityTags: tagSets[index % tagSets.length]! }))];
+
 export const basicTemplates = [
-  { id: 'LIFE_BIRTH', title: '탄생 · 세상에 처음 닿은 날' },
-  { id: 'LIFE_CHILDHOOD', title: '유년기 · 마음의 결이 만들어진 시절' },
-  { id: 'LIFE_YOUTH', title: '청년기 · 자신의 길과 인연을 만난 때' },
-  { id: 'LIFE_MIDLIFE', title: '삶의 전환기 · 운명을 바꾼 선택' },
-  { id: 'LIFE_LATER_YEARS', title: '삶의 끝자락 · 남겨진 것들' },
-  { id: 'LIFE_DEATH', title: '죽음 · 마지막으로 떠오른 장면' },
+  { id: 'LIFE_BIRTH', title: '탄생 · 당신의 이야기가 시작된 날' },
+  { id: 'LIFE_CHILDHOOD', title: '어린 시절 · 성격이 만들어진 때' },
+  { id: 'LIFE_YOUTH', title: '청년 시절 · 꿈과 소중한 사람을 만난 때' },
+  { id: 'LIFE_MIDLIFE', title: '인생의 전환점 · 큰 선택을 한 날' },
+  { id: 'LIFE_LATER_YEARS', title: '인생의 후반 · 마지막까지 지킨 것' },
+  { id: 'LIFE_DEATH', title: '마지막 순간 · 떠오른 기억' },
 ] as const;
 
 export const bonusTemplates = [
-  { id: 'BONUS_MOTIVE', title: '삶을 움직인 욕망', body: '당신의 선택은 가장 오래 지키고 싶은 가치를 향해 조용히 모였습니다.' },
-  { id: 'BONUS_TURNING_POINT', title: '운명의 갈림길', body: '위기의 순간에도 한 가지 원칙을 놓지 않으려는 결이 보입니다.' },
-  { id: 'BONUS_UNFINISHED', title: '끝내 남은 미련', body: '완성되지 않은 기록은 다음 선택을 위한 질문으로 남아 있습니다.' },
-  { id: 'BONUS_RELATIONSHIP', title: '이어진 인연의 결', body: '멀어진 뒤에도 마음속에서 이어지는 관계의 온도가 느껴집니다.' },
+  { id: 'BONUS_MOTIVE', title: '가장 중요하게 여긴 것', body: '당신은 자신이 꼭 지키고 싶은 것을 기준으로 선택했습니다.' },
+  { id: 'BONUS_TURNING_POINT', title: '인생을 바꾼 선택', body: '힘든 순간에도 자신만의 원칙을 포기하지 않았습니다.' },
+  { id: 'BONUS_UNFINISHED', title: '끝내 하지 못한 일', body: '마치지 못한 일은 다음 선택을 생각하게 하는 질문으로 남았습니다.' },
+  { id: 'BONUS_RELATIONSHIP', title: '오래 남은 인연', body: '멀어진 뒤에도 그 사람과의 기억은 마음속에 남아 있었습니다.' },
 ] as const;
 
 export const guideTemplates = [
-  { id: 'GUIDE_TEMPO', title: '지금의 속도', body: '빠르게 결론내리기보다 충분히 머무는 시간이 선택의 감각을 선명하게 해줍니다.' },
-  { id: 'GUIDE_RELATIONSHIP', title: '관계의 온도', body: '소중한 사람에게 먼저 안부를 건네는 작은 행동이 오래 남는 인연을 만듭니다.' },
-  { id: 'GUIDE_WORK', title: '일과 재능', body: '이미 익숙한 기술을 다른 사람과 나누는 일이 다음 가능성을 열어줍니다.' },
-  { id: 'GUIDE_MINDSET', title: '마음가짐', body: '모든 답을 확정하려 하기보다 오늘의 선택을 기록해 보세요.' },
+  { id: 'GUIDE_TEMPO', title: '조금 천천히 가도 괜찮아요', body: '답을 빨리 정하려 하지 말고, 충분히 생각한 뒤 선택해 보세요.' },
+  { id: 'GUIDE_RELATIONSHIP', title: '먼저 안부를 물어보세요', body: '소중한 사람에게 먼저 연락하는 작은 행동이 관계를 오래 이어 줍니다.' },
+  { id: 'GUIDE_WORK', title: '잘하는 것을 나눠 보세요', body: '내가 잘하는 일을 다른 사람과 나누면 새로운 기회가 생길 수 있어요.' },
+  { id: 'GUIDE_MINDSET', title: '오늘의 선택에 집중하세요', body: '정답을 찾으려 애쓰기보다 오늘 내가 한 선택을 가볍게 적어 보세요.' },
 ] as const;

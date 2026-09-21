@@ -12,6 +12,7 @@ import { loadSession } from '../src/session/store';
 import { startNewSession } from '../src/session/start';
 import { colors, spacing } from '../src/theme/tokens';
 import { trackEvent } from '../src/analytics/track';
+import { AppNav } from '../src/components/AppNav';
 
 type ExtendedResult = z.infer<typeof ExtendedResultResponseSchema>;
 
@@ -23,11 +24,11 @@ export default function DeepScreen() {
   useEffect(() => {
     void (async () => {
       const session = await loadSession();
-      if (!session?.resultId) return setError('결과 기록을 찾을 수 없습니다.');
+      if (!session?.resultId) return setError('전생 이야기를 찾을 수 없어요. 처음부터 다시 시작해 주세요.');
       try {
         setResult(await api.deep(session.resultId));
       } catch {
-        setError('심화 내용을 불러오지 못했습니다.');
+        setError('더 자세한 이야기를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');
       }
     })();
   }, []);
@@ -58,11 +59,17 @@ export default function DeepScreen() {
   if (!result) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>;
 
   return <Screen>
-    <Text style={styles.headline}>심화 내용</Text>
-    <ResultExperience image={result.image} blocks={result.blocks} />
+    <Text style={styles.headline}>더 자세한 전생 이야기</Text>
+    <ResultExperience
+      image={result.image}
+      blocks={result.blocks}
+      introTitle="기록 뒤에 숨은 네 개의 이야기"
+      introDescription="기록보기에서 다 하지 못한 마음과 인연, 선택의 뒷이야기가 네 장의 소설로 이어집니다."
+    />
     <Text style={styles.disclaimer}>{result.disclaimer}</Text>
-    <UnlockAction label="현생 가이드 보기" loadingLabel="광고 확인 중…" onUnlock={unlockGuide} />
-    <PrimaryButton onPress={() => void restart()}>또 다른 전생 기록 찾아보기</PrimaryButton>
+    <UnlockAction label="지금의 나를 위한 팁 보기" loadingLabel="광고 확인 중…" onUnlock={unlockGuide} />
+    <PrimaryButton onPress={() => void restart()}>다른 전생 이야기 찾아보기</PrimaryButton>
+    <AppNav />
   </Screen>;
 }
 

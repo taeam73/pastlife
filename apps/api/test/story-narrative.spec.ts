@@ -35,7 +35,7 @@ describe('buildStoryNarrative', () => {
     ]);
     expect(fullStory.length).toBeGreaterThanOrEqual(1_600);
     expect(blocks.every(({ body }) => body.length >= 140 && body.length <= 1_000)).toBe(true);
-    expect(fullStory).toContain('이제 기록의 먼지를 천천히 걷어 보겠습니다');
+    expect(fullStory).toContain('당신의 17번째 삶을 시작해 볼게요');
     expect(fullStory).toContain('그곳에서 당신은');
     expect(fullStory).toContain('가장 중요한 오랜 동료');
     expect(fullStory).toContain('동이 트기 전');

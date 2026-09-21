@@ -8,10 +8,13 @@ import {
   personalities,
   regions,
   relationships,
+  historicalSettings,
+  findHistoricalSettingExpansion,
 } from '@pastlife/content';
 import { answerHash, hashText } from './hash.js';
 import { pickCandidate } from './filter.js';
 import { calculateScores } from './score.js';
+import { deterministicIndex } from './prng.js';
 import type { CalculateResultInput, ResultCore } from './types.js';
 
 export function calculateResult({ answers, contentVersion }: CalculateResultInput): ResultCore {
@@ -32,6 +35,10 @@ export function calculateResult({ answers, contentVersion }: CalculateResultInpu
   const relationship = pickCandidate(relationships, scores.tags, `${seed}:relationship`);
   const event = pickCandidate(lifeEvents, scores.tags, `${seed}:event`);
   const lastMemory = pickCandidate(lastMemories, scores.tags, `${seed}:last-memory`);
+  const setting = historicalSettings.find(({ id }) => id === location.id);
+  const settingExpansion = findHistoricalSettingExpansion(location.id);
+  const imageKeys = settingExpansion?.imageAssetKeys ?? [setting?.visual.fallbackAssetKey ?? `library/${location.id.toLowerCase()}.jpg`];
+  const imageKey = imageKeys[deterministicIndex(`${seed}:${occupation.id}:library-image`, imageKeys.length)]!;
 
   return {
     contentVersion,
@@ -49,7 +56,7 @@ export function calculateResult({ answers, contentVersion }: CalculateResultInpu
     lastMemoryId: lastMemory.id,
     basicBlockIds: basicTemplates.map(({ id }) => id),
     libraryImage: {
-      key: `library/${location.id.toLowerCase()}.jpg`,
+      key: imageKey,
       promptTags: [era.code, region.code, occupation.id, ...scores.topTags.map(({ tag }) => tag)],
     },
   };

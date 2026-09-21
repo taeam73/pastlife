@@ -6,6 +6,8 @@ prd_version: 2.0
 status: ready_for_implementation
 canonical_language: ko
 required_question_count: 36
+
+> 사용자 문장 기준: 모든 질문, 결과, 가이드, UI 문구와 AI 생성 문장은 `docs/development-writing-guidelines.md`를 따른다. 10대, 특히 중학생도 한 번 읽고 이해할 수 있는 쉽고 구체적인 표현을 사용한다.
 required_choice_count: 216
 maximum_ads_per_run: 3
 ---
@@ -767,7 +769,7 @@ maximum_ads_per_run: 3
 | Q1_03_C5 | 바늘과 실 (creativity+2, devotion+2) |
 | Q1_03_C6 | 씨앗이 든 주머니 (stability+2, protection+2) |
 
-#### Q1_04 당신 앞에 네 계절이 동시에 펼쳐집니다. 어느 쪽으로 걸어가고 싶나요?
+#### Q1_04 봄, 여름, 가을, 겨울 중 어느 길로 가고 싶나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -775,10 +777,10 @@ maximum_ads_per_run: 3
 | Q1_04_C2 | 빛이 강한 여름 (achievement+2, courage+1) |
 | Q1_04_C3 | 바람이 선선한 가을 (calm+2, knowledge+1) |
 | Q1_04_C4 | 눈이 깊게 쌓인 겨울 (survival+2, independence+2) |
-| Q1_04_C5 | 비가 내리는 경계의 계절 (empathy+2, regret+1) |
+| Q1_04_C5 | 비가 내리는 때 (empathy+2, regret+1) |
 | Q1_04_C6 | 계절이 느껴지지 않는 실내 (stability+2, urbanity+1) |
 
-#### Q1_05 낯선 길에서 잠시 머물 곳을 골라야 합니다. 어디가 편안한가요?
+#### Q1_05 낯선 길에서 잠시 쉴 곳을 골라야 합니다. 어디가 가장 편한가요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -802,7 +804,7 @@ maximum_ads_per_run: 3
 
 ### A 2단계 인연의 기억
 
-#### Q2_01 오랜 시간 찾던 사람을 만났습니다. 가장 먼저 드는 감정은 무엇인가요?
+#### Q2_01 오래 찾던 사람을 만났습니다. 가장 먼저 어떤 기분이 드나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -811,7 +813,7 @@ maximum_ads_per_run: 3
 | Q2_01_C3 | 미안함 (regret+3, empathy+1) |
 | Q2_01_C4 | 경계심 (survival+2, independence+1) |
 | Q2_01_C5 | 벅찬 기쁨 (connection+3, devotion+1) |
-| Q2_01_C6 | 말로 설명하기 어려운 평온 (calm+3, spirituality+1) |
+| Q2_01_C6 | 마음이 편안해지는 느낌 (calm+3, spirituality+1) |
 
 #### Q2_02 누군가가 위험에 처했습니다. 당신은 어떻게 하나요?
 
@@ -857,7 +859,7 @@ maximum_ads_per_run: 3
 | Q2_05_C5 | 상대의 마음 (empathy+3, connection+1) |
 | Q2_05_C6 | 사실과 기록 (knowledge+3, achievement+1) |
 
-#### Q2_06 누군가 당신에게 비밀을 맡깁니다. 어떻게 간직하나요?
+#### Q2_06 누군가 비밀을 말해 줍니다. 어떻게 지킬 건가요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -881,7 +883,7 @@ maximum_ads_per_run: 3
 | Q3_01_C5 | 가족을 지킬 풍요 (stability+3, protection+2) |
 | Q3_01_C6 | 새로운 세계를 만날 기회 (adventure+3, mobility+2) |
 
-#### Q3_02 당신의 이름이 어떤 방식으로 남기를 바라나요?
+#### Q3_02 사람들이 당신을 어떻게 기억하면 좋겠나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -911,10 +913,10 @@ maximum_ads_per_run: 3
 | Q3_04_C2 | 쌓아온 기술 (achievement+2, creativity+2) |
 | Q3_04_C3 | 내가 가진 지식 (knowledge+3, independence+1) |
 | Q3_04_C4 | 위기에서 버틴 경험 (survival+3, courage+1) |
-| Q3_04_C5 | 신념과 기도 (spirituality+3, devotion+1) |
+| Q3_04_C5 | 믿음과 기도 (spirituality+3, devotion+1) |
 | Q3_04_C6 | 선택할 수 있다는 감각 (freedom+3, independence+2) |
 
-#### Q3_05 많은 자원을 맡게 된다면 어디에 먼저 쓰나요?
+#### Q3_05 많은 돈과 물건을 맡게 된다면 어디에 먼저 쓰나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -925,7 +927,7 @@ maximum_ads_per_run: 3
 | Q3_05_C5 | 군대와 성벽 (survival+2, authority+2) |
 | Q3_05_C6 | 굶주린 사람을 돕는 일 (empathy+3, devotion+1) |
 
-#### Q3_06 가장 견디기 어려운 삶은 어떤 삶인가요?
+#### Q3_06 어떤 삶이 가장 힘들 것 같나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -949,7 +951,7 @@ maximum_ads_per_run: 3
 | Q4_01_C5 | 중요한 것만 챙겨 떠난다 (freedom+2, mobility+2) |
 | Q4_01_C6 | 끝까지 자리를 지킨다 (devotion+3, stability+2) |
 
-#### Q4_02 두 길 중 하나를 골라야 합니다. 무엇을 따르나요?
+#### Q4_02 두 길 중 하나를 골라야 합니다. 무엇을 기준으로 고르나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -960,7 +962,7 @@ maximum_ads_per_run: 3
 | Q4_02_C5 | 가장 많은 사람에게 도움이 되는 길 (empathy+2, collectivism+2) |
 | Q4_02_C6 | 사실과 증거가 가리키는 길 (knowledge+3, calm+1) |
 
-#### Q4_03 큰 실패 뒤에 가장 먼저 하는 일은 무엇인가요?
+#### Q4_03 큰 실수를 한 뒤 가장 먼저 무엇을 하나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -969,7 +971,7 @@ maximum_ads_per_run: 3
 | Q4_03_C3 | 함께한 사람을 먼저 돌본다 (empathy+3, protection+1) |
 | Q4_03_C4 | 실패를 감추고 버틴다 (survival+2, regret+1) |
 | Q4_03_C5 | 새로운 방식으로 바꾼다 (creativity+3, courage+1) |
-| Q4_03_C6 | 운명으로 받아들이고 기도한다 (spirituality+2, calm+2) |
+| Q4_03_C6 | 어쩔 수 없는 일로 받아들이고 기도한다 (spirituality+2, calm+2) |
 
 #### Q4_04 권력자가 부당한 명령을 내립니다. 당신은 어떻게 하나요?
 
@@ -993,7 +995,7 @@ maximum_ads_per_run: 3
 | Q4_05_C5 | 위험하면 거절한다 (independence+2, survival+2) |
 | Q4_05_C6 | 길만 알려주고 떠난다 (freedom+1, calm+1) |
 
-#### Q4_06 당신의 성취가 다른 사람의 희생 위에 놓였음을 알게 됩니다. 어떻게 하나요?
+#### Q4_06 내가 잘되는 동안 누군가 피해를 봤습니다. 어떻게 하나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -1028,18 +1030,18 @@ maximum_ads_per_run: 3
 | Q5_02_C5 | 진실을 너무 늦게 밝힌 일 (knowledge+2, regret+2) |
 | Q5_02_C6 | 나 자신을 돌보지 않은 시간 (calm+2, empathy+1) |
 
-#### Q5_03 당신이 남기고 싶은 것은 무엇인가요?
+#### Q5_03 나중에 사람들이 이어 가면 좋을 것은 무엇인가요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
 | Q5_03_C1 | 사람들이 함께 살 수 있는 터전 (stability+3, protection+2) |
-| Q5_03_C2 | 후대가 읽을 기록 (knowledge+3, honor+1) |
+| Q5_03_C2 | 나중 사람들이 읽을 기록 (knowledge+3, honor+1) |
 | Q5_03_C3 | 누군가 이어갈 기술 (creativity+2, devotion+2) |
 | Q5_03_C4 | 멀리 이어지는 길 (adventure+2, achievement+2) |
 | Q5_03_C5 | 마음을 위로하는 노래 (creativity+3, empathy+1) |
 | Q5_03_C6 | 어떤 것에도 얽매이지 않은 기억 (freedom+3, independence+1) |
 
-#### Q5_04 당신을 가장 깊이 흔드는 상실은 무엇인가요?
+#### Q5_04 무엇을 잃는 일이 가장 슬플 것 같나요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -1047,10 +1049,10 @@ maximum_ads_per_run: 3
 | Q5_04_C2 | 친구의 배신 (honor+2, regret+2) |
 | Q5_04_C3 | 고향을 떠나야 하는 일 (stability+3, mobility-1) |
 | Q5_04_C4 | 평생 만든 것이 사라지는 일 (creativity+2, achievement+2) |
-| Q5_04_C5 | 믿었던 신념이 무너지는 일 (spirituality+2, regret+2) |
+| Q5_04_C5 | 믿던 생각이 흔들리는 일 (spirituality+2, regret+2) |
 | Q5_04_C6 | 내 이름과 기록이 지워지는 일 (honor+3, knowledge+1) |
 
-#### Q5_05 삶이 끝나기 전에 꼭 하고 싶은 일은 무엇인가요?
+#### Q5_05 죽기 전에 꼭 하고 싶은 일은 무엇인가요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -1074,7 +1076,7 @@ maximum_ads_per_run: 3
 
 ### A 6단계 마지막 기억
 
-#### Q6_01 기억 속 마지막 장면에서 무엇을 보고 있었나요?
+#### Q6_01 전생의 마지막 장면을 상상해 보세요. 무엇이 보일까요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -1085,7 +1087,7 @@ maximum_ads_per_run: 3
 | Q6_01_C5 | 완성하지 못한 물건 (creativity+2, regret+2) |
 | Q6_01_C6 | 누군가의 얼굴 (connection+3, devotion+1) |
 
-#### Q6_02 마지막 순간 곁에 있던 존재는 누구인가요?
+#### Q6_02 전생의 마지막 순간을 상상해 보세요. 곁에는 누가 있을까요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -1096,7 +1098,7 @@ maximum_ads_per_run: 3
 | Q6_02_C5 | 아무도 없었다 (independence+3, regret+1) |
 | Q6_02_C6 | 이름을 모르는 아이 (protection+2, spirituality+2) |
 
-#### Q6_03 마지막에 가장 강하게 남은 감정은 무엇인가요?
+#### Q6_03 전생의 마지막 순간을 상상해 보세요. 어떤 기분이 들까요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -1107,18 +1109,18 @@ maximum_ads_per_run: 3
 | Q6_03_C5 | 해방감 (freedom+3, independence+1) |
 | Q6_03_C6 | 해냈다는 안도 (achievement+3, honor+1) |
 
-#### Q6_04 마지막으로 손에 닿아 있던 것은 무엇인가요?
+#### Q6_04 전생의 마지막 순간을 상상해 보세요. 손에는 무엇이 닿아 있을까요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
 | Q6_04_C1 | 누군가의 손 (connection+3, devotion+2) |
 | Q6_04_C2 | 낡은 책이나 문서 (knowledge+3, honor+1) |
 | Q6_04_C3 | 작업 도구 (creativity+3, achievement+1) |
-| Q6_04_C4 | 작은 부적이나 묵주 (spirituality+3, calm+1) |
+| Q6_04_C4 | 작은 부적이나 기도 도구 (spirituality+3, calm+1) |
 | Q6_04_C5 | 흙과 풀 (stability+2, protection+1) |
 | Q6_04_C6 | 여행 가방이나 지도 (adventure+2, freedom+2) |
 
-#### Q6_05 마지막으로 남기고 싶은 말은 무엇인가요?
+#### Q6_05 전생의 마지막 순간을 상상해 보세요. 어떤 말을 남기고 싶을까요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |
@@ -1129,7 +1131,7 @@ maximum_ads_per_run: 3
 | Q6_05_C5 | 나는 내 선택을 후회하지 않는다 (freedom+2, courage+2) |
 | Q6_05_C6 | 이제 모두 괜찮다 (calm+3, empathy+1) |
 
-#### Q6_06 기억이 사라지기 전 마지막으로 향하고 싶은 곳은 어디인가요?
+#### Q6_06 전생의 마지막 순간을 상상해 보세요. 어디에 가고 싶을까요?
 
 | 선택지 ID | 선택지와 예시 점수 |
 | --- | --- |

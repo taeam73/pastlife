@@ -34,6 +34,9 @@ const variants: readonly EndingVariant[] = [
   { category: 'UNKNOWN', title: '기록이 멈춘 먼 여정', cause: '먼 길을 떠난 뒤 돌아오지 않아 마지막 순간은 기록되지 않았습니다', setting: '마지막으로 목격된 강 건너 나루', finalChoice: '동행자에게 지도와 식량을 건네고 혼자 뒤를 확인하러 갔습니다', aftermath: '사람들은 죽음을 단정하지 않은 채 해마다 같은 날 길목에 등불을 놓았습니다', minAge: 21, maxAge: 63 },
 ];
 
+const endingAdds = ['남은 사람들은 그 선택을 오래 기억했습니다.', '마지막까지 주변 사람의 안전을 먼저 생각했습니다.', '작은 물건 하나가 그날의 기억으로 남았습니다.', '그 이야기는 가까운 사람에게 조용히 전해졌습니다.', '다음 사람은 그 삶에서 한 가지 방법을 배웠습니다.'];
+const expandedVariants: readonly EndingVariant[] = variants.flatMap((variant) => endingAdds.map((add, index) => ({ ...variant, title: `${variant.title} ${index + 1}`, aftermath: `${variant.aftermath} ${add}` })));
+
 function stableIndex(seed: string, length: number) {
   let hash = 2_166_136_261;
   for (const character of seed) {
@@ -46,7 +49,7 @@ function stableIndex(seed: string, length: number) {
 export function selectLifeEnding(core: Pick<ResultCore, 'answerHash' | 'recordNo' | 'eventId' | 'lastMemoryId' | 'locationId'>) {
   const maritimeLocations = new Set(['LOC_VENICE', 'LOC_SWASHILI', 'LOC_POLYNESIA']);
   const candidates = maritimeLocations.has(core.locationId)
-    ? variants
+    ? expandedVariants
     : variants.filter(({ title, setting }) => !title.includes('항해') && !setting.includes('밤바다'));
   const variant = candidates[stableIndex(`${core.answerHash}:${core.recordNo}:${core.eventId}:${core.lastMemoryId}:ending`, candidates.length)]!;
   const ageRange = variant.maxAge - variant.minAge + 1;

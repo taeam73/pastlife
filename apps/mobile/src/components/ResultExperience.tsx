@@ -1,13 +1,29 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { ResultBlock } from './ResultBlock';
+import { resolveLibraryImage } from '../results/libraryImages';
 
 type Block = { id: string; title: string; body: string };
 type ImageAsset = { uri: string; alt: string; sourceType: 'AI' | 'LIBRARY'; status: 'READY' | 'FALLBACK' };
 type Highlight = { id: string; title: string; summary: string; detail: string };
 
-export function ResultExperience({ image, blocks, highlights }: { image: ImageAsset; blocks: Block[]; highlights?: Highlight[] }) {
+type ResultExperienceProps = {
+  image: ImageAsset;
+  blocks: Block[];
+  highlights?: Highlight[];
+  introTitle?: string;
+  introDescription?: string;
+};
+
+export function ResultExperience({
+  image,
+  blocks,
+  highlights,
+  introTitle = '당신의 전생 이야기',
+  introDescription = '태어난 순간부터 삶의 마지막까지, 여섯 장으로 나누어 보여드릴게요.',
+}: ResultExperienceProps) {
   const showRemoteImage = /^https?:\/\//.test(image.uri);
+  const localImage = resolveLibraryImage(image.uri);
   const highlightOrder = ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'INNER_WOUND', 'LIFE_LEGACY', 'PRESENT_ECHO', 'DREAM_AND_DAILY', 'LIFE_FOUNDATION'];
   const visibleHighlights = highlights
     ?.filter(({ id }) => id !== 'IDENTITY')
@@ -16,7 +32,7 @@ export function ResultExperience({ image, blocks, highlights }: { image: ImageAs
   return <View style={styles.container}>
     <View style={styles.modeRow} accessibilityRole="tablist">
       <Pressable accessibilityRole="tab" accessibilityState={{ selected: true }} style={[styles.modeButton, styles.modeSelected]}>
-        <Text style={styles.modeText}>이미지와 텍스트</Text>
+        <Text style={styles.modeText}>글로 보기</Text>
       </Pressable>
       <Pressable disabled accessibilityRole="tab" accessibilityState={{ selected: false, disabled: true }} style={[styles.modeButton, styles.modeDisabled]}>
         <Text style={styles.modeDisabledText}>영상으로 보기</Text>
@@ -25,8 +41,8 @@ export function ResultExperience({ image, blocks, highlights }: { image: ImageAs
     </View>
 
     <View style={styles.hero}>
-      {showRemoteImage
-        ? <Image accessibilityLabel={image.alt} source={{ uri: image.uri }} resizeMode="cover" style={styles.image} />
+      {showRemoteImage || localImage
+        ? <Image accessibilityLabel={image.alt} source={localImage ?? { uri: image.uri }} resizeMode="cover" style={styles.image} />
         : <View accessible accessibilityLabel={image.alt} style={styles.imageFallback}>
             <Text style={styles.imageFallbackEyebrow}>전생 기록 이미지</Text>
             <Text style={styles.imageFallbackText}>{image.alt}</Text>
@@ -36,14 +52,14 @@ export function ResultExperience({ image, blocks, highlights }: { image: ImageAs
     </View>
 
     <View style={styles.storyIntro}>
-      <Text style={styles.storyEyebrow}>당신의 전생 이야기</Text>
-      <Text style={styles.storyLead}>한 사람의 탄생부터 마지막 순간까지, 여섯 장의 생애 기록으로 이어집니다.</Text>
+      <Text style={styles.storyEyebrow}>{introTitle}</Text>
+      <Text style={styles.storyLead}>{introDescription}</Text>
     </View>
     <View style={styles.textView}>{blocks.map((block) => <ResultBlock key={block.id} title={block.title} body={block.body} />)}</View>
     {visibleHighlights?.length ? <View style={styles.highlights}>
       <View style={styles.highlightIntro}>
-        <Text style={styles.storyEyebrow}>이 삶에서 가장 깊게 남은 것들</Text>
-        <Text style={styles.storyLead}>이제 긴 생애를 움직인 인연과 사건, 마음의 흔적을 하나씩 짚어 보겠습니다.</Text>
+        <Text style={styles.storyEyebrow}>이 삶에서 중요했던 것들</Text>
+        <Text style={styles.storyLead}>삶에 큰 영향을 준 사람과 사건을 한눈에 정리했어요.</Text>
       </View>
       {visibleHighlights.map((item) => <View key={item.id} style={styles.highlightCard}><Text style={styles.highlightTitle}>{item.title}</Text><Text style={styles.highlightSummary}>{item.summary}</Text><Text style={styles.highlightDetail}>{item.detail}</Text></View>)}
     </View> : null}

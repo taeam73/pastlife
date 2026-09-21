@@ -24,4 +24,11 @@ describe('canonical content', () => {
     expect(first.id).toBe(second.id);
     expect(first.stage).toBe(3);
   });
+
+  it('keeps question wording concrete and easy for teenagers', () => {
+    const difficultPhrases = ['상실', '자원', '운명', '후대', '신념', '경계의 계절', '말로 설명하기 어려운'];
+    const allText = questions.flatMap((question) => [question.text, ...question.choices.map((choice) => choice.text)]);
+    expect(allText.every((text) => text.length <= 40)).toBe(true);
+    expect(allText.some((text) => difficultPhrases.some((phrase) => text.includes(phrase)))).toBe(false);
+  });
 });

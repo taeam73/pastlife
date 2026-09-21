@@ -1,14 +1,15 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { bonusTemplates, eras, guideTemplates, historicalLocations, occupations } from '@pastlife/content';
+import { eras, historicalLocations, occupations } from '@pastlife/content';
 import type { ResultCore } from '@pastlife/scoring';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { IMAGE_PROVIDER, type ImageProvider } from '../providers/image.provider.js';
 import { IMAGE_STORAGE, type ImageStorage } from '../providers/storage.provider.js';
 import { LibraryImageProvider } from '../providers/library-image.provider.js';
 import { buildStoryNarrative, buildStoryProfile } from '../providers/story-narrative.js';
+import { buildDeepNarrative, buildPresentGuideNarrative } from '../providers/extended-narratives.js';
 
-export const RESULT_DISCLAIMER = '이 결과는 종교적 또는 과학적 사실을 판정하거나 현재의 성격과 미래를 진단하지 않습니다. 선택을 바탕으로 구성된 창작 스토리텔링입니다.';
+export const RESULT_DISCLAIMER = '이 이야기는 선택한 답을 바탕으로 만든 창작 콘텐츠입니다. 실제 전생이나 현재의 성격, 미래를 판단하는 결과가 아닙니다.';
 
 @Injectable()
 export class ResultsService {
@@ -33,7 +34,8 @@ export class ResultsService {
     if (!session?.unlocks.includes('BASIC')) throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: 'AD 1 completion is required', slot: 1 });
     const era = eras.find(({ id }) => id === result.core.eraId)!;
     const location = historicalLocations.find(({ id }) => id === result.core.locationId)!;
-    const occupation = occupations.find(({ id }) => id === result.core.occupationId)!;
+    const occupationAliases: Record<string, string> = { OCC_01: 'OCC_SCRIBE', OCC_02: 'OCC_TEACHER', OCC_03: 'OCC_CEREMONIAL', OCC_04: 'OCC_NAVIGATOR', OCC_05: 'OCC_NAVIGATOR', OCC_06: 'OCC_ARTISAN', OCC_07: 'OCC_HEALER', OCC_08: 'OCC_MESSENGER' };
+    const occupation = occupations.find(({ id }) => id === (occupationAliases[result.core.occupationId] ?? result.core.occupationId))!;
     const storyProfile = result.storyProfile ?? buildStoryProfile(result.core);
     const blocksNeedRefresh = result.blocks.length !== 6 || result.blocks.some(({ body }) =>
       !body.includes('\n\n') || /사용자의 실제 정체성|창작 서사|창작 설정|서사용 이름|마지막 장의 제목|선택을 바탕으로/.test(body));
@@ -73,11 +75,11 @@ export class ResultsService {
   }
 
   async deep(resultId: string) {
-    return this.extended(resultId, 'DEEP', bonusTemplates, 2);
+    return this.extended(resultId, 'DEEP', 2);
   }
 
   async guide(resultId: string) {
-    return this.extended(resultId, 'GUIDE', guideTemplates, 3);
+    return this.extended(resultId, 'GUIDE', 3);
   }
 
   async share(resultId: string) {
@@ -131,19 +133,22 @@ export class ResultsService {
     }
   }
 
-  private async extended<T extends readonly { id: string; title: string; body: string }[]>(
+  private async extended(
     resultId: string,
     unlockType: 'DEEP' | 'GUIDE',
-    templates: T,
     slot: number,
   ) {
     const result = await this.requireResult(resultId);
     const session = await this.repository.getSession(result.sessionId);
     if (!session?.unlocks.includes(unlockType)) throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: `AD ${slot} completion is required`, slot });
+    const storyProfile = result.storyProfile ?? buildStoryProfile(result.core);
+    const blocks = unlockType === 'DEEP'
+      ? buildDeepNarrative(result.core, storyProfile)
+      : buildPresentGuideNarrative(result.core, storyProfile);
     return {
       resultId,
       image: await this.presentImage(await this.ensureImage(resultId), result.core),
-      blocks: templates.map(({ id, title, body }) => ({ id, title, body })),
+      blocks,
       disclaimer: RESULT_DISCLAIMER,
     };
   }

@@ -13,6 +13,9 @@ import {
   relationships,
   socialClasses,
   tags,
+  validateHistoricalContent,
+  historicalSettings,
+  historicalOccupations,
 } from '@pastlife/content';
 
 const prisma = new PrismaClient();
@@ -27,6 +30,8 @@ const tagGroup = (tag: string) => {
 };
 
 async function main() {
+  const contentIssues = validateHistoricalContent(historicalSettings, historicalOccupations);
+  if (contentIssues.length > 0) throw new Error(`Historical content validation failed: ${JSON.stringify(contentIssues)}`);
   const existing = await prisma.contentVersion.findUnique({ where: { version } });
   if (existing?.status === 'PUBLISHED' && existing.digest !== digest) {
     throw new Error(`Published content ${version} differs from the canonical digest; create a new version`);
@@ -42,6 +47,9 @@ async function main() {
   }
   const tagRows = await prisma.tag.findMany();
   const tagIds = new Map(tagRows.map((tag) => [tag.code, tag.id]));
+  const upsertTranslation = (key: string, text: string) => prisma.translation.upsert({
+    where: { locale_key_version: { locale: 'ko', key, version } }, update: { text }, create: { locale: 'ko', key, version, text },
+  });
 
   for (const question of questions) {
     const questionKey = `question.${question.id}`;
@@ -74,13 +82,16 @@ async function main() {
     }
   }
 
-  for (const era of eras) await prisma.era.upsert({ where: { id: era.id }, update: {}, create: { id: era.id, code: era.code, yearStart: era.yearStart, yearEnd: era.yearEnd, translationKey: `era.${era.id}`, affinityTags: era.affinityTags } });
-  for (const region of regions) await prisma.region.upsert({ where: { id: region.id }, update: {}, create: { id: region.id, code: region.code, translationKey: `region.${region.id}`, affinityTags: region.affinityTags } });
-  for (const location of historicalLocations) await prisma.historicalLocation.upsert({ where: { id: location.id }, update: {}, create: { id: location.id, eraId: location.eraId, regionId: location.regionId, historicalNameKey: `location.${location.id}.name`, presentContextKey: `location.${location.id}.present`, affinityTags: location.affinityTags } });
-  for (const socialClass of socialClasses) await prisma.socialClass.upsert({ where: { id: socialClass.id }, update: {}, create: { id: socialClass.id, code: socialClass.id, translationKey: `class.${socialClass.id}`, affinityTags: socialClass.affinityTags } });
+  for (const era of eras) { const key = `era.${era.id}`; await upsertTranslation(key, era.label); await prisma.era.upsert({ where: { id: era.id }, update: { yearStart: era.yearStart, yearEnd: era.yearEnd, affinityTags: era.affinityTags }, create: { id: era.id, code: era.code, yearStart: era.yearStart, yearEnd: era.yearEnd, translationKey: key, affinityTags: era.affinityTags } }); }
+  for (const region of regions) { const key = `region.${region.id}`; await upsertTranslation(key, region.label); await prisma.region.upsert({ where: { id: region.id }, update: { affinityTags: region.affinityTags }, create: { id: region.id, code: region.code, translationKey: key, affinityTags: region.affinityTags } }); }
+  for (const location of historicalLocations) { const nameKey = `location.${location.id}.name`; const presentKey = `location.${location.id}.present`; await upsertTranslation(nameKey, location.label); await upsertTranslation(presentKey, location.presentDayContext); await prisma.historicalLocation.upsert({ where: { id: location.id }, update: { eraId: location.eraId, regionId: location.regionId, affinityTags: location.affinityTags }, create: { id: location.id, eraId: location.eraId, regionId: location.regionId, historicalNameKey: nameKey, presentContextKey: presentKey, affinityTags: location.affinityTags } }); }
+  for (const socialClass of socialClasses) { const key = `class.${socialClass.id}`; await upsertTranslation(key, socialClass.label); await prisma.socialClass.upsert({ where: { id: socialClass.id }, update: { affinityTags: socialClass.affinityTags }, create: { id: socialClass.id, code: socialClass.id, translationKey: key, affinityTags: socialClass.affinityTags } }); }
   for (const occupation of occupations) {
-    await prisma.occupation.upsert({ where: { id: occupation.id }, update: {}, create: { id: occupation.id, classId: occupation.classId, translationKey: `occupation.${occupation.id}`, promptTags: occupation.affinityTags } });
-    await prisma.occupationRule.upsert({ where: { occupationId_eraId_locationId: { occupationId: occupation.id, eraId: occupation.allowedEraIds[0]!, locationId: occupation.allowedLocationIds[0]! } }, update: {}, create: { occupationId: occupation.id, eraId: occupation.allowedEraIds[0]!, locationId: occupation.allowedLocationIds[0]!, minScores: {}, exclusions: [] } });
+    const key = `occupation.${occupation.id}`; await upsertTranslation(key, occupation.label);
+    await prisma.occupation.upsert({ where: { id: occupation.id }, update: { classId: occupation.classId, promptTags: occupation.affinityTags }, create: { id: occupation.id, classId: occupation.classId, translationKey: key, promptTags: occupation.affinityTags } });
+    await prisma.occupationRule.deleteMany({ where: { occupationId: occupation.id } });
+    const settings = historicalSettings.filter(({ occupationIds }) => occupationIds.includes(occupation.id));
+    if (settings.length > 0) await prisma.occupationRule.createMany({ data: settings.map((setting) => ({ occupationId: occupation.id, eraId: setting.eraId, locationId: setting.id, minScores: {}, exclusions: [] })) });
   }
   for (const item of personalities) await prisma.personality.upsert({ where: { id: item.id }, update: {}, create: { id: item.id, translationKey: `personality.${item.id}`, tagRules: item.affinityTags } });
   for (const item of relationships) await prisma.relationship.upsert({ where: { id: item.id }, update: {}, create: { id: item.id, translationKey: `relationship.${item.id}`, tagRules: item.affinityTags, exclusions: [] } });

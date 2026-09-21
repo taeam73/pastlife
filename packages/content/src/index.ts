@@ -4,6 +4,11 @@ import type { Question, Stage } from './types.js';
 
 export * from './catalogs.js';
 export * from './types.js';
+export * from './historical/types.js';
+export * from './historical/validate.js';
+export * from './historical/occupations.js';
+export * from './historical/settings.js';
+export * from './historical/expansions.js';
 
 export const questions = questionsJson as Question[];
 

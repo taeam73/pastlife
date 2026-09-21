@@ -13,6 +13,7 @@ import { colors, spacing } from '../src/theme/tokens';
 import { trackEvent } from '../src/analytics/track';
 import { AsyncActionStatus, type AsyncStatus } from '../src/components/AsyncActionStatus';
 import { UnlockAction } from '../src/components/UnlockAction';
+import { AppNav } from '../src/components/AppNav';
 
 type BasicResult = z.infer<typeof BasicResultResponseSchema>;
 
@@ -56,13 +57,14 @@ export default function ResultScreen() {
     <Text style={styles.headline}>{result.headline}</Text>
     <ResultExperience image={result.image} blocks={result.blocks} highlights={result.highlights} />
     <Text style={styles.disclaimer}>{result.disclaimer}</Text>
-    <UnlockAction label="광고 시청 후 심화 보기" loadingLabel="광고를 준비하고 있습니다" onUnlock={async () => { const session = await loadSession(); if (!session?.sessionId) throw new Error('Session not found'); void trackEvent('deep_cta_clicked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); void trackEvent('ad_started', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); try { await api.fakeAd(session.sessionId, 2); } catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); throw error; } void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); void trackEvent('deep_unlocked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); router.replace('/deep'); }} />
+    <UnlockAction label="광고 보고 더 자세히 보기" loadingLabel="광고를 준비하고 있어요" onUnlock={async () => { const session = await loadSession(); if (!session?.sessionId) throw new Error('Session not found'); void trackEvent('deep_cta_clicked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); void trackEvent('ad_started', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); try { await api.fakeAd(session.sessionId, 2); } catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); throw error; } void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); void trackEvent('deep_unlocked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); router.replace('/deep'); }} />
     <PrimaryButton disabled onPress={() => undefined}>영상 공유 · 출시 예정</PrimaryButton>
     <Text style={styles.videoNotice}>영상 보기와 영상 공유는 첫 출시 이후 제공됩니다.</Text>
     <PrimaryButton disabled={imageShareStatus === 'LOADING'} onPress={() => void shareImage()}>이미지 공유</PrimaryButton>
     <AsyncActionStatus status={imageShareStatus} loadingText="이미지 공유 카드를 만들고 있습니다." readyText="이미지 공유 준비를 마쳤습니다." errorText="이미지 공유 카드를 만들지 못했습니다. 잠시 후 다시 시도해 주세요." onRetry={() => void shareImage()} />
     <PrimaryButton onPress={async () => { const auth = await loadAuth(); if (!auth) { router.push({ pathname: './login', params: { resultId: result.resultId } }); return; } await api.archive(result.resultId, auth.accessToken); const session = await loadSession(); void trackEvent('archive_saved', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), resultId: result.resultId }); router.replace('/archive'); }}>아카이브에 저장하기</PrimaryButton>
     <PrimaryButton onPress={() => void restart()}>또 다른 전생 기록 찾아보기</PrimaryButton>
+    <AppNav />
   </Screen>;
 }
 

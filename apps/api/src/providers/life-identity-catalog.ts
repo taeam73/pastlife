@@ -10,6 +10,14 @@ const namesByLocation: Record<string, readonly [string, string, string, string]>
   LOC_ANDES: ['킬라', '사미', '아마루', '인티'],
   LOC_STEPPE: ['사란', '알탄', '테무르', '바투'],
   LOC_POLYNESIA: ['히나', '마레바', '타네', '마우이'],
+  LOC_HAN_CHANGAN: ['란', '잉', '웨이', '준'],
+  LOC_HEIAN_KYO: ['아키코', '치요', '하루', '마사노리'],
+  LOC_JOSEON_HANYANG: ['연화', '복순', '도윤', '성호'],
+  LOC_MALI_TIMBUKTU: ['아미나타', '마리암', '바카리', '술레이만'],
+  LOC_AZTEC_TENOCHTITLAN: ['쇼치틀', '아토토스틀리', '토날리', '야오틀'],
+  LOC_OTTOMAN_ISTANBUL: ['아이셰', '파트마', '메흐메트', '케말'],
+  LOC_EDO: ['오하루', '오키누', '신타로', '겐지'],
+  LOC_INDUSTRIAL_HANSEONG: ['순옥', '정희', '재필', '창호'],
 };
 
 const favoritePlacesByLocation: Record<string, string> = {
@@ -21,6 +29,14 @@ const favoritePlacesByLocation: Record<string, string> = {
   LOC_ANDES: '계단밭과 마을의 불빛이 함께 내려다보이는 언덕',
   LOC_STEPPE: '천막 뒤편에서 바람과 말의 숨소리를 들을 수 있는 낮은 언덕',
   LOC_POLYNESIA: '썰물 때만 드러나는 섬 북쪽의 얕은 암초',
+  LOC_HAN_CHANGAN: '사람과 수레가 뜸해진 서쪽 시장의 성문 그늘',
+  LOC_HEIAN_KYO: '도성 밖 논과 산기슭이 함께 보이는 하천 둑',
+  LOC_JOSEON_HANYANG: '개천의 물소리와 시장의 망치 소리가 만나는 돌다리',
+  LOC_MALI_TIMBUKTU: '필사본 냄새가 남은 모스크 옆 흙벽 회랑',
+  LOC_AZTEC_TENOCHTITLAN: '꽃과 채소를 실은 카누가 지나는 조용한 수로',
+  LOC_OTTOMAN_ISTANBUL: '보스포루스의 배와 언덕의 지붕이 보이는 부두 계단',
+  LOC_EDO: '짐배와 빨랫배가 천천히 오가는 운하의 버드나무 아래',
+  LOC_INDUSTRIAL_HANSEONG: '전차 종소리와 인쇄기 소리가 함께 들리는 성문 안 골목',
 };
 
 const appearances = [
@@ -75,6 +91,17 @@ const dailyDetails = [
   { talent: '낯선 길에서도 방향과 반복되는 표식을 기억하는 능력', weakness: '안전하다는 확신이 없으면 결정을 지나치게 늦추는 점', favoritePlace: '밤하늘을 가리지 않는 성벽이나 해안', favoriteFood: '불에 구운 뿌리채소와 짭짤한 치즈', dailyHabit: '하루가 끝나면 다음 날의 경로를 손가락으로 세 번 짚었습니다', belief: '두려움은 멈추라는 명령이 아니라 더 자세히 보라는 신호라는 믿음' },
 ];
 
+// 결과가 같은 문장만 반복되지 않도록 각 축에 읽기 쉬운 생활 장면 변형을 만든다.
+const sceneVariants = (items: readonly string[], labels: readonly string[]) => items.flatMap((item, index) => labels.map((label) => `${item} ${label}`));
+const expandedAppearances = sceneVariants(appearances, ['아침 빛에서 보인 모습이었습니다.', '일할 때 더 잘 드러나는 모습이었습니다.', '오래된 사진에도 남은 모습이었습니다.', '친한 사람만 알아본 모습이었습니다.', '계절에 따라 조금 달라진 모습이었습니다.']);
+const expandedManners = sceneVariants(manners, ['처음 만난 사람에게도 같은 태도를 보였습니다.', '가까운 사람 앞에서는 조금 달라졌습니다.', '바쁜 날에도 이 습관을 지켰습니다.', '힘든 일이 생기면 이 모습이 더 뚜렷해졌습니다.', '시간이 지나도 쉽게 바뀌지 않았습니다.']);
+const expandedHobbies = sceneVariants(hobbies, ['쉬는 날마다 이어 갔습니다.', '친구와 함께 즐겼습니다.', '혼자 있을 때 마음을 가라앉혔습니다.', '작은 도구만 있으면 할 수 있었습니다.', '누군가에게 배워 시작했습니다.']);
+const expandedDreams = sceneVariants(dreams, ['그 꿈을 위해 작은 준비를 했습니다.', '끝까지 포기하지 않은 바람이었습니다.', '사람들과 나누고 싶은 꿈이었습니다.', '쉽지 않았지만 다시 생각한 꿈이었습니다.', '다음 세대에 남기고 싶은 꿈이었습니다.']);
+const expandedDailyDetails = dailyDetails.flatMap((detail, index) => Array.from({ length: 5 }, (_, variant) => ({
+  ...detail,
+  talent: `${detail.talent} ${['작은 일부터 시작했습니다.', '다른 사람의 도움도 받았습니다.', '매일 조금씩 연습했습니다.', '실수 뒤에 더 꼼꼼해졌습니다.', '배운 것을 주변에 나누었습니다.'][variant]}`,
+})));
+
 function stableIndex(seed: string, length: number) {
   let hash = 2_166_136_261;
   for (const character of seed) { hash ^= character.charCodeAt(0); hash = Math.imul(hash, 16_777_619); }
@@ -86,7 +113,7 @@ export function selectLifeIdentity(core: Pick<ResultCore, 'answerHash' | 'record
   const identityIndex = stableIndex(`${core.answerHash}:${core.recordNo}:identity`, 4);
   const gender: StoryProfile['identity']['gender'] = identityIndex < 2 ? '여성' : '남성';
   const name = names[identityIndex]!;
-  const detail = dailyDetails[stableIndex(`${core.answerHash}:${core.occupationId}:daily`, dailyDetails.length)]!;
+  const detail = expandedDailyDetails[stableIndex(`${core.answerHash}:${core.occupationId}:daily`, expandedDailyDetails.length)]!;
   const psychology = psychologies[stableIndex(`${core.answerHash}:${core.occupationId}:psychology`, psychologies.length)]!;
   const dream = dreams[stableIndex(`${core.answerHash}:dream`, dreams.length)]!;
   const unrealizedDream = dreams[(stableIndex(`${core.answerHash}:unrealized`, dreams.length - 1) + 1) % dreams.length]!;
@@ -95,17 +122,17 @@ export function selectLifeIdentity(core: Pick<ResultCore, 'answerHash' | 'record
       fictional: true as const,
       name,
       gender,
-      appearance: appearances[stableIndex(`${core.answerHash}:appearance`, appearances.length)]!,
-      voiceAndManner: manners[stableIndex(`${core.answerHash}:manner`, manners.length)]!,
+      appearance: expandedAppearances[stableIndex(`${core.answerHash}:appearance`, expandedAppearances.length)]!,
+      voiceAndManner: expandedManners[stableIndex(`${core.answerHash}:manner`, expandedManners.length)]!,
       ...psychology,
     },
     dailyLife: {
       occupationMeaning: '생계 수단이면서 공동체에서 자신의 자리를 증명하는 일이었습니다',
-      hobby: hobbies[stableIndex(`${core.answerHash}:hobby`, hobbies.length)]!,
+      hobby: expandedHobbies[stableIndex(`${core.answerHash}:hobby`, expandedHobbies.length)]!,
       ...detail,
       favoritePlace: favoritePlacesByLocation[core.locationId] ?? detail.favoritePlace,
-      dream,
-      unrealizedDream,
+      dream: expandedDreams[stableIndex(`${core.answerHash}:dream`, expandedDreams.length)]!,
+      unrealizedDream: expandedDreams[stableIndex(`${core.answerHash}:unrealized`, expandedDreams.length)]!,
     },
   };
 }

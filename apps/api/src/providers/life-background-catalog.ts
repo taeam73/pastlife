@@ -35,6 +35,11 @@ const innerLives: readonly InnerLife[] = [
   { formativeWound: '가족의 기대와 다른 재능을 숨겨야 했던 시절', coreFear: '진짜 모습을 보이면 사랑과 자리를 잃는다는 두려움', copingPattern: '낮에는 요구받은 역할을, 밤에는 원하는 일을 몰래 이어 갔습니다', lifelongDilemma: '의무를 다하는 삶과 자신의 이름으로 사는 삶 중 무엇을 택할지 고민했습니다', deepestPain: '자신의 작품을 다른 사람의 이름으로 세상에 내보낸 일', secretWish: '가장 아끼는 일을 숨기지 않고 보여 주는 것' },
 ];
 
+const backgroundAdds = ['아침마다 역할을 나누어 하루를 시작했습니다.', '서로 다른 생각을 듣는 시간이 있었습니다.', '작은 물건 하나를 아껴 쓰는 습관이 있었습니다.', '이웃의 도움으로 어려운 날을 넘겼습니다.', '계절이 바뀔 때 생활 방식도 조금 달라졌습니다.'];
+const expandedFamilies = families.flatMap((item) => backgroundAdds.map((add) => ({ ...item, siblingStory: `${item.siblingStory} ${add}` })));
+const expandedHomes = homes.flatMap((item) => backgroundAdds.map((add) => ({ ...item, homeAndResources: `${item.homeAndResources} ${add}` })));
+const expandedInnerLives = innerLives.flatMap((item) => backgroundAdds.map((add) => ({ ...item, copingPattern: `${item.copingPattern} ${add}` })));
+
 function stableIndex(seed: string, length: number) {
   let hash = 2_166_136_261;
   for (const character of seed) { hash ^= character.charCodeAt(0); hash = Math.imul(hash, 16_777_619); }
@@ -42,8 +47,8 @@ function stableIndex(seed: string, length: number) {
 }
 
 export function selectLifeBackground(core: Pick<ResultCore, 'answerHash' | 'recordNo' | 'locationId' | 'personalityId'>) {
-  const family = families[stableIndex(`${core.answerHash}:${core.recordNo}:family`, families.length)]!;
-  const conditions = homes[stableIndex(`${core.answerHash}:${core.locationId}:conditions`, homes.length)]!;
-  const innerLife = innerLives[stableIndex(`${core.answerHash}:${core.personalityId}:inner`, innerLives.length)]!;
+  const family = expandedFamilies[stableIndex(`${core.answerHash}:${core.recordNo}:family`, expandedFamilies.length)]!;
+  const conditions = expandedHomes[stableIndex(`${core.answerHash}:${core.locationId}:conditions`, expandedHomes.length)]!;
+  const innerLife = expandedInnerLives[stableIndex(`${core.answerHash}:${core.personalityId}:inner`, expandedInnerLives.length)]!;
   return { background: { ...family, ...conditions }, innerLife };
 }

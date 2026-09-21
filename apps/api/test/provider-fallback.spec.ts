@@ -45,7 +45,7 @@ describe('provider fallbacks', () => {
     try {
       const story = await new AiNarrativeProvider(new TemplateNarrativeProvider()).createBasic(fixture);
       expect(story.blocks.map(({ body }) => body).join('\n').length).toBeGreaterThanOrEqual(1_600);
-      expect(story.blocks[0]?.title).toBe('탄생 · 세상에 처음 닿은 날');
+      expect(story.blocks[0]?.title).toBe('탄생 · 당신의 이야기가 시작된 날');
     } finally {
       globalThis.fetch = original;
     }
