@@ -67,6 +67,8 @@ export const ShareAssetResponseSchema = z.object({
   status: z.enum(['READY', 'TEMPLATE_READY']),
   uri: z.string(),
   sourceImageUri: z.string(),
+  layers: z.array(ImageLayerSchema).default([]),
+  compositeSource: z.enum(['SERVER_COMPOSITE', 'LAYERED_PREVIEW', 'SINGLE_IMAGE']),
   deepLink: z.string(),
   storeFallbackUrl: z.string().url(),
 });

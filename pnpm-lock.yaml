@@ -319,6 +319,9 @@ importers:
       react-native-screens:
         specifier: ^4.18.0
         version: 4.28.0(react-native@0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      react-native-view-shot:
+        specifier: ^6.0.1
+        version: 6.0.1(react-native@0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-web:
         specifier: ~0.21.0
         version: 0.21.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -3937,6 +3940,19 @@ packages:
     peerDependencies:
       react: '*'
       react-native: '*'
+
+  react-native-view-shot@6.0.1:
+    resolution: {integrity: sha512-GIEMJcqHoqOz0KL+do2ZwddTwusiNl0oYtnivv3cIedZWtklPjLcvZhY0QjPDuOiIoz6BdWW49+S3z68+YgJZA==}
+    engines: {node: '>=20.19.4', npm: '>=10'}
+    peerDependencies:
+      html2canvas-pro: ^2.0.0
+      react: '>=18.0.0'
+      react-native: '>=0.80.0'
+    peerDependenciesMeta:
+      html2canvas-pro:
+        optional: true
+      react-native:
+        optional: true
 
   react-native-web@0.21.2:
     resolution: {integrity: sha512-SO2t9/17zM4iEnFvlu2DA9jqNbzNhoUP+AItkoCOyFmDMOhUnBBznBDCYN92fGdfAkfQlWzPoez6+zLxFNsZEg==}
@@ -8846,6 +8862,12 @@ snapshots:
       react-freeze: 1.0.4(react@19.2.3)
       react-native: 0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.2.3)(supports-color@8.1.1)
       warn-once: 0.1.1
+
+  react-native-view-shot@6.0.1(react-native@0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
+    optionalDependencies:
+      react-native: 0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.2.3)(supports-color@8.1.1)
 
   react-native-web@0.21.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:

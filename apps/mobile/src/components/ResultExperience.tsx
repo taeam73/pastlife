@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { ResultBlock } from './ResultBlock';
@@ -16,13 +17,13 @@ type ResultExperienceProps = {
   introDescription?: string;
 };
 
-export function ResultExperience({
+export const ResultExperience = forwardRef<View, ResultExperienceProps>(function ResultExperience({
   image,
   blocks,
   highlights,
   introTitle = '당신의 전생 이야기',
   introDescription = '태어난 순간부터 삶의 마지막까지, 여섯 장으로 나누어 보여드릴게요.',
-}: ResultExperienceProps) {
+}: ResultExperienceProps, ref) {
   const showRemoteImage = /^https?:\/\//.test(image.uri);
   const localImage = resolveLibraryImage(image.uri);
   const layers = image.layers?.length ? image.layers : [{ uri: image.compositeUri ?? image.uri, role: 'BACKGROUND' as const, alt: image.alt }];
@@ -37,7 +38,7 @@ export function ResultExperience({
     ?.filter(({ id }) => id !== 'IDENTITY')
     .sort((left, right) => highlightOrder.indexOf(left.id) - highlightOrder.indexOf(right.id));
 
-  return <View style={styles.container}>
+  return <View ref={ref} collapsable={false} style={styles.container}>
     <View style={styles.modeRow} accessibilityRole="tablist">
       <Pressable accessibilityRole="tab" accessibilityState={{ selected: true }} style={[styles.modeButton, styles.modeSelected]}>
         <Text style={styles.modeText}>글로 보기</Text>
@@ -72,7 +73,7 @@ export function ResultExperience({
       {visibleHighlights.map((item) => <View key={item.id} style={styles.highlightCard}><Text style={styles.highlightTitle}>{item.title}</Text><Text style={styles.highlightSummary}>{item.summary}</Text><Text style={styles.highlightDetail}>{item.detail}</Text></View>)}
     </View> : null}
   </View>;
-}
+});
 
 const styles = StyleSheet.create({
   container: { gap: spacing.md },

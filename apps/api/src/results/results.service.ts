@@ -107,6 +107,8 @@ export class ResultsService {
       status: 'TEMPLATE_READY' as const,
       uri: `template://share/${shareId}.png`,
       sourceImageUri: image.compositeUri ?? image.uri,
+      layers: image.layers ?? [],
+      compositeSource: image.compositeUri ? 'SERVER_COMPOSITE' as const : image.layers && image.layers.length > 1 ? 'LAYERED_PREVIEW' as const : 'SINGLE_IMAGE' as const,
       deepLink,
       storeFallbackUrl,
     };

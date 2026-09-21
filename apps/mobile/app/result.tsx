@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Share, StyleSheet, Text } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Share, StyleSheet, Text, View } from 'react-native';
+import { captureRef } from 'react-native-view-shot';
 import { useRouter } from 'expo-router';
 import type { z } from 'zod';
 import { BasicResultResponseSchema } from '@pastlife/contracts';
@@ -22,6 +23,7 @@ export default function ResultScreen() {
   const [result, setResult] = useState<BasicResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [imageShareStatus, setImageShareStatus] = useState<AsyncStatus>('IDLE');
+  const resultCardRef = useRef<View>(null);
 
   useEffect(() => { void (async () => {
     const session = await loadSession();
@@ -40,6 +42,10 @@ export default function ResultScreen() {
       const session = await loadSession();
       void trackEvent('share_format_selected', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), resultId: result.resultId, shareFormat: 'IMAGE' });
       const asset = await api.shareAsset(result.resultId, 'IMAGE');
+      const capturedUri = resultCardRef.current
+        ? await captureRef(resultCardRef, { format: 'png', quality: 0.9, result: 'tmpfile' })
+        : undefined;
+      if (capturedUri) asset.deepLink = capturedUri;
       void trackEvent('share_asset_ready', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), resultId: result.resultId, shareFormat: 'IMAGE' });
       const outcome = await Share.share({ message: `${asset.deepLink}\n이미지 공유 카드가 준비되었습니다.`, url: asset.deepLink });
       if (outcome.action === Share.sharedAction) void trackEvent('share_completed', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), resultId: result.resultId, shareFormat: 'IMAGE' });
@@ -55,7 +61,7 @@ export default function ResultScreen() {
   return <Screen>
     <Text style={styles.eyebrow}>전생 기록 No.{String(result.recordNo).padStart(2, '0')} 발견</Text>
     <Text style={styles.headline}>{result.headline}</Text>
-    <ResultExperience image={result.image} blocks={result.blocks} highlights={result.highlights} />
+    <ResultExperience ref={resultCardRef} image={result.image} blocks={result.blocks} highlights={result.highlights} />
     <Text style={styles.disclaimer}>{result.disclaimer}</Text>
     <UnlockAction label="광고 보고 더 자세히 보기" loadingLabel="광고를 준비하고 있어요" onUnlock={async () => { const session = await loadSession(); if (!session?.sessionId) throw new Error('Session not found'); void trackEvent('deep_cta_clicked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); void trackEvent('ad_started', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); try { await api.fakeAd(session.sessionId, 2); } catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); throw error; } void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); void trackEvent('deep_unlocked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); router.replace('/deep'); }} />
     <PrimaryButton disabled onPress={() => undefined}>영상 공유 · 출시 예정</PrimaryButton>
