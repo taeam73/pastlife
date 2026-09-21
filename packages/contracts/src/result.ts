@@ -13,6 +13,11 @@ export const AdCompletionRequestSchema = z.object({ providerEventId: z.string().
 export const UnlockResponseSchema = z.object({ sessionId: z.string(), unlockType: z.enum(['BASIC', 'DEEP', 'GUIDE']), unlocked: z.boolean() });
 
 export const BasicBlockSchema = z.object({ id: z.string(), title: z.string(), body: z.string() });
+export const ImageLayerSchema = z.object({ uri: z.string(), role: z.enum(['BACKGROUND', 'CHARACTER', 'EFFECT']), alt: z.string() });
+export const ResultImageSchema = z.object({
+  sourceType: z.enum(['AI', 'LIBRARY']), uri: z.string(), alt: z.string(), status: z.enum(['READY', 'FALLBACK']),
+  layers: z.array(ImageLayerSchema).optional(), compositeUri: z.string().optional(),
+});
 export const StoryHighlightSchema = z.object({
   id: z.enum(['IDENTITY', 'DREAM_AND_DAILY', 'LIFE_FOUNDATION', 'INNER_WOUND', 'KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO']),
   title: z.string(),
@@ -29,7 +34,7 @@ export const BasicResultResponseSchema = z.object({
     occupation: z.string(), hobby: z.string(), dream: z.string(), talent: z.string(), weakness: z.string(), favoritePlace: z.string(), belief: z.string(),
     formativeWound: z.string(), centralContradiction: z.string(), realization: z.string(),
   }),
-  image: z.object({ sourceType: z.enum(['AI', 'LIBRARY']), uri: z.string(), alt: z.string(), status: z.enum(['READY', 'FALLBACK']) }),
+  image: ResultImageSchema,
   lifeSummary: z.object({ ageAtDeath: z.number().int().positive(), lifespanLabel: z.string(), endingTitle: z.string() }),
   highlights: z.array(StoryHighlightSchema).length(8),
   blocks: z.array(BasicBlockSchema).length(6),
@@ -38,7 +43,7 @@ export const BasicResultResponseSchema = z.object({
 
 export const ExtendedResultResponseSchema = z.object({
   resultId: z.string(),
-  image: z.object({ sourceType: z.enum(['AI', 'LIBRARY']), uri: z.string(), alt: z.string(), status: z.enum(['READY', 'FALLBACK']) }),
+  image: ResultImageSchema,
   blocks: z.array(BasicBlockSchema).length(4),
   disclaimer: z.string(),
 });

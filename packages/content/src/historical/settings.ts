@@ -122,35 +122,35 @@ const baseHistoricalSettings: readonly HistoricalSetting[] = [
     id: 'LOC_SHANGHAI_1920', eraId: 'ERA_20C_EARLY', regionId: 'REG_EAST_ASIA', label: '1920년대 상하이 항구와 인쇄 거리', presentDayContext: '오늘날 중국 상하이', yearStart: 1920, yearEnd: 1929,
     affinityTags: ['connection', 'creativity'], occupationIds: ['OCC_MERCHANT', 'OCC_PRINTER', 'OCC_PHOTOGRAPHER', 'OCC_JOURNALIST'],
     dailyLifeNotes: ['전차와 부두를 오가는 사람들 사이로 여러 언어의 간판이 이어졌습니다', '신문과 전단이 카페와 인쇄소에서 빠르게 돌았습니다', '이주 노동자와 상인들은 숙소와 식당 정보를 서로 나누었습니다'],
-    visual: { fallbackAssetKey: 'library/v3/shanghai-1920.jpg', environment: '전차 선로, 부두 창고, 인쇄소 골목', clothing: '서양식 재킷과 중국식 작업복이 공존하는 거리 복장', avoid: ['현대 고층 빌딩', '현대 자동차', '현대식 간판'] }, reviewStatus: 'EDITORIAL_REVIEWED',
+    visual: { fallbackAssetKey: 'library/v5/shanghai-1920.png', environment: '전차 선로, 부두 창고, 인쇄소 골목', clothing: '서양식 재킷과 중국식 작업복이 공존하는 거리 복장', avoid: ['현대 고층 빌딩', '현대 자동차', '현대식 간판'] }, reviewStatus: 'EDITORIAL_REVIEWED',
     provenance: [source('Shanghai: The Paris of the Orient', 'https://www.britannica.com/place/Shanghai-China', '20세기 초 국제 항구와 도시 생활'), source('The International Dunhuang Project', 'https://idp.bl.uk/', '동아시아 교역과 기록 자료')],
   },
   {
     id: 'LOC_SEOUL_1940', eraId: 'ERA_20C_EARLY', regionId: 'REG_EAST_ASIA', label: '1940년대 서울의 피난과 배급 생활', presentDayContext: '오늘날 대한민국 서울', yearStart: 1940, yearEnd: 1949,
     affinityTags: ['survival', 'connection'], occupationIds: ['OCC_NURSE', 'OCC_JOURNALIST', 'OCC_CIVIL_SERVANT', 'OCC_COMMUNITY_ORGANIZER'],
     dailyLifeNotes: ['가족들은 피난 보따리와 배급표를 생활의 중심에 두었습니다', '병원과 학교는 부족한 물자 속에서도 임시 기능을 이어 갔습니다', '라디오와 전갈은 헤어진 가족을 찾는 중요한 수단이었습니다'],
-    visual: { fallbackAssetKey: 'library/v3/seoul-1940.jpg', environment: '낮은 한옥과 임시 시장, 피난 행렬', clothing: '수선한 작업복과 계절에 맞춘 겹옷', avoid: ['현대식 군복', '현대 아파트', '현대 광고판'] }, reviewStatus: 'EDITORIAL_REVIEWED',
+    visual: { fallbackAssetKey: 'library/v5/seoul-1940.png', environment: '낮은 한옥과 임시 시장, 피난 행렬', clothing: '수선한 작업복과 계절에 맞춘 겹옷', avoid: ['현대식 군복', '현대 아파트', '현대 광고판'] }, reviewStatus: 'EDITORIAL_REVIEWED',
     provenance: [source('Seoul Museum of History', 'https://museum.seoul.go.kr/eng/index.do', '근현대 서울의 생활사 자료'), source('Korean History Database', 'https://db.history.go.kr/', '20세기 한국 사회와 전쟁 자료')],
   },
   {
     id: 'LOC_BUSAN_1950', eraId: 'ERA_20C_LATE', regionId: 'REG_EAST_ASIA', label: '1950년대 부산의 피란민 시장', presentDayContext: '오늘날 대한민국 부산', yearStart: 1950, yearEnd: 1959,
     affinityTags: ['survival', 'adventure'], occupationIds: ['OCC_MERCHANT', 'OCC_NURSE', 'OCC_RADIO_TECHNICIAN', 'OCC_COMMUNITY_ORGANIZER'],
     dailyLifeNotes: ['언덕길 판잣집과 시장은 서로의 소식을 나누는 생활권이 되었습니다', '미군 물자와 지역 장터가 섞인 새로운 거래 방식이 생겼습니다', '피난민들은 고향의 주소와 이름을 종이에 적어 보관했습니다'],
-    visual: { fallbackAssetKey: 'library/v3/busan-1950.jpg', environment: '항구 언덕, 판잣집, 국제시장 골목', clothing: '기운 작업복과 군용 외투를 고쳐 입은 사람들', avoid: ['현대 항만 크레인', '현대 차량', '현대식 상가'] }, reviewStatus: 'EDITORIAL_REVIEWED',
+    visual: { fallbackAssetKey: 'library/v5/busan-1950.png', environment: '항구 언덕, 판잣집, 국제시장 골목', clothing: '기운 작업복과 군용 외투를 고쳐 입은 사람들', avoid: ['현대 항만 크레인', '현대 차량', '현대식 상가'] }, reviewStatus: 'EDITORIAL_REVIEWED',
     provenance: [source('Busan Modern History Museum', 'https://www.busan.go.kr/museum/', '전후 부산의 피난과 시장 생활'), source('Korean History Database', 'https://db.history.go.kr/', '한국전쟁과 피난민 자료')],
   },
   {
     id: 'LOC_TOKYO_1960', eraId: 'ERA_20C_LATE', regionId: 'REG_EAST_ASIA', label: '1960년대 도쿄의 고도성장과 전파 상점', presentDayContext: '오늘날 일본 도쿄', yearStart: 1960, yearEnd: 1969,
     affinityTags: ['achievement', 'knowledge'], occupationIds: ['OCC_FACTORY_WORKER', 'OCC_RADIO_TECHNICIAN', 'OCC_PHOTOGRAPHER', 'OCC_CIVIL_SERVANT'],
     dailyLifeNotes: ['전철역 주변에 공장 노동자와 학생을 위한 작은 상점이 늘었습니다', '텔레비전과 라디오가 가족의 저녁 시간을 바꾸었습니다', '새로운 주택 단지와 오래된 골목이 빠르게 맞닿았습니다'],
-    visual: { fallbackAssetKey: 'library/v3/tokyo-1960.jpg', environment: '전철역, 전파 상점, 새로 지은 주택 단지', clothing: '작업복과 단정한 출근복, 학생 교복', avoid: ['현대 전광판', '스마트폰', '현대 고층 빌딩'] }, reviewStatus: 'EDITORIAL_REVIEWED',
+    visual: { fallbackAssetKey: 'library/v5/tokyo-1960.png', environment: '전철역, 전파 상점, 새로 지은 주택 단지', clothing: '작업복과 단정한 출근복, 학생 교복', avoid: ['현대 전광판', '스마트폰', '현대 고층 빌딩'] }, reviewStatus: 'EDITORIAL_REVIEWED',
     provenance: [source('Tokyo Metropolitan Library Digital Archive', 'https://www.library.metro.tokyo.lg.jp/english/', '전후 도쿄 도시 생활 자료'), source('Japan Search', 'https://jpsearch.go.jp/', '일본 근현대 사진과 기록')],
   },
   {
     id: 'LOC_LAGOS_1980', eraId: 'ERA_20C_LATE', regionId: 'REG_SUBSAHARAN_AFRICA', label: '1980년대 라고스의 음악과 이주 네트워크', presentDayContext: '오늘날 나이지리아 라고스', yearStart: 1980, yearEnd: 1989,
     affinityTags: ['connection', 'freedom'], occupationIds: ['OCC_JOURNALIST', 'OCC_PHOTOGRAPHER', 'OCC_RADIO_TECHNICIAN', 'OCC_COMMUNITY_ORGANIZER'],
     dailyLifeNotes: ['버스 정류장과 시장은 도시 안팎의 이주 소식을 교환하는 장소였습니다', '카세트와 라디오는 음악과 지역 뉴스를 동시에 퍼뜨렸습니다', '공동체 모임은 전기와 물 문제를 함께 해결하는 창구가 되었습니다'],
-    visual: { fallbackAssetKey: 'library/v3/lagos-1980.jpg', environment: '시장, 버스 정류장, 음악 스튜디오', clothing: '선명한 색상의 일상복과 작업복', avoid: ['현대식 대형 쇼핑몰', '스마트폰', '현대 교통 표지'] }, reviewStatus: 'EDITORIAL_REVIEWED',
+    visual: { fallbackAssetKey: 'library/v5/lagos-1980.png', environment: '시장, 버스 정류장, 음악 스튜디오', clothing: '선명한 색상의 일상복과 작업복', avoid: ['현대식 대형 쇼핑몰', '스마트폰', '현대 교통 표지'] }, reviewStatus: 'EDITORIAL_REVIEWED',
     provenance: [source('Lagos State Records and Archives Bureau', 'https://lasrab.gov.ng/', '라고스 도시와 기록 자료'), source('British Library Sounds', 'https://sounds.bl.uk/', '나이지리아 음악과 구술 기록')],
   },
   {
@@ -190,7 +190,7 @@ const generatedSettings: HistoricalSetting[] = Array.from({ length: 90 }, (_, in
     presentDayContext: `${sourceSetting.presentDayContext}의 생활 장면 변형 ${variant}`,
     occupationIds: [...sourceSetting.occupationIds].slice(index % 5).concat(sourceSetting.occupationIds.slice(0, index % 5)),
     dailyLifeNotes: [...sourceSetting.dailyLifeNotes, `${generatedSettingLabels[index % generatedSettingLabels.length]}에서 사람들은 서로의 일을 도왔습니다.`],
-    visual: { ...sourceSetting.visual, fallbackAssetKey: `library/v3/generated-setting-${String(variant).padStart(3, '0')}.jpg` },
+    visual: { ...sourceSetting.visual },
   };
 });
 

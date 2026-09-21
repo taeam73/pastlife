@@ -11,7 +11,7 @@ export function validateHistoricalContent(settings: readonly HistoricalSetting[]
     if (setting.occupationIds.length < 2) issues.push({ code: 'SHALLOW_OCCUPATION_POOL', itemId: setting.id, message: 'At least two occupations are required' });
     if (setting.dailyLifeNotes.length < 3) issues.push({ code: 'SHALLOW_DAILY_LIFE', itemId: setting.id, message: 'At least three daily-life notes are required' });
     if (setting.provenance.length < 2) issues.push({ code: 'INSUFFICIENT_PROVENANCE', itemId: setting.id, message: 'At least two sources are required' });
-    if (!setting.visual.fallbackAssetKey.startsWith('library/v3/')) issues.push({ code: 'INVALID_ASSET_KEY', itemId: setting.id, message: 'Fallback asset must live under library/v3' });
+    if (!/^library\/v\d+\//.test(setting.visual.fallbackAssetKey)) issues.push({ code: 'INVALID_ASSET_KEY', itemId: setting.id, message: 'Fallback asset must live under a versioned library directory' });
     for (const occupationId of setting.occupationIds) if (!occupationIds.has(occupationId)) issues.push({ code: 'UNKNOWN_OCCUPATION', itemId: setting.id, message: occupationId });
   }
   const connectedOccupationIds = new Set(settings.flatMap(({ occupationIds }) => occupationIds));

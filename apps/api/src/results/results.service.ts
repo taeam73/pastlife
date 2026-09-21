@@ -106,7 +106,7 @@ export class ResultsService {
       type,
       status: 'TEMPLATE_READY' as const,
       uri: `template://share/${shareId}.png`,
-      sourceImageUri: image.uri,
+      sourceImageUri: image.compositeUri ?? image.uri,
       deepLink,
       storeFallbackUrl,
     };
@@ -125,9 +125,13 @@ export class ResultsService {
   }
 
   private async presentImage(image: Awaited<ReturnType<ImageProvider['getImage']>>, core: ResultCore) {
-    if (!image.uri.startsWith('s3://')) return image;
+    const layered = image.layers?.length ? image : {
+      ...image,
+      layers: [{ uri: image.uri, role: 'BACKGROUND' as const, alt: image.alt }],
+    };
+    if (!layered.uri.startsWith('s3://')) return layered;
     try {
-      return { ...image, uri: await this.imageStorage.getDownloadUrl(image.uri) };
+      return { ...layered, uri: await this.imageStorage.getDownloadUrl(layered.uri) };
     } catch {
       return this.libraryImages.getImage(core);
     }

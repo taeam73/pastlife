@@ -1,5 +1,6 @@
 import type { ResultCore, AnswerInput } from '@pastlife/scoring';
 import type { StoryProfile } from '../story-profile.js';
+import type { ImageLayer } from '../providers/image.provider.js';
 
 export type StoredSession = {
   id: string;
@@ -34,6 +35,8 @@ export type StoredImage = {
   status: 'READY' | 'FALLBACK';
   attemptCount: number;
   errorCode?: string;
+  layers?: ImageLayer[];
+  compositeUri?: string;
 };
 
 export const ASSESSMENT_REPOSITORY = Symbol('ASSESSMENT_REPOSITORY');

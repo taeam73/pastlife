@@ -4,7 +4,8 @@ import { ResultBlock } from './ResultBlock';
 import { resolveLibraryImage } from '../results/libraryImages';
 
 type Block = { id: string; title: string; body: string };
-type ImageAsset = { uri: string; alt: string; sourceType: 'AI' | 'LIBRARY'; status: 'READY' | 'FALLBACK' };
+type ImageLayer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
+type ImageAsset = { uri: string; alt: string; sourceType: 'AI' | 'LIBRARY'; status: 'READY' | 'FALLBACK'; layers?: ImageLayer[] | undefined; compositeUri?: string | undefined };
 type Highlight = { id: string; title: string; summary: string; detail: string };
 
 type ResultExperienceProps = {
@@ -24,6 +25,13 @@ export function ResultExperience({
 }: ResultExperienceProps) {
   const showRemoteImage = /^https?:\/\//.test(image.uri);
   const localImage = resolveLibraryImage(image.uri);
+  const layers = image.layers?.length ? image.layers : [{ uri: image.compositeUri ?? image.uri, role: 'BACKGROUND' as const, alt: image.alt }];
+  const renderLayer = (layer: ImageLayer) => {
+    const layerRemote = /^https?:\/\//.test(layer.uri);
+    const layerLocal = resolveLibraryImage(layer.uri);
+    if (!layerRemote && !layerLocal) return null;
+    return <Image key={`${layer.role}:${layer.uri}`} accessibilityLabel={layer.alt} source={layerLocal ?? { uri: layer.uri }} resizeMode="cover" style={[styles.image, layer.role === 'CHARACTER' ? styles.characterLayer : undefined]} />;
+  };
   const highlightOrder = ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'INNER_WOUND', 'LIFE_LEGACY', 'PRESENT_ECHO', 'DREAM_AND_DAILY', 'LIFE_FOUNDATION'];
   const visibleHighlights = highlights
     ?.filter(({ id }) => id !== 'IDENTITY')
@@ -41,8 +49,8 @@ export function ResultExperience({
     </View>
 
     <View style={styles.hero}>
-      {showRemoteImage || localImage
-        ? <Image accessibilityLabel={image.alt} source={localImage ?? { uri: image.uri }} resizeMode="cover" style={styles.image} />
+      {showRemoteImage || localImage || layers.some((layer) => /^https?:\/\//.test(layer.uri) || resolveLibraryImage(layer.uri))
+        ? layers.map(renderLayer)
         : <View accessible accessibilityLabel={image.alt} style={styles.imageFallback}>
             <Text style={styles.imageFallbackEyebrow}>전생 기록 이미지</Text>
             <Text style={styles.imageFallbackText}>{image.alt}</Text>
@@ -77,6 +85,7 @@ const styles = StyleSheet.create({
   comingSoon: { color: colors.muted, fontSize: 11, marginTop: 2 },
   hero: { minHeight: 360, borderRadius: 20, overflow: 'hidden', backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
+  characterLayer: { opacity: 0.98 },
   imageFallback: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, alignItems: 'center', justifyContent: 'center', padding: spacing.lg, gap: spacing.sm },
   imageFallbackEyebrow: { color: colors.accent, fontSize: 14, fontWeight: '700' },
   imageFallbackText: { color: colors.muted, fontSize: 17, lineHeight: 26, textAlign: 'center' },
