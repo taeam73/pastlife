@@ -157,7 +157,7 @@ const baseHistoricalSettings: readonly HistoricalSetting[] = [
     id: 'LOC_SAO_PAULO_1990', eraId: 'ERA_20C_LATE', regionId: 'REG_AMERICAS', label: '1990년대 상파울루의 컴퓨터 학원과 이주 생활', presentDayContext: '오늘날 브라질 상파울루', yearStart: 1990, yearEnd: 1999,
     affinityTags: ['knowledge', 'adventure'], occupationIds: ['OCC_PROGRAMMER', 'OCC_JOURNALIST', 'OCC_PHOTOGRAPHER', 'OCC_COMMUNITY_ORGANIZER'],
     dailyLifeNotes: ['컴퓨터 학원과 복사 가게가 새로운 일자리를 준비하는 장소가 되었습니다', '이주한 가족들은 전화번호와 주소록을 통해 서로를 연결했습니다', '버스 노선과 동네 라디오가 거대한 도시의 생활 정보를 이어 주었습니다'],
-    visual: { fallbackAssetKey: 'library/v3/saopaulo-1990.jpg', environment: '컴퓨터 학원, 버스 터미널, 다층 주거지', clothing: '청바지와 셔츠, 직업별 작업복', avoid: ['스마트폰', '현대식 공유 차량', '2000년대 이후 로고'] }, reviewStatus: 'EDITORIAL_REVIEWED',
+    visual: { fallbackAssetKey: 'library/v5/saopaulo-1990.png', environment: '컴퓨터 학원, 버스 터미널, 다층 주거지', clothing: '청바지와 셔츠, 직업별 작업복', avoid: ['스마트폰', '현대식 공유 차량', '2000년대 이후 로고'] }, reviewStatus: 'EDITORIAL_REVIEWED',
     provenance: [source('Museu da Imagem e do Som de São Paulo', 'https://mis-sp.org.br/', '상파울루 근현대 도시 기록'), source('Biblioteca Nacional Digital', 'https://bndigital.bn.gov.br/', '브라질 사진과 신문 자료')],
   },
 ] as const;
