@@ -24,12 +24,33 @@ export class LibraryImageProvider implements ImageProvider {
       OCC_CLOWN: 'asset://characters/v1/clown-male.png',
       OCC_FARMER: 'asset://characters/v1/farmer-female.png',
       OCC_NAVIGATOR: 'asset://characters/v1/navigator-female.png',
-      OCC_ARTISAN: 'asset://characters/v1/artisan-male.png',
+      OCC_ARTISAN: 'asset://characters/v1/young-potter-female.png',
       OCC_TEACHER: 'asset://characters/v1/teacher-female.png',
       OCC_COMMUNITY_ORGANIZER: 'asset://characters/v1/community-organizer-male.png',
       OCC_PROGRAMMER: 'asset://characters/v1/programmer-female.png',
+      OCC_SCHOLAR: 'asset://characters/v1/elder-scholar-male.png',
+      OCC_FISHER: 'asset://characters/v1/middle-aged-fisher-male.png',
+      OCC_WEAVER: 'asset://characters/v1/child-weaver-female.png',
     };
-    const backgroundUri = `asset://${core.libraryImage.key}`;
+    const backgroundAlternates = [
+      'asset://library/v5/accra-1850.png',
+      'asset://library/v5/cusco-1500.png',
+      'asset://library/v5/edo-osaka-1750.png',
+      'asset://library/v5/kyoto-1700.png',
+      'asset://library/v5/lima-1700.png',
+      'asset://library/v5/marrakesh-1200.png',
+      'asset://library/v5/samarqand-1400.png',
+      'asset://library/v5/stockholm-1750.png',
+      'asset://library/v5/tunis-1400.png',
+    ];
+    let hash = 2_166_136_261;
+    for (const character of `${core.answerHash}:${core.recordNo}`) {
+      hash ^= character.charCodeAt(0);
+      hash = Math.imul(hash, 16_777_619);
+    }
+    const backgroundUri = (hash >>> 0) % 3 === 0
+      ? backgroundAlternates[(hash >>> 0) % backgroundAlternates.length]!
+      : `asset://${core.libraryImage.key}`;
     const characterUri = characterByOccupation[core.occupationId];
     return {
       sourceType: 'LIBRARY',
