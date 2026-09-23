@@ -36,9 +36,9 @@ const innerLives: readonly InnerLife[] = [
 ];
 
 const backgroundAdds = ['아침마다 역할을 나누어 하루를 시작했습니다.', '서로 다른 생각을 듣는 시간이 있었습니다.', '작은 물건 하나를 아껴 쓰는 습관이 있었습니다.', '이웃의 도움으로 어려운 날을 넘겼습니다.', '계절이 바뀔 때 생활 방식도 조금 달라졌습니다.'];
-const expandedFamilies = families.flatMap((item) => backgroundAdds.map((add) => ({ ...item, siblingStory: `${item.siblingStory} ${add}` })));
-const expandedHomes = homes.flatMap((item) => backgroundAdds.map((add) => ({ ...item, homeAndResources: `${item.homeAndResources} ${add}` })));
-const expandedInnerLives = innerLives.flatMap((item) => backgroundAdds.map((add) => ({ ...item, copingPattern: `${item.copingPattern} ${add}` })));
+const expandedFamilies = families.flatMap((item) => backgroundAdds.map((add) => ({ ...item, siblingStory: `${item.siblingStory}. ${add}` })));
+const expandedHomes = homes.flatMap((item) => backgroundAdds.map((add) => ({ ...item, homeAndResources: `${item.homeAndResources}. ${add}` })));
+const expandedInnerLives = innerLives.flatMap((item) => backgroundAdds.map((add) => ({ ...item, copingPattern: `${item.copingPattern}. ${add}` })));
 
 function stableIndex(seed: string, length: number) {
   let hash = 2_166_136_261;

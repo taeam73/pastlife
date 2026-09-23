@@ -49,6 +49,34 @@ describe('private result image delivery', () => {
     expect(result.image.uri).toBe('s3://pastlife-private/results/hash.webp');
   });
 
+  it('signs S3 references in composite and layered image fields', async () => {
+    const layeredResult: StoredResult = structuredClone(result);
+    layeredResult.image = {
+      ...layeredResult.image!,
+      compositeUri: 's3://pastlife-private/results/composite.webp',
+      layers: [
+        { uri: 's3://pastlife-private/results/background.webp', role: 'BACKGROUND', alt: 'background' },
+        { uri: 'https://cdn.invalid/character.webp', role: 'CHARACTER', alt: 'character' },
+      ],
+    };
+    const getDownloadUrl = vi.fn(async (uri: string) => `https://signed.invalid/${uri.slice('s3://pastlife-private/'.length)}?X-Amz-Expires=900`);
+    const repository = {
+      getResult: vi.fn(async () => structuredClone(layeredResult)),
+      getSession: vi.fn(async () => structuredClone(session)),
+    } as unknown as AssessmentRepository;
+    const imageProvider = { getImage: vi.fn() } as unknown as ImageProvider;
+    const storage = { putObject: vi.fn(), getDownloadUrl } as unknown as ImageStorage;
+    const service = new ResultsService(repository, imageProvider, storage, new LibraryImageProvider());
+
+    const response = await service.basic(result.id);
+
+    expect(response.image.uri).toContain('https://signed.invalid/results/hash.webp');
+    expect(response.image.compositeUri).toContain('https://signed.invalid/results/composite.webp');
+    expect(response.image.layers?.[0]?.uri).toContain('https://signed.invalid/results/background.webp');
+    expect(response.image.layers?.[1]?.uri).toBe('https://cdn.invalid/character.webp');
+    expect(getDownloadUrl).toHaveBeenCalledTimes(3);
+  });
+
   it('uses the library image when signing fails', async () => {
     const { service } = createService(vi.fn(async () => { throw new Error('signing unavailable'); }));
     const response = await service.basic(result.id);

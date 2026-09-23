@@ -66,7 +66,7 @@ export default function DeepScreen() {
       introTitle="기록 뒤에 숨은 네 개의 이야기"
       introDescription="기록보기에서 다 하지 못한 마음과 인연, 선택의 뒷이야기가 네 장의 소설로 이어집니다."
     />
-    <Text style={styles.disclaimer}>{result.disclaimer}</Text>
+    {result.disclaimer ? <Text style={styles.disclaimer}>{result.disclaimer}</Text> : null}
     <UnlockAction label="지금의 나를 위한 팁 보기" loadingLabel="광고 확인 중…" onUnlock={unlockGuide} />
     <PrimaryButton onPress={() => void restart()}>다른 전생 이야기 찾아보기</PrimaryButton>
     <AppNav />

@@ -30,6 +30,7 @@ export const BasicResultResponseSchema = z.object({
   headline: z.string(),
   character: z.object({
     name: z.string(), gender: z.enum(['여성', '남성']), fictional: z.literal(true), appearance: z.string(),
+    introduction: z.string(), occupationDescription: z.string(),
     temperament: z.string(), complex: z.string(), socialMask: z.string(), stressResponse: z.string(), familyStructure: z.string(), primaryCaregiver: z.string(),
     occupation: z.string(), hobby: z.string(), dream: z.string(), talent: z.string(), weakness: z.string(), favoritePlace: z.string(), belief: z.string(),
     formativeWound: z.string(), centralContradiction: z.string(), realization: z.string(),

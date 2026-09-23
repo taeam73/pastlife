@@ -186,8 +186,8 @@ const generatedSettings: HistoricalSetting[] = Array.from({ length: 90 }, (_, in
   return {
     ...sourceSetting,
     id: `${sourceSetting.id}_VARIANT_${String(variant).padStart(3, '0')}`,
-    label: `${generatedSettingLabels[index % generatedSettingLabels.length]} ${variant}`,
-    presentDayContext: `${sourceSetting.presentDayContext}의 생활 장면 변형 ${variant}`,
+    label: generatedSettingLabels[index % generatedSettingLabels.length]!,
+    presentDayContext: sourceSetting.presentDayContext,
     occupationIds: [...sourceSetting.occupationIds].slice(index % 5).concat(sourceSetting.occupationIds.slice(0, index % 5)),
     dailyLifeNotes: [...sourceSetting.dailyLifeNotes, `${generatedSettingLabels[index % generatedSettingLabels.length]}에서 사람들은 서로의 일을 도왔습니다.`],
     visual: { ...sourceSetting.visual },

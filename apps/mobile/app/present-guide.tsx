@@ -43,7 +43,7 @@ export default function PresentGuideScreen() {
       introTitle="지금의 당신으로 이어지는 네 개의 장면"
       introDescription="전생 이야기와 닮은 오늘의 순간을 따라가며, 다음 선택을 소설처럼 풀어봅니다."
     />
-    <Text style={styles.disclaimer}>{result.disclaimer}</Text>
+    {result.disclaimer ? <Text style={styles.disclaimer}>{result.disclaimer}</Text> : null}
     <PrimaryButton onPress={() => void restart()}>다른 전생 이야기 찾아보기</PrimaryButton>
     <AppNav />
   </Screen>;

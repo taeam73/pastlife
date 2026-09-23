@@ -61,8 +61,8 @@ export default function ResultScreen() {
   return <Screen>
     <Text style={styles.eyebrow}>전생 기록 No.{String(result.recordNo).padStart(2, '0')} 발견</Text>
     <Text style={styles.headline}>{result.headline}</Text>
-    <ResultExperience ref={resultCardRef} image={result.image} blocks={result.blocks} highlights={result.highlights} />
-    <Text style={styles.disclaimer}>{result.disclaimer}</Text>
+    <ResultExperience ref={resultCardRef} image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} />
+    {result.disclaimer ? <Text style={styles.disclaimer}>{result.disclaimer}</Text> : null}
     <UnlockAction label="광고 보고 더 자세히 보기" loadingLabel="광고를 준비하고 있어요" onUnlock={async () => { const session = await loadSession(); if (!session?.sessionId) throw new Error('Session not found'); void trackEvent('deep_cta_clicked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); void trackEvent('ad_started', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); try { await api.fakeAd(session.sessionId, 2); } catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); throw error; } void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); void trackEvent('deep_unlocked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); router.replace('/deep'); }} />
     <PrimaryButton disabled onPress={() => undefined}>영상 공유 · 출시 예정</PrimaryButton>
     <Text style={styles.videoNotice}>영상 보기와 영상 공유는 첫 출시 이후 제공됩니다.</Text>

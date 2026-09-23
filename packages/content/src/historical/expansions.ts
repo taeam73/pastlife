@@ -24,6 +24,13 @@ function assetSlug(fallbackAssetKey: string) {
 export const historicalSettingExpansions: readonly HistoricalSettingExpansion[] = historicalSettings.map((setting) => {
   const slug = assetSlug(setting.visual.fallbackAssetKey);
   const generatedExtension = 'png';
+  const imageAssetKeys: HistoricalSettingExpansion['imageAssetKeys'] = setting.visual.fallbackAssetKey.startsWith('library/v5/')
+    ? [setting.visual.fallbackAssetKey, setting.visual.fallbackAssetKey, setting.visual.fallbackAssetKey]
+    : [
+        `library/v4/${slug}-daily.webp`,
+        `library/v4/${slug}-work.${generatedExtension}`,
+        `library/v4/${slug}-turning.${generatedExtension}`,
+      ];
   const workEpisodes = setting.occupationIds.map((occupationId, index) => {
     const occupation = historicalOccupations.find(({ id }) => id === occupationId);
     if (!occupation) throw new Error(`Unknown occupation ${occupationId} in ${setting.id}`);
@@ -33,7 +40,7 @@ export const historicalSettingExpansions: readonly HistoricalSettingExpansion[] 
     return {
       id: `${setting.id}_WORK_${String(index + 1).padStart(2, '0')}`,
       title: `${occupation.label}에게 찾아온 뜻밖의 하루`,
-      setup: `${setting.label}에서 ${action} 그날, 평소와 다른 문제가 생겼습니다. ${localDetail}`,
+      setup: `${setting.label}에서 ${action}. 그날 평소와 다른 문제가 생겼습니다. ${localDetail}`,
       choice: `당신은 ${object}부터 챙기는 대신 함께 일하던 사람들의 안전과 생계를 먼저 확인했습니다.`,
       consequence: `그 선택은 ${occupation.label}의 일을 혼자만의 기술이 아니라 공동체가 이어 가는 방식으로 바꾸었습니다.`,
       occupationIds: [occupationId],
@@ -49,11 +56,7 @@ export const historicalSettingExpansions: readonly HistoricalSettingExpansion[] 
   }));
   return {
     settingId: setting.id,
-    imageAssetKeys: [
-      `library/v4/${slug}-daily.webp`,
-      `library/v4/${slug}-work.${generatedExtension}`,
-      `library/v4/${slug}-turning.${generatedExtension}`,
-    ],
+    imageAssetKeys,
     workEpisodes,
     lifeEvents,
   };

@@ -146,7 +146,7 @@ const baseLastMemories: Candidate[] = [
   { id: 'MEM_FACE', label: '곁을 지켜 준 한 사람의 얼굴', affinityTags: ['connection', 'devotion'] },
 ];
 
-export const lastMemories: Candidate[] = [...baseLastMemories, ...Array.from({ length: 24 }, (_, index) => ({ id: `MEM_VARIANT_${String(index + 1).padStart(2, '0')}`, label: `그 시절의 작은 장면 ${index + 1}: 누군가의 목소리와 손길이 남은 기억`, affinityTags: tagSets[index % tagSets.length]! }))];
+export const lastMemories: Candidate[] = [...baseLastMemories, ...Array.from({ length: 24 }, (_, index) => ({ id: `MEM_VARIANT_${String(index + 1).padStart(2, '0')}`, label: '그 시절 누군가의 목소리와 손길이 남은 기억', affinityTags: tagSets[index % tagSets.length]! }))];
 
 export const basicTemplates = [
   { id: 'LIFE_BIRTH', title: '탄생 · 당신의 이야기가 시작된 날' },

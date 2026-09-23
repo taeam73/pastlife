@@ -47,21 +47,20 @@ describe('story event catalog', () => {
     expect(selectRelationshipEvent(core)).toEqual(selectRelationshipEvent(core));
   });
 
-  it('offers eight authored variants for every relationship type', () => {
+  it('offers sixteen authored variants for every relationship type', () => {
     expect(relationshipEventCounts()).toEqual({
-      REL_COMPANION: 8,
-      REL_FAMILY: 8,
-      REL_LOST_LOVE: 8,
-      REL_STUDENT: 8,
+      REL_COMPANION: 16,
+      REL_FAMILY: 16,
+      REL_LOST_LOVE: 16,
+      REL_STUDENT: 16,
     });
   });
 
-  it('weaves the selected relationship episode into the concrete location incident', () => {
+  it('keeps the selected relationship arc without forcing it into every event paragraph', () => {
     const relationshipEvent = selectRelationshipEvent(core);
     const story = buildStoryNarrative(core).map(({ body }) => body).join('\n');
 
     expect(story).toContain(relationshipEvent.setup);
-    expect(story).toContain(relationshipEvent.otherAction);
     expect(story).toContain(relationshipEvent.aftermath);
   });
 });

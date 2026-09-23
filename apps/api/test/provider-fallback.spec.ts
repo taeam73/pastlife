@@ -107,6 +107,24 @@ describe('provider fallbacks', () => {
     expect(image.sourceType).toBe('LIBRARY');
     expect(image.uri).toContain('asset://');
   });
+  it('does not use a modern character fallback for a medieval Heian result', async () => {
+    const heian = {
+      ...fixture,
+      answerHash: 'heian-regression',
+      recordNo: 85,
+      eraId: 'ERA_MEDIEVAL',
+      regionId: 'REG_EAST_ASIA',
+      locationId: 'LOC_HEIAN_KYO',
+      occupationId: 'OCC_ARTISAN',
+      libraryImage: { key: 'library/v3/heian-kyo.jpg', promptTags: [] },
+    } as unknown as ResultCore;
+
+    const image = await new LibraryImageProvider().getImage(heian);
+    const character = image.layers?.find(({ role }) => role === 'CHARACTER');
+
+    expect(character?.uri).toMatch(/characters\/v2\/heian-artisan-(male|female)\.png$/);
+    expect(character?.uri).not.toContain('photographer');
+  });
   it('builds a deterministic, safety-bounded historical image prompt', () => {
     const promptCore = { ...fixture, libraryImage: { key: 'ancient-east-asia', promptTags: ['rain', 'scribe'] } };
     const prompt = buildAiImagePrompt(promptCore);

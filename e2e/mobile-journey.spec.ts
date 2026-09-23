@@ -16,6 +16,9 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
 
   await expect(page).toHaveURL(/\/result$/);
   await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();
+  await expect(page.getByText('전생의 인물')).toBeVisible();
+  await expect(page.getByText('삶의 기록')).toBeVisible();
+  await expect(page.getByText(/\d+세에 맞이한 마지막 장면/)).toBeVisible();
   await expect(page.getByRole('tab', { name: '글로 보기' })).toBeVisible();
   await expect(page.getByRole('tab', { name: /영상으로 보기/ })).toBeDisabled();
   await expect(page.getByText('당신의 전생 이야기')).toBeVisible();

@@ -92,14 +92,17 @@ const dailyDetails = [
 ];
 
 // 결과가 같은 문장만 반복되지 않도록 각 축에 읽기 쉬운 생활 장면 변형을 만든다.
-const sceneVariants = (items: readonly string[], labels: readonly string[]) => items.flatMap((item, index) => labels.map((label) => `${item} ${label}`));
+const sceneVariants = (items: readonly string[], labels: readonly string[]) => items.flatMap((item) => labels.map((label) => {
+  const firstSentence = item.trim().replace(/[.!?]+$/u, '');
+  return `${firstSentence}. ${label.trim()}`;
+}));
 const expandedAppearances = sceneVariants(appearances, ['아침 빛에서 보인 모습이었습니다.', '일할 때 더 잘 드러나는 모습이었습니다.', '오래된 사진에도 남은 모습이었습니다.', '친한 사람만 알아본 모습이었습니다.', '계절에 따라 조금 달라진 모습이었습니다.']);
 const expandedManners = sceneVariants(manners, ['처음 만난 사람에게도 같은 태도를 보였습니다.', '가까운 사람 앞에서는 조금 달라졌습니다.', '바쁜 날에도 이 습관을 지켰습니다.', '힘든 일이 생기면 이 모습이 더 뚜렷해졌습니다.', '시간이 지나도 쉽게 바뀌지 않았습니다.']);
 const expandedHobbies = sceneVariants(hobbies, ['쉬는 날마다 이어 갔습니다.', '친구와 함께 즐겼습니다.', '혼자 있을 때 마음을 가라앉혔습니다.', '작은 도구만 있으면 할 수 있었습니다.', '누군가에게 배워 시작했습니다.']);
 const expandedDreams = sceneVariants(dreams, ['그 꿈을 위해 작은 준비를 했습니다.', '끝까지 포기하지 않은 바람이었습니다.', '사람들과 나누고 싶은 꿈이었습니다.', '쉽지 않았지만 다시 생각한 꿈이었습니다.', '다음 세대에 남기고 싶은 꿈이었습니다.']);
 const expandedDailyDetails = dailyDetails.flatMap((detail, index) => Array.from({ length: 5 }, (_, variant) => ({
   ...detail,
-  talent: `${detail.talent} ${['작은 일부터 시작했습니다.', '다른 사람의 도움도 받았습니다.', '매일 조금씩 연습했습니다.', '실수 뒤에 더 꼼꼼해졌습니다.', '배운 것을 주변에 나누었습니다.'][variant]}`,
+  talent: `${detail.talent}. ${['작은 일부터 시작했습니다.', '다른 사람의 도움도 받았습니다.', '매일 조금씩 연습했습니다.', '실수 뒤에 더 꼼꼼해졌습니다.', '배운 것을 주변에 나누었습니다.'][variant]}`,
 })));
 
 function stableIndex(seed: string, length: number) {

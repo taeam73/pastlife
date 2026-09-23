@@ -35,24 +35,28 @@ describe('buildStoryNarrative', () => {
     ]);
     expect(fullStory.length).toBeGreaterThanOrEqual(1_600);
     expect(blocks.every(({ body }) => body.length >= 140 && body.length <= 1_000)).toBe(true);
-    expect(fullStory).toContain('당신의 17번째 삶을 시작해 볼게요');
-    expect(fullStory).toContain('그곳에서 당신은');
-    expect(fullStory).toContain('가장 중요한 오랜 동료');
-    expect(fullStory).toContain('동이 트기 전');
-    expect(fullStory).toContain('서쪽 창고');
-    expect(fullStory).toContain('금이 간 점토판');
-    expect(fullStory).toContain('배급 명단을 꺼내 들었');
-    expect(fullStory).toContain('곡물 배급 명단');
-    expect(fullStory).toContain('사흘 뒤');
-    expect(fullStory).toContain('열두 가구');
+    expect(fullStory).not.toMatch(/즐겼습니다[.!]?\s*(을|를)\s*즐겼습니다/);
+    expect(fullStory).not.toMatch(/했습니다[.!]?이었습니다/);
+    expect(fullStory).toContain('당신의 17번째 삶입니다');
+    expect(fullStory).toContain('전생 이름은');
+    expect(fullStory).toContain('오랜 동료를 만나 가장 가까운 사이');
+    expect(fullStory).toContain('당신의 직업은 서기관이었습니다');
+    expect(fullStory).toContain('이 경험은 잘못을 보았을 때 모른 척하지 않는 태도로 남았습니다');
+    expect(fullStory).not.toContain('배급 명단에서 한 사람의 이름이 빠진');
+    expect(fullStory).not.toContain('사건을 겪었습니다');
+    expect((fullStory.match(/당신은 /g) ?? []).length).toBeGreaterThanOrEqual(4);
     expect(fullStory).not.toContain('밤바다');
-    expect(fullStory).not.toMatch(/점토패을|동료을|수프을|신뢰이라|꾸러미이|빗소리이|것이라는 꿈/);
+    expect(fullStory).not.toMatch(/점토패을|동료을|수프을|신뢰이라|꾸러미이|빗소리이|것이라는 꿈|이었습니다\.는|능력 작은/);
     expect(fullStory).not.toMatch(/실제로 살았|틀림없는 전생|확실한 전생/);
+    expect(fullStory).not.toContain('이 이야기는 실제 전생을 증명하는 기록이 아니라');
     expect(fullStory).not.toMatch(/사용자의 실제 정체성|창작 서사|창작 설정|서사용 이름|마지막 장의 제목|선택을 바탕으로/);
     expect(blocks.every(({ body }) => body.split('\n\n').length >= 4)).toBe(true);
     expect(buildStoryNarrative(core)).toEqual(blocks);
 
     const profile = buildStoryProfile(core);
+    expect(fullStory).not.toContain(profile.identity.appearance);
+    expect(fullStory).not.toContain(profile.dailyLife.hobby);
+    expect(fullStory).not.toContain(profile.dailyLife.dream);
     expect(profile.identity.fictional).toBe(true);
     expect(['여성', '남성']).toContain(profile.identity.gender);
     expect(profile.identity.name).not.toBe('');
@@ -77,8 +81,8 @@ describe('buildStoryNarrative', () => {
       lastMemoryId: 'MEM_SEA',
     } as ResultCore).map(({ body }) => body).join('\n');
 
-    expect(oceanStory).toContain('산호석 부두');
-    expect(oceanStory).toContain('매듭을 묶은 항해줄');
+    expect(oceanStory).toContain('스와힐리 해안 도시권');
+    expect(oceanStory).toContain('당신의 직업은 항해 길잡이였습니다');
     expect(oceanStory).toContain('계절풍');
     expect(oceanStory).not.toContain('곡물 배급 명단');
   });

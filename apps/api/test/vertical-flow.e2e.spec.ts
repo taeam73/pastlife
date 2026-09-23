@@ -97,11 +97,11 @@ describe('anonymous vertical flow', () => {
     });
     expect(basic.body.blocks).toHaveLength(6);
     expect(basic.body.blocks.map(({ body }: { body: string }) => body).join('\n').length).toBeGreaterThanOrEqual(1_600);
-    expect(basic.body.blocks[0].body).toContain(`당신의 ${basic.body.recordNo}번째 삶`);
+    expect(basic.body.blocks[0].body).toContain(`당신의 ${basic.body.recordNo}번째 삶입니다`);
     expect(basic.body.character.fictional).toBe(true);
     expect(basic.body.highlights).toHaveLength(8);
     expect(basic.body.recordNo).toBeGreaterThanOrEqual(1);
-    expect(basic.body.disclaimer).toContain('창작 콘텐츠');
+    expect(basic.body.disclaimer).toBe('');
 
     await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/deep`).expect(403).expect(({ body }) => expect(body.slot).toBe(2));
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${sessionId}` }).expect(201);

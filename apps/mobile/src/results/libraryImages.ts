@@ -1,6 +1,8 @@
 import type { ImageSourcePropType } from 'react-native';
 
 const libraryImages: Record<string, ImageSourcePropType> = {
+  'asset://characters/v2/heian-artisan-male.png': require('../../assets/characters/v2/heian-artisan-male.png'),
+  'asset://characters/v2/heian-artisan-female.png': require('../../assets/characters/v2/heian-artisan-female.png'),
   'asset://characters/v1/independence-female.png': require('../../assets/characters/v1/independence-female.png'),
   'asset://characters/v1/soldier-male.png': require('../../assets/characters/v1/soldier-male.png'),
   'asset://characters/v1/printer-female.png': require('../../assets/characters/v1/printer-female.png'),

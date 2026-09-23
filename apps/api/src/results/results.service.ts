@@ -8,8 +8,9 @@ import { IMAGE_STORAGE, type ImageStorage } from '../providers/storage.provider.
 import { LibraryImageProvider } from '../providers/library-image.provider.js';
 import { buildStoryNarrative, buildStoryProfile } from '../providers/story-narrative.js';
 import { buildDeepNarrative, buildPresentGuideNarrative } from '../providers/extended-narratives.js';
+import { buildCharacterIntroduction, describeOccupation } from '../providers/occupation-narrative.js';
 
-export const RESULT_DISCLAIMER = '이 이야기는 선택한 답을 바탕으로 만든 창작 콘텐츠입니다. 실제 전생이나 현재의 성격, 미래를 판단하는 결과가 아닙니다.';
+export const RESULT_DISCLAIMER = '';
 
 @Injectable()
 export class ResultsService {
@@ -37,17 +38,20 @@ export class ResultsService {
     const occupationAliases: Record<string, string> = { OCC_01: 'OCC_SCRIBE', OCC_02: 'OCC_TEACHER', OCC_03: 'OCC_CEREMONIAL', OCC_04: 'OCC_NAVIGATOR', OCC_05: 'OCC_NAVIGATOR', OCC_06: 'OCC_ARTISAN', OCC_07: 'OCC_HEALER', OCC_08: 'OCC_MESSENGER' };
     const occupation = occupations.find(({ id }) => id === (occupationAliases[result.core.occupationId] ?? result.core.occupationId))!;
     const storyProfile = result.storyProfile ?? buildStoryProfile(result.core);
+    const occupationDescription = describeOccupation(result.core);
     const blocksNeedRefresh = result.blocks.length !== 6 || result.blocks.some(({ body }) =>
       !body.includes('\n\n') || /사용자의 실제 정체성|창작 서사|창작 설정|서사용 이름|마지막 장의 제목|선택을 바탕으로/.test(body));
     const blocks = blocksNeedRefresh ? buildStoryNarrative(result.core) : result.blocks;
     return {
       resultId,
       recordNo: result.core.recordNo,
-      headline: `${era.label} ${location.label}의 ${occupation.label}`,
+      headline: `${era.label}, ${location.label}에서 일한 ${occupation.label}`,
       character: {
         name: storyProfile.identity.name,
         gender: storyProfile.identity.gender,
         fictional: storyProfile.identity.fictional,
+        introduction: buildCharacterIntroduction(storyProfile, occupationDescription),
+        occupationDescription,
         appearance: storyProfile.identity.appearance,
         temperament: storyProfile.identity.temperament,
         complex: storyProfile.identity.complex,
@@ -131,9 +135,16 @@ export class ResultsService {
       ...image,
       layers: [{ uri: image.uri, role: 'BACKGROUND' as const, alt: image.alt }],
     };
-    if (!layered.uri.startsWith('s3://')) return layered;
+    const layers = layered.layers ?? [];
+    if (!layered.uri.startsWith('s3://') && !layers.some((layer) => layer.uri.startsWith('s3://')) && !layered.compositeUri?.startsWith('s3://')) return layered;
     try {
-      return { ...layered, uri: await this.imageStorage.getDownloadUrl(layered.uri) };
+      const resolveUri = async (uri: string) => uri.startsWith('s3://') ? this.imageStorage.getDownloadUrl(uri) : uri;
+      return {
+        ...layered,
+        uri: await resolveUri(layered.uri),
+        ...(layered.compositeUri ? { compositeUri: await resolveUri(layered.compositeUri) } : {}),
+        layers: await Promise.all(layers.map(async (layer) => ({ ...layer, uri: await resolveUri(layer.uri) }))),
+      };
     } catch {
       return this.libraryImages.getImage(core);
     }

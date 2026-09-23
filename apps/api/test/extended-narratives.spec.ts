@@ -50,7 +50,8 @@ describe('extended web-novel narratives', () => {
     expectWebNovelShape(blocks);
     expect(fullStory).toContain('오늘');
     expect(fullStory).toContain('해볼 수 있어요');
-    expect(fullStory).toContain('이 이야기가 지금의 당신을 단정하는 것은 아닙니다');
+    expect(fullStory).toContain(profile.identity.name);
+    expect(fullStory).not.toContain('이 이야기가 지금의 당신을 단정하는 것은 아닙니다');
     expect(fullStory).not.toMatch(/반드시|틀림없이|미래에는/);
     expect(buildPresentGuideNarrative(core, profile)).toEqual(blocks);
   });

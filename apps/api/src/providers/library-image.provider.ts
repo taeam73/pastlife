@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { historicalLocations } from '@pastlife/content';
 import type { ResultCore } from '@pastlife/scoring';
 import type { ImageAsset, ImageProvider } from './image.provider.js';
+import { selectLifeIdentity } from './life-identity-catalog.js';
 
 @Injectable()
 export class LibraryImageProvider implements ImageProvider {
@@ -32,26 +33,45 @@ export class LibraryImageProvider implements ImageProvider {
       OCC_FISHER: 'asset://characters/v1/middle-aged-fisher-male.png',
       OCC_WEAVER: 'asset://characters/v1/child-weaver-female.png',
     };
-    const backgroundAlternates = [
-      'asset://library/v5/accra-1850.png',
-      'asset://library/v5/cusco-1500.png',
-      'asset://library/v5/edo-osaka-1750.png',
-      'asset://library/v5/kyoto-1700.png',
-      'asset://library/v5/lima-1700.png',
-      'asset://library/v5/marrakesh-1200.png',
-      'asset://library/v5/samarqand-1400.png',
-      'asset://library/v5/stockholm-1750.png',
-      'asset://library/v5/tunis-1400.png',
-    ];
-    let hash = 2_166_136_261;
-    for (const character of `${core.answerHash}:${core.recordNo}`) {
-      hash ^= character.charCodeAt(0);
-      hash = Math.imul(hash, 16_777_619);
-    }
-    const backgroundUri = (hash >>> 0) % 3 === 0
-      ? backgroundAlternates[(hash >>> 0) % backgroundAlternates.length]!
-      : `asset://${core.libraryImage.key}`;
-    const characterUri = characterByOccupation[core.occupationId];
+    const gender = selectLifeIdentity(core).identity.gender;
+    const isFemale = gender.startsWith('여');
+    const preferredCharacterUri = characterByOccupation[core.occupationId];
+    const exactCharacterBySettingOccupation: Record<string, { female: string; male: string }> = {
+      'LOC_HEIAN_KYO:OCC_ARTISAN': {
+        female: 'asset://characters/v2/heian-artisan-female.png',
+        male: 'asset://characters/v2/heian-artisan-male.png',
+      },
+    };
+    const locationFallbacks: Record<string, { female: string; male: string }> = {
+      LOC_HEIAN_KYO: {
+        female: 'asset://characters/v1/porcelain-artisan-female.png',
+        male: 'asset://characters/v1/rice-farmer-male.png',
+      },
+    };
+    const eraFallbacks: Record<string, { female: string[]; male: string[] }> = {
+      ERA_ANCIENT_CIV: {
+        female: ['asset://characters/v1/roman-bathkeeper-female.png', 'asset://characters/v1/healer-female.png'],
+        male: ['asset://characters/v1/mesopotamian-scribe-male.png', 'asset://characters/v1/artisan-male.png'],
+      },
+      ERA_MEDIEVAL: {
+        female: ['asset://characters/v1/porcelain-artisan-female.png', 'asset://characters/v1/healer-female.png'],
+        male: ['asset://characters/v1/rice-farmer-male.png', 'asset://characters/v1/mali-trader-male.png', 'asset://characters/v1/artisan-male.png'],
+      },
+      ERA_RENAISSANCE_EARLY_MODERN: {
+        female: ['asset://characters/v1/teacher-renaissance-female.png', 'asset://characters/v1/young-potter-female.png'],
+        male: ['asset://characters/v1/artisan-male.png', 'asset://characters/v1/sailor-male.png'],
+      },
+    };
+    const genderSuffix = isFemale ? '-female.png' : '-male.png';
+    const exactCharacter = exactCharacterBySettingOccupation[`${core.locationId}:${core.occupationId}`]?.[isFemale ? 'female' : 'male'];
+    const locationFallback = locationFallbacks[core.locationId]?.[isFemale ? 'female' : 'male'];
+    const eraCandidates = eraFallbacks[core.eraId]?.[isFemale ? 'female' : 'male'] ?? (isFemale
+      ? ['asset://characters/v1/printer-female.png', 'asset://characters/v1/performer-female.png']
+      : ['asset://characters/v1/community-organizer-male.png', 'asset://characters/v1/artisan-male.png']);
+    const characterUri = exactCharacter ?? (preferredCharacterUri?.endsWith(genderSuffix)
+      ? preferredCharacterUri
+      : locationFallback ?? eraCandidates[core.recordNo % eraCandidates.length]);
+    const backgroundUri = 'asset://' + core.libraryImage.key;
     return {
       sourceType: 'LIBRARY',
       uri: backgroundUri,

@@ -140,6 +140,49 @@ const relationshipDepthEvents: Record<string, readonly RelationshipStoryEvent[]>
   ],
 };
 
+const expandedRelationshipEvents: Record<string, readonly RelationshipStoryEvent[]> = {
+  REL_COMPANION: [
+    { type: 'RESCUE', title: '무너진 길에서 잡은 손', setup: '당신과 동료는 무너진 길 건너편에 사람이 남았다는 소식을 들었습니다.', otherAction: '동료는 혼자 뛰어들지 않고 당신과 밧줄과 신호를 먼저 맞췄습니다.', aftermath: '두 사람은 용기보다 서로의 움직임을 확인하는 일이 구조를 가능하게 한다는 것을 배웠습니다.' },
+    { type: 'FAILURE', title: '함께 책임진 실패', setup: '두 사람이 맡은 작업이 예상과 다르게 실패해 여러 사람이 불편을 겪었습니다.', otherAction: '동료는 당신에게 책임을 돌리지 않고 자신이 놓친 부분부터 사람들 앞에서 말했습니다.', aftermath: '당신도 자신의 실수를 숨기지 않았고 두 사람은 같은 실패를 막을 점검 순서를 만들었습니다.' },
+    { type: 'DEPARTURE', title: '서로 다른 길로 떠난 날', setup: '오랫동안 함께 일한 두 사람에게 서로 다른 지역으로 갈 기회가 생겼습니다.', otherAction: '동료는 함께 남으라고 강요하지 않고 각자가 원하는 삶을 솔직히 말하자고 했습니다.', aftermath: '길은 달라졌지만 두 사람은 정한 날마다 소식을 전하며 관계를 이어 갔습니다.' },
+    { type: 'SECRET', title: '동료가 맡긴 비밀', setup: '동료는 오랫동안 숨겨 온 실수와 두려움을 당신에게 털어놓았습니다.', otherAction: '동료는 용서를 요구하지 않고 피해를 바로잡을 방법을 함께 찾아 달라고 부탁했습니다.', aftermath: '당신은 비밀을 덮어 주는 대신 책임을 다할 때까지 곁을 지켰습니다.' },
+    { type: 'CRAFT_CONFLICT', title: '속도와 안전 사이', setup: '당신과 동료는 일을 빨리 끝낼지 안전을 다시 확인할지를 두고 맞섰습니다.', otherAction: '동료는 말로만 주장하지 않고 위험한 부분을 직접 보여 주었습니다.', aftermath: '두 사람은 이후 마감보다 안전 점검을 먼저 적는 규칙을 함께 지켰습니다.' },
+    { type: 'MIGRATION', title: '낯선 도시의 첫 동료', setup: '당신은 아는 사람이 없는 도시로 옮겨 처음부터 일을 배워야 했습니다.', otherAction: '동료는 당신의 말투와 출신을 평가하지 않고 하루의 작업 순서를 보여 주었습니다.', aftermath: '당신은 자리를 잡은 뒤 새로 온 사람에게 같은 도움을 돌려주었습니다.' },
+    { type: 'POWER_SHIFT', title: '권력 앞에서 지킨 동료', setup: '새 책임자는 한 사람에게 실패의 책임을 모두 씌우려 했습니다.', otherAction: '동료는 침묵하면 안전했지만 두 사람이 함께 결정한 일이라고 밝혔습니다.', aftermath: '당신은 그 행동을 기억하며 이후 누구도 혼자 희생되지 않게 기록을 남겼습니다.' },
+    { type: 'LEGACY', title: '마지막 공동 작업', setup: '나이가 든 두 사람은 더 이상 예전처럼 오래 일할 수 없었습니다.', otherAction: '동료는 마지막 성과보다 후배들이 이해할 수 있는 작업 방법을 남기자고 제안했습니다.', aftermath: '두 사람의 이름보다 함께 만든 기준이 작업장에 더 오래 남았습니다.' },
+  ],
+  REL_FAMILY: [
+    { type: 'SHORTAGE', title: '줄어든 식량을 나눈 밤', setup: '가족이 가진 식량으로는 다음 수확까지 버티기 어려웠습니다.', otherAction: '가족은 한 사람에게 희생을 요구하지 않고 각자 줄일 수 있는 몫을 말했습니다.', aftermath: '당신은 가족을 지키는 일이 혼자 굶는 것이 아니라 함께 기준을 정하는 일임을 배웠습니다.' },
+    { type: 'ROLE_REVERSAL', title: '돌보는 사람이 바뀐 계절', setup: '늘 가족을 돌보던 사람이 병으로 자리에 눕게 되었습니다.', otherAction: '가족들은 익숙하지 않은 집안일과 생계를 나누어 맡았습니다.', aftermath: '당신은 도움을 받는 일도 가족을 믿는 행동이라는 것을 받아들였습니다.' },
+    { type: 'CONFLICT', title: '남겨진 집과 빚', setup: '가족에게 작은 집과 함께 갚아야 할 빚이 남았습니다.', otherAction: '한 가족은 좋은 것만 차지하지 않고 재산과 책임을 함께 공개하자고 말했습니다.', aftermath: '가족은 다투면서도 누구도 거처를 잃지 않는 방법으로 몫을 정했습니다.' },
+    { type: 'MIGRATION', title: '가족이 흩어진 이주', setup: '생계를 위해 가족들이 서로 다른 지역으로 떠나야 했습니다.', otherAction: '가족은 떠나는 순서와 다시 만날 장소를 분명하게 정했습니다.', aftermath: '당신은 주소가 바뀌어도 반복해서 안부를 확인하며 가족 관계를 지켰습니다.' },
+    { type: 'CONFLICT', title: '꿈을 반대한 가족', setup: '가족은 당신의 꿈이 생계에 도움이 되지 않는다며 그만두라고 했습니다.', otherAction: '가족 한 사람은 반대하면서도 당신이 준비한 계획과 필요한 시간을 끝까지 들었습니다.', aftermath: '당신은 책임을 버리지 않으면서도 작은 시간부터 꿈을 이어 갈 수 있었습니다.' },
+    { type: 'RECONCILIATION', title: '늦게 차린 식사', setup: '오랜 다툼으로 가족이 같은 식탁에 앉지 않은 시간이 이어졌습니다.', otherAction: '한 사람이 먼저 잘잘못을 따지지 않고 모두가 먹을 음식을 준비했습니다.', aftermath: '대화는 서툴렀지만 가족은 작은 약속부터 다시 지키기 시작했습니다.' },
+    { type: 'ROLE_REVERSAL', title: '자녀에게 배운 부모', setup: '가족의 오래된 방식이 누군가에게 계속 상처를 주고 있었습니다.', otherAction: '어린 가족 구성원이 용기를 내어 무엇이 힘든지 구체적으로 말했습니다.', aftermath: '당신은 나이를 권위로 삼지 않고 가족의 규칙을 함께 고쳤습니다.' },
+    { type: 'LEGACY', title: '가족에게 남긴 생활법', setup: '삶의 끝을 생각할 나이가 되자 무엇을 남길지 정해야 했습니다.', otherAction: '가족은 값비싼 물건보다 당신이 매일 지킨 습관을 적어 달라고 했습니다.', aftermath: '당신이 남긴 돌봄과 약속의 방식은 다음 세대의 생활 속에 이어졌습니다.' },
+  ],
+  REL_LOST_LOVE: [
+    { type: 'ENCOUNTER', title: '비를 피하다 만난 사람', setup: '당신은 갑작스러운 비를 피해 들어간 곳에서 낯선 사람과 처음 말을 나눴습니다.', otherAction: '그 사람은 서둘러 떠나지 않고 당신의 젖은 물건을 함께 말려 주었습니다.', aftermath: '짧은 친절은 두 사람이 서로의 하루를 기다리는 관계로 이어졌습니다.' },
+    { type: 'LOVE', title: '아무도 모르는 산책', setup: '두 사람은 사람들의 시선 때문에 마음을 드러내기 어려웠습니다.', otherAction: '그 사람은 거창한 약속 대신 일이 끝난 뒤 같은 길을 걷자고 했습니다.', aftermath: '당신은 말보다 반복해서 곁에 있는 행동으로 사랑을 느꼈습니다.' },
+    { type: 'SEPARATION', title: '떠나는 배 앞의 작별', setup: '그 사람은 가족을 지키기 위해 먼 지역으로 떠나야 했습니다.', otherAction: '그 사람은 돌아오겠다는 불확실한 약속 대신 반드시 보낼 첫 소식을 정했습니다.', aftermath: '두 사람은 헤어졌지만 상대의 책임을 원망으로만 기억하지 않았습니다.' },
+    { type: 'SECRET', title: '숨겨 둔 과거', setup: '그 사람에게는 쉽게 말하지 못한 과거와 책임이 있었습니다.', otherAction: '그 사람은 관계가 더 깊어지기 전에 사실을 숨기지 않고 털어놓았습니다.', aftermath: '당신은 상처받았지만 진실을 알고 자신의 선택을 직접 내릴 수 있었습니다.' },
+    { type: 'CONFLICT', title: '서로 다른 미래', setup: '당신은 남고 싶었지만 그 사람은 새로운 곳에서 시작하고 싶어 했습니다.', otherAction: '그 사람은 사랑을 증명하라며 한쪽의 꿈을 포기시키지 않았습니다.', aftermath: '두 사람은 함께하지 못해도 서로의 삶을 줄이지 않는 선택을 했습니다.' },
+    { type: 'RECONCILIATION', title: '오해를 푼 마지막 대화', setup: '전하지 못한 말 때문에 두 사람은 서로에게 버림받았다고 생각했습니다.', otherAction: '그 사람은 늦었더라도 당시의 두려움과 선택을 솔직하게 설명했습니다.', aftermath: '관계는 돌아오지 않았지만 원망만 남았던 기억은 이해로 바뀌었습니다.' },
+    { type: 'RESCUE', title: '위험 앞에 남은 사람', setup: '위험한 상황에서 한 사람만 먼저 떠날 수 있었습니다.', otherAction: '그 사람은 당신을 대신해 희생하려 하지 않고 함께 빠져나갈 방법을 찾았습니다.', aftermath: '당신은 사랑이 대신 사라지는 일이 아니라 함께 살아갈 길을 찾는 것임을 알았습니다.' },
+    { type: 'LEGACY', title: '남겨진 작은 물건', setup: '다시 만나지 못한 뒤에도 그 사람이 남긴 작은 물건이 곁에 있었습니다.', otherAction: '그 물건에는 함께 지키려 했던 약속과 생활의 흔적이 남아 있었습니다.', aftermath: '당신은 과거에 머물지 않으면서도 그 사랑이 가르친 다정함을 다른 사람에게 건넸습니다.' },
+  ],
+  REL_STUDENT: [
+    { type: 'MENTORSHIP', title: '첫 질문을 한 제자', setup: '새 제자는 기본적인 질문조차 틀릴까 봐 입을 열지 못했습니다.', otherAction: '제자는 용기를 내어 가장 이해되지 않는 한 가지를 물었습니다.', aftermath: '당신은 질문을 막지 않는 일이 가르침의 시작이라는 것을 배웠습니다.' },
+    { type: 'FAILURE', title: '두 번 실패한 작업', setup: '제자는 같은 작업에서 두 번 연속 실수했습니다.', otherAction: '제자는 변명하지 않고 어느 순서에서 혼란스러웠는지 직접 표시했습니다.', aftermath: '당신은 벌을 주기보다 설명 방식을 바꾸었고 세 번째 작업은 성공했습니다.' },
+    { type: 'DISCOVERY', title: '스승이 놓친 발견', setup: '제자는 오래된 작업물에서 아무도 보지 못한 특징을 발견했습니다.', otherAction: '제자는 확신하는 척하지 않고 관찰한 내용과 모르는 부분을 함께 가져왔습니다.', aftermath: '당신은 제자의 이름으로 발견을 남기고 함께 확인할 기회를 만들었습니다.' },
+    { type: 'CONFLICT', title: '가르침을 넘어선 반대', setup: '제자는 당신의 판단이 약한 사람에게 불리하다고 공개적으로 반대했습니다.', otherAction: '제자는 감정적인 비난 대신 영향을 받는 사람들의 사례를 보여 주었습니다.', aftermath: '당신은 체면보다 잘못된 기준을 고치는 쪽을 선택했습니다.' },
+    { type: 'ROLE_REVERSAL', title: '제자에게 도움을 청한 날', setup: '나이가 든 당신은 익숙했던 일을 예전처럼 해내기 어려워졌습니다.', otherAction: '제자는 대신 결정하지 않고 당신이 할 수 있는 부분과 필요한 도움을 물었습니다.', aftermath: '두 사람의 관계는 가르치는 사람과 배우는 사람을 넘어 서로 돌보는 관계가 되었습니다.' },
+    { type: 'DEPARTURE', title: '제자의 독립', setup: '제자는 더 넓은 곳에서 자기 방식으로 일할 기회를 얻었습니다.', otherAction: '제자는 허락만 구하지 않고 배우고 싶은 것과 두려운 점을 솔직히 말했습니다.', aftermath: '당신은 붙잡지 않고 실패해도 돌아와 이야기할 자리를 남겨 두었습니다.' },
+    { type: 'POWER_SHIFT', title: '스승보다 앞에 선 제자', setup: '중요한 자리에서 제자가 당신보다 더 나은 판단을 내렸습니다.', otherAction: '제자는 스승의 권위를 꺾으려 하지 않고 판단의 근거를 모두에게 설명했습니다.', aftermath: '당신은 제자의 성장을 인정했고 이후 결정권을 실제로 나누었습니다.' },
+    { type: 'LEGACY', title: '이어진 가르침', setup: '당신이 더는 가르칠 수 없게 된 뒤 제자가 새로운 사람들을 맡았습니다.', otherAction: '제자는 당신의 말을 그대로 외우게 하지 않고 각자의 질문을 먼저 들었습니다.', aftermath: '가르침은 한 사람의 권위가 아니라 계속 배우는 방식으로 남았습니다.' },
+  ],
+};
+
 export type HistoricalStoryEvent = RelationshipStoryEvent & { category: keyof typeof STORY_EVENT_TAXONOMY };
 
 const eventSeeds: readonly [keyof typeof STORY_EVENT_TAXONOMY, string, string, string][] = [
@@ -177,7 +220,7 @@ export function historicalEventCounts() {
 }
 
 export function relationshipEventCounts() {
-  return Object.fromEntries(Object.keys(relationshipEvents).map((key) => [key, (relationshipEvents[key]?.length ?? 0) + (supplementalRelationshipEvents[key]?.length ?? 0) + (relationshipDepthEvents[key]?.length ?? 0)]));
+  return Object.fromEntries(Object.keys(relationshipEvents).map((key) => [key, (relationshipEvents[key]?.length ?? 0) + (supplementalRelationshipEvents[key]?.length ?? 0) + (relationshipDepthEvents[key]?.length ?? 0) + (expandedRelationshipEvents[key]?.length ?? 0)]));
 }
 
 function stableIndex(seed: string, length: number) {
@@ -191,6 +234,6 @@ function stableIndex(seed: string, length: number) {
 
 export function selectRelationshipEvent(core: Pick<ResultCore, 'answerHash' | 'recordNo' | 'relationshipId'>): RelationshipStoryEvent {
   const base = relationshipEvents[core.relationshipId] ?? relationshipEvents.REL_COMPANION!;
-  const candidates = [...base, ...(supplementalRelationshipEvents[core.relationshipId] ?? supplementalRelationshipEvents.REL_COMPANION!), ...(relationshipDepthEvents[core.relationshipId] ?? relationshipDepthEvents.REL_COMPANION!)];
+  const candidates = [...base, ...(supplementalRelationshipEvents[core.relationshipId] ?? supplementalRelationshipEvents.REL_COMPANION!), ...(relationshipDepthEvents[core.relationshipId] ?? relationshipDepthEvents.REL_COMPANION!), ...(expandedRelationshipEvents[core.relationshipId] ?? expandedRelationshipEvents.REL_COMPANION!)];
   return candidates[stableIndex(`${core.answerHash}:${core.recordNo}:${core.relationshipId}`, candidates.length)]!;
 }

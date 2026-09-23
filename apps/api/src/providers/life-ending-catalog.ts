@@ -35,7 +35,7 @@ const variants: readonly EndingVariant[] = [
 ];
 
 const endingAdds = ['남은 사람들은 그 선택을 오래 기억했습니다.', '마지막까지 주변 사람의 안전을 먼저 생각했습니다.', '작은 물건 하나가 그날의 기억으로 남았습니다.', '그 이야기는 가까운 사람에게 조용히 전해졌습니다.', '다음 사람은 그 삶에서 한 가지 방법을 배웠습니다.'];
-const expandedVariants: readonly EndingVariant[] = variants.flatMap((variant) => endingAdds.map((add, index) => ({ ...variant, title: `${variant.title} ${index + 1}`, aftermath: `${variant.aftermath} ${add}` })));
+const expandedVariants: readonly EndingVariant[] = variants.flatMap((variant) => endingAdds.map((add) => ({ ...variant, aftermath: `${variant.aftermath}. ${add}` })));
 
 function stableIndex(seed: string, length: number) {
   let hash = 2_166_136_261;
