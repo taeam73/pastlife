@@ -26,6 +26,27 @@ function withParticle(value: string, consonantForm: string, vowelForm: string) {
   return `${value}${(last - 0xac00) % 28 === 0 ? vowelForm : consonantForm}`;
 }
 
+function describePastWound(value: string) {
+  const trimmed = value.trim().replace(/[.!?]+$/u, '');
+  if (trimmed.endsWith('경험')) return `${trimmed.slice(0, -2).trimEnd()} 일이 있었습니다.`;
+  if (trimmed.endsWith('기억')) return `${trimmed.slice(0, -2).trimEnd()} 일이 있었습니다.`;
+  if (trimmed.endsWith('시절')) return `${trimmed.slice(0, -2).trimEnd()} 때가 있었습니다.`;
+  if (trimmed.endsWith('날')) return `${trimmed}이 있었습니다.`;
+  return `${trimmed} 일이 있었습니다.`;
+}
+
+function describeFear(value: string) {
+  const trimmed = value.trim().replace(/[.!?]+$/u, '');
+  return trimmed.endsWith('두려움')
+    ? `${trimmed.slice(0, -3).trimEnd()} 두려워했습니다.`
+    : sentence(trimmed);
+}
+
+function describeWish(value: string) {
+  const trimmed = value.trim().replace(/[.!?]+$/u, '');
+  return `${withParticle(trimmed, '이었습니다', '였습니다')}.`;
+}
+
 export function buildDeepNarrative(core: ResultCore, profile: StoryProfile): NarrativeBlock[] {
   const era = labelOf(eras, core.eraId, '오래전 어느 시대');
   const location = labelOf(historicalLocations, core.locationId, '이름이 남지 않은 도시');
@@ -41,18 +62,18 @@ export function buildDeepNarrative(core: ResultCore, profile: StoryProfile): Nar
       id: 'DEEP_INNER_SELF',
       title: '제1장 · 아무도 몰랐던 마음',
       body: [
-        `${era}, ${location}. 그곳에서 ${profile.identity.name}은 ${withRoleParticle(occupation)} 살았습니다. ${occupationDescription}`,
+        `${era}, ${location}. 그곳에서 ${withParticle(profile.identity.name, '은', '는')} ${withRoleParticle(occupation)} 살았습니다. ${occupationDescription}`,
         `${sentence(profile.identity.voiceAndManner)} 겉으로는 ${sentence(profile.identity.socialMask)} 그래서 주변 사람들은 ${profile.identity.name}이 흔들리거나 지치는 모습을 거의 보지 못했습니다.`,
-        `하지만 혼자 남으면 마음속 이야기는 달라졌습니다. 어린 시절의 ${sentence(profile.innerLife.formativeWound)} 그 기억은 시간이 지나도 쉽게 사라지지 않았습니다. 마음 한쪽에는 ${sentence(profile.innerLife.coreFear)} 그래서 힘든 일이 생길 때마다 ${sentence(profile.innerLife.copingPattern)}`,
-        `${sentence(profile.characterArc.centralContradiction)} 겉으로 보이는 모습과 속마음이 달랐기 때문에, 쉬어야 할 때도 자신을 계속 몰아붙였습니다. ${sentence(profile.identity.stressResponse)} 누구에게 기대고 싶으면서도 먼저 손을 내미는 일은 쉽지 않았습니다.`,
-        `${profile.identity.name}에게 정말 필요했던 것은 ${sentence(profile.characterArc.innerNeed)} 이 사실을 받아들이기까지는 오랜 시간이 걸렸습니다. 강한 사람은 혼자 모든 일을 해내는 사람이 아니라, 두려운 마음을 말하고 도움을 나눌 줄 아는 사람이라는 걸 조금씩 알게 되었습니다.`,
+        `어린 시절에는 ${describePastWound(profile.innerLife.formativeWound)} 그 일 이후 당신은 ${describeFear(profile.innerLife.coreFear)} 그래서 힘든 일이 생기면 ${sentence(profile.innerLife.copingPattern)}`,
+        `${sentence(profile.characterArc.centralContradiction)} 이런 모습 때문에 쉬어야 할 때도 자신을 계속 몰아붙였습니다. ${sentence(profile.identity.stressResponse)} 누구에게 기대고 싶어도 먼저 손을 내미는 일은 쉽지 않았습니다.`,
+        `${profile.identity.name}에게 정말 필요했던 것은 ${describeWish(profile.characterArc.innerNeed)} 오랜 시간이 흐른 뒤에야, 강한 사람도 두려운 마음을 말하고 다른 사람과 책임을 나눌 수 있다는 사실을 받아들였습니다.`,
       ].join('\n\n'),
     },
     {
       id: 'DEEP_RELATIONSHIP',
       title: '제2장 · 마음의 문을 연 사람',
       body: [
-        `${relationship}과의 만남은 평범하게 시작되었습니다. ${sentence(keyRelationship?.bond ?? '처음에는 필요한 말을 주고받는 사이였습니다')} 두 사람은 성격도, 문제를 해결하는 방식도 달랐습니다. 그래서 가까워지는 데에는 생각보다 긴 시간이 필요했습니다.`,
+        `${withParticle(relationship, '과', '와')}의 만남은 평범하게 시작되었습니다. ${sentence(keyRelationship?.bond ?? '처음에는 필요한 말을 주고받는 사이였습니다')} 두 사람은 성격도, 문제를 해결하는 방식도 달랐습니다. 그래서 가까워지는 데에는 생각보다 긴 시간이 필요했습니다.`,
         `${sentence(keyRelationship?.tension ?? profile.innerLife.lifelongDilemma)} 당신은 상대를 믿고 싶었지만, 믿었다가 다시 상처받을까 봐 한 걸음 물러서곤 했습니다. 상대가 곁에 있어도 중요한 걱정은 혼자 해결하려 했고, 괜찮지 않은 날에도 괜찮다고 말했습니다.`,
         `관계가 달라진 것은 거창한 약속 때문이 아니었습니다. 어느 힘든 날, 그 사람은 답을 재촉하지 않고 당신 곁에 머물렀습니다. ${sentence(keyRelationship?.change ?? '그 경험은 누군가와 책임을 나눠도 된다는 생각을 남겼습니다')} 그날부터 당신은 아주 조금씩 진짜 마음을 보여 주기 시작했습니다.`,
         `${sentence(mentorRelationship?.tension ?? '한편 인정받고 싶은 마음과 내 방식을 지키고 싶은 마음도 계속 부딪혔습니다')} 이 관계들을 지나며 당신은 배웠습니다. 가까운 사이는 서로의 문제를 대신 해결하는 관계가 아니라, 도망치지 않고 같은 자리에 있어 주는 관계라는 것을요.`,
@@ -64,7 +85,7 @@ export function buildDeepNarrative(core: ResultCore, profile: StoryProfile): Nar
       body: [
         `인생의 방향이 바뀐 날, 당신은 익숙한 일상을 버릴 수 있는 선택 앞에 섰습니다. ${sentence(decisiveMoment?.event ?? profile.characterArc.outwardGoal)} 눈앞의 손해를 피하면 조용히 지나갈 수 있었습니다. 하지만 그렇게 하면 누군가는 당신 대신 더 큰 어려움을 겪어야 했습니다.`,
         `당신은 한참 동안 움직이지 못했습니다. 머릿속에는 실패하면 모두의 삶이 무너질 수 있다는 두려움이 떠올랐습니다. 동시에 누구도 포기하고 싶지 않은 마음도 커졌습니다. 결국 당신은 가장 편한 길이 아니라, 자신이 옳다고 믿는 길을 골랐습니다.`,
-        `${sentence(profile.ending.finalChoice)} 선택은 끝난 뒤에도 값을 요구했습니다. ${sentence(decisiveMoment?.consequence ?? profile.ending.aftermath)} 사람들은 결과만 보고 용감했다고 말했지만, 당신은 잃은 것과 상처받은 사람들을 오래 기억했습니다.`,
+        `${sentence(profile.ending.finalChoice)} 그 선택으로 삶의 방향이 달라졌습니다. ${sentence(profile.ending.aftermath)} 사람들은 용감한 결정이었다고 말했지만, 당신은 그 과정에서 잃은 것과 상처받은 사람들도 오래 기억했습니다.`,
         `그날 이후 당신은 희생을 멋진 이야기로 꾸미지 않았습니다. 같은 문제가 다시 생겼을 때 누군가 혼자 감당하지 않도록 일하는 순서와 책임을 나누었습니다. 그 선택이 완벽해서가 아니라, 부족했던 점까지 다음 사람에게 알려 주었기 때문에 삶의 방향이 달라졌습니다.`,
       ].join('\n\n'),
     },
@@ -72,10 +93,10 @@ export function buildDeepNarrative(core: ResultCore, profile: StoryProfile): Nar
       id: 'DEEP_LEGACY',
       title: '제4장 · 삶이 끝난 뒤에도 남은 것',
       body: [
-        `시간이 흐르면서 당신의 걸음도 느려졌습니다. 가장 오래 마음에 남은 아픔은 ${sentence(profile.innerLife.deepestPain)} 아무에게도 쉽게 말하지 못한 바람은 ${sentence(profile.innerLife.secretWish)} 이루지 못한 일이 있었지만, 그것이 삶 전체를 실패로 만들지는 않았습니다.`,
+        `시간이 흐르면서 당신의 걸음도 느려졌습니다. 가장 오래 마음에 남은 아픔은 ${describeWish(profile.innerLife.deepestPain)} 아무에게도 쉽게 말하지 못한 바람은 ${describeWish(profile.innerLife.secretWish)} 이루지 못한 일이 있었지만, 그것이 삶 전체를 실패로 만들지는 않았습니다.`,
         `${profile.ageAtDeath}세에 이른 마지막 순간, 당신은 자신의 이름보다 곁에 남겨질 사람들을 먼저 생각했습니다. ${sentence(profile.ending.cause)} ${sentence(profile.ending.aftermath)} 당신이 떠난 뒤 사람들은 화려한 업적보다 평소에 반복하던 작은 행동을 더 오래 기억했습니다.`,
         `${sentence(profile.legacy)} 누군가는 당신이 정리해 둔 방법으로 일을 이어 갔고, 누군가는 당신에게 배운 말을 다른 사람에게 건넸습니다. 한 사람의 삶은 그렇게 눈에 잘 띄지 않는 방식으로 여러 사람의 다음 날에 남았습니다.`,
-        `마지막에 남은 것은 죽음이 아니었습니다. 상처가 있어도 다시 사람을 믿은 일, 두려워도 필요한 선택을 한 일, 그리고 혼자만 살아남지 않으려 했던 마음이었습니다. 그것이 ${profile.identity.name}이 끝까지 지키고 남긴 삶의 기록이었습니다.`,
+        `마지막에 남은 것은 죽음이 아니었습니다. 상처가 있어도 다시 사람을 믿은 일, 두려워도 필요한 선택을 한 일, 그리고 혼자만 살아남지 않으려 했던 마음이었습니다. 그것이 ${withParticle(profile.identity.name, '이', '가')} 끝까지 지키고 남긴 삶의 기록이었습니다.`,
       ].join('\n\n'),
     },
   ];

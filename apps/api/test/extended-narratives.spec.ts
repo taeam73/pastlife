@@ -39,6 +39,9 @@ describe('extended web-novel narratives', () => {
     expect(fullStory).toContain(profile.identity.name);
     expect(fullStory).toContain('오랜 동료');
     expect(fullStory).toContain(profile.innerLife.deepestPain);
+    expect(fullStory).not.toMatch(/어린 시절의 .*경험\.\s+그 기억/);
+    expect(fullStory).not.toMatch(/두려움\.\s+그래서/);
+    expect(fullStory).not.toMatch(/선택은 끝난 뒤에도 값을 요구했습니다/);
     expect(buildDeepNarrative(core, profile)).toEqual(blocks);
   });
 

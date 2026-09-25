@@ -27,12 +27,56 @@ export function describeOccupation(core: Pick<ResultCore, 'occupationId' | 'loca
 
   const actions = occupation.dailyActions.slice(0, 2).map(sentence).join(' ');
   const tools = occupation.signatureObjects.join('과 ');
+  const purpose = occupationId === 'OCC_TEXTILE'
+    ? '이 일은 사람들이 입고 생활하는 데 필요한 천을 만드는 일이었습니다.'
+    : occupation.classId === 'CLASS_HEALER'
+      ? '이 일은 아픈 사람의 상태를 살피고 회복을 돕는 일이었습니다.'
+      : occupation.classId === 'CLASS_SCHOLAR' || occupation.classId === 'CLASS_ADMIN'
+        ? '이 일은 필요한 정보와 약속을 정확히 남겨 사람들이 판단하도록 돕는 일이었습니다.'
+        : occupation.classId === 'CLASS_ARTISAN'
+          ? '이 일은 사람들이 매일 사용하는 물건을 만들고 고치는 일이었습니다.'
+          : occupation.classId === 'CLASS_AGRICULTURE'
+            ? '이 일은 사람들이 먹고 생활하는 데 필요한 것을 마련하는 일이었습니다.'
+            : occupation.classId === 'CLASS_MILITARY'
+              ? '이 일은 위험을 먼저 확인하고 사람들의 안전을 지키는 일이었습니다.'
+              : '이 일은 사람들의 일상이 계속되도록 필요한 역할을 맡는 일이었습니다.';
   return [
     `당신의 직업은 ${withJosa(occupation.label, '이었습니다', '였습니다')}.`,
     actions,
     `${tools} 같은 도구를 사용했습니다.`,
-    '이 일은 주변 사람들의 생활을 지키는 데 꼭 필요했습니다.',
+    purpose,
   ].join(' ');
+}
+
+export function describeOccupationTraits(
+  core: Pick<ResultCore, 'occupationId'>,
+  talent: string,
+  weakness: string,
+) {
+  const occupationId = aliases[core.occupationId] ?? core.occupationId;
+  if (occupationId === 'OCC_TEXTILE') {
+    return {
+      strength: '작은 색 차이와 반복되는 무늬를 잘 기억하는 점',
+      weakness: '실수를 걱정해 작업 결정을 늦추는 때가 있다는 점',
+    };
+  }
+
+  const occupation = historicalOccupations.find(({ id }) => id === occupationId);
+  const tools = occupation?.signatureObjects.join('과 ') ?? '도구';
+  const rawWeakness = firstSentence(weakness);
+  const contextualWeakness = rawWeakness.includes('결정을 지나치게 늦추')
+    ? '확실할 때까지 확인하느라 작업 결정을 늦추는 때가 있다는 점'
+    : rawWeakness.includes('피로')
+      ? '일에 집중하면 자신의 피로를 늦게 알아차리는 때가 있다는 점'
+      : rawWeakness.includes('책임')
+        ? '모든 일을 혼자 맡으려는 때가 있다는 점'
+        : rawWeakness;
+  return {
+    strength: occupation
+      ? `${tools}의 상태와 작업 순서에서 작은 차이를 알아차리는 점`
+      : firstSentence(talent),
+    weakness: contextualWeakness,
+  };
 }
 
 export function buildCharacterIntroduction(profile: StoryProfile, occupationDescription: string) {

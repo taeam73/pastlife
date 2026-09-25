@@ -150,8 +150,8 @@ export const lastMemories: Candidate[] = [...baseLastMemories, ...Array.from({ l
 
 export const basicTemplates = [
   { id: 'LIFE_BIRTH', title: '탄생 · 당신의 이야기가 시작된 날' },
-  { id: 'LIFE_CHILDHOOD', title: '어린 시절 · 성격이 만들어진 때' },
-  { id: 'LIFE_YOUTH', title: '청년 시절 · 꿈과 소중한 사람을 만난 때' },
+  { id: 'LIFE_CHILDHOOD', title: '어린 시절 · 책임감을 배운 순간' },
+  { id: 'LIFE_YOUTH', title: '청년 시절 · 일과 소중한 관계가 깊어진 때' },
   { id: 'LIFE_MIDLIFE', title: '인생의 전환점 · 큰 선택을 한 날' },
   { id: 'LIFE_LATER_YEARS', title: '인생의 후반 · 마지막까지 지킨 것' },
   { id: 'LIFE_DEATH', title: '마지막 순간 · 떠오른 기억' },

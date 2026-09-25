@@ -20,7 +20,7 @@ import { selectStoryArchetype } from './story-archetype-catalog.js';
 import { selectScenarioVariants } from './story-scenario-catalog.js';
 import { selectHistoricalEpisodes } from './historical-episode-catalog.js';
 import { selectChoiceOutcome } from './choice-outcome-catalog.js';
-import { describeOccupation } from './occupation-narrative.js';
+import { describeOccupation, describeOccupationTraits } from './occupation-narrative.js';
 import { selectDiverseLifeEvents } from './story-diversity-catalog.js';
 
 const locationScenes: Record<string, string> = {
@@ -54,10 +54,29 @@ const personalityScenes: Record<string, string> = {
 
 const relationshipScenes: Record<string, string> = {
   REL_COMPANION: '처음에는 필요한 말만 나누던 사이였지만, 여러 번 같은 어려움을 건너며 서로의 침묵까지 이해하는 오랜 동료가 되었습니다. 두 사람은 일이 끝난 늦은 시간에도 내일의 계획을 나누곤 했습니다.',
-  REL_FAMILY: '끝까지 지키려 한 가족은 당신이 지쳐 돌아왔을 때 아무 설명 없이 자리를 내어 주던 사람들이었습니다. 당신은 그 평범한 저녁을 지키기 위해 힘든 선택도 기꺼이 감당했습니다.',
+  REL_FAMILY: '가족은 당신이 지쳐 돌아온 날, 아무 설명을 요구하지 않고 따뜻한 식사와 쉴 자리를 마련해 주었습니다. 당신에게 가족은 의무만 지우는 사람들이 아니라 힘들 때 돌아가 쉴 수 있는 사람들이었습니다.',
   REL_LOST_LOVE: '다시 만나지 못한 사랑은 짧은 계절처럼 머물렀지만 이후의 모든 선택에 잔잔한 기준이 되었습니다. 함께하지 못한 시간보다 서로에게 건넸던 진심을 잊지 않으려 했습니다.',
   REL_STUDENT: '배움을 이어받은 제자는 처음에는 서툴고 질문이 많았지만 어느새 당신이 미처 보지 못한 가능성을 보여 주었습니다. 가르침은 한쪽에서 다른 쪽으로 흐르는 것이 아니라 함께 자라는 일임을 알게 했습니다.',
 };
+
+function relationshipOpening(relationshipId: string) {
+  if (relationshipId === 'REL_FAMILY') return '청년 시절에도 가족은 당신의 삶에서 가장 가까운 사람들이었습니다.';
+  if (relationshipId === 'REL_LOST_LOVE') return '이 시기에 마음을 나누는 한 사람을 만나 가장 가까운 사이가 되었습니다.';
+  if (relationshipId === 'REL_STUDENT') return '이 시기에 처음 맡은 제자를 만나 기술과 경험을 나누기 시작했습니다.';
+  return '이 시기에 함께 일하던 동료와 가까워졌습니다.';
+}
+
+function concreteRelationshipAction(relationshipId: string, value: string) {
+  if (relationshipId !== 'REL_FAMILY') return value;
+  return value.replace(/^한 가족은/u, '가족 한 사람은');
+}
+
+function relationshipClosing(relationshipId: string) {
+  if (relationshipId === 'REL_FAMILY') return '가족과 어려움을 나눈 경험은 이후 중요한 선택을 할 때도 혼자 결정하지 않는 기준이 되었습니다.';
+  if (relationshipId === 'REL_STUDENT') return '제자와 함께 배운 경험은 이후 중요한 선택을 할 때도 다음 사람의 의견을 듣는 기준이 되었습니다.';
+  if (relationshipId === 'REL_LOST_LOVE') return '그 사람과 나눈 마음은 헤어진 뒤에도 중요한 선택의 기준으로 남았습니다.';
+  return '동료와 쌓은 신뢰는 이후 중요한 선택을 할 때도 든든한 힘이 되었습니다.';
+}
 
 const eventScenes: Record<string, string> = {
   EVENT_01: '도시의 질서가 흔들리고 오래 지켜 온 기록이 사라질 위기',
@@ -224,6 +243,7 @@ export function buildStoryNarrative(core: ResultCore): NarrativeBlock[] {
   const presentDayLocation = location.presentDayContext.replace(/^오늘날\s+/u, '');
   const profile = buildStoryProfile(core);
   const occupationDescription = describeOccupation(core);
+  const occupationTraits = describeOccupationTraits(core, profile.dailyLife.talent, profile.dailyLife.weakness);
   const diverseEvents = selectDiverseLifeEvents(core);
   const choiceOutcome = selectChoiceOutcome(core, {
     choice: withYouSubject(diverseEvents.turning.choice),
@@ -246,18 +266,16 @@ export function buildStoryNarrative(core: ResultCore): NarrativeBlock[] {
       `${sentence(profile.background.primaryCaregiver)} ${sentence(profile.background.siblingStory)}`,
     ].join('\n\n'),
     [
-      `여덟 살 무렵 겪은 일은 ${withRoleParticle(diverseEvents.childhood.title)} 기억에 남았습니다. ${sentence(profile.background.education)}`,
+      `여덟 살 무렵, 당신은 ${sentence(profile.background.education)}`,
       `${sentence(diverseEvents.childhood.problem)} ${sentence(withYouSubject(diverseEvents.childhood.choice))}`,
-      `${diverseEvents.childhood.timeAfter}, ${sentence(diverseEvents.childhood.consequence)} ${sentence(diverseEvents.childhood.legacy)}`,
-      `이 일은 마음에 오래 남았습니다. ${sentence(profile.innerLife.formativeWound)} 그 뒤로 ${sentence(profile.innerLife.coreFear)}`,
-      `힘들 때는 ${sentence(profile.identity.stressResponse)} 그래도 잘못된 일을 보면 그냥 지나치지 않았습니다. ${personalityScene}`,
+      `${diverseEvents.childhood.timeAfter}, ${sentence(diverseEvents.childhood.consequence)} ${sentence(diverseEvents.childhood.legacy)} 이 일을 겪은 뒤, 당신은 문제가 생기면 외면하지 않고 직접 확인하는 사람이 되었습니다.`,
     ].join('\n\n'),
     [
       occupationDescription,
-      `당신의 장점은 ${firstSentence(profile.dailyLife.talent)}이었습니다. 약점은 ${firstSentence(profile.dailyLife.weakness)}이었습니다.`,
+      `당신의 장점은 ${occupationTraits.strength}이었습니다. 다만 ${occupationTraits.weakness}도 있었습니다.`,
       `${sentence(diverseEvents.work.problem)} ${sentence(withYouSubject(diverseEvents.work.choice))} ${workSacrifice(diverseEvents.work.theme)} ${workRecognition(diverseEvents.work.theme, occupation.label)}`.replace(/\s{2,}/g, ' '),
-      `이 시기에 ${withJosa(relationship.label, '을', '를')} 만나 가장 가까운 사이가 되었습니다. ${relationshipScene}`,
-      `${sentence(relationshipEvent.setup)} ${sentence(relationshipEvent.otherAction)} 이 인연은 이후 중요한 선택을 할 때도 당신 곁에 있었습니다.`,
+      `${relationshipOpening(relationship.id)} ${relationshipScene}`,
+      `${sentence(relationshipEvent.setup)} ${sentence(concreteRelationshipAction(relationship.id, relationshipEvent.otherAction))} ${sentence(relationshipEvent.aftermath)} ${relationshipClosing(relationship.id)}`,
     ].join('\n\n'),
     [
       `그러던 어느 날, ${sentence(diverseEvents.turning.problem)}`,
