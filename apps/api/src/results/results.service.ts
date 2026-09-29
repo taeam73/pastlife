@@ -9,6 +9,9 @@ import { LibraryImageProvider } from '../providers/library-image.provider.js';
 import { buildStoryNarrative, buildStoryProfile } from '../providers/story-narrative.js';
 import { buildDeepNarrative, buildPresentGuideNarrative } from '../providers/extended-narratives.js';
 import { buildCharacterIntroduction, describeOccupation } from '../providers/occupation-narrative.js';
+import { inspectNarrative } from '../providers/narrative-quality.js';
+import { inspectResultCanon } from '../providers/narrative-canon.js';
+import { inspectImageCompatibility } from '../providers/image-compatibility.js';
 
 export const RESULT_DISCLAIMER = '';
 
@@ -39,7 +42,7 @@ export class ResultsService {
     const occupation = occupations.find(({ id }) => id === (occupationAliases[result.core.occupationId] ?? result.core.occupationId))!;
     const storyProfile = result.storyProfile ?? buildStoryProfile(result.core);
     const occupationDescription = describeOccupation(result.core);
-    const blocksNeedRefresh = result.blocks.length !== 6 || result.blocks.some(({ body }) =>
+    const blocksNeedRefresh = inspectResultCanon(result.core, result.blocks).length > 0 || result.blocks.some(({ body }) => body.length > 1800 || inspectNarrative(body).score < 80) || result.blocks.length !== 6 || result.blocks.some(({ body }) =>
       !body.includes('\n\n') || /사용자의 실제 정체성|창작 서사|창작 설정|서사용 이름|마지막 장의 제목|선택을 바탕으로/.test(body));
     const blocks = blocksNeedRefresh ? buildStoryNarrative(result.core) : result.blocks;
     return {
@@ -124,6 +127,11 @@ export class ResultsService {
     const existingJob = this.imageJobs.get(resultId);
     if (existingJob) return existingJob;
     const job = this.imageProvider.getImage(result.core)
+      .then((image) => {
+        const issues = inspectImageCompatibility(result.core, image);
+        if (issues.length > 0) throw new Error(`Image compatibility check failed: ${issues.map(({ message }) => message).join('; ')}`);
+        return image;
+      })
       .then((image) => this.repository.saveResultImage(resultId, image))
       .finally(() => this.imageJobs.delete(resultId));
     this.imageJobs.set(resultId, job);

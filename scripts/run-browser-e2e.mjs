@@ -43,25 +43,32 @@ async function stop(child) {
 
 let exitCode = 1;
 try {
-  const api = start(
-    ['node_modules/tsx/dist/cli.mjs', '--tsconfig', 'apps/api/tsconfig.json', 'apps/api/src/main.ts'],
-    { USE_IN_MEMORY_DB: 'true', USE_MOCK_GOOGLE: 'true', ADMIN_TOKEN: 'e2e-admin-token', CONTENT_VERSION: '2.5.0', NODE_OPTIONS: shim },
-  );
-  await waitFor(`${apiUrl}/admin/content/summary`, api, 120_000);
+  const reuseServers = process.env.E2E_REUSE_SERVERS === '1';
+  if (reuseServers) {
+    await waitFor(`${apiUrl}/admin/content/summary`, { exitCode: null }, 10_000);
+    await waitFor('http://127.0.0.1:8081', { exitCode: null }, 10_000);
+    await waitFor('http://127.0.0.1:3000', { exitCode: null }, 10_000);
+  } else {
+    const api = start(
+      ['node_modules/tsx/dist/cli.mjs', '--tsconfig', 'apps/api/tsconfig.json', 'apps/api/src/main.ts'],
+      { USE_IN_MEMORY_DB: 'true', USE_MOCK_GOOGLE: 'true', ADMIN_TOKEN: 'e2e-admin-token', CONTENT_VERSION: '2.5.0', NODE_OPTIONS: shim },
+    );
+    await waitFor(`${apiUrl}/admin/content/summary`, api, 120_000);
 
-  const mobile = start(
-    ['node_modules/expo/bin/cli', 'start', '--web', '--port', '8081'],
-    { CI: '1', EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_API_URL: apiUrl, EXPO_PUBLIC_USE_MOCK_GOOGLE: 'true', NODE_OPTIONS: shim },
-    resolve(root, 'apps/mobile'),
-  );
-  await waitFor('http://127.0.0.1:8081', mobile, 180_000);
+    const mobile = start(
+      ['node_modules/expo/bin/cli', 'start', '--web', '--port', '8081'],
+      { CI: '1', EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_API_URL: apiUrl, EXPO_PUBLIC_USE_MOCK_GOOGLE: 'true', NODE_OPTIONS: shim },
+      resolve(root, 'apps/mobile'),
+    );
+    await waitFor('http://127.0.0.1:8081', mobile, 180_000);
 
-  const admin = start(
-    ['node_modules/next/dist/bin/next', 'dev', '-p', '3000'],
-    { NEXT_PUBLIC_API_URL: apiUrl },
-    resolve(root, 'apps/admin'),
-  );
-  await waitFor('http://127.0.0.1:3000', admin, 120_000);
+    const admin = start(
+      ['node_modules/next/dist/bin/next', 'dev', '-p', '3000'],
+      { NEXT_PUBLIC_API_URL: apiUrl },
+      resolve(root, 'apps/admin'),
+    );
+    await waitFor('http://127.0.0.1:3000', admin, 120_000);
+  }
 
   const playwright = spawn(
     process.execPath,

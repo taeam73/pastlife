@@ -59,7 +59,10 @@ export default function ResultScreen() {
   if (error) return <Screen><Text style={styles.error}>{error}</Text></Screen>;
   if (!result) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>;
   return <Screen>
-    <Text style={styles.eyebrow}>전생 기록 No.{String(result.recordNo).padStart(2, '0')} 발견</Text>
+    <View style={styles.resultHeader}>
+      <View style={styles.headerSpacer} />
+      <Text style={styles.eyebrow}>전생 기록 No.{String(result.recordNo).padStart(2, '0')} 발견</Text>
+    </View>
     <Text style={styles.headline}>{result.headline}</Text>
     <ResultExperience ref={resultCardRef} image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} />
     {result.disclaimer ? <Text style={styles.disclaimer}>{result.disclaimer}</Text> : null}
@@ -74,4 +77,4 @@ export default function ResultScreen() {
   </Screen>;
 }
 
-const styles = StyleSheet.create({ eyebrow: { color: colors.accent, fontSize: 15 }, headline: { color: colors.text, fontSize: 27, lineHeight: 36, fontWeight: '700' }, disclaimer: { color: colors.muted, fontSize: 13, lineHeight: 20, marginTop: spacing.md }, videoNotice: { color: colors.muted, fontSize: 13, lineHeight: 20, textAlign: 'center' }, error: { color: colors.error, fontSize: 16 } });
+const styles = StyleSheet.create({ resultHeader: { minHeight: 44, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', paddingTop: 2 }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { color: colors.text, fontSize: 25, lineHeight: 34, fontWeight: '700', marginTop: 8, marginBottom: 4 }, disclaimer: { color: colors.muted, fontSize: 13, lineHeight: 20, marginTop: spacing.md }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });

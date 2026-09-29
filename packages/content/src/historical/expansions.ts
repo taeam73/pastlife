@@ -13,6 +13,7 @@ export type HistoricalEpisode = {
 export type HistoricalSettingExpansion = {
   settingId: string;
   imageAssetKeys: readonly [string, string, string];
+  additionalImageAssetKeys?: readonly string[];
   workEpisodes: readonly HistoricalEpisode[];
   lifeEvents: readonly HistoricalEpisode[];
 };
@@ -57,6 +58,28 @@ export const historicalSettingExpansions: readonly HistoricalSettingExpansion[] 
   return {
     settingId: setting.id,
     imageAssetKeys,
+    ...(setting.id === 'LOC_MESOPOTAMIA' ? { additionalImageAssetKeys: ['library/v4/mesopotamia-ur-study.png', 'library/v4/mesopotamia-ur-study2.png'] } : {}),
+    ...(setting.id === 'LOC_GANGES' ? { additionalImageAssetKeys: ['library/v4/magadha-ganges-study.png', 'library/v4/magadha-ganges-study2.png'] } : {}),
+    ...(setting.id === 'LOC_VENICE' ? { additionalImageAssetKeys: ['library/v4/renaissance-venice-study.png', 'library/v4/renaissance-venice-study2.png'] } : {}),
+    ...(setting.id === 'LOC_HEIAN_KYO' ? { additionalImageAssetKeys: ['library/v4/heian-kyo-study.png', 'library/v4/heian-kyo-study2.png'] } : {}),
+    ...(setting.id === 'LOC_MALI_TIMBUKTU' ? { additionalImageAssetKeys: ['library/v4/mali-timbuktu-study.png', 'library/v4/mali-timbuktu-study2.png'] } : {}),
+    ...(setting.id === 'LOC_ABBASID' ? { additionalImageAssetKeys: ['library/v4/abbasid-baghdad-study.png', 'library/v4/abbasid-baghdad-study2.png'] } : {}),
+    ...(setting.id === 'LOC_JOSEON_HANYANG' ? { additionalImageAssetKeys: ['library/v4/joseon-hanyang-study.png', 'library/v4/joseon-hanyang-study2.png'] } : {}),
+    ...(setting.id === 'LOC_OTTOMAN_ISTANBUL' ? { additionalImageAssetKeys: ['library/v4/ottoman-istanbul-study.png', 'library/v4/ottoman-istanbul-study2.png'] } : {}),
+    ...(setting.id === 'LOC_EDO' ? { additionalImageAssetKeys: ['library/v4/late-edo-study.png', 'library/v4/late-edo-study2.png'] } : {}),
+    ...(setting.id === 'LOC_SWASHILI' ? { additionalImageAssetKeys: ['library/v4/swahili-kilwa-study.png', 'library/v4/swahili-kilwa-study2.png'] } : {}),
+    ...(setting.id === 'LOC_ANDES' ? { additionalImageAssetKeys: ['library/v4/inca-andes-study.png', 'library/v4/inca-andes-study2.png'] } : {}),
+    ...(setting.id === 'LOC_STEPPE' ? { additionalImageAssetKeys: ['library/v4/mongol-steppe-study.png', 'library/v4/mongol-steppe-study2.png'] } : {}),
+    ...(setting.id === 'LOC_POLYNESIA' ? { additionalImageAssetKeys: ['library/v4/polynesian-voyagers-study.png', 'library/v4/polynesian-voyagers-study2.png'] } : {}),
+    ...(setting.id === 'LOC_HAN_CHANGAN' ? { additionalImageAssetKeys: ['library/v4/han-changan-study.png', 'library/v4/han-changan-study2.png'] } : {}),
+    ...(setting.id === 'LOC_AZTEC_TENOCHTITLAN' ? { additionalImageAssetKeys: ['library/v4/mexica-tenochtitlan-study.png', 'library/v4/mexica-tenochtitlan-study2.png'] } : {}),
+    ...(setting.id === 'LOC_INDUSTRIAL_HANSEONG' ? { additionalImageAssetKeys: ['library/v4/industrial-hanseong-study.png', 'library/v4/industrial-hanseong-study2.png'] } : {}),
+    ...(setting.id === 'LOC_SHANGHAI_1920' ? { additionalImageAssetKeys: ['library/v4/shanghai-1920-study.png', 'library/v4/shanghai-1920-study2.png'] } : {}),
+    ...(setting.id === 'LOC_SEOUL_1940' ? { additionalImageAssetKeys: ['library/v4/seoul-1940-study.png', 'library/v4/seoul-1940-study2.png'] } : {}),
+    ...(setting.id === 'LOC_BUSAN_1950' ? { additionalImageAssetKeys: ['library/v4/busan-1950-study.png', 'library/v4/busan-1950-study2.png'] } : {}),
+    ...(setting.id === 'LOC_TOKYO_1960' ? { additionalImageAssetKeys: ['library/v4/tokyo-1960-study.png', 'library/v4/tokyo-1960-study2.png'] } : {}),
+    ...(setting.id === 'LOC_LAGOS_1980' ? { additionalImageAssetKeys: ['library/v4/lagos-1980-study.png', 'library/v4/lagos-1980-study2.png'] } : {}),
+    ...(setting.id === 'LOC_SAO_PAULO_1990' ? { additionalImageAssetKeys: ['library/v4/saopaulo-1990-study.png', 'library/v4/saopaulo-1990-study2.png'] } : {}),
     workEpisodes,
     lifeEvents,
   };

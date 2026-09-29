@@ -37,7 +37,9 @@ export function calculateResult({ answers, contentVersion }: CalculateResultInpu
   const lastMemory = pickCandidate(lastMemories, scores.tags, `${seed}:last-memory`);
   const setting = historicalSettings.find(({ id }) => id === location.id);
   const settingExpansion = findHistoricalSettingExpansion(location.id);
-  const imageKeys = settingExpansion?.imageAssetKeys ?? [setting?.visual.fallbackAssetKey ?? `library/${location.id.toLowerCase()}.jpg`];
+  const imageKeys = settingExpansion
+    ? [...settingExpansion.imageAssetKeys, ...(settingExpansion.additionalImageAssetKeys ?? [])]
+    : [setting?.visual.fallbackAssetKey ?? `library/${location.id.toLowerCase()}.jpg`];
   const imageKey = imageKeys[deterministicIndex(`${seed}:${occupation.id}:library-image`, imageKeys.length)]!;
 
   return {

@@ -22,6 +22,7 @@ import { selectHistoricalEpisodes } from './historical-episode-catalog.js';
 import { selectChoiceOutcome } from './choice-outcome-catalog.js';
 import { describeOccupation, describeOccupationTraits } from './occupation-narrative.js';
 import { selectDiverseLifeEvents } from './story-diversity-catalog.js';
+import { editNarrative } from './narrative-quality.js';
 
 const locationScenes: Record<string, string> = {
   LOC_MESOPOTAMIA: '햇빛에 마른 점토 냄새와 수로를 오가는 사람들의 목소리가 골목마다 머물렀고, 해가 기울면 낮 동안 달아오른 벽이 천천히 식어 갔습니다.',
@@ -135,6 +136,11 @@ function sentence(value: string) {
 
 function firstSentence(value: string) {
   return value.trim().split(/(?<=[.!?…])\s+/u)[0]!.replace(/[.!?…]+$/u, '');
+}
+
+function compactStoryBody(body: string, index: number) {
+  if (index < 3) return body;
+  return editNarrative(body, 4);
 }
 
 function withYouSubject(value: string) {
@@ -300,6 +306,8 @@ export function buildStoryNarrative(core: ResultCore): NarrativeBlock[] {
       `그렇게 ${profile.identity.name}의 삶은 끝났지만, 그 사람이 남긴 선택과 약속은 주변 사람들의 생활 속에 오래 남았습니다.`,
     ].join('\n\n'),
   ];
+
+  for (let index = 2; index < bodies.length; index += 1) bodies[index] = compactStoryBody(bodies[index]!, index);
 
   return basicTemplates.map((template, index) => ({
     id: template.id,

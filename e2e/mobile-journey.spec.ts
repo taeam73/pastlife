@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('completes the assessment and unlocks archive, deep, and guide results', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByText('전생록', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('전생록 로고')).toBeVisible();
   await page.getByRole('button', { name: '나의 전생 찾아보기' }).click();
   await expect(page.getByText('기억은 생각보다 먼저 반응합니다.')).toBeVisible();
   await page.getByRole('button', { name: '질문 시작하기' }).click();

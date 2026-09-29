@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { ResultCore } from '@pastlife/scoring';
 import { buildStoryNarrative, buildStoryProfile } from '../src/providers/story-narrative.js';
+import { inspectResultCanon } from '../src/providers/narrative-canon.js';
+import { inspectNarrative } from '../src/providers/narrative-quality.js';
 
 const core = {
   contentVersion: '2.5.0',
@@ -147,5 +149,27 @@ describe('buildStoryNarrative', () => {
     expect(new Set(profiles.map(({ dailyLife }) => dailyLife.hobby)).size).toBeGreaterThanOrEqual(6);
     expect(new Set(profiles.map(({ ending }) => ending.category)).size).toBeGreaterThanOrEqual(7);
     expect(profiles.every(({ timeline }) => timeline.every((entry, index) => index === 0 || entry.age >= timeline[index - 1]!.age))).toBe(true);
+  });
+
+  it('keeps representative era and occupation combinations canon-valid', () => {
+    const samples = [
+      core,
+      { ...core, answerHash: 'ocean-case', eraId: 'ERA_AGE_OF_EXPLORATION', regionId: 'REG_SUBSAHARAN_AFRICA', locationId: 'LOC_SWASHILI', classId: 'CLASS_MERCHANT', occupationId: 'OCC_05', eventId: 'EVENT_05', lastMemoryId: 'MEM_SEA' },
+    ] as ResultCore[];
+    for (const sample of samples) {
+      expect(inspectResultCanon(sample, buildStoryNarrative(sample))).toEqual([]);
+    }
+  });
+
+  it('maintains a readable quality floor across a representative result matrix', () => {
+    const cases = Array.from({ length: 24 }, (_, index) => ({
+      ...core,
+      answerHash: `qa-matrix-${index}`,
+      recordNo: index + 1,
+      ...(index % 2 === 1 ? { eraId: 'ERA_AGE_OF_EXPLORATION', regionId: 'REG_SUBSAHARAN_AFRICA', locationId: 'LOC_SWASHILI', classId: 'CLASS_MERCHANT', occupationId: 'OCC_05', eventId: 'EVENT_05', lastMemoryId: 'MEM_SEA' } : {}),
+    } as ResultCore));
+    const reports = cases.flatMap((sample) => buildStoryNarrative(sample).map(({ body }) => inspectNarrative(body)));
+    expect(reports.every(({ score }) => score >= 60)).toBe(true);
+    expect(Math.max(...reports.map(({ overlongParagraphs }) => overlongParagraphs))).toBeLessThanOrEqual(1);
   });
 });

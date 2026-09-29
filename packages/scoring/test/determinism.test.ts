@@ -31,7 +31,7 @@ describe('result determinism', () => {
       const setting = historicalSettings.find(({ id }) => id === result.locationId)!;
       expect(setting.occupationIds).toContain(result.occupationId);
       expect(findHistoricalSettingExpansion(setting.id)?.imageAssetKeys).toContain(result.libraryImage.key);
-      expect(result.libraryImage.key).toMatch(/^library\/v4\/.+-(daily|work|turning)\.(webp|png)$/);
+      expect(result.libraryImage.key).toMatch(/^library\/v4\/.+-(daily|work|turning|study)\.(webp|png)$/);
     }
   });
 });

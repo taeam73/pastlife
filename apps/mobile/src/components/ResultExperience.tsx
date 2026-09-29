@@ -1,5 +1,5 @@
-import { forwardRef } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { forwardRef, useRef, useState } from 'react';
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { ResultBlock } from './ResultBlock';
 import { resolveLibraryImage } from '../results/libraryImages';
@@ -64,6 +64,13 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     { label: '취미', value: oneSentence(character.hobby) },
     { label: '꿈', value: oneSentence(character.dream) },
   ] : [];
+  const [highlightIndex, setHighlightIndex] = useState(0);
+  const highlightPagerRef = useRef<ScrollView>(null);
+  const moveHighlight = (nextIndex: number) => {
+    const boundedIndex = Math.max(0, Math.min(nextIndex, (visibleHighlights?.length ?? 1) - 1));
+    highlightPagerRef.current?.scrollTo({ x: boundedIndex * (Dimensions.get('window').width - spacing.lg * 2), animated: true });
+    setHighlightIndex(boundedIndex);
+  };
 
   return <View ref={ref} collapsable={false} style={styles.container}>
     <View style={styles.modeRow} accessibilityRole="tablist">
@@ -123,21 +130,24 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         <Text style={styles.storyEyebrow}>이 삶에서 중요했던 것들</Text>
         <Text style={styles.storyLead}>삶에 큰 영향을 준 사람과 사건을 한눈에 정리했어요.</Text>
       </View>
-      {visibleHighlights.map((item) => <View key={item.id} style={styles.highlightCard}><Text style={styles.highlightTitle}>{item.title}</Text><Text style={styles.highlightSummary}>{item.summary}</Text><Text style={styles.highlightDetail}>{item.detail}</Text></View>)}
+      <View style={styles.highlightCarousel}><ScrollView ref={highlightPagerRef} horizontal pagingEnabled showsHorizontalScrollIndicator={false} onMomentumScrollEnd={(event) => setHighlightIndex(Math.round(event.nativeEvent.contentOffset.x / (Dimensions.get('window').width - spacing.lg * 2)))} contentContainerStyle={styles.highlightPager} accessibilityLabel="삶에서 중요했던 이야기 카드">
+        {visibleHighlights.map((item) => <View key={item.id} style={styles.highlightCard}><Text style={styles.highlightTitle}>{item.title}</Text><Text style={styles.highlightSummary}>{item.summary}</Text><Text style={styles.highlightDetail}>{item.detail}</Text></View>)}
+      </ScrollView><Pressable accessibilityRole="button" accessibilityLabel="이전 중요 이야기" onPress={() => moveHighlight(highlightIndex - 1)} style={[styles.highlightArrow, styles.highlightArrowLeft, highlightIndex === 0 && styles.highlightArrowFaint]}><Text style={styles.highlightArrowText}>‹</Text></Pressable><Pressable accessibilityRole="button" accessibilityLabel="다음 중요 이야기" onPress={() => moveHighlight(highlightIndex + 1)} style={[styles.highlightArrow, styles.highlightArrowRight, highlightIndex === (visibleHighlights.length - 1) && styles.highlightArrowFaint]}><Text style={styles.highlightArrowText}>›</Text></Pressable></View>
+      <View style={styles.highlightDots}>{visibleHighlights.map((item, index) => <View key={`${item.id}-dot`} style={[styles.highlightDot, index === highlightIndex && styles.highlightDotActive]} />)}</View>
     </View> : null}
   </View>;
 });
 
 const styles = StyleSheet.create({
   container: { gap: spacing.md },
-  modeRow: { flexDirection: 'row', gap: spacing.sm },
+  modeRow: { display: 'none' },
   modeButton: { flex: 1, borderColor: colors.border, borderWidth: 1, borderRadius: 12, padding: spacing.sm, alignItems: 'center', justifyContent: 'center', minHeight: 58 },
   modeSelected: { backgroundColor: colors.surfaceRaised, borderColor: colors.accent },
-  modeDisabled: { opacity: 0.52 },
+  modeDisabled: { opacity: 0.42, backgroundColor: 'rgba(14, 21, 35, 0.55)' },
   modeText: { color: colors.text, fontWeight: '700' },
   modeDisabledText: { color: colors.muted, fontWeight: '700' },
   comingSoon: { color: colors.muted, fontSize: 11, marginTop: 2 },
-  hero: { minHeight: 360, borderRadius: 20, overflow: 'hidden', backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
+  hero: { minHeight: 360, borderRadius: 20, overflow: 'hidden', backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end', marginTop: spacing.xs },
   image: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
   characterLayer: { position: 'absolute', right: 0, bottom: 0, left: 0, height: '88%', zIndex: 1, alignItems: 'center', justifyContent: 'flex-end', pointerEvents: 'none' },
   characterImage: { width: '100%', height: '100%', opacity: 0.98 },
@@ -146,15 +156,25 @@ const styles = StyleSheet.create({
   imageFallbackText: { color: colors.muted, fontSize: 17, lineHeight: 26, textAlign: 'center' },
   imageShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 100, zIndex: 2, backgroundColor: 'rgba(5, 10, 18, 0.45)' },
   heroLabel: { color: colors.text, fontSize: 14, fontWeight: '700', padding: spacing.md, zIndex: 3 },
-  storyIntro: { gap: 4, marginTop: spacing.sm },
+  storyIntro: { gap: 6, marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.border, borderTopWidth: StyleSheet.hairlineWidth },
   storyEyebrow: { color: colors.accent, fontSize: 15, fontWeight: '700' },
   storyLead: { color: colors.muted, fontSize: 16, lineHeight: 24 },
   highlights: { gap: spacing.sm },
   highlightIntro: { gap: 4, marginTop: spacing.md, marginBottom: spacing.xs },
-  highlightCard: { borderLeftColor: colors.accent, borderLeftWidth: 3, backgroundColor: colors.surfaceRaised, padding: spacing.md, borderRadius: 12, gap: 4 },
+  highlightCarousel: { position: 'relative' },
+  highlightPager: { gap: spacing.sm, paddingRight: spacing.lg },
+  highlightCard: { width: Dimensions.get('window').width - spacing.lg * 3, borderLeftColor: colors.accent, borderLeftWidth: 3, backgroundColor: colors.surfaceRaised, padding: spacing.md, borderRadius: 12, gap: 4 },
   highlightTitle: { color: colors.accent, fontSize: 13, fontWeight: '700' },
   highlightSummary: { color: colors.text, fontSize: 16, lineHeight: 23, fontWeight: '700' },
   highlightDetail: { color: colors.muted, fontSize: 14, lineHeight: 22 },
+  highlightDots: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 6 },
+  highlightDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.border },
+  highlightDotActive: { width: 18, backgroundColor: colors.accent },
+  highlightArrow: { position: 'absolute', top: '45%', width: 34, height: 34, marginTop: -17, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(8, 13, 24, 0.58)', borderColor: 'rgba(241, 223, 178, 0.42)', borderWidth: 1 },
+  highlightArrowLeft: { left: 5 },
+  highlightArrowRight: { right: 5 },
+  highlightArrowFaint: { opacity: 0.28 },
+  highlightArrowText: { color: '#f1dfb2', fontSize: 24, lineHeight: 26 },
   textView: { gap: spacing.md },
   profileCard: { position: 'relative', overflow: 'hidden', backgroundColor: colors.surfaceRaised, borderColor: colors.border, borderWidth: 1, borderRadius: 18, padding: spacing.md, gap: spacing.md },
   profileAccent: { position: 'absolute', top: 0, right: 0, left: 0, height: 4, backgroundColor: colors.accent },

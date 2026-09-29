@@ -37,6 +37,10 @@ export class LibraryImageProvider implements ImageProvider {
     const isFemale = gender.startsWith('여');
     const preferredCharacterUri = characterByOccupation[core.occupationId];
     const exactCharacterBySettingOccupation: Record<string, { female: string; male: string }> = {
+      'LOC_MALI_TIMBUKTU:OCC_SCRIBE': {
+        female: 'asset://characters/v1/market-seller-female.png',
+        male: 'asset://characters/v2/mali-scribe-male.png',
+      },
       'LOC_HEIAN_KYO:OCC_ARTISAN': {
         female: 'asset://characters/v2/heian-artisan-female.png',
         male: 'asset://characters/v2/heian-artisan-male.png',
