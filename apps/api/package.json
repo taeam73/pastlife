@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "tsx watch src/main.ts",
-    "start": "tsx src/main.ts",
+    "dev": "node ../../scripts/tsx-cli.mjs watch src/main.ts",
+    "start": "node ../../scripts/tsx-cli.mjs src/main.ts",
     "storage:smoke": "node --env-file=../../.env scripts/storage-smoke.mjs",
     "test": "vitest run --exclude test/**/*.e2e.spec.ts",
     "test:e2e": "vitest run test/vertical-flow.e2e.spec.ts",
