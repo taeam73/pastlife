@@ -4,6 +4,12 @@
     "slug": "past-life-archive",
     "version": "0.1.0",
     "orientation": "portrait",
+    "icon": "./assets/branding/logo-mark.png",
+    "splash": {
+      "image": "./assets/branding/logo-mark.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0D1420"
+    },
     "scheme": "pastlife",
     "userInterfaceStyle": "dark",
     "plugins": ["expo-router", "expo-secure-store"],
