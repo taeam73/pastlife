@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Animated, ImageBackground, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Animated, Image, ImageBackground, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Screen } from '../src/components/Screen';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { AppNav } from '../src/components/AppNav';
@@ -55,6 +55,7 @@ export default function StartScreen() {
       <Screen scroll={false} transparent>
         <View style={styles.hero}>
           <Animated.View style={{ opacity: contentOpacity, transform: [{ translateY: contentY }] }}>
+            <Image accessibilityLabel="전생록" source={require('../assets/branding/title-logo-celestial.png')} resizeMode="contain" style={styles.titleLogo} />
             <Text style={styles.kicker}>PAST LIFE ARCHIVE</Text>
             <Text style={styles.title}>나는 언제, 어디에서,{ '\n' }어떤 사람이었을까?</Text>
             <Text style={styles.copy}>시간 너머에 남겨진 당신의 이야기를 찾아보세요.</Text>
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
   backgroundImage: { opacity: 1 },
   overlay: { flex: 1, backgroundColor: 'rgba(5, 10, 18, 0.20)' },
   hero: { flex: 1, justifyContent: 'flex-start', gap: spacing.md, paddingTop: 148 },
+  titleLogo: { width: 260, height: 92, alignSelf: 'center', marginBottom: spacing.sm },
   kicker: { color: 'rgba(244, 231, 193, 0.78)', fontSize: 11, letterSpacing: 3, marginBottom: spacing.sm },
   title: { color: colors.text, fontSize: 30, lineHeight: 40, fontWeight: '700' },
   copy: { color: '#D9DFE8', fontSize: 16, lineHeight: 24, marginTop: spacing.md },

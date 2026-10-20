@@ -92,6 +92,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
             <Text style={styles.imageFallbackText}>{image.alt}</Text>
           </View>}
       <View pointerEvents="none" style={styles.imageShade} />
+      <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-celestial.png')} resizeMode="contain" style={styles.heroTitleLogo} />
       <Text pointerEvents="none" style={styles.heroLabel}>{image.sourceType === 'AI' ? 'AI로 복원한 장면' : '기록을 바탕으로 한 장면'}</Text>
     </View>
 
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
   imageFallbackText: { color: colors.muted, fontSize: 17, lineHeight: 26, textAlign: 'center' },
   imageShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 100, zIndex: 2, backgroundColor: 'rgba(5, 10, 18, 0.45)' },
   heroLabel: { color: colors.text, fontSize: 14, fontWeight: '700', padding: spacing.md, zIndex: 3 },
+  heroTitleLogo: { position: 'absolute', top: spacing.md, left: spacing.lg, width: 180, height: 64, zIndex: 3 },
   storyIntro: { gap: 6, marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.border, borderTopWidth: StyleSheet.hairlineWidth },
   storyEyebrow: { color: colors.accent, fontSize: 15, fontWeight: '700' },
   storyLead: { color: colors.muted, fontSize: 16, lineHeight: 24 },
