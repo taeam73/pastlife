@@ -12,4 +12,11 @@
 - 확인: 모바일·API·관리자·워커·공유 패키지로 구성된 모노레포.
 - 확인: 6단계 질문, 결정론적 scoring, 결과·광고·이미지 폴백·아카이브 흐름의 코드와 테스트가 존재한다.
 - 미확인: 실제 운영 DB, 외부 공급자, 광고 SDK, OAuth 실계정, 시장 수치.
-- 검증 이슈: `corepack pnpm typecheck`가 `node_modules/.pnpm` 접근 거부로 중단되었다.
+
+## 2026-10-20 검증 결과
+
+- 통과: `corepack pnpm install`을 lockfile 기준으로 완료했다.
+- 통과: `corepack pnpm typecheck` 전체 9개 workspace.
+- 통과: `corepack pnpm test` 전체 단위 테스트.
+- 실패: `corepack pnpm content:check`의 캐릭터 자산 검사에서 `abbasid-healer-male.png`가 요구 크기 `1024x1536` 대신 `1145x1374`로 확인되었다.
+- 보호 조치: 자산 파일과 제품 코드는 임의로 수정하지 않고, 자산 교체·재생성 승인 대상으로 남겼다.
