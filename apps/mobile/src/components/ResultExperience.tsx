@@ -21,6 +21,7 @@ type ResultExperienceProps = {
   lifeSummary?: LifeSummary;
   introTitle?: string;
   introDescription?: string;
+  headline?: string;
 };
 
 function oneSentence(value: string) {
@@ -35,6 +36,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
   lifeSummary,
   introTitle = '당신의 전생 이야기',
   introDescription = '태어난 순간부터 삶의 마지막까지, 여섯 장으로 나누어 보여드릴게요.',
+  headline,
 }: ResultExperienceProps, ref) {
   const showRemoteImage = /^https?:\/\//.test(image.uri);
   const localImage = resolveLibraryImage(image.uri);
@@ -96,7 +98,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.brandLogo} />
         <Text style={styles.brandMeta}>전생 기록 No.06 발견</Text>
       </View>
-      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={introTitle} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
+      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={headline ?? introTitle} characterLabel={character ? `${character.name} · ${character.occupation}` : undefined} characterDescription={character?.introduction} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
       <ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={(index) => { setChapterIndex(index); chapterPagerRef.current?.scrollToIndex(index); }} />
     </> : null}
     <View style={[styles.hero, styles.hidden]}>
