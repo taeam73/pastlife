@@ -5,7 +5,7 @@ import { resolveLibraryImage } from '../results/libraryImages';
 
 type Chapter = { id: string; title: string; summary: string; detail: string };
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
-type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; layers?: Layer[]; title: string; characterLabel?: string; characterDescription?: string; logo: any; selectedIndex: number; onSelect: (index: number) => void };
+type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; layers?: Layer[]; title: string; characterLabel?: string | undefined; characterDescription?: string | undefined; logo: any; selectedIndex: number; onSelect: (index: number) => void };
 export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => void };
 
 export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, layers, title, characterLabel, characterDescription, logo, selectedIndex, onSelect }, ref) {
