@@ -27,5 +27,9 @@
 - [콘셉트](docs/concept.md)
 - [디자인 가이드](docs/design-guide.md)
 - [디자인 구현 명세](docs/design-implementation-spec.md)
+
+## 필수 UI 스킬
+
+- [전생록 반응형 UI 스킬](.codex/skills/pastlife-responsive-ui/SKILL.md): 모바일·태블릿 대응은 모든 화면 작업의 필수 조건이다.
 - [콘텐츠 가이드](docs/content-guide.md)
 - [결정 로그](docs/decision-log.md)

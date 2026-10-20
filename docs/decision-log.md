@@ -48,3 +48,9 @@
 - 결정: `ProgressBar`에 progressbar 역할과 min/max/now 값을 제공해 단계 진행률을 보조기술이 읽을 수 있게 한다.
 - 검증: `corepack pnpm typecheck`, `corepack pnpm test`, `corepack pnpm content:check` 모두 통과했다.
 - 범위: 질문·결과 로직과 데이터 구조는 변경하지 않고 표현 계층과 접근성만 보강했다.
+
+## 2026-10-20 반응형 UI 필수 규칙 고정
+
+- 결정: 모바일·태블릿 반응형 대응을 선택 사항이 아닌 프로젝트 필수 규칙으로 고정한다.
+- 적용: `.codex/skills/pastlife-responsive-ui/SKILL.md`를 추가하고 `AGENTS.md`에서 모든 UI 작업에 적용하도록 연결했다.
+- 검증 기준: 320px 최소 폭, 태블릿 중앙 정렬, viewport 전체 배경, 가로 오버플로 없음.
