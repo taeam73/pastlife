@@ -11,11 +11,13 @@ export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => vo
 export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, layers, title, characterLabel, characterDescription, logo, selectedIndex, onSelect }, ref) {
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
-  const pageWidth = Math.min(width, 760);
+  const contentWidth = Math.min(width, 760);
+  const pageWidth = width;
+  const bleed = Math.max(spacing.lg, (width - contentWidth) / 2 + spacing.lg);
   const source = resolveLibraryImage(imageUri) ?? (/^https?:\/\//.test(imageUri) ? { uri: imageUri } : undefined);
   useImperativeHandle(ref, () => ({ scrollToIndex: (index) => scrollRef.current?.scrollTo({ x: index * pageWidth, animated: true }) }), [pageWidth]);
   if (!source) return null;
-  return <View style={styles.wrapper}>
+  return <View style={[styles.wrapper, { width: width, marginLeft: -bleed, marginRight: -bleed }]}>
     <ScrollView ref={scrollRef} horizontal pagingEnabled showsHorizontalScrollIndicator={false} decelerationRate="fast" onMomentumScrollEnd={(event) => onSelect(Math.round(event.nativeEvent.contentOffset.x / pageWidth))} accessibilityLabel="전생 이야기 페이지">
       {chapters.map((chapter, index) => <View key={chapter.id} style={[styles.page, { width: pageWidth }]}>
         <View style={styles.hero}>
@@ -47,7 +49,7 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
 });
 
 const styles = StyleSheet.create({
-  wrapper: { marginHorizontal: -spacing.lg, marginTop: -spacing.lg },
+  wrapper: { marginTop: -spacing.lg },
   page: { paddingHorizontal: 0, gap: spacing.sm },
   hero: { minHeight: 540, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: StyleSheet.absoluteFill,
