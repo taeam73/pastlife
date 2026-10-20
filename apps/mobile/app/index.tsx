@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Animated, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native';
+import { Animated, ImageBackground, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Screen } from '../src/components/Screen';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { AppNav } from '../src/components/AppNav';
@@ -15,6 +15,7 @@ const backgrounds = [
 ];
 export default function StartScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
   const background = useState(() => backgrounds[Math.floor(Math.random() * backgrounds.length)])[0];
   const contentOpacity = useRef(new Animated.Value(0)).current;
   const contentY = useRef(new Animated.Value(18)).current;
@@ -51,7 +52,7 @@ export default function StartScreen() {
     router.push('/guide');
   };
 
-  return <ImageBackground source={background} resizeMode="cover" style={styles.background} imageStyle={styles.backgroundImage}>
+  return <ImageBackground source={background} resizeMode="cover" style={[styles.background, { width, height }]} imageStyle={styles.backgroundImage}>
     <View style={styles.overlay}>
       <Screen scroll={false} transparent>
         <View style={styles.hero}>
