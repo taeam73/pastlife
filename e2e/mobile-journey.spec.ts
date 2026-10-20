@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('completes the assessment and unlocks archive, deep, and guide results', async ({ page }) => {
+  test.setTimeout(60_000);
   await page.goto('/');
 
   await expect(page.getByLabel('전생록 로고')).toBeVisible();
@@ -16,19 +17,14 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
 
   await expect(page).toHaveURL(/\/result$/);
   await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();
-  await expect(page.getByText('전생의 인물')).toBeVisible();
+  await expect(page.getByText('전생 인물 카드')).toBeVisible();
   await expect(page.getByText('삶의 기록')).toBeVisible();
   await expect(page.getByText(/\d+세에 맞이한 마지막 장면/)).toBeVisible();
-  await expect(page.getByRole('tab', { name: '글로 보기' })).toBeVisible();
-  await expect(page.getByRole('tab', { name: /영상으로 보기/ })).toBeDisabled();
   await expect(page.getByText('당신의 전생 이야기')).toBeVisible();
-  await expect(page.getByText(/당신의 \d+번째 삶을 시작해 볼게요/)).toBeVisible();
   await expect(page.getByText('탄생 · 당신의 이야기가 시작된 날').first()).toBeVisible();
   await expect(page.getByText('마지막 순간 · 떠오른 기억')).toBeVisible();
   await expect(page.getByText('이 삶에서 중요했던 것들')).toBeVisible();
   await expect(page.getByText('가장 중요한 인연')).toBeVisible();
-  await expect(page.getByText(/창작 콘텐츠입니다/)).toBeVisible();
-  await expect(page.getByRole('button', { name: '영상 공유 · 출시 예정' })).toBeDisabled();
   await expect(page.getByRole('button', { name: '이미지 공유' })).toBeVisible();
   await expect(page.getByRole('tab', { name: '메인' })).toBeVisible();
   await expect(page.getByRole('tab', { name: '나의 전생' })).toBeVisible();

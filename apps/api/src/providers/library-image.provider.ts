@@ -59,7 +59,7 @@ export class LibraryImageProvider implements ImageProvider {
       'LOC_HAN_CHANGAN:OCC_OFFICIAL': { female: 'asset://characters/v1/teacher-female.png', male: 'asset://characters/v2/han-official-male.png' },
       'LOC_JOSEON_HANYANG:OCC_PRINTER': { female: 'asset://characters/v2/joseon-printer-female.png', male: 'asset://characters/v2/joseon-printer-male.png' },
       'LOC_JOSEON_HANYANG:OCC_OFFICIAL': { female: 'asset://characters/v2/joseon-official-female.png', male: 'asset://characters/v2/joseon-official-male.png' },
-      'LOC_AZTEC_TENOCHTITLAN:OCC_MERCHANT': { female: 'asset://characters/v2/mexica-merchant-female2.png', male: 'asset://characters/v2/mexica-merchant-male2.png' },
+      'LOC_AZTEC_TENOCHTITLAN:OCC_MERCHANT': { female: 'asset://characters/v2/mexica-merchant-female.png', male: 'asset://characters/v2/mexica-merchant-male2.png' },
       'LOC_AZTEC_TENOCHTITLAN:OCC_FARMER': { female: 'asset://characters/v1/farmer-female.png', male: 'asset://characters/v2/mexica-farmer-male.png' },
       'LOC_INDUSTRIAL_HANSEONG:OCC_JOURNALIST': { female: 'asset://characters/v2/hanseong-journalist-female.png', male: 'asset://characters/v2/hanseong-journalist-male.png' },
       'LOC_INDUSTRIAL_HANSEONG:OCC_RADIO_TECHNICIAN': { female: 'asset://characters/v1/radio-repair-female.png', male: 'asset://characters/v2/hanseong-radio-male.png' },

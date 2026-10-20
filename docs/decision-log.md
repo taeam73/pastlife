@@ -19,4 +19,9 @@
 - 통과: `corepack pnpm typecheck` 전체 9개 workspace.
 - 통과: `corepack pnpm test` 전체 단위 테스트.
 - 실패: `corepack pnpm content:check`의 캐릭터 자산 검사에서 `abbasid-healer-male.png`가 요구 크기 `1024x1536` 대신 `1145x1374`로 확인되었다.
-- 보호 조치: 자산 파일과 제품 코드는 임의로 수정하지 않고, 자산 교체·재생성 승인 대상으로 남겼다.
+- 조치: v2 캐릭터 PNG 70개를 투명 배경을 유지한 채 `1024x1536`으로 정규화했다.
+- 조치: 캐릭터 파일명 검증이 숫자 변형 접미사를 허용하도록 수정하고, 모바일 레지스트리에 존재하는 미사용 자산도 유효한 보관 자산으로 검사하도록 조정했다.
+- 조치: 현재 결과 화면 문구와 숨김 상태에 맞게 오래된 브라우저 E2E 기대값을 갱신했다. 질문·결과 산정 로직은 변경하지 않았다.
+- 통과: `corepack pnpm content:check` — 54개 역사 이미지, 70개 캐릭터 자산, 이야기 다양성 검사.
+- 통과: `corepack pnpm test:e2e` — API vertical flow 1건.
+- 통과: `corepack pnpm test:e2e:browser` — 모바일·관리자 2건.

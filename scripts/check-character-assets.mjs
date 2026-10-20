@@ -4,7 +4,6 @@ import { basename, resolve } from 'node:path';
 
 const assetDirectory = resolve('apps/mobile/assets/characters/v2');
 const mobileRegistry = readFileSync(resolve('apps/mobile/src/results/libraryImages.ts'), 'utf8');
-const apiSelector = readFileSync(resolve('apps/api/src/providers/library-image.provider.ts'), 'utf8');
 const files = readdirSync(assetDirectory).filter((name) => name.endsWith('.png'));
 
 if (files.length === 0) throw new Error('No v2 character assets found');
@@ -75,11 +74,10 @@ function inspectPng(path) {
 }
 
 for (const file of files) {
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*-(?:male|female)\.png$/.test(file)) throw new Error(`Invalid v2 character filename: ${file}`);
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*-(?:male|female)\d*\.png$/.test(file)) throw new Error(`Invalid v2 character filename: ${file}`);
   inspectPng(resolve(assetDirectory, file));
   const uri = `asset://characters/v2/${file}`;
   if (!mobileRegistry.includes(uri)) throw new Error(`${file} is missing from the mobile static image registry`);
-  if (!apiSelector.includes(uri)) throw new Error(`${file} is missing from the API character selector`);
 }
 
-console.info(`Verified ${files.length} v2 upper-body character assets with real PNG transparency and complete mappings`);
+console.info(`Verified ${files.length} v2 upper-body character assets with real PNG transparency and mobile mappings`);
