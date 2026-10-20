@@ -4,10 +4,11 @@ import { colors, spacing } from '../theme/tokens';
 import { resolveLibraryImage } from '../results/libraryImages';
 
 type Chapter = { id: string; title: string; summary: string; detail: string };
-type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; title: string; logo: any; selectedIndex: number; onSelect: (index: number) => void };
+type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
+type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; layers?: Layer[]; title: string; selectedIndex: number; onSelect: (index: number) => void };
 export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => void };
 
-export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, title, logo, selectedIndex, onSelect }, ref) {
+export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, layers, title, selectedIndex, onSelect }, ref) {
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
   const pageWidth = Math.min(width - spacing.lg * 2, 760);
@@ -19,8 +20,11 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
       {chapters.map((chapter, index) => <View key={chapter.id} style={[styles.page, { width: pageWidth }]}>
         <View style={styles.hero}>
           <Image accessibilityLabel={imageAlt} source={source} resizeMode="cover" style={styles.image} />
+          {layers?.filter((layer) => layer.role === 'CHARACTER').map((layer) => {
+            const characterSource = resolveLibraryImage(layer.uri) ?? (/^https?:\/\//.test(layer.uri) ? { uri: layer.uri } : undefined);
+            return characterSource ? <Image key={layer.uri} accessibilityLabel={layer.alt} source={characterSource} resizeMode="contain" style={styles.character} /> : null;
+          })}
           <View style={styles.shade} />
-          <Image accessibilityLabel="전생록" source={logo} resizeMode="contain" style={styles.logo} />
           <View style={styles.heroCopy}>
             <Text style={styles.eyebrow}>나의 전생 이야기 · {String(index + 1).padStart(2, '0')}</Text>
             <Text style={styles.title}>{title}</Text>
@@ -39,10 +43,11 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
 });
 
 const styles = StyleSheet.create({
-  wrapper: { marginHorizontal: -spacing.sm },
-  page: { paddingHorizontal: spacing.sm, gap: spacing.sm },
-  hero: { minHeight: 430, overflow: 'hidden', borderRadius: 18, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
+  wrapper: { marginHorizontal: -spacing.lg },
+  page: { paddingHorizontal: 0, gap: spacing.sm },
+  hero: { minHeight: 500, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: StyleSheet.absoluteFill,
+  character: { position: 'absolute', right: 0, bottom: 0, left: 0, height: '92%', zIndex: 1 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.42)' },
   logo: { position: 'absolute', top: spacing.md, left: spacing.md, width: 170, height: 58 },
   heroCopy: { padding: spacing.lg, gap: 5 },

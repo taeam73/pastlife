@@ -89,7 +89,11 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     </View>
 
     {chapterHighlights?.length ? <>
-      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} title={introTitle} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
+      <View style={styles.brandHeader}>
+        <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.brandLogo} />
+        <Text style={styles.brandMeta}>전생 기록 No.06 발견</Text>
+      </View>
+      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={introTitle} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
       <ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={(index) => { setChapterIndex(index); chapterPagerRef.current?.scrollToIndex(index); }} />
     </> : null}
     <View style={[styles.hero, styles.hidden]}>
@@ -152,6 +156,9 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
 const styles = StyleSheet.create({
   container: { gap: spacing.md },
   hidden: { display: 'none' },
+  brandHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.xs, minHeight: 48 },
+  brandLogo: { width: 118, height: 42 },
+  brandMeta: { color: colors.accent, fontSize: 12, fontWeight: '700' },
   modeRow: { display: 'none' },
   modeButton: { flex: 1, borderColor: colors.border, borderWidth: 1, borderRadius: 12, padding: spacing.sm, alignItems: 'center', justifyContent: 'center', minHeight: 58 },
   modeSelected: { backgroundColor: colors.surfaceRaised, borderColor: colors.accent },
