@@ -7,7 +7,7 @@ type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; selected
 
 function chapterUri(imageUri: string, index: number) {
   const suffixes = ['-work.png', '-turning.png', '-study.png', '-study2.png'];
-  if (imageUri.includes('-daily.webp')) return imageUri.replace('-daily.webp', suffixes[index] ?? suffixes[0]);
+  if (imageUri.includes('-daily.webp')) return imageUri.replace('-daily.webp', suffixes[index] ?? suffixes[0]!);
   return imageUri;
 }
 
