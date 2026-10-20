@@ -28,6 +28,7 @@
 - [디자인 가이드](docs/design-guide.md)
 - [디자인 구현 명세](docs/design-implementation-spec.md)
 - [추가 디자인 시안 및 로고](docs/design-variants.md)
+- [C 시안 확정 디자인 기준](docs/design-decision-c-cinematic.md)
 
 ## 필수 UI 스킬
 
