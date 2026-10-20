@@ -9,7 +9,7 @@ export default function Html({ children }: PropsWithChildren) {
       <style dangerouslySetInnerHTML={{ __html: `
         html, body { width: 100%; min-width: 100%; min-height: 100%; margin: 0; background: #0D1420; }
         body { overflow-x: hidden; }
-        #root { width: 100%; min-width: 100%; min-height: 100vh; }
+        #root, #root > div { width: 100vw !important; min-width: 100vw !important; max-width: none !important; min-height: 100vh; }
       ` }} />
     </head>
     <body>{children}</body>
