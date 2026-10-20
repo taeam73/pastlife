@@ -1,4 +1,4 @@
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { resolveLibraryImage } from '../results/libraryImages';
 
@@ -12,6 +12,9 @@ function chapterUri(imageUri: string, index: number) {
 }
 
 export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, onSelect }: Props) {
+  const { width } = useWindowDimensions();
+  const contentWidth = Math.min(width, 760) - spacing.lg * 2;
+  const cardWidth = Math.max(94, Math.floor((contentWidth - spacing.md * 2 - spacing.sm * 3) / 4));
   const fallback = resolveLibraryImage(imageUri) ?? (/^https?:\/\//.test(imageUri) ? { uri: imageUri } : undefined);
   if (!fallback) return null;
   return <View style={styles.section}>
@@ -20,7 +23,7 @@ export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.rail} accessibilityLabel="전생 이야기 챕터 목록">
         {chapters.map((chapter, index) => {
           const chapterSource = resolveLibraryImage(chapterUri(imageUri, index)) ?? fallback;
-          return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={`${index + 1}장 ${chapter.title}`} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
+          return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={`${index + 1}장 ${chapter.title}`} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, { width: cardWidth }, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
             <Image accessibilityLabel={imageAlt} source={chapterSource} resizeMode="cover" style={styles.image} />
             <View style={styles.shade} />
             <View style={styles.cardCopy}><Text style={styles.chapterNumber}>{String(index + 1).padStart(2, '0')}</Text><Text numberOfLines={2} style={styles.chapterTitle}>{chapter.title}</Text></View>
