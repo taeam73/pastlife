@@ -11,7 +11,7 @@ export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => vo
 export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, layers, title, logo, selectedIndex, onSelect }, ref) {
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
-  const pageWidth = Math.min(width - spacing.lg * 2, 760);
+  const pageWidth = Math.min(width, 760);
   const source = resolveLibraryImage(imageUri) ?? (/^https?:\/\//.test(imageUri) ? { uri: imageUri } : undefined);
   useImperativeHandle(ref, () => ({ scrollToIndex: (index) => scrollRef.current?.scrollTo({ x: index * pageWidth, animated: true }) }), [pageWidth]);
   if (!source) return null;
@@ -49,7 +49,7 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
 const styles = StyleSheet.create({
   wrapper: { marginHorizontal: -spacing.lg },
   page: { paddingHorizontal: 0, gap: spacing.sm },
-  hero: { minHeight: 560, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
+  hero: { minHeight: 430, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: StyleSheet.absoluteFill,
   character: { position: 'absolute', right: -12, bottom: 0, width: '68%', height: '88%', zIndex: 2 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.2)', zIndex: 3 },
