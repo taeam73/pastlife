@@ -31,5 +31,6 @@
 ## 필수 UI 스킬
 
 - [전생록 반응형 UI 스킬](.codex/skills/pastlife-responsive-ui/SKILL.md): 모바일·태블릿 대응은 모든 화면 작업의 필수 조건이다.
+- 화면 문제 수정 시 단일 증상만 고치지 말고 공통 레이어와 인접 화면까지 종합 점검한 뒤 반영한다.
 - [콘텐츠 가이드](docs/content-guide.md)
 - [결정 로그](docs/decision-log.md)
