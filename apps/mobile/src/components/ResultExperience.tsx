@@ -3,6 +3,7 @@ import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from
 import { colors, spacing } from '../theme/tokens';
 import { ResultBlock } from './ResultBlock';
 import { resolveLibraryImage } from '../results/libraryImages';
+import { ChapterFilmstrip } from './ChapterFilmstrip';
 
 type Block = { id: string; title: string; body: string };
 type ImageLayer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
@@ -125,6 +126,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
       <Text style={styles.profileText}>{lifeSummary.ageAtDeath}세에 맞이한 마지막 장면 · {lifeSummary.endingTitle}</Text>
     </View> : null}
     <View style={styles.textView}>{blocks.map((block) => <ResultBlock key={block.id} title={block.title} body={block.body} />)}</View>
+    {visibleHighlights?.length ? <ChapterFilmstrip chapters={visibleHighlights} imageUri={image.uri} imageAlt={image.alt} /> : null}
     {visibleHighlights?.length ? <View style={styles.highlights}>
       <View style={styles.highlightIntro}>
         <Text style={styles.storyEyebrow}>이 삶에서 중요했던 것들</Text>
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
   storyIntro: { gap: 6, marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.border, borderTopWidth: StyleSheet.hairlineWidth },
   storyEyebrow: { color: colors.accent, fontSize: 15, fontWeight: '700' },
   storyLead: { color: colors.muted, fontSize: 16, lineHeight: 24 },
-  highlights: { gap: spacing.sm },
+  highlights: { display: 'none', gap: spacing.sm },
   highlightIntro: { gap: 4, marginTop: spacing.md, marginBottom: spacing.xs },
   highlightCarousel: { position: 'relative' },
   highlightPager: { gap: spacing.sm, paddingRight: spacing.lg },
