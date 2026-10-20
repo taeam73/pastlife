@@ -26,5 +26,6 @@
 - [시장 조사](docs/market-research.md)
 - [콘셉트](docs/concept.md)
 - [디자인 가이드](docs/design-guide.md)
+- [디자인 구현 명세](docs/design-implementation-spec.md)
 - [콘텐츠 가이드](docs/content-guide.md)
 - [결정 로그](docs/decision-log.md)
