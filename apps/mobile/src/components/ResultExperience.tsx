@@ -4,6 +4,7 @@ import { colors, spacing } from '../theme/tokens';
 import { ResultBlock } from './ResultBlock';
 import { resolveLibraryImage } from '../results/libraryImages';
 import { ChapterFilmstrip } from './ChapterFilmstrip';
+import { CinematicChapterPager, CinematicChapterPagerHandle } from './CinematicChapterPager';
 
 type Block = { id: string; title: string; body: string };
 type ImageLayer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
@@ -67,6 +68,8 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     { label: '꿈', value: oneSentence(character.dream) },
   ] : [];
   const [highlightIndex, setHighlightIndex] = useState(0);
+  const [chapterIndex, setChapterIndex] = useState(0);
+  const chapterPagerRef = useRef<CinematicChapterPagerHandle>(null);
   const highlightPagerRef = useRef<ScrollView>(null);
   const moveHighlight = (nextIndex: number) => {
     const boundedIndex = Math.max(0, Math.min(nextIndex, (visibleHighlights?.length ?? 1) - 1));
@@ -85,7 +88,11 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
       </Pressable>
     </View>
 
-    <View style={styles.hero}>
+    {chapterHighlights?.length ? <>
+      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} title={introTitle} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
+      <ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={(index) => { setChapterIndex(index); chapterPagerRef.current?.scrollToIndex(index); }} />
+    </> : null}
+    <View style={[styles.hero, styles.hidden]}>
       {showRemoteImage || localImage || layers.some((layer) => /^https?:\/\//.test(layer.uri) || resolveLibraryImage(layer.uri))
         ? layers.map(renderLayer)
         : <View accessible accessibilityLabel={image.alt} style={styles.imageFallback}>
@@ -97,11 +104,11 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
       <Text pointerEvents="none" style={styles.heroLabel}>{image.sourceType === 'AI' ? 'AI로 복원한 장면' : '기록을 바탕으로 한 장면'}</Text>
     </View>
 
-    <View style={styles.storyIntro}>
+    <View style={[styles.storyIntro, styles.hidden]}>
       <Text style={[styles.storyEyebrow, styles.parchmentTitle]}>{introTitle}</Text>
       <Text style={[styles.storyLead, styles.parchmentBody]}>{introDescription}</Text>
     </View>
-    {chapterHighlights?.length ? <ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} /> : null}
+    {chapterHighlights?.length ? <View style={styles.hidden}><ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={setChapterIndex} /></View> : null}
     {character ? <View style={styles.profileCard}>
       <View style={styles.profileAccent} />
       <View style={styles.profileHeader}>
@@ -144,6 +151,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
 
 const styles = StyleSheet.create({
   container: { gap: spacing.md },
+  hidden: { display: 'none' },
   modeRow: { display: 'none' },
   modeButton: { flex: 1, borderColor: colors.border, borderWidth: 1, borderRadius: 12, padding: spacing.sm, alignItems: 'center', justifyContent: 'center', minHeight: 58 },
   modeSelected: { backgroundColor: colors.surfaceRaised, borderColor: colors.accent },
