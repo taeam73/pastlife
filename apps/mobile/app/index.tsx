@@ -55,7 +55,7 @@ export default function StartScreen() {
       <Screen scroll={false} transparent>
         <View style={styles.hero}>
           <Animated.View style={{ opacity: contentOpacity, transform: [{ translateY: contentY }] }}>
-            <Image accessibilityLabel="전생록" source={require('../assets/branding/title-logo-celestial.png')} resizeMode="contain" style={styles.titleLogo} />
+            <Image accessibilityLabel="전생록" source={require('../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.titleLogo} />
             <Text style={styles.kicker}>PAST LIFE ARCHIVE</Text>
             <Text style={styles.title}>나는 언제, 어디에서,{ '\n' }어떤 사람이었을까?</Text>
             <Text style={styles.copy}>시간 너머에 남겨진 당신의 이야기를 찾아보세요.</Text>

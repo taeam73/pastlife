@@ -59,6 +59,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
   const visibleHighlights = highlights
     ?.filter(({ id }) => id !== 'IDENTITY' && id !== 'DREAM_AND_DAILY')
     .sort((left, right) => highlightOrder.indexOf(left.id) - highlightOrder.indexOf(right.id));
+  const chapterHighlights = visibleHighlights?.filter(({ id }) => ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'].includes(id)).slice(0, 4);
   const characterFacts = character ? [
     { label: '외모', value: oneSentence(character.appearance) },
     { label: '성격', value: oneSentence(character.temperament) },
@@ -92,14 +93,15 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
             <Text style={styles.imageFallbackText}>{image.alt}</Text>
           </View>}
       <View pointerEvents="none" style={styles.imageShade} />
-      <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-celestial.png')} resizeMode="contain" style={styles.heroTitleLogo} />
+      <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.heroTitleLogo} />
       <Text pointerEvents="none" style={styles.heroLabel}>{image.sourceType === 'AI' ? 'AI로 복원한 장면' : '기록을 바탕으로 한 장면'}</Text>
     </View>
 
     <View style={styles.storyIntro}>
-      <Text style={styles.storyEyebrow}>{introTitle}</Text>
-      <Text style={styles.storyLead}>{introDescription}</Text>
+      <Text style={[styles.storyEyebrow, styles.parchmentTitle]}>{introTitle}</Text>
+      <Text style={[styles.storyLead, styles.parchmentBody]}>{introDescription}</Text>
     </View>
+    {chapterHighlights?.length ? <ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} /> : null}
     {character ? <View style={styles.profileCard}>
       <View style={styles.profileAccent} />
       <View style={styles.profileHeader}>
@@ -127,7 +129,6 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
       <Text style={styles.profileText}>{lifeSummary.ageAtDeath}세에 맞이한 마지막 장면 · {lifeSummary.endingTitle}</Text>
     </View> : null}
     <View style={styles.textView}>{blocks.map((block) => <ResultBlock key={block.id} title={block.title} body={block.body} />)}</View>
-    {visibleHighlights?.length ? <ChapterFilmstrip chapters={visibleHighlights} imageUri={image.uri} imageAlt={image.alt} /> : null}
     {visibleHighlights?.length ? <View style={styles.highlights}>
       <View style={styles.highlightIntro}>
         <Text style={styles.storyEyebrow}>이 삶에서 중요했던 것들</Text>
@@ -160,9 +161,11 @@ const styles = StyleSheet.create({
   imageShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 100, zIndex: 2, backgroundColor: 'rgba(5, 10, 18, 0.45)' },
   heroLabel: { color: colors.text, fontSize: 14, fontWeight: '700', padding: spacing.md, zIndex: 3 },
   heroTitleLogo: { position: 'absolute', top: spacing.md, left: spacing.lg, width: 180, height: 64, zIndex: 3 },
-  storyIntro: { gap: 6, marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.border, borderTopWidth: StyleSheet.hairlineWidth },
+  storyIntro: { gap: 8, marginTop: spacing.md, padding: spacing.lg, backgroundColor: '#DCC79A', borderRadius: 14, borderColor: '#B89456', borderWidth: 1, shadowColor: '#000', shadowOpacity: 0.22, shadowRadius: 8, shadowOffset: { width: 0, height: 4 } },
   storyEyebrow: { color: colors.accent, fontSize: 15, fontWeight: '700' },
   storyLead: { color: colors.muted, fontSize: 16, lineHeight: 24 },
+  parchmentTitle: { color: '#4A321E', textAlign: 'center' },
+  parchmentBody: { color: '#4A321E', textAlign: 'center' },
   highlights: { display: 'none', gap: spacing.sm },
   highlightIntro: { gap: 4, marginTop: spacing.md, marginBottom: spacing.xs },
   highlightCarousel: { position: 'relative' },
