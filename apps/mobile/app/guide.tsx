@@ -8,9 +8,7 @@ import { loadSession } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
 
 const backgrounds = [
-  require('../assets/branding/main-bg-01.png'),
-  require('../assets/branding/main-bg-02.png'),
-  require('../assets/branding/main-bg-03.png'),
+  require('../assets/branding/cinematic-start-bg.png'),
 ];
 export default function GuideScreen() {
   const router = useRouter();
