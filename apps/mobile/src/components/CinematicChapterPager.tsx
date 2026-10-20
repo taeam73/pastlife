@@ -5,10 +5,10 @@ import { resolveLibraryImage } from '../results/libraryImages';
 
 type Chapter = { id: string; title: string; summary: string; detail: string };
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
-type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; layers?: Layer[]; title: string; selectedIndex: number; onSelect: (index: number) => void };
+type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; layers?: Layer[]; title: string; logo: any; selectedIndex: number; onSelect: (index: number) => void };
 export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => void };
 
-export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, layers, title, selectedIndex, onSelect }, ref) {
+export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, layers, title, logo, selectedIndex, onSelect }, ref) {
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
   const pageWidth = Math.min(width - spacing.lg * 2, 760);
@@ -25,6 +25,10 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
             return characterSource ? <Image key={layer.uri} accessibilityLabel={layer.alt} source={characterSource} resizeMode="contain" style={styles.character} /> : null;
           })}
           <View style={styles.shade} />
+          <View style={styles.brandBlock}>
+            <Image accessibilityLabel="전생록" source={logo} resizeMode="contain" style={styles.logo} />
+            <Text style={styles.brandMeta}>전생 기록 No.06 발견</Text>
+          </View>
           <View style={styles.heroCopy}>
             <Text style={styles.eyebrow}>나의 전생 이야기 · {String(index + 1).padStart(2, '0')}</Text>
             <Text style={styles.title}>{title}</Text>
@@ -45,16 +49,18 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
 const styles = StyleSheet.create({
   wrapper: { marginHorizontal: -spacing.lg },
   page: { paddingHorizontal: 0, gap: spacing.sm },
-  hero: { minHeight: 500, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
+  hero: { minHeight: 560, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: StyleSheet.absoluteFill,
-  character: { position: 'absolute', right: 0, bottom: 0, left: 0, height: '92%', zIndex: 1 },
-  shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.42)' },
-  logo: { position: 'absolute', top: spacing.md, left: spacing.md, width: 170, height: 58 },
-  heroCopy: { padding: spacing.lg, gap: 5 },
+  character: { position: 'absolute', right: -12, bottom: 0, width: '68%', height: '88%', zIndex: 2 },
+  shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.2)', zIndex: 3 },
+  brandBlock: { position: 'absolute', top: spacing.md, left: spacing.md, zIndex: 5, padding: 6, backgroundColor: 'rgba(5, 10, 18, 0.72)' },
+  logo: { width: 126, height: 42 },
+  brandMeta: { color: '#f1dfb2', fontSize: 11, fontWeight: '700', marginTop: 2 },
+  heroCopy: { width: '62%', padding: spacing.md, marginBottom: spacing.lg, marginLeft: spacing.md, gap: 5, zIndex: 5 },
   eyebrow: { color: '#f1dfb2', fontSize: 12, fontWeight: '700', letterSpacing: 1 },
-  title: { color: '#fff8e8', fontSize: 25, lineHeight: 34, fontWeight: '800' },
-  chapterTitle: { color: '#f1dfb2', fontSize: 18, lineHeight: 25, fontWeight: '700' },
-  summary: { color: '#fff8e8', fontSize: 14, lineHeight: 21 },
+  title: { color: '#fff8e8', fontSize: 24, lineHeight: 32, fontWeight: '800', backgroundColor: 'rgba(5, 10, 18, 0.78)', paddingHorizontal: 8, paddingVertical: 3, alignSelf: 'flex-start' },
+  chapterTitle: { color: '#f1dfb2', fontSize: 18, lineHeight: 25, fontWeight: '700', backgroundColor: 'rgba(5, 10, 18, 0.78)', paddingHorizontal: 8, paddingVertical: 3, alignSelf: 'flex-start' },
+  summary: { color: '#fff8e8', fontSize: 14, lineHeight: 21, backgroundColor: 'rgba(5, 10, 18, 0.78)', paddingHorizontal: 8, paddingVertical: 3, alignSelf: 'flex-start' },
   parchment: { minHeight: 122, padding: spacing.md, borderRadius: 14, borderWidth: 1, borderColor: '#b89456', backgroundColor: '#dcc79a', gap: 5 },
   parchmentTitle: { color: '#4a321e', fontSize: 17, lineHeight: 23, fontWeight: '800', textAlign: 'center' },
   parchmentBody: { color: '#4a321e', fontSize: 14, lineHeight: 21, textAlign: 'center' },

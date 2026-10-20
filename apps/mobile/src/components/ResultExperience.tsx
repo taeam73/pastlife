@@ -38,7 +38,10 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
 }: ResultExperienceProps, ref) {
   const showRemoteImage = /^https?:\/\//.test(image.uri);
   const localImage = resolveLibraryImage(image.uri);
-  const layers = image.layers?.length ? image.layers : [{ uri: image.compositeUri ?? image.uri, role: 'BACKGROUND' as const, alt: image.alt }];
+  const baseLayers = image.layers?.length ? image.layers : [{ uri: image.compositeUri ?? image.uri, role: 'BACKGROUND' as const, alt: image.alt }];
+  const hasCharacterLayer = baseLayers.some((layer) => layer.role === 'CHARACTER');
+  const fallbackCharacterUri = character?.gender.includes('여') ? 'asset://characters/v2/joseon-official-female.png' : 'asset://characters/v2/joseon-official-male.png';
+  const layers = hasCharacterLayer ? baseLayers : [...baseLayers, { uri: fallbackCharacterUri, role: 'CHARACTER' as const, alt: '전생 인물' }];
   const renderLayer = (layer: ImageLayer) => {
     const layerRemote = /^https?:\/\//.test(layer.uri);
     const layerLocal = resolveLibraryImage(layer.uri);
@@ -93,7 +96,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.brandLogo} />
         <Text style={styles.brandMeta}>전생 기록 No.06 발견</Text>
       </View>
-      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={introTitle} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
+      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={introTitle} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
       <ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={(index) => { setChapterIndex(index); chapterPagerRef.current?.scrollToIndex(index); }} />
     </> : null}
     <View style={[styles.hero, styles.hidden]}>
@@ -156,7 +159,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
 const styles = StyleSheet.create({
   container: { gap: spacing.md },
   hidden: { display: 'none' },
-  brandHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.xs, minHeight: 48 },
+  brandHeader: { display: 'none' },
   brandLogo: { width: 118, height: 42 },
   brandMeta: { color: colors.accent, fontSize: 12, fontWeight: '700' },
   modeRow: { display: 'none' },
