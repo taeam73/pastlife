@@ -47,13 +47,13 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
 });
 
 const styles = StyleSheet.create({
-  wrapper: { marginHorizontal: -spacing.lg },
+  wrapper: { marginHorizontal: -spacing.lg, marginTop: -spacing.lg },
   page: { paddingHorizontal: 0, gap: spacing.sm },
-  hero: { minHeight: 430, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
+  hero: { minHeight: 540, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: StyleSheet.absoluteFill,
   character: { position: 'absolute', right: -12, bottom: 0, width: '68%', height: '88%', zIndex: 2 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.2)', zIndex: 3 },
-  brandBlock: { position: 'absolute', top: spacing.md, left: spacing.md, zIndex: 5, padding: 6, backgroundColor: 'rgba(5, 10, 18, 0.72)' },
+  brandBlock: { display: 'none' },
   logoText: { color: '#fff8e8', fontSize: 34, lineHeight: 42, fontWeight: '400', fontFamily: 'MaruBuri-Regular', letterSpacing: -2 },
   brandMeta: { color: '#f1dfb2', fontSize: 11, fontWeight: '700', marginTop: 2 },
   heroCopy: { width: '62%', padding: spacing.md, marginBottom: spacing.lg, marginLeft: spacing.md, gap: 5, zIndex: 5 },
