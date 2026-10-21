@@ -6,6 +6,7 @@ export type PresentedChapter = {
   lead: string;
   body: string;
   closingLine: string;
+  imageUri: string;
 };
 
 const chapterTitles: Record<string, string> = {
@@ -25,7 +26,7 @@ function compact(value: string, max: number) {
 export function presentHeadline(value: string) { return compact(value, 42); }
 export function presentIdentity(value: string) { return compact(value, 72); }
 
-export function presentChapters(highlights: Highlight[]): PresentedChapter[] {
+export function presentChapters(highlights: Highlight[], backgroundImage = ''): PresentedChapter[] {
   const order = ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'];
   return order.map((id) => highlights.find((item) => item.id === id)).filter((item): item is Highlight => Boolean(item)).map((item) => ({
     id: item.id,
@@ -33,5 +34,11 @@ export function presentChapters(highlights: Highlight[]): PresentedChapter[] {
     lead: compact(item.summary, 58),
     body: compact(item.detail, 140),
     closingLine: `이 장면은 지금의 당신에게 ${compact(item.summary, 32)}라는 흔적을 남겼습니다.`,
+    imageUri: chapterImage(backgroundImage, item.id),
   }));
+}
+
+function chapterImage(backgroundImage: string, id: string) {
+  const suffix: Record<string, string> = { KEY_RELATIONSHIP: '-work.png', DECISIVE_EVENT: '-turning.png', LIFE_LEGACY: '-study.png', PRESENT_ECHO: '-study2.png' };
+  return backgroundImage.includes('-daily.webp') ? backgroundImage.replace('-daily.webp', suffix[id] ?? '-work.png') : backgroundImage;
 }

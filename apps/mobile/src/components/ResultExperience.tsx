@@ -67,7 +67,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     ?.filter(({ id }) => id !== 'IDENTITY' && id !== 'DREAM_AND_DAILY')
     .sort((left, right) => highlightOrder.indexOf(left.id) - highlightOrder.indexOf(right.id));
   const chapterHighlights = visibleHighlights?.filter(({ id }) => ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'].includes(id)).slice(0, 4);
-  const presentedChapters = chapterHighlights ? presentChapters(chapterHighlights).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: `${chapter.body} ${chapter.closingLine}` })) : undefined;
+  const presentedChapters = chapterHighlights ? presentChapters(chapterHighlights, image.uri).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: `${chapter.body} ${chapter.closingLine}`, imageUri: chapter.imageUri })) : undefined;
   const characterFacts = character ? [
     { label: '외모', value: oneSentence(character.appearance) },
     { label: '성격', value: oneSentence(character.temperament) },

@@ -2,7 +2,7 @@ import { Image, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, Vi
 import { colors, spacing } from '../theme/tokens';
 import { resolveLibraryImage } from '../results/libraryImages';
 
-type Chapter = { id: string; title: string; summary: string; detail: string };
+type Chapter = { id: string; title: string; summary: string; detail: string; imageUri?: string | undefined };
 type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; selectedIndex: number; onSelect: (index: number) => void };
 
 function chapterUri(imageUri: string, index: number) {
@@ -22,7 +22,7 @@ export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, 
     <View style={styles.railWrap}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.rail} accessibilityLabel="전생 이야기 챕터 목록">
         {chapters.map((chapter, index) => {
-          const chapterSource = resolveLibraryImage(chapterUri(imageUri, index)) ?? fallback;
+          const chapterSource = resolveLibraryImage(chapter.imageUri ?? chapterUri(imageUri, index)) ?? fallback;
           return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={`${index + 1}장 ${chapter.title}`} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, { width: cardWidth }, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
             <Image accessibilityLabel={imageAlt} source={chapterSource} resizeMode="cover" style={styles.image} />
             <View style={styles.shade} />

@@ -4,7 +4,7 @@ import { colors, spacing } from '../theme/tokens';
 import { resolveLibraryImage } from '../results/libraryImages';
 import { ParchmentSummary } from './ParchmentSummary';
 
-type Chapter = { id: string; title: string; summary: string; detail: string };
+type Chapter = { id: string; title: string; summary: string; detail: string; imageUri?: string | undefined };
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; layers?: Layer[]; title: string; characterLabel?: string | undefined; characterDescription?: string | undefined; logo: any; selectedIndex: number; onSelect: (index: number) => void };
 export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => void };
@@ -22,7 +22,7 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
     <ScrollView ref={scrollRef} horizontal pagingEnabled showsHorizontalScrollIndicator={false} decelerationRate="fast" onMomentumScrollEnd={(event) => onSelect(Math.round(event.nativeEvent.contentOffset.x / pageWidth))} accessibilityLabel="전생 이야기 페이지">
       {chapters.map((chapter, index) => <View key={chapter.id} style={[styles.page, { width: pageWidth }]}>
         <View style={styles.hero}>
-          <Image accessibilityLabel={imageAlt} source={source} resizeMode="cover" style={styles.image} />
+          <Image accessibilityLabel={imageAlt} source={resolveLibraryImage(chapter.imageUri ?? imageUri) ?? source} resizeMode="cover" style={styles.image} />
           {layers?.filter((layer) => layer.role === 'CHARACTER').map((layer) => {
             const characterSource = resolveLibraryImage(layer.uri) ?? (/^https?:\/\//.test(layer.uri) ? { uri: layer.uri } : undefined);
             return characterSource ? <Image key={layer.uri} accessibilityLabel={layer.alt} source={characterSource} resizeMode="contain" style={styles.character} /> : null;
