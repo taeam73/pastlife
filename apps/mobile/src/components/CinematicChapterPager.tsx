@@ -6,16 +6,17 @@ import { ParchmentSummary } from './ParchmentSummary';
 
 type Chapter = { id: string; title: string; summary: string; detail: string; imageUri?: string | undefined };
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
-type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; layers?: Layer[]; title: string; characterLabel?: string | undefined; characterDescription?: string | undefined; logo: any; selectedIndex: number; onSelect: (index: number) => void };
+type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; compositeUri?: string | undefined; layers?: Layer[]; title: string; characterLabel?: string | undefined; characterDescription?: string | undefined; logo: any; selectedIndex: number; onSelect: (index: number) => void };
 export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => void };
 
-export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, layers, title, characterLabel, characterDescription, logo, selectedIndex, onSelect }, ref) {
+export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, compositeUri, layers, title, characterLabel, characterDescription, logo, selectedIndex, onSelect }, ref) {
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
   const contentWidth = Math.min(width, 760);
   const pageWidth = width;
   const bleed = Math.max(spacing.lg, (width - contentWidth) / 2 + spacing.lg);
-  const source = resolveLibraryImage(imageUri) ?? (/^https?:\/\//.test(imageUri) ? { uri: imageUri } : undefined);
+  const sourceUri = compositeUri ?? imageUri;
+  const source = resolveLibraryImage(sourceUri) ?? (/^https?:\/\//.test(sourceUri) ? { uri: sourceUri } : undefined);
   useImperativeHandle(ref, () => ({ scrollToIndex: (index) => scrollRef.current?.scrollTo({ x: index * pageWidth, animated: true }) }), [pageWidth]);
   if (!source) return null;
   return <View style={[styles.wrapper, { width: width, marginLeft: -bleed, marginRight: -bleed }]}>
@@ -23,10 +24,11 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
       {chapters.map((chapter, index) => <View key={chapter.id} style={[styles.page, { width: pageWidth }]}>
         <View style={styles.hero}>
           <Image accessibilityLabel={imageAlt} source={resolveLibraryImage(chapter.imageUri ?? imageUri) ?? source} resizeMode="cover" style={styles.image} />
-          {layers?.filter((layer) => layer.role === 'CHARACTER').map((layer) => {
+          {!compositeUri && layers?.filter((layer) => layer.role === 'CHARACTER').map((layer) => {
             const characterSource = resolveLibraryImage(layer.uri) ?? (/^https?:\/\//.test(layer.uri) ? { uri: layer.uri } : undefined);
             return characterSource ? <Image key={layer.uri} accessibilityLabel={layer.alt} source={characterSource} resizeMode="contain" style={styles.character} /> : null;
           })}
+          {!compositeUri ? <View pointerEvents="none" style={styles.characterGrounding} /> : null}
           <View style={styles.shade} />
           <View style={styles.brandBlock}>
             <Text accessibilityLabel="전생록" style={styles.logoText}>전생록</Text>
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
   hero: { minHeight: 540, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: StyleSheet.absoluteFill,
   character: { position: 'absolute', right: -12, bottom: 0, width: '68%', height: '88%', zIndex: 2 },
+  characterGrounding: { position: 'absolute', left: '28%', right: '8%', bottom: -22, height: 92, borderRadius: 999, backgroundColor: 'rgba(12, 11, 9, 0.42)', opacity: 0.78, zIndex: 2 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.2)', zIndex: 3 },
   brandBlock: { display: 'none' },
   logoText: { color: '#fff8e8', fontSize: 34, lineHeight: 42, fontWeight: '400', fontFamily: 'MaruBuri-Regular', letterSpacing: -2 },

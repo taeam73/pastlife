@@ -100,7 +100,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.brandLogo} />
         <Text style={styles.brandMeta}>전생 기록 No.06 발견</Text>
       </View>
-      <CinematicChapterPager ref={chapterPagerRef} chapters={presentedChapters ?? []} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={headline ? presentHeadline(headline) : introTitle} characterLabel={character ? `${character.name} · ${character.occupation}` : undefined} characterDescription={character ? presentIdentity(character.introduction) : undefined} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
+      <CinematicChapterPager ref={chapterPagerRef} chapters={presentedChapters ?? []} imageUri={image.uri} imageAlt={image.alt} compositeUri={image.compositeUri} layers={layers} title={headline ? presentHeadline(headline) : introTitle} characterLabel={character ? `${character.name} · ${character.occupation}` : undefined} characterDescription={character ? presentIdentity(character.introduction) : undefined} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
       <ChapterFilmstrip chapters={presentedChapters ?? []} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={(index) => { setChapterIndex(index); chapterPagerRef.current?.scrollToIndex(index); }} />
     </> : null}
     <View style={[styles.hero, styles.hidden]}>
