@@ -21,14 +21,13 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
   if (!source) return null;
   return <View style={[styles.wrapper, { width: width, marginLeft: -bleed, marginRight: -bleed }]}>
     <ScrollView ref={scrollRef} horizontal pagingEnabled showsHorizontalScrollIndicator={false} decelerationRate="fast" onMomentumScrollEnd={(event) => onSelect(Math.round(event.nativeEvent.contentOffset.x / pageWidth))} accessibilityLabel="전생 이야기 페이지">
-      {chapters.map((chapter, index) => <View key={chapter.id} style={[styles.page, { width: pageWidth }]}>
+      {chapters.map((chapter, index) => <View key={chapter.id} style={[styles.page, { width: pageWidth }]}> 
         <View style={styles.hero}>
           <Image accessibilityLabel={imageAlt} source={resolveLibraryImage(chapter.imageUri ?? imageUri) ?? source} resizeMode="cover" style={styles.image} />
           {!compositeUri && layers?.filter((layer) => layer.role === 'CHARACTER').map((layer) => {
             const characterSource = resolveLibraryImage(layer.uri) ?? (/^https?:\/\//.test(layer.uri) ? { uri: layer.uri } : undefined);
             return characterSource ? <Image key={layer.uri} accessibilityLabel={layer.alt} source={characterSource} resizeMode="contain" style={styles.character} /> : null;
           })}
-          {!compositeUri ? <View pointerEvents="none" style={styles.characterGrounding} /> : null}
           <View style={styles.shade} />
           <View style={styles.brandBlock}>
             <Text accessibilityLabel="전생록" style={styles.logoText}>전생록</Text>
@@ -40,8 +39,10 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
             <Text style={styles.chapterTitle}>{characterLabel ?? chapter.title}</Text>
             <Text numberOfLines={2} style={styles.summary}>{characterDescription ?? '당신의 전생을 살아간 인물의 기록입니다.'}</Text>
           </View>
+          <View style={styles.parchmentOverlay}>
+            <ParchmentSummary title={chapter.title} body={chapter.detail} />
+          </View>
         </View>
-        <ParchmentSummary title={chapter.title} body={chapter.detail} />
       </View>)}
     </ScrollView>
     <View style={styles.dots}>{chapters.map((chapter, index) => <View key={chapter.id} style={[styles.dot, index === selectedIndex && styles.activeDot]} />)}</View>
@@ -50,21 +51,20 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
 
 const styles = StyleSheet.create({
   wrapper: { marginTop: -spacing.lg },
-  page: { paddingHorizontal: 0, gap: spacing.sm },
-  hero: { minHeight: 540, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
+  page: { paddingHorizontal: 0 },
+  hero: { minHeight: 640, overflow: 'hidden', borderRadius: 0, backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   image: StyleSheet.absoluteFill,
   character: { position: 'absolute', right: -12, bottom: 0, width: '68%', height: '88%', zIndex: 2 },
-  characterGrounding: { position: 'absolute', left: '28%', right: '8%', bottom: -22, height: 92, borderRadius: 999, backgroundColor: 'rgba(12, 11, 9, 0.42)', opacity: 0.78, zIndex: 2 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.2)', zIndex: 3 },
   brandBlock: { display: 'none' },
   logoText: { color: '#fff8e8', fontSize: 34, lineHeight: 42, fontWeight: '400', fontFamily: 'MaruBuri-Regular', letterSpacing: -2 },
   brandMeta: { color: '#f1dfb2', fontSize: 11, fontWeight: '700', marginTop: 2 },
-  heroCopy: { width: '62%', padding: spacing.md, marginBottom: spacing.lg, marginLeft: spacing.md, gap: 5, zIndex: 5 },
+  heroCopy: { width: '62%', padding: spacing.md, marginBottom: 166, marginLeft: spacing.md, gap: 5, zIndex: 5 },
   eyebrow: { color: '#f1dfb2', fontSize: 12, fontWeight: '700', letterSpacing: 1 },
   title: { color: '#fff8e8', fontSize: 24, lineHeight: 32, fontWeight: '800', textShadowColor: 'rgba(0, 0, 0, 0.72)', textShadowRadius: 8, textShadowOffset: { width: 0, height: 2 } },
   chapterTitle: { color: '#f1dfb2', fontSize: 18, lineHeight: 25, fontWeight: '700', textShadowColor: 'rgba(0, 0, 0, 0.72)', textShadowRadius: 8, textShadowOffset: { width: 0, height: 2 } },
   summary: { color: '#fff8e8', fontSize: 14, lineHeight: 21, textShadowColor: 'rgba(0, 0, 0, 0.72)', textShadowRadius: 8, textShadowOffset: { width: 0, height: 2 } },
-  parchment: { minHeight: 122, padding: spacing.md, borderRadius: 14, borderWidth: 1, borderColor: '#b89456', backgroundColor: '#dcc79a', gap: 5 },
+  parchmentOverlay: { position: 'absolute', left: spacing.md, right: spacing.md, bottom: spacing.md, zIndex: 6 },
   parchmentTitle: { color: '#4a321e', fontSize: 17, lineHeight: 23, fontWeight: '800', textAlign: 'center' },
   parchmentBody: { color: '#4a321e', fontSize: 14, lineHeight: 21, textAlign: 'center' },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: 6, paddingTop: spacing.xs },
