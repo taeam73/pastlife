@@ -176,20 +176,16 @@ const connectedSettings = baseHistoricalSettings.map((setting) => setting.id ===
   ? { ...setting, occupationIds: [...setting.occupationIds, ...expandedOccupationIds] }
   : setting);
 
-const generatedSettingLabels = [
-  '강가의 시장과 작업장', '산길을 지키는 마을', '바닷길의 작은 항구', '성벽 아래의 거리', '철도 옆의 새 동네',
-  '학교와 공방이 있는 골목', '농장과 창고가 이어진 평야', '광장과 극장이 있는 도시', '비가 많은 숲의 마을', '사막을 건너는 교역로',
-];
 const generatedSettings: HistoricalSetting[] = Array.from({ length: 90 }, (_, index) => {
   const sourceSetting = connectedSettings[index % connectedSettings.length]!;
   const variant = index + 1;
   return {
     ...sourceSetting,
     id: `${sourceSetting.id}_VARIANT_${String(variant).padStart(3, '0')}`,
-    label: generatedSettingLabels[index % generatedSettingLabels.length]!,
+    label: sourceSetting.label,
     presentDayContext: sourceSetting.presentDayContext,
     occupationIds: [...sourceSetting.occupationIds].slice(index % 5).concat(sourceSetting.occupationIds.slice(0, index % 5)),
-    dailyLifeNotes: [...sourceSetting.dailyLifeNotes, `${generatedSettingLabels[index % generatedSettingLabels.length]}에서 사람들은 서로의 일을 도왔습니다.`],
+    dailyLifeNotes: [...sourceSetting.dailyLifeNotes, `${sourceSetting.label}에서 사람들은 서로의 일을 도왔습니다.`],
     visual: { ...sourceSetting.visual },
   };
 });

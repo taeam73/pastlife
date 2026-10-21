@@ -1,6 +1,10 @@
 import type { ResultCore, AnswerInput } from '@pastlife/scoring';
 import type { StoryProfile } from '../story-profile.js';
 import type { ImageLayer } from '../providers/image.provider.js';
+import type { z } from 'zod';
+import type { ResultPresentationSchema } from '@pastlife/contracts';
+
+export type StoredPresentation = z.infer<typeof ResultPresentationSchema>;
 
 export type StoredSession = {
   id: string;
@@ -26,6 +30,7 @@ export type StoredResult = {
   blocks: NarrativeBlock[];
   storyProfile?: StoryProfile;
   image?: StoredImage;
+  presentation?: StoredPresentation;
 };
 
 export type StoredImage = {
@@ -53,5 +58,6 @@ export interface AssessmentRepository {
   getResult(id: string): Promise<StoredResult | undefined>;
   getResultBySession(sessionId: string): Promise<StoredResult | undefined>;
   saveResultImage(resultId: string, image: StoredImage): Promise<StoredImage>;
+  saveResultPresentation(resultId: string, presentation: StoredPresentation): Promise<StoredPresentation>;
   completeAd(sessionId: string, slot: number, providerEventId: string): Promise<boolean>;
 }

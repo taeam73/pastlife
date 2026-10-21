@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
 import { eras, historicalLocations, occupations } from '@pastlife/content';
 import type { ResultCore } from '@pastlife/scoring';
@@ -12,11 +12,14 @@ import { buildCharacterIntroduction, describeOccupation } from '../providers/occ
 import { inspectNarrative } from '../providers/narrative-quality.js';
 import { inspectResultCanon } from '../providers/narrative-canon.js';
 import { inspectImageCompatibility } from '../providers/image-compatibility.js';
+import { buildResultPresentation } from './build-result-presentation.js';
+import { ResultPresentationSchema } from '@pastlife/contracts';
 
 export const RESULT_DISCLAIMER = '';
 
 @Injectable()
 export class ResultsService {
+  private readonly logger = new Logger(ResultsService.name);
   private readonly imageJobs = new Map<string, Promise<Awaited<ReturnType<ImageProvider['getImage']>>>>();
   constructor(
     @Inject(ASSESSMENT_REPOSITORY) private readonly repository: AssessmentRepository,
@@ -41,6 +44,17 @@ export class ResultsService {
     const occupationAliases: Record<string, string> = { OCC_01: 'OCC_SCRIBE', OCC_02: 'OCC_TEACHER', OCC_03: 'OCC_CEREMONIAL', OCC_04: 'OCC_NAVIGATOR', OCC_05: 'OCC_NAVIGATOR', OCC_06: 'OCC_ARTISAN', OCC_07: 'OCC_HEALER', OCC_08: 'OCC_MESSENGER' };
     const occupation = occupations.find(({ id }) => id === (occupationAliases[result.core.occupationId] ?? result.core.occupationId))!;
     const storyProfile = result.storyProfile ?? buildStoryProfile(result.core);
+    const storedImage = await this.ensureImage(resultId);
+    const presentedImage = await this.presentImage(storedImage, result.core);
+    let presentation;
+    try {
+      const matchedCharacter = await this.libraryImages.getImage(result.core);
+      presentation = result.presentation
+        ? ResultPresentationSchema.parse(result.presentation)
+        : await this.repository.saveResultPresentation(resultId, buildResultPresentation(result.core, storyProfile, storedImage, matchedCharacter));
+    } catch (error) {
+      this.logger.warn(`Presentation unavailable for ${resultId}: ${error instanceof Error ? error.message : String(error)}`);
+    }
     const occupationDescription = describeOccupation(result.core);
     const blocksNeedRefresh = inspectResultCanon(result.core, result.blocks).length > 0 || result.blocks.some(({ body }) => body.length > 1800 || inspectNarrative(body).score < 80) || result.blocks.length !== 6 || result.blocks.some(({ body }) =>
       !body.includes('\n\n') || /사용자의 실제 정체성|창작 서사|창작 설정|서사용 이름|마지막 장의 제목|선택을 바탕으로/.test(body));
@@ -75,7 +89,11 @@ export class ResultsService {
       },
       lifeSummary: { ageAtDeath: storyProfile.ageAtDeath, lifespanLabel: storyProfile.lifespanLabel, endingTitle: storyProfile.ending.title },
       highlights: storyProfile.highlights,
-      image: await this.presentImage(await this.ensureImage(resultId), result.core),
+      image: presentedImage,
+      ...(presentation ? { presentation: {
+        ...presentation,
+        hero: { ...presentation.hero, backgroundUri: presentedImage.layers?.find((layer) => layer.role === 'BACKGROUND')?.uri ?? presentedImage.uri },
+      } } : {}),
       blocks,
       disclaimer: RESULT_DISCLAIMER,
     };

@@ -100,6 +100,9 @@ describe('anonymous vertical flow', () => {
     expect(basic.body.blocks[0].body).toContain(`당신의 ${basic.body.recordNo}번째 삶입니다`);
     expect(basic.body.character.fictional).toBe(true);
     expect(basic.body.highlights).toHaveLength(8);
+    expect(basic.body.presentation?.chapters.map(({ id }: { id: string }) => id)).toEqual(['MEETING', 'TRIAL', 'CHOICE', 'NOW']);
+    const repeatedBasic = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(200);
+    expect(repeatedBasic.body.presentation).toEqual(basic.body.presentation);
     expect(basic.body.recordNo).toBeGreaterThanOrEqual(1);
     expect(basic.body.disclaimer).toBe('');
 

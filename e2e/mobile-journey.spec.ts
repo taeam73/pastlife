@@ -4,7 +4,7 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   test.setTimeout(60_000);
   await page.goto('/');
 
-  await expect(page.getByLabel('전생록 로고')).toBeVisible();
+  await expect(page.getByRole('img', { name: '전생록' }).first()).toBeVisible();
   await page.getByRole('button', { name: '나의 전생 찾아보기' }).click();
   await expect(page.getByText('기억은 생각보다 먼저 반응합니다.')).toBeVisible();
   await page.getByRole('button', { name: '질문 시작하기' }).click();
@@ -16,15 +16,24 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   }
 
   await expect(page).toHaveURL(/\/result$/);
-  await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();
-  await expect(page.getByText('전생 인물 카드')).toBeVisible();
-  await expect(page.getByText('삶의 기록')).toBeVisible();
-  await expect(page.getByText(/\d+세에 맞이한 마지막 장면/)).toBeVisible();
-  await expect(page.getByText('당신의 전생 이야기')).toBeVisible();
-  await expect(page.getByText('탄생 · 당신의 이야기가 시작된 날').first()).toBeVisible();
-  await expect(page.getByText('마지막 순간 · 떠오른 기억')).toBeVisible();
-  await expect(page.getByText('이 삶에서 중요했던 것들')).toBeVisible();
-  await expect(page.getByText('가장 중요한 인연')).toBeVisible();
+  await expect(page.getByText('당신의 전생은')).toBeVisible();
+  await expect(page.getByText('나의 전생 이야기', { exact: true })).toBeVisible();
+  const scene = page.getByRole('img', { name: /historical scene$/ }).first();
+  const backgroundSource = await scene.getAttribute('src');
+  for (const [number, title] of [[2, '시련'], [3, '선택'], [4, '그리고, 지금']] as const) {
+    await page.getByRole('button', { name: `${number}장 ${title}`, exact: true }).click();
+    await expect(page.getByText(`나의 전생 이야기 · ${String(number).padStart(2, '0')}`)).toBeVisible();
+    await expect(page.getByLabel(`${title} 내용`)).toBeVisible();
+    expect(await scene.getAttribute('src')).toBe(backgroundSource);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('button', { name: '2장 시련', exact: true }).click();
+  await expect(page.getByRole('button', { name: '다음 글 페이지' })).toBeVisible();
+  await page.getByRole('button', { name: '다음 글 페이지' }).click();
+  await expect(page.getByText('2 / 2')).toBeVisible();
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await expect(page.getByRole('button', { name: '4장 그리고, 지금', exact: true })).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 900 });
   await expect(page.getByRole('button', { name: '이미지 공유' })).toBeVisible();
   await expect(page.getByRole('tab', { name: '메인' })).toBeVisible();
   await expect(page.getByRole('tab', { name: '나의 전생' })).toBeVisible();
@@ -48,7 +57,7 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   await expect(page.getByText('저장된 전생 기록이 없습니다.')).toBeVisible();
 
   await page.goto('/result');
-  await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();
+  await expect(page.getByText('나의 전생 이야기', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: '광고 보고 더 자세히 보기' }).click();
   await expect(page).toHaveURL(/\/deep$/);
   await expect(page.getByText('더 자세한 전생 이야기', { exact: true })).toBeVisible();
@@ -72,5 +81,5 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   await expect(page.getByText('로그인하면 저장한 전생 기록을 다시 볼 수 있습니다.')).toBeVisible();
 
   await page.goto('/result');
-  await expect(page.getByText(/전생 기록 No\.\d{2}/)).toBeVisible();
+  await expect(page.getByText('나의 전생 이야기', { exact: true })).toBeVisible();
 });

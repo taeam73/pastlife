@@ -1,15 +1,11 @@
-import { Image, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { resolveLibraryImage } from '../results/libraryImages';
+import { CroppedScene } from './CroppedScene';
+import type { Crop } from '../results/crop';
 
-type Chapter = { id: string; title: string; summary: string; detail: string; imageUri?: string | undefined };
+type Chapter = { id: string; title: string; summary: string; detail: string; imageUri?: string | undefined; crop?: Crop | undefined };
 type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; selectedIndex: number; onSelect: (index: number) => void };
-
-function chapterUri(imageUri: string, index: number) {
-  const suffixes = ['-work.png', '-turning.png', '-study.png', '-study2.png'];
-  if (imageUri.includes('-daily.webp')) return imageUri.replace('-daily.webp', suffixes[index] ?? suffixes[0]!);
-  return imageUri;
-}
 
 export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, onSelect }: Props) {
   const { width } = useWindowDimensions();
@@ -22,9 +18,8 @@ export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, 
     <View style={styles.railWrap}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.rail} accessibilityLabel="전생 이야기 챕터 목록">
         {chapters.map((chapter, index) => {
-          const chapterSource = resolveLibraryImage(chapter.imageUri ?? chapterUri(imageUri, index)) ?? fallback;
           return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={`${index + 1}장 ${chapter.title}`} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, { width: cardWidth }, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
-            <Image accessibilityLabel={imageAlt} source={chapterSource} resizeMode="cover" style={styles.image} />
+            <View style={styles.image}><CroppedScene uri={imageUri} crop={chapter.crop ?? { focusX: (index + 1) / 5, focusY: 0.5, zoom: 1.55 }} accessibilityLabel={`${imageAlt} · ${chapter.title} 미리보기`} /></View>
             <View style={styles.shade} />
             <View style={styles.cardCopy}><Text style={styles.chapterNumber}>{String(index + 1).padStart(2, '0')}</Text><Text numberOfLines={2} style={styles.chapterTitle}>{chapter.title}</Text></View>
           </Pressable>;
@@ -41,12 +36,12 @@ const styles = StyleSheet.create({
   headingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, paddingHorizontal: spacing.md },
   headingLine: { flex: 1, maxWidth: 72, height: 1, backgroundColor: '#b89456' },
   sectionTitle: { color: '#d8b66a', fontSize: 20, lineHeight: 28, fontWeight: '700' },
-  railWrap: { position: 'relative' },
+  railWrap: { position: 'relative', width: '100%', maxWidth: 760, alignSelf: 'center' },
   rail: { gap: 7, paddingHorizontal: spacing.sm, paddingBottom: 21 },
   card: { width: 94, height: 137, overflow: 'hidden', borderRadius: 8, borderWidth: 1, borderColor: '#6b5128', backgroundColor: '#211a12', justifyContent: 'flex-end' },
   selected: { borderColor: '#f0c75e', borderWidth: 2, shadowColor: '#e7b94c', shadowOpacity: 0.65, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } },
   pressed: { transform: [{ scale: 0.97 }] },
-  image: StyleSheet.absoluteFill,
+  image: { ...StyleSheet.absoluteFill },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(4, 5, 6, 0.25)' },
   cardCopy: { padding: 7, backgroundColor: 'rgba(8, 8, 8, 0.38)' },
   chapterNumber: { color: '#f0c75e', fontSize: 16, lineHeight: 21, fontWeight: '700' },

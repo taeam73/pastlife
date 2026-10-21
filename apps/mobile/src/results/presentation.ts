@@ -5,8 +5,8 @@ export type PresentedChapter = {
   shortTitle: string;
   lead: string;
   body: string;
-  closingLine: string;
   imageUri: string;
+  crop: { focusX: number; focusY: number; zoom: number };
 };
 
 const chapterTitles: Record<string, string> = {
@@ -28,17 +28,18 @@ export function presentIdentity(value: string) { return compact(value, 72); }
 
 export function presentChapters(highlights: Highlight[], backgroundImage = ''): PresentedChapter[] {
   const order = ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'];
-  return order.map((id) => highlights.find((item) => item.id === id)).filter((item): item is Highlight => Boolean(item)).map((item) => ({
+  const crops = [
+    { focusX: 0.22, focusY: 0.5, zoom: 1.55 },
+    { focusX: 0.46, focusY: 0.32, zoom: 1.55 },
+    { focusX: 0.68, focusY: 0.62, zoom: 1.55 },
+    { focusX: 0.84, focusY: 0.45, zoom: 1.55 },
+  ];
+  return order.map((id) => highlights.find((item) => item.id === id)).filter((item): item is Highlight => Boolean(item)).map((item, index) => ({
     id: item.id,
     shortTitle: chapterTitles[item.id] ?? compact(item.title, 12),
-    lead: compact(item.summary, 58),
-    body: compact(item.detail, 140),
-    closingLine: `이 장면은 지금의 당신에게 ${compact(item.summary, 32)}라는 흔적을 남겼습니다.`,
-    imageUri: chapterImage(backgroundImage, item.id),
+    lead: item.summary.trim(),
+    body: item.detail.trim(),
+    imageUri: backgroundImage,
+    crop: crops[index]!,
   }));
-}
-
-function chapterImage(backgroundImage: string, id: string) {
-  const suffix: Record<string, string> = { KEY_RELATIONSHIP: '-work.png', DECISIVE_EVENT: '-turning.png', LIFE_LEGACY: '-study.png', PRESENT_ECHO: '-study2.png' };
-  return backgroundImage.includes('-daily.webp') ? backgroundImage.replace('-daily.webp', suffix[id] ?? '-work.png') : backgroundImage;
 }

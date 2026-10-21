@@ -355,6 +355,7 @@ model Result {
   recordNo         Int
   coreJson         Json
   storyProfileJson Json?
+  presentationJson  Json?
   status           ResultStatus   @default(NARRATIVE_GENERATING)
   createdAt        DateTime       @default(now())
   texts            ResultText[]
@@ -388,6 +389,8 @@ model ResultImage {
   altText      String  @default("")
   attemptCount Int     @default(0)
   errorCode    String?
+  layersJson   Json?
+  compositeUri String?
 
   @@map("result_images")
 }

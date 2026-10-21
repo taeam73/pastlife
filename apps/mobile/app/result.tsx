@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Share, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 import { useRouter } from 'expo-router';
 import type { z } from 'zod';
@@ -24,6 +24,7 @@ export default function ResultScreen() {
   const [error, setError] = useState<string | null>(null);
   const [imageShareStatus, setImageShareStatus] = useState<AsyncStatus>('IDLE');
   const resultCardRef = useRef<View>(null);
+  const pageScrollRef = useRef<ScrollView>(null);
 
   useEffect(() => { void (async () => {
     const session = await loadSession();
@@ -58,13 +59,14 @@ export default function ResultScreen() {
 
   if (error) return <Screen><Text style={styles.error}>{error}</Text></Screen>;
   if (!result) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>;
-  return <Screen>
+  return <Screen fullBleed scrollRef={pageScrollRef}>
     <View style={styles.resultHeader}>
       <View style={styles.headerSpacer} />
       <Text style={styles.eyebrow}>전생 기록 No.{String(result.recordNo).padStart(2, '0')} 발견</Text>
     </View>
     <Text style={styles.headline}>{result.headline}</Text>
-    <ResultExperience ref={resultCardRef} image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} headline={result.headline} />
+    <ResultExperience ref={resultCardRef} image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} headline={result.headline} presentation={result.presentation} onChapterSelect={() => pageScrollRef.current?.scrollTo({ y: 0, animated: false })} />
+    <View style={styles.actionRail}>
     {result.disclaimer ? <Text style={styles.disclaimer}>{result.disclaimer}</Text> : null}
     <UnlockAction label="광고 보고 더 자세히 보기" loadingLabel="광고를 준비하고 있어요" onUnlock={async () => { const session = await loadSession(); if (!session?.sessionId) throw new Error('Session not found'); void trackEvent('deep_cta_clicked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); void trackEvent('ad_started', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); try { await api.fakeAd(session.sessionId, 2); } catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); throw error; } void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); void trackEvent('deep_unlocked', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion }); router.replace('/deep'); }} />
     <PrimaryButton disabled onPress={() => undefined}>영상 공유 · 출시 예정</PrimaryButton>
@@ -74,7 +76,8 @@ export default function ResultScreen() {
     <PrimaryButton onPress={async () => { const auth = await loadAuth(); if (!auth) { router.push({ pathname: './login', params: { resultId: result.resultId } }); return; } await api.archive(result.resultId, auth.accessToken); const session = await loadSession(); void trackEvent('archive_saved', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), resultId: result.resultId }); router.replace('/archive'); }}>아카이브에 저장하기</PrimaryButton>
     <PrimaryButton onPress={() => void restart()}>또 다른 전생 기록 찾아보기</PrimaryButton>
     <AppNav />
+    </View>
   </Screen>;
 }
 
-const styles = StyleSheet.create({ resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, disclaimer: { color: colors.muted, fontSize: 13, lineHeight: 20, marginTop: spacing.md }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });
+const styles = StyleSheet.create({ actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.lg, gap: spacing.md }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, disclaimer: { color: colors.muted, fontSize: 13, lineHeight: 20, marginTop: spacing.md }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });

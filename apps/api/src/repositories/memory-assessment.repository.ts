@@ -81,6 +81,13 @@ export class MemoryAssessmentRepository implements AssessmentRepository {
     return structuredClone(image);
   }
 
+  async saveResultPresentation(resultId: string, presentation: StoredResult['presentation']) {
+    const result = this.results.get(resultId);
+    if (!result || !presentation) throw new Error(`Result ${resultId} not found`);
+    if (!result.presentation) result.presentation = structuredClone(presentation);
+    return structuredClone(result.presentation);
+  }
+
   async completeAd(sessionId: string, slot: number, providerEventId: string) {
     const prior = this.adEvents.get(providerEventId);
     if (prior && (prior.sessionId !== sessionId || prior.slot !== slot)) throw new Error('Provider event was already used');

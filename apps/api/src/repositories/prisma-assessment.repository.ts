@@ -3,7 +3,7 @@ import { Prisma, SessionStatus, UnlockType } from '@prisma/client';
 import type { Stage } from '@pastlife/content';
 import type { AnswerInput, ResultCore } from '@pastlife/scoring';
 import { PrismaService } from '../prisma/prisma.service.js';
-import type { AssessmentRepository, NarrativeBlock, StoredImage, StoredResult, StoredSession } from './assessment.repository.js';
+import type { AssessmentRepository, NarrativeBlock, StoredImage, StoredPresentation, StoredResult, StoredSession } from './assessment.repository.js';
 import type { StoryProfile } from '../story-profile.js';
 
 @Injectable()
@@ -91,6 +91,7 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
             recordNo: result.core.recordNo,
             coreJson: result.core as unknown as Prisma.InputJsonValue,
             storyProfileJson: result.storyProfile as unknown as Prisma.InputJsonValue,
+            ...(result.presentation ? { presentationJson: result.presentation as unknown as Prisma.InputJsonValue } : {}),
             status: 'READY',
             texts: { create: { locale: 'ko', blocksJson: result.blocks as unknown as Prisma.InputJsonValue, generatorVersion: 'template-v1' } },
           },
@@ -128,6 +129,8 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
         altText: image.alt,
         attemptCount: image.attemptCount,
         errorCode: image.errorCode ?? null,
+        ...(image.layers ? { layersJson: image.layers as unknown as Prisma.InputJsonValue } : {}),
+        ...(image.compositeUri ? { compositeUri: image.compositeUri } : {}),
       },
     });
     return {
@@ -137,7 +140,18 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
       status: row.status === 'FALLBACK' ? 'FALLBACK' as const : 'READY' as const,
       attemptCount: row.attemptCount,
       ...(row.errorCode ? { errorCode: row.errorCode } : {}),
+      ...(row.layersJson ? { layers: row.layersJson as unknown as NonNullable<StoredImage['layers']> } : {}),
+      ...(row.compositeUri ? { compositeUri: row.compositeUri } : {}),
     };
+  }
+
+  async saveResultPresentation(resultId: string, presentation: StoredPresentation) {
+    await this.prisma.result.updateMany({
+      where: { id: resultId, presentationJson: { equals: Prisma.DbNull } },
+      data: { presentationJson: presentation as unknown as Prisma.InputJsonValue },
+    });
+    const row = await this.prisma.result.findUniqueOrThrow({ where: { id: resultId }, select: { presentationJson: true } });
+    return row.presentationJson as unknown as StoredPresentation;
   }
 
   async completeAd(sessionId: string, slot: number, providerEventId: string) {
@@ -181,13 +195,14 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
     };
   }
 
-  private toResult(row: { id: string; sessionId: string; status: string; coreJson: Prisma.JsonValue; storyProfileJson: Prisma.JsonValue | null; texts: Array<{ blocksJson: Prisma.JsonValue }>; image: { sourceType: string; storageUrl: string; altText: string; status: string; attemptCount: number; errorCode: string | null } | null }): StoredResult {
+  private toResult(row: { id: string; sessionId: string; status: string; coreJson: Prisma.JsonValue; storyProfileJson: Prisma.JsonValue | null; presentationJson: Prisma.JsonValue | null; texts: Array<{ blocksJson: Prisma.JsonValue }>; image: { sourceType: string; storageUrl: string; altText: string; status: string; attemptCount: number; errorCode: string | null; layersJson: Prisma.JsonValue | null; compositeUri: string | null } | null }): StoredResult {
     return {
       id: row.id,
       sessionId: row.sessionId,
       status: row.status === 'READY' ? 'READY' : 'FAILED',
       core: row.coreJson as unknown as ResultCore,
       ...(row.storyProfileJson ? { storyProfile: row.storyProfileJson as unknown as StoryProfile } : {}),
+      ...(row.presentationJson ? { presentation: row.presentationJson as unknown as StoredPresentation } : {}),
       blocks: (row.texts[0]?.blocksJson ?? []) as unknown as NarrativeBlock[],
       ...(row.image ? { image: {
         sourceType: row.image.sourceType === 'AI' ? 'AI' : 'LIBRARY',
@@ -196,6 +211,8 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
         status: row.image.status === 'FALLBACK' ? 'FALLBACK' : 'READY',
         attemptCount: row.image.attemptCount,
         ...(row.image.errorCode ? { errorCode: row.image.errorCode } : {}),
+        ...(row.image.layersJson ? { layers: row.image.layersJson as unknown as NonNullable<StoredImage['layers']> } : {}),
+        ...(row.image.compositeUri ? { compositeUri: row.image.compositeUri } : {}),
       } satisfies StoredImage } : {}),
     };
   }

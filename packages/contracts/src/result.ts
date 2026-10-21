@@ -24,6 +24,22 @@ export const StoryHighlightSchema = z.object({
   summary: z.string(),
   detail: z.string(),
 });
+export const ResultPresentationSchema = z.object({
+  version: z.literal(2),
+  hero: z.object({
+    title: z.string().min(1),
+    tagline: z.string().min(1),
+    lifeSummary: z.string().min(1),
+    backgroundUri: z.string().min(1),
+    characterUri: z.string().nullable(),
+  }),
+  chapters: z.tuple([
+    z.object({ id: z.literal('MEETING'), title: z.string().min(1), body: z.string().min(1), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
+    z.object({ id: z.literal('TRIAL'), title: z.string().min(1), body: z.string().min(1), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
+    z.object({ id: z.literal('CHOICE'), title: z.string().min(1), body: z.string().min(1), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
+    z.object({ id: z.literal('NOW'), title: z.string().min(1), body: z.string().min(1), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
+  ]),
+});
 export const BasicResultResponseSchema = z.object({
   resultId: z.string(),
   recordNo: z.number().int().min(1).max(99),
@@ -36,6 +52,7 @@ export const BasicResultResponseSchema = z.object({
     formativeWound: z.string(), centralContradiction: z.string(), realization: z.string(),
   }),
   image: ResultImageSchema,
+  presentation: ResultPresentationSchema.optional(),
   lifeSummary: z.object({ ageAtDeath: z.number().int().positive(), lifespanLabel: z.string(), endingTitle: z.string() }),
   highlights: z.array(StoryHighlightSchema).length(8),
   blocks: z.array(BasicBlockSchema).length(6),

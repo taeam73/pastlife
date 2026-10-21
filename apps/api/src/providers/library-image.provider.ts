@@ -36,7 +36,7 @@ export class LibraryImageProvider implements ImageProvider {
     const gender = selectLifeIdentity(core).identity.gender;
     const isFemale = gender.startsWith('여');
     const preferredCharacterUri = characterByOccupation[core.occupationId];
-    const exactCharacterBySettingOccupation: Record<string, { female: string; male: string }> = {
+    const exactCharacterBySettingOccupation: Record<string, Partial<Record<'female' | 'male', string>>> = {
       'LOC_MESOPOTAMIA:OCC_SCRIBE': { female: 'asset://characters/v2/mesopotamia-scribe-female.png', male: 'asset://characters/v1/mesopotamian-scribe-male.png' },
       'LOC_MESOPOTAMIA:OCC_MERCHANT': { female: 'asset://characters/v1/market-seller-female.png', male: 'asset://characters/v2/mesopotamia-merchant-male.png' },
       'LOC_GANGES:OCC_HEALER': { female: 'asset://characters/v2/ganges-healer-female.png', male: 'asset://characters/v2/ganges-healer-male.png' },
@@ -50,6 +50,7 @@ export class LibraryImageProvider implements ImageProvider {
       'LOC_SWASHILI:OCC_MERCHANT': { female: 'asset://characters/v2/kilwa-merchant-female.png', male: 'asset://characters/v1/mali-trader-male.png' },
       'LOC_SWASHILI:OCC_SHIPWRIGHT': { female: 'asset://characters/v1/dock-worker-female.png', male: 'asset://characters/v2/kilwa-shipwright-male.png' },
       'LOC_ANDES:OCC_TEXTILE': { female: 'asset://characters/v2/andes-textile-female.png', male: 'asset://characters/v1/artisan-male.png' },
+      'LOC_ANDES:OCC_FARMER': { female: 'asset://characters/v2/andes-farmer-female.png' },
       'LOC_ANDES:OCC_MESSENGER': { female: 'asset://characters/v2/andes-messenger-female.png', male: 'asset://characters/v2/andes-messenger-male.png' },
       'LOC_STEPPE:OCC_HEALER': { female: 'asset://characters/v2/steppe-healer-female2.png', male: 'asset://characters/v2/steppe-healer-male2.png' },
       'LOC_STEPPE:OCC_MESSENGER': { female: 'asset://characters/v1/navigator-female.png', male: 'asset://characters/v2/steppe-messenger-male.png' },
@@ -79,7 +80,7 @@ export class LibraryImageProvider implements ImageProvider {
       'LOC_MALI_TIMBUKTU:OCC_BUILDER': { female: 'asset://characters/v2/mali-builder-female.png', male: 'asset://characters/v2/mali-builder-male.png' },
       'LOC_EDO:OCC_ARTISAN': { female: 'asset://characters/v2/edo-artisan-female.png', male: 'asset://characters/v1/artisan-male.png' },
       'LOC_EDO:OCC_MERCHANT': { female: 'asset://characters/v1/market-seller-female.png', male: 'asset://characters/v2/edo-merchant-male.png' },
-      'LOC_OTTOMAN_ISTANBUL:OCC_ARTISAN': { female: 'asset://characters/v2/ottoman-artisan-female.png', male: 'asset://characters/v1/artisan-male.png' },
+      'LOC_OTTOMAN_ISTANBUL:OCC_ARTISAN': { female: 'asset://characters/v2/ottoman-artisan-female.png', male: 'asset://characters/v2/ottoman-artisan-male.png' },
       'LOC_OTTOMAN_ISTANBUL:OCC_OFFICIAL': { female: 'asset://characters/v2/ottoman-official-female.png', male: 'asset://characters/v2/ottoman-official-male2.png' },
       'LOC_HAN_CHANGAN:OCC_SCRIBE': {
         female: 'asset://characters/v2/han-scribe-female.png',
@@ -90,7 +91,7 @@ export class LibraryImageProvider implements ImageProvider {
         male: 'asset://characters/v2/abbasid-healer-male.png',
       },
       'LOC_MALI_TIMBUKTU:OCC_SCRIBE': {
-        female: 'asset://characters/v1/market-seller-female.png',
+        female: 'asset://characters/v2/mali-scribe-female.png',
         male: 'asset://characters/v2/mali-scribe-male.png',
       },
       'LOC_HEIAN_KYO:OCC_ARTISAN': {
@@ -119,12 +120,21 @@ export class LibraryImageProvider implements ImageProvider {
       },
     };
     const genderSuffix = isFemale ? '-female.png' : '-male.png';
-    const exactCharacter = exactCharacterBySettingOccupation[`${core.locationId}:${core.occupationId}`]?.[isFemale ? 'female' : 'male'];
-    const locationFallback = locationFallbacks[core.locationId]?.[isFemale ? 'female' : 'male'];
+    const canonicalLocationId = core.locationId.replace(/_VARIANT_\d+$/u, '');
+    const mappedCharacter = exactCharacterBySettingOccupation[`${canonicalLocationId}:${core.occupationId}`]?.[isFemale ? 'female' : 'male'];
+    // Older occupation-wide portraits are useful fallbacks, but are not verified
+    // against the result's place and era and must not be labelled an exact match.
+    const exactCharacter = ((mappedCharacter?.includes('/v2/') &&
+      !(canonicalLocationId === 'LOC_SEOUL_1940' && core.occupationId === 'OCC_JOURNALIST' && isFemale)) ||
+      (canonicalLocationId === 'LOC_MESOPOTAMIA' && core.occupationId === 'OCC_SCRIBE' && !isFemale)
+    )
+      ? mappedCharacter
+      : undefined;
+    const locationFallback = locationFallbacks[canonicalLocationId]?.[isFemale ? 'female' : 'male'];
     const eraCandidates = eraFallbacks[core.eraId]?.[isFemale ? 'female' : 'male'] ?? (isFemale
       ? ['asset://characters/v1/printer-female.png', 'asset://characters/v1/performer-female.png']
       : ['asset://characters/v1/community-organizer-male.png', 'asset://characters/v1/artisan-male.png']);
-    const characterUri = exactCharacter ?? (preferredCharacterUri?.endsWith(genderSuffix)
+    const characterUri = mappedCharacter ?? (preferredCharacterUri?.endsWith(genderSuffix)
       ? preferredCharacterUri
       : locationFallback ?? eraCandidates[core.recordNo % eraCandidates.length]);
     const backgroundUri = 'asset://' + core.libraryImage.key;
@@ -134,6 +144,7 @@ export class LibraryImageProvider implements ImageProvider {
       alt: `${location.label} historical scene`,
       status: 'FALLBACK',
       attemptCount: 0,
+      matchQuality: exactCharacter ? 'EXACT' : 'FALLBACK',
       layers: [
         { uri: backgroundUri, role: 'BACKGROUND', alt: 'historical background' },
         ...(characterUri ? [{ uri: characterUri, role: 'CHARACTER' as const, alt: 'historical character' }] : []),

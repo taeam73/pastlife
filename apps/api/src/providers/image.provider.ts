@@ -15,5 +15,6 @@ export type ImageAsset = {
   errorCode?: string;
   layers?: ImageLayer[];
   compositeUri?: string;
+  matchQuality?: 'EXACT' | 'FALLBACK';
 };
 export interface ImageProvider { getImage(core: ResultCore): Promise<ImageAsset> }

@@ -10,9 +10,11 @@ const highlights = [
 
 describe('result presentation', () => {
   it('shortens display headline', () => expect(presentHeadline('아주 긴 시대와 지역과 직업을 모두 설명하는 결과 헤드라인입니다.').length).toBeLessThanOrEqual(42));
-  it('returns four chapters in cinematic order with bounded body copy', () => {
-    const result = presentChapters(highlights);
+  it('returns four chapters with one source scene and distinct crops, preserving text for pagination', () => {
+    const result = presentChapters(highlights, 'asset://library/scene.webp');
     expect(result.map((item) => item.shortTitle)).toEqual(['만남', '시련', '선택', '지금']);
-    expect(result.every((item) => item.body.length <= 140)).toBe(true);
+    expect(result.every((item) => item.imageUri === 'asset://library/scene.webp')).toBe(true);
+    expect(new Set(result.map((item) => item.crop.focusX)).size).toBe(4);
+    expect(result[3]?.body).toBe(highlights[0]?.detail.trim());
   });
 });
