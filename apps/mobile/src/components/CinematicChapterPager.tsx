@@ -2,6 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Image, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { resolveLibraryImage } from '../results/libraryImages';
+import { ParchmentSummary } from './ParchmentSummary';
 
 type Chapter = { id: string; title: string; summary: string; detail: string };
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
@@ -38,10 +39,7 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
             <Text numberOfLines={2} style={styles.summary}>{characterDescription ?? '당신의 전생을 살아간 인물의 기록입니다.'}</Text>
           </View>
         </View>
-        <View style={styles.parchment}>
-          <Text style={styles.parchmentTitle}>{chapter.title}</Text>
-          <Text numberOfLines={3} style={styles.parchmentBody}>{chapter.detail}</Text>
-        </View>
+        <ParchmentSummary title={chapter.title} body={chapter.detail} />
       </View>)}
     </ScrollView>
     <View style={styles.dots}>{chapters.map((chapter, index) => <View key={chapter.id} style={[styles.dot, index === selectedIndex && styles.activeDot]} />)}</View>

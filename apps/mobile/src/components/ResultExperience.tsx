@@ -5,6 +5,7 @@ import { ResultBlock } from './ResultBlock';
 import { resolveLibraryImage } from '../results/libraryImages';
 import { ChapterFilmstrip } from './ChapterFilmstrip';
 import { CinematicChapterPager, CinematicChapterPagerHandle } from './CinematicChapterPager';
+import { presentChapters, presentHeadline, presentIdentity } from '../results/presentation';
 
 type Block = { id: string; title: string; body: string };
 type ImageLayer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
@@ -66,6 +67,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     ?.filter(({ id }) => id !== 'IDENTITY' && id !== 'DREAM_AND_DAILY')
     .sort((left, right) => highlightOrder.indexOf(left.id) - highlightOrder.indexOf(right.id));
   const chapterHighlights = visibleHighlights?.filter(({ id }) => ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'].includes(id)).slice(0, 4);
+  const presentedChapters = chapterHighlights ? presentChapters(chapterHighlights).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: `${chapter.body} ${chapter.closingLine}` })) : undefined;
   const characterFacts = character ? [
     { label: '외모', value: oneSentence(character.appearance) },
     { label: '성격', value: oneSentence(character.temperament) },
@@ -98,8 +100,8 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         <Image accessibilityLabel="전생록" source={require('../../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.brandLogo} />
         <Text style={styles.brandMeta}>전생 기록 No.06 발견</Text>
       </View>
-      <CinematicChapterPager ref={chapterPagerRef} chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={headline ?? introTitle} characterLabel={character ? `${character.name} · ${character.occupation}` : undefined} characterDescription={character?.introduction} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
-      <ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={(index) => { setChapterIndex(index); chapterPagerRef.current?.scrollToIndex(index); }} />
+      <CinematicChapterPager ref={chapterPagerRef} chapters={presentedChapters ?? []} imageUri={image.uri} imageAlt={image.alt} layers={layers} title={headline ? presentHeadline(headline) : introTitle} characterLabel={character ? `${character.name} · ${character.occupation}` : undefined} characterDescription={character ? presentIdentity(character.introduction) : undefined} logo={require('../../assets/branding/title-logo-cinematic.png')} selectedIndex={chapterIndex} onSelect={setChapterIndex} />
+      <ChapterFilmstrip chapters={presentedChapters ?? []} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={(index) => { setChapterIndex(index); chapterPagerRef.current?.scrollToIndex(index); }} />
     </> : null}
     <View style={[styles.hero, styles.hidden]}>
       {showRemoteImage || localImage || layers.some((layer) => /^https?:\/\//.test(layer.uri) || resolveLibraryImage(layer.uri))
@@ -117,7 +119,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
       <Text style={[styles.storyEyebrow, styles.parchmentTitle]}>{introTitle}</Text>
       <Text style={[styles.storyLead, styles.parchmentBody]}>{introDescription}</Text>
     </View>
-    {chapterHighlights?.length ? <View style={styles.hidden}><ChapterFilmstrip chapters={chapterHighlights} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={setChapterIndex} /></View> : null}
+    {presentedChapters?.length ? <View style={styles.hidden}><ChapterFilmstrip chapters={presentedChapters} imageUri={image.uri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={setChapterIndex} /></View> : null}
     {character ? <View style={styles.profileCard}>
       <View style={styles.profileAccent} />
       <View style={styles.profileHeader}>
