@@ -10,7 +10,8 @@ type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; selected
 export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, onSelect }: Props) {
   const { width } = useWindowDimensions();
   const contentWidth = Math.min(width, 760) - spacing.lg * 2;
-  const cardWidth = Math.max(94, Math.floor((contentWidth - spacing.md * 2 - spacing.sm * 3) / 4));
+  const cardWidth = Math.max(64, Math.floor((contentWidth - spacing.md * 2 - spacing.sm * 3) / 4));
+  const cardHeight = Math.round(cardWidth * 1.46);
   const fallback = resolveLibraryImage(imageUri) ?? (/^https?:\/\//.test(imageUri) ? { uri: imageUri } : undefined);
   if (!fallback) return null;
   return <View style={styles.section}>
@@ -18,7 +19,7 @@ export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, 
     <View style={styles.railWrap}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.rail} accessibilityLabel="전생 이야기 챕터 목록">
         {chapters.map((chapter, index) => {
-          return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={`${index + 1}장 ${chapter.title}`} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, { width: cardWidth }, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
+          return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={`${index + 1}장 ${chapter.title}`} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, { width: cardWidth, height: cardHeight }, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
             <View style={styles.image}><CroppedScene uri={imageUri} crop={chapter.crop ?? { focusX: (index + 1) / 5, focusY: 0.5, zoom: 1.55 }} accessibilityLabel={`${imageAlt} · ${chapter.title} 미리보기`} /></View>
             <View style={styles.shade} />
             <View style={styles.cardCopy}><Text style={styles.chapterNumber}>{String(index + 1).padStart(2, '0')}</Text><Text numberOfLines={2} style={styles.chapterTitle}>{chapter.title}</Text></View>
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   headingLine: { flex: 1, maxWidth: 72, height: 1, backgroundColor: '#b89456' },
   sectionTitle: { color: '#d8b66a', fontSize: 20, lineHeight: 28, fontWeight: '700' },
   railWrap: { position: 'relative', width: '100%', maxWidth: 760, alignSelf: 'center' },
-  rail: { gap: 7, paddingHorizontal: spacing.sm, paddingBottom: 21 },
+  rail: { minWidth: '100%', justifyContent: 'center', gap: 7, paddingHorizontal: spacing.sm, paddingBottom: 21 },
   card: { width: 94, height: 137, overflow: 'hidden', borderRadius: 8, borderWidth: 1, borderColor: '#6b5128', backgroundColor: '#211a12', justifyContent: 'flex-end' },
   selected: { borderColor: '#f0c75e', borderWidth: 2, shadowColor: '#e7b94c', shadowOpacity: 0.65, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } },
   pressed: { transform: [{ scale: 0.97 }] },

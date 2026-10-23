@@ -18,8 +18,8 @@ export default defineConfig({
       testMatch: /mobile-.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'http://127.0.0.1:8081',
-        channel: process.env.CI ? undefined : 'chrome',
+        baseURL: process.env.MOBILE_BASE_URL ?? 'http://127.0.0.1:8081',
+        channel: process.env.E2E_BROWSER_CHANNEL ?? (process.env.CI ? undefined : 'chrome'),
       },
     },
     {
@@ -27,8 +27,8 @@ export default defineConfig({
       testMatch: /admin-.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'http://127.0.0.1:3000',
-        channel: process.env.CI ? undefined : 'chrome',
+        baseURL: process.env.ADMIN_BASE_URL ?? 'http://127.0.0.1:3000',
+        channel: process.env.E2E_BROWSER_CHANNEL ?? (process.env.CI ? undefined : 'chrome'),
       },
     },
   ],

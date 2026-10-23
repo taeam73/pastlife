@@ -59,5 +59,6 @@ export interface AssessmentRepository {
   getResultBySession(sessionId: string): Promise<StoredResult | undefined>;
   saveResultImage(resultId: string, image: StoredImage): Promise<StoredImage>;
   saveResultPresentation(resultId: string, presentation: StoredPresentation): Promise<StoredPresentation>;
+  updateResultPresentation(resultId: string, presentation: StoredPresentation): Promise<StoredPresentation>;
   completeAd(sessionId: string, slot: number, providerEventId: string): Promise<boolean>;
 }

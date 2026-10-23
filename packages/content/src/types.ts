@@ -33,6 +33,7 @@ export type AxisCode = (typeof axes)[number];
 export type Stage = 1 | 2 | 3 | 4 | 5 | 6;
 export type TagScore = { tag: CoreTag; score: 1 | 2 | 3 };
 export type AxisScore = { axis: AxisCode; score: -2 | -1 | 0 | 1 | 2 };
+export type StorySignal = 'notice' | 'connect' | 'rest' | 'explore' | 'repair' | 'speak' | 'protect' | 'release';
 
 export type Choice = {
   id: string;
@@ -40,6 +41,7 @@ export type Choice = {
   displayOrder: number;
   tagScores: TagScore[];
   axisScores: AxisScore[];
+  storySignals?: StorySignal[];
 };
 
 export type Question = {

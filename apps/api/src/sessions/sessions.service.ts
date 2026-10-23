@@ -1,6 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { BadRequestException, ConflictException, GoneException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { questions, selectQuestion, type Stage } from '@pastlife/content';
+import { questionsForVersion, selectQuestion, type Stage } from '@pastlife/content';
 import { calculateResult } from '@pastlife/scoring';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { NARRATIVE_PROVIDER, type NarrativeProvider } from '../providers/narrative.provider.js';
@@ -18,7 +18,7 @@ export class SessionsService {
       anonymousId: deviceId ?? randomUUID(),
       locale,
       seed: randomBytes(16).toString('hex'),
-      contentVersion: process.env.CONTENT_VERSION ?? '2.5.0',
+      contentVersion: process.env.CONTENT_VERSION ?? '3.0.0',
       status: 'CREATED',
       viewMode: 'TEXT',
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -30,9 +30,10 @@ export class SessionsService {
     const session = await this.requireSession(sessionId);
     if (!Number.isInteger(stageNumber) || stageNumber < 1 || stageNumber > 6) throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'stage must be between 1 and 6' });
     const locked = session.questions.find(({ stage }) => stage === stageNumber);
+    const sessionQuestions = questionsForVersion(session.contentVersion);
     const history = await this.repository.getQuestionHistory(session.anonymousId, session.id, 10);
     const selected = locked
-      ? questions.find(({ id }) => id === locked.questionId)
+      ? sessionQuestions.find(({ id }) => id === locked.questionId)
       : selectQuestion({
           stage: stageNumber as Stage,
           sessionSeed: session.seed,
@@ -41,7 +42,7 @@ export class SessionsService {
         });
     if (!selected) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Question not found' });
     const lockedQuestionId = await this.repository.lockQuestion(sessionId, stageNumber, selected.id);
-    const question = questions.find(({ id }) => id === lockedQuestionId);
+    const question = sessionQuestions.find(({ id }) => id === lockedQuestionId);
     if (!question) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Question not found' });
     return {
       id: question.id,
@@ -58,7 +59,7 @@ export class SessionsService {
     }
     if (!Number.isInteger(stageNumber) || stageNumber < 1 || stageNumber > 6) throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Invalid stage' });
     const locked = session.questions.find(({ stage }) => stage === stageNumber);
-    const expected = locked ? questions.find(({ id }) => id === locked.questionId) : undefined;
+    const expected = locked ? questionsForVersion(session.contentVersion).find(({ id }) => id === locked.questionId) : undefined;
     if (!expected) throw new ConflictException({ code: 'INVALID_STATE', message: 'Question must be requested before answering' });
     if (expected.id !== questionId || !expected.choices.some(({ id }) => id === choiceId)) {
       throw new BadRequestException({ code: 'VALIDATION_ERROR', message: 'Question or choice does not match this session stage' });

@@ -1,0 +1,9 @@
+# 101번째 원고·그림 검수 — 그날의 두 경기
+
+- **집계:** 101개 고유 `storyCards`, 101개 고유 원고, 101쌍의 별도 배경·인물 그림과 API·모바일 매핑. 120편까지 19편 남음. 작업 전에는 각 100개였다.
+- **선행 설정:** [설정 대장](story-setting-register.md)에 집필·그림 제작 전에 1949년 쿠바 공화국 아바나 세로 지구, 여성 테레사 로하스(1920~1978), 종이 가게·혼인·아들·조카·아버지의 병과 죽음·노년의 일을 확정했다. 첫 번째 폼페이 후보가 78번째와 겹쳐 제작 전에 폐기된 기록도 남겼다.
+- **역사 근거:** [미 국무부 역사실](https://history.state.gov/countries/cuba)은 1902년 쿠바 공화국 성립을 기록한다. [미국 야구 명예의 전당의 첫 카리브 시리즈 기록](https://baseballhall.org/discover/shortstops/taking-the-world-series-worldwide-caribbean-world-series)과 [그란 에스타디오 기록](https://baseballhall.org/discover/a-trip-back-in-time)은 1949년 2월 20일 아바나의 첫 시리즈와 1946년 경기장 개장을 뒷받침한다. [스미스소니언의 1949년 종이 스코어 카드](https://www.si.edu/object/cuban-baseball-league-score-card%3Anmah_1064795), [1947년 아바나 여자 야구 경기 기록](https://baseballhall.org/discover/shortstops/spring-training%20in%20Cuba)도 확인했다(2026-10-23). 테레사·가족·가게·입장권·공터 시합·대사는 창작이며 실제 경기의 점수나 선수를 재현하지 않는다.
+- **원고:** 01은 아바나에서 나고 늙기까지 일·가족·취향·걱정을 세 쪽으로 소개하며 한 번의 어긋난 약속으로 평생을 규정하지 않는다. 02는 희귀한 입장권과 조카와의 약속이 겹친 날을 장면과 대화로 진행한다. 테레사는 큰 경기를 실제로 즐기면서도 늦은 통보로 아이들의 시작을 늦춘 대가를 치르고, 조카의 다음 심판 선택을 되돌리지 못한다. 세 답변의 출발 행동은 날짜 확인·직접 알리기·대신할 어른 찾기로 다르다. 03은 출생부터 사망까지 16개 사건으로 02 바깥의 생활을 담고, 04는 남편·아들·조카·손님의 서로 다른 기억을 남긴다. 연도·나이·관계·인과를 설정 대장과 대조했다.
+- **그림:** `havana-two-games-bg.jpg` 1254×1254, 1940년대 아바나 야구장 입구를 상상한 사람 없는 배경; `havana-teresa-rojas.webp` 1024×1536, 실제 투명 알파의 테레사 초상. 파일별 치수·알파와 고유 매핑을 검사하고 320px·768px 합성에서 글과 인물 가독성을 직접 확인했다. 경기장 조명·입구와 의상의 세부 복원은 전문가 확인 전이다.
+- **검사 통과:** `corepack pnpm typecheck`, `corepack pnpm content:check`(101개 그림쌍·다양성·도달성 포함), `corepack pnpm test`, `corepack pnpm test:e2e`. 전용 `e2e/mobile-two-games-one-ticket.spec.ts`가 API+모바일 브라우저에서 320×720 및 768×1024로 01 세 쪽, 02~04 접근, 그림 로드와 가로 넘침을 확인했다. `output/playwright/story-two-games-one-ticket-320-{1,2,3}.png`와 `-768-3.png`를 시각 검사했다.
+- **한계:** 실제 독자의 이해·흥미, 물리적 기기, 정확한 경기장 건축·복식 복원은 검증하지 않았다. 기존 첫 44편의 01·03 전수 보강도 남았다. 커밋·푸시·배포 없음.

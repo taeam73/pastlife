@@ -14,6 +14,7 @@ import { inspectResultCanon } from '../providers/narrative-canon.js';
 import { inspectImageCompatibility } from '../providers/image-compatibility.js';
 import { buildResultPresentation } from './build-result-presentation.js';
 import { ResultPresentationSchema } from '@pastlife/contracts';
+import { buildContentStoryExtended, buildContentStoryResult } from './story-result.js';
 
 export const RESULT_DISCLAIMER = '';
 
@@ -39,6 +40,10 @@ export class ResultsService {
     const result = await this.requireResult(resultId);
     const session = await this.repository.getSession(result.sessionId);
     if (!session?.unlocks.includes('BASIC')) throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: 'AD 1 completion is required', slot: 1 });
+    if (result.core.storyId) {
+      const image = await this.presentImage(await this.ensureImage(resultId), result.core);
+      return buildContentStoryResult(resultId, result.core, image);
+    }
     const era = eras.find(({ id }) => id === result.core.eraId)!;
     const location = historicalLocations.find(({ id }) => id === result.core.locationId)!;
     const occupationAliases: Record<string, string> = { OCC_01: 'OCC_SCRIBE', OCC_02: 'OCC_TEACHER', OCC_03: 'OCC_CEREMONIAL', OCC_04: 'OCC_NAVIGATOR', OCC_05: 'OCC_NAVIGATOR', OCC_06: 'OCC_ARTISAN', OCC_07: 'OCC_HEALER', OCC_08: 'OCC_MESSENGER' };
@@ -48,10 +53,20 @@ export class ResultsService {
     const presentedImage = await this.presentImage(storedImage, result.core);
     let presentation;
     try {
-      const matchedCharacter = await this.libraryImages.getImage(result.core);
-      presentation = result.presentation
-        ? ResultPresentationSchema.parse(result.presentation)
-        : await this.repository.saveResultPresentation(resultId, buildResultPresentation(result.core, storyProfile, storedImage, matchedCharacter));
+      const storedPresentation = result.presentation ? ResultPresentationSchema.parse(result.presentation) : undefined;
+      if (storedPresentation?.version === 3) {
+        presentation = storedPresentation;
+      } else {
+        const matchedCharacter = await this.libraryImages.getImage(result.core);
+        const generatedPresentation = buildResultPresentation(result.core, storyProfile, storedImage, matchedCharacter);
+        presentation = storedPresentation
+          ? await this.repository.updateResultPresentation(resultId, ResultPresentationSchema.parse({
+            ...storedPresentation,
+            version: 3,
+            hero: { ...storedPresentation.hero, signatureQuote: generatedPresentation.hero.signatureQuote },
+          }))
+          : await this.repository.saveResultPresentation(resultId, generatedPresentation);
+      }
     } catch (error) {
       this.logger.warn(`Presentation unavailable for ${resultId}: ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -184,6 +199,10 @@ export class ResultsService {
     const result = await this.requireResult(resultId);
     const session = await this.repository.getSession(result.sessionId);
     if (!session?.unlocks.includes(unlockType)) throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: `AD ${slot} completion is required`, slot });
+    if (result.core.storyId) {
+      const image = await this.presentImage(await this.ensureImage(resultId), result.core);
+      return buildContentStoryExtended(resultId, result.core, image, unlockType);
+    }
     const storyProfile = result.storyProfile ?? buildStoryProfile(result.core);
     const blocks = unlockType === 'DEEP'
       ? buildDeepNarrative(result.core, storyProfile)

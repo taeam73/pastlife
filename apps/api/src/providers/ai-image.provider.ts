@@ -36,6 +36,7 @@ export class AiImageProvider implements ImageProvider {
     @Inject(IMAGE_STORAGE) private readonly storage: ImageStorage,
   ) {}
   async getImage(core: ResultCore): Promise<ImageAsset> {
+    if (core.storyId) return this.fallback.getImage(core);
     const endpoint = process.env.AI_IMAGE_API_URL;
     if (!endpoint) return this.fallback.getImage(core);
     for (let attempt = 1; attempt <= 2; attempt += 1) {

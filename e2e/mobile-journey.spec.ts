@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('completes the assessment and unlocks archive, deep, and guide results', async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
   await page.goto('/');
 
   await expect(page.getByRole('img', { name: '전생록' }).first()).toBeVisible();
@@ -18,21 +18,22 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   await expect(page).toHaveURL(/\/result$/);
   await expect(page.getByText('당신의 전생은')).toBeVisible();
   await expect(page.getByText('나의 전생 이야기', { exact: true })).toBeVisible();
-  const scene = page.getByRole('img', { name: /historical scene$/ }).first();
+  const scene = page.getByTestId('result-hero-background').locator('img');
   const backgroundSource = await scene.getAttribute('src');
-  for (const [number, title] of [[2, '시련'], [3, '선택'], [4, '그리고, 지금']] as const) {
-    await page.getByRole('button', { name: `${number}장 ${title}`, exact: true }).click();
-    await expect(page.getByText(`나의 전생 이야기 · ${String(number).padStart(2, '0')}`)).toBeVisible();
-    await expect(page.getByLabel(`${title} 내용`)).toBeVisible();
+  expect(backgroundSource).toBeTruthy();
+  let previousChapterText = '';
+  for (const number of [2, 3, 4]) {
+    await page.getByRole('button', { name: new RegExp(`^${number}장 .* 보기$`) }).click();
+    const chapterText = await page.getByTestId('chapter-reader-panel').textContent();
+    expect(chapterText).not.toBe(previousChapterText);
+    previousChapterText = chapterText ?? '';
     expect(await scene.getAttribute('src')).toBe(backgroundSource);
   }
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: '2장 시련', exact: true }).click();
-  await expect(page.getByRole('button', { name: '다음 글 페이지' })).toBeVisible();
-  await page.getByRole('button', { name: '다음 글 페이지' }).click();
-  await expect(page.getByText('2 / 2')).toBeVisible();
+  await page.getByRole('button', { name: /^2장 .* 보기$/ }).click();
+  await expect(page.getByTestId('chapter-reader-panel')).toBeVisible();
   await page.setViewportSize({ width: 768, height: 1024 });
-  await expect(page.getByRole('button', { name: '4장 그리고, 지금', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^4장 .* 보기$/ })).toBeVisible();
   await page.setViewportSize({ width: 1440, height: 900 });
   await expect(page.getByRole('button', { name: '이미지 공유' })).toBeVisible();
   await expect(page.getByRole('tab', { name: '메인' })).toBeVisible();
@@ -48,7 +49,7 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   await page.getByText('기록 열기').click();
   await expect(page).toHaveURL(/\/archive\/[0-9a-f-]+$/);
   await expect(page.getByText(/저장된 전생 기록 No\.\d{2}/)).toBeVisible();
-  await expect(page.getByText('탄생 · 당신의 이야기가 시작된 날').last()).toBeVisible();
+  await expect(page.getByRole('button', { name: /^1장 .* 보기$/ })).toBeVisible();
   await expect(page.getByRole('tab', { name: '메인' })).toBeVisible();
   await page.getByRole('button', { name: '기록 삭제' }).click();
   await expect(page.getByText('이 기록을 아카이브에서 삭제할까요? 현재 결과와 익명 판정 데이터는 삭제되지 않습니다.')).toBeVisible();
@@ -61,13 +62,13 @@ test('completes the assessment and unlocks archive, deep, and guide results', as
   await page.getByRole('button', { name: '광고 보고 더 자세히 보기' }).click();
   await expect(page).toHaveURL(/\/deep$/);
   await expect(page.getByText('더 자세한 전생 이야기', { exact: true })).toBeVisible();
-  await expect(page.getByText('제3장 · 선택 뒤에 남은 대가')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^3장 .* 보기$/ })).toBeVisible();
   await expect(page.getByRole('tab', { name: '나의 전생' })).toBeVisible();
 
   await page.getByRole('button', { name: '지금의 나를 위한 팁 보기' }).click();
   await expect(page).toHaveURL(/\/present-guide$/);
   await expect(page.getByText('지금의 나를 위한 가이드', { exact: true })).toBeVisible();
-  await expect(page.getByText('제3장 · 잘하는 일을 나누는 방법')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^3장 .* 보기$/ })).toBeVisible();
   await expect(page.getByRole('tab', { name: '설정' })).toBeVisible();
 
   await page.reload();

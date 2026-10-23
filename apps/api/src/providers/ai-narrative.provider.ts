@@ -41,6 +41,7 @@ export class AiNarrativeProvider implements NarrativeProvider {
   constructor(@Inject(TemplateNarrativeProvider) private readonly fallback: TemplateNarrativeProvider) {}
   async createBasic(core: ResultCore): Promise<NarrativeResult> {
     const characterStory = await this.fallback.createBasic(core);
+    if (core.storyId) return characterStory;
     const endpoint = process.env.AI_TEXT_API_URL;
     if (!endpoint) return characterStory;
     try {

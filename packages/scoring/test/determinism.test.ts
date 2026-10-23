@@ -27,7 +27,7 @@ describe('result determinism', () => {
 
   it('chooses only occupations allowed by the selected historical setting', () => {
     for (let choiceIndex = 0; choiceIndex < 6; choiceIndex += 1) {
-      const result = calculateResult({ answers: answersFor(`v3-${choiceIndex}`, choiceIndex), sessionSeed: `v3-${choiceIndex}`, contentVersion: '3.0.0' });
+      const result = calculateResult({ answers: answersFor(`v3-${choiceIndex}`, choiceIndex), sessionSeed: `v3-${choiceIndex}`, contentVersion: '2.5.0' });
       const setting = historicalSettings.find(({ id }) => id === result.locationId)!;
       expect(setting.occupationIds).toContain(result.occupationId);
       expect(findHistoricalSettingExpansion(setting.id)?.imageAssetKeys).toContain(result.libraryImage.key);

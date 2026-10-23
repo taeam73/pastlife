@@ -6,7 +6,7 @@ const validEnv = {
   DATABASE_URL: 'postgresql://user:secret@ep-demo-pooler.ap-northeast-2.aws.neon.tech/app?sslmode=require',
   DIRECT_URL: 'postgresql://user:secret@ep-demo.ap-northeast-2.aws.neon.tech/app?sslmode=require',
   USE_IN_MEMORY_DB: 'false',
-  CONTENT_VERSION: '2.5.0',
+  CONTENT_VERSION: '3.0.0',
   AI_IMAGE_API_URL: 'https://images.example.com/generate',
   AI_IMAGE_API_KEY: 'ai-secret',
   S3_ENDPOINT: 'https://objects.example.com',
@@ -21,7 +21,7 @@ test('accepts pooled runtime and direct migration Neon endpoints', () => {
     runtimeHost: 'ep-demo-pooler.ap-northeast-2.aws.neon.tech',
     migrationHost: 'ep-demo.ap-northeast-2.aws.neon.tech',
     provider: 'neon',
-    contentVersion: '2.5.0',
+    contentVersion: '3.0.0',
     aiImageEndpointHost: 'images.example.com',
     storageEndpointHost: 'objects.example.com',
     storageBucket: 'pastlife-staging-private',
@@ -38,7 +38,7 @@ test('accepts separate non-Neon PostgreSQL endpoints', () => {
     runtimeHost: 'runtime-db.internal',
     migrationHost: 'migration-db.internal',
     provider: 'postgresql',
-    contentVersion: '2.5.0',
+    contentVersion: '3.0.0',
     aiImageEndpointHost: 'images.example.com',
     storageEndpointHost: 'objects.example.com',
     storageBucket: 'pastlife-staging-private',
@@ -48,7 +48,7 @@ test('accepts separate non-Neon PostgreSQL endpoints', () => {
 
 test('rejects unsafe staging modes and versions', () => {
   assert.throws(() => inspectStagingEnv({ ...validEnv, USE_IN_MEMORY_DB: 'true' }), /must be false/);
-  assert.throws(() => inspectStagingEnv({ ...validEnv, CONTENT_VERSION: '2.0.0' }), /must be 2\.5\.0/);
+  assert.throws(() => inspectStagingEnv({ ...validEnv, CONTENT_VERSION: '2.5.0' }), /must be 3\.0\.0/);
 });
 
 test('rejects invalid Neon runtime and migration roles', () => {

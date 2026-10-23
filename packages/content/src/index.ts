@@ -1,6 +1,7 @@
 import questionsJson from './generated/questions.ko.json';
 
 import type { Question, Stage } from './types.js';
+import { storyQuestions } from './story-questions.js';
 
 export * from './catalogs.js';
 export * from './types.js';
@@ -9,8 +10,15 @@ export * from './historical/validate.js';
 export * from './historical/occupations.js';
 export * from './historical/settings.js';
 export * from './historical/expansions.js';
+export * from './story-catalog.js';
+export * from './story-manuscripts.js';
 
 export const questions = questionsJson as Question[];
+export { storyQuestions };
+
+export function questionsForVersion(contentVersion: string): Question[] {
+  return contentVersion.startsWith('3.') ? storyQuestions : questions;
+}
 
 function stableHash(value: string): number {
   let hash = 2166136261;
@@ -32,9 +40,10 @@ export function selectQuestion(input: {
   excludedQuestionIds: readonly string[];
 }): Question {
   const { stage, sessionSeed, contentVersion } = input;
-  const candidates = questions.filter((question) => question.stage === stage).sort((left, right) => left.id.localeCompare(right.id));
-  if (candidates.length !== 6) {
-    throw new Error(`Expected six questions for stage ${stage}, received ${candidates.length}`);
+  const candidates = questionsForVersion(contentVersion).filter((question) => question.stage === stage).sort((left, right) => left.id.localeCompare(right.id));
+  const expectedCount = contentVersion.startsWith('3.') ? 4 : 6;
+  if (candidates.length !== expectedCount) {
+    throw new Error(`Expected ${expectedCount} questions for stage ${stage}, received ${candidates.length}`);
   }
   const excluded = new Set(input.excludedQuestionIds);
   const fresh = candidates.filter(({ id }) => !excluded.has(id));
@@ -43,5 +52,5 @@ export function selectQuestion(input: {
 }
 
 export function findChoice(questionId: string, choiceId: string) {
-  return questions.find((question) => question.id === questionId)?.choices.find((choice) => choice.id === choiceId);
+  return [...questions, ...storyQuestions].find((question) => question.id === questionId)?.choices.find((choice) => choice.id === choiceId);
 }

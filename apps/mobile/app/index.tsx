@@ -57,8 +57,8 @@ export default function StartScreen() {
           <Animated.View style={{ opacity: contentOpacity, transform: [{ translateY: contentY }] }}>
             <Image accessibilityLabel="전생록" source={require('../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.titleLogo} />
             <Text style={styles.kicker}>PAST LIFE ARCHIVE</Text>
-            <Text style={styles.title}>나는 언제, 어디에서,{ '\n' }어떤 사람이었을까?</Text>
-            <Text style={styles.copy}>시간 너머에 남겨진 당신의 이야기를 찾아보세요.</Text>
+            <Text style={styles.title}>나는 언제, 어디에서,{ '\n' }어떤 삶을 살았을까?</Text>
+            <Text style={styles.copy}>시간 너머의 뜻밖의 이야기에서, 지금의 마음과 닮은 장면을 찾아보세요.</Text>
           </Animated.View>
           <Animated.View style={{ opacity: buttonOpacity, transform: [{ translateY: buttonY }] }}>
             <PrimaryButton leadingIcon="✦" onPress={() => void start()}>나의 전생 찾아보기</PrimaryButton>

@@ -11,10 +11,12 @@ describe('anonymous vertical flow', () => {
   const originalDatabaseUrl = process.env.DATABASE_URL;
   const originalUseInMemoryDb = process.env.USE_IN_MEMORY_DB;
   const originalUseMockGoogle = process.env.USE_MOCK_GOOGLE;
+  const originalContentVersion = process.env.CONTENT_VERSION;
 
   beforeAll(async () => {
     process.env.USE_IN_MEMORY_DB = 'true';
     process.env.USE_MOCK_GOOGLE = 'true';
+    process.env.CONTENT_VERSION = '2.5.0';
     delete process.env.DATABASE_URL;
     const module = await Test.createTestingModule({ imports: [AppModule] }).compile();
     app = module.createNestApplication();
@@ -30,6 +32,8 @@ describe('anonymous vertical flow', () => {
     else process.env.USE_IN_MEMORY_DB = originalUseInMemoryDb;
     if (originalUseMockGoogle === undefined) delete process.env.USE_MOCK_GOOGLE;
     else process.env.USE_MOCK_GOOGLE = originalUseMockGoogle;
+    if (originalContentVersion === undefined) delete process.env.CONTENT_VERSION;
+    else process.env.CONTENT_VERSION = originalContentVersion;
   });
 
   it('completes six stages, remains idempotent, and unlocks basic once', async () => {

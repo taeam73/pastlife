@@ -5,6 +5,17 @@ import { inspectImageCompatibility } from '../src/providers/image-compatibility.
 import type { ResultCore } from '@pastlife/scoring';
 
 describe('result image compatibility', () => {
+  it('accepts exact two-layer art for its own story and rejects a swapped character', async () => {
+    const provider = new LibraryImageProvider();
+    const core = { storyId: 'ROOM7', contentVersion: '3.0.0' } as ResultCore;
+    const room = await provider.getImage(core);
+    expect(inspectImageCompatibility(core, room)).toEqual([]);
+    const clown = await provider.getImage({ ...core, storyId: 'CLOWN' });
+    expect(inspectImageCompatibility(core, clown)).not.toEqual([]);
+    const fallback = await provider.getImage({ ...core, storyId: 'BLANK_ORDER' });
+    expect(inspectImageCompatibility({ ...core, storyId: 'BLANK_ORDER' }, fallback)).toEqual([]);
+  });
+
   it('keeps every historical setting background and character layer aligned', async () => {
     const provider = new LibraryImageProvider();
     for (const setting of historicalSettings) {

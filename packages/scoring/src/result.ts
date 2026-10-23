@@ -10,17 +10,38 @@ import {
   relationships,
   historicalSettings,
   findHistoricalSettingExpansion,
+  findChoice,
+  storyCards,
+  type StorySignal,
 } from '@pastlife/content';
-import { answerHash, hashText } from './hash.js';
+import { answerHash, canonicalAnswers, hashText } from './hash.js';
 import { pickCandidate } from './filter.js';
 import { calculateScores } from './score.js';
 import { deterministicIndex } from './prng.js';
 import type { CalculateResultInput, ResultCore } from './types.js';
 
 export function calculateResult({ answers, contentVersion }: CalculateResultInput): ResultCore {
+  if (contentVersion.startsWith('3.') && answers.some(({ questionId }) => !questionId.startsWith('SQ'))) {
+    throw new Error('Content 3.x results require story-first questions');
+  }
   const digest = answerHash(answers);
   const seed = `${digest}:${contentVersion}`;
   const scores = calculateScores(answers);
+  const storySignals = contentVersion.startsWith('3.')
+    ? canonicalAnswers(answers).flatMap(({ questionId, choiceId }) => findChoice(questionId, choiceId)?.storySignals ?? [])
+    : [];
+  const signalCount = (signal: StorySignal) => storySignals.filter((value) => value === signal).length;
+  // The rare, non-human card needs an unusually close match and a stable gate.
+  // A general preference for quiet or release alone is not enough.
+  const rareGate = Number.parseInt(hashText(`${seed}:rare`).slice(0, 8), 16) % 20 === 0;
+  const rareCard = rareGate ? storyCards.find((card) => card.rare && card.signals.every((signal) => signalCount(signal) > 0)) : undefined;
+  const affinities = storyCards.filter((card) => !card.rare).map((card) => ({ card, score: card.signals.reduce((total, signal) => total + Math.min(2, signalCount(signal)), 0) }));
+  const maxAffinity = Math.max(...affinities.map(({ score }) => score));
+  const closeMatches = affinities.filter(({ score }) => score > 0 && score >= maxAffinity - 1).sort((a, b) => a.card.id.localeCompare(b.card.id));
+  const storyId = contentVersion.startsWith('3.')
+    ? rareCard?.id ?? closeMatches[Number.parseInt(hashText(`${seed}:story-pick`).slice(0, 8), 16) % closeMatches.length]?.card.id
+    : undefined;
+  if (contentVersion.startsWith('3.') && !storyId) throw new Error('No story card matched the answers');
 
   const location = pickCandidate(historicalLocations, scores.tags, `${seed}:location`, historicalLocations);
   const era = eras.find(({ id }) => id === location.eraId);
@@ -43,6 +64,7 @@ export function calculateResult({ answers, contentVersion }: CalculateResultInpu
   const imageKey = imageKeys[deterministicIndex(`${seed}:${occupation.id}:library-image`, imageKeys.length)]!;
 
   return {
+    ...(storyId ? { storyId, storySignals } : {}),
     contentVersion,
     answerHash: digest,
     recordNo: (Number.parseInt(hashText(digest).slice(0, 8), 16) % 99) + 1,

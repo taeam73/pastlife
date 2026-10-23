@@ -1,0 +1,9 @@
+# 84번째 원고·그림 검수 — 다른 딸을 위한 부채
+
+- ID: `FAN_FOR_OTHER_DAUGHTER`. 사요(1648~1712)는 1675년 도쿠가와 막부 시대 교토에서 살았을 법한 창작 부채 그림 화공이다. [메트로폴리탄 미술관의 교토 장식 미술 안내](https://www.metmuseum.org/exhibitions/listings/2019/kyoto-capital-artistic-imagination/exhibition-guide), [교토 공식 관광의 부채 제작 설명](https://kyoto.travel/en/travel-inspiration/kyoto-craftmanship-small-production-crafts/), [메트로폴리탄 미술관의 에도 시대 여성 화가 자료](https://resources.metmuseum.org/resources/metpublications/pdf/The_Tale_of_Genji_A_Japanese_Classic_Illuminated.pdf), [에도 시대 개관](https://www.metmuseum.org/toah/ht/09/eaj.html)을 2026-10-23 확인했다. 여성 화가의 실례는 직업 가능성의 참고이며 사요 같은 여성 공방이 일반적이었다는 증거로 확대하지 않는다. 사요와 가족·공방·부채 주문·대화·생애는 창작이다. [설정 대장](story-setting-register.md)에 역사 조건과 평생을 집필 전에 확정했다.
+- 01은 출생지·일·친구 하나와 공방·손이 굳은 노년과 미요에게 일을 넘긴 변화를 세 쪽에 담았다. 아버지와의 재회 하나로 평생을 규정하지 않는다. 짧은 결과 요약은 80자 계약을 지킨다.
+- 02는 손등의 화상 자국과 이름으로 손님이 아버지임을 알아차리는 공방의 하루다. 세 답변은 자국 확인, 직접 질문, 주문 거절을 각기 다른 첫 행동으로 보여 주지만 모두 선금을 돌려주고 정체를 밝히는 공통 결말로 수렴한다. 사요는 품삯을 잃고 며칠간 흔들린다. 즉각적인 화해 없이 편지 몇 통이 오가는 것으로 맺으며, 전생록 화자의 도입과 이후 삶의 마무리가 있다. 인과를 다시 읽으며 빈 부채를 '펼친다'는 표현과 하나의 혼인 이후 공방 역할을 명확히 고쳤다.
+- 03은 출생부터 사망까지 13개 사건으로 가족, 그림을 배운 시기, 친구와 공방, 어머니의 죽음, 동생의 이동, 도제 교육, 손 통증, 역할 이양을 담는다. 04는 어머니·하나·료타·미요의 관점과 사요가 남긴 말로 평생을 보여 준다. 생몰 연도·나이·관계·사건 순서와 쉬운 문장인지 점검했다.
+- 그림은 `apps/mobile/assets/stories/v3/kyoto-fan-workshop-bg.jpg`(1254×1254)와 `kyoto-sayo.webp`(1024×1536, 알파 0~254)를 별도 제작했다. 배경의 부채 종이·대나무 살·붓과 인물의 작업복·부채를 원고와 맞췄다. 건축·복식의 모든 세부 고증을 보증하는 그림은 아니다.
+- 검증: `corepack pnpm typecheck`, `corepack pnpm content:check`, `corepack pnpm test`, `corepack pnpm test:e2e`와 전용 `e2e/mobile-fan-for-other-daughter.spec.ts`의 320×720·768×1024 브라우저 결과 검사를 통과했다. 그림 원본 해상도, 01 세 쪽, 02~04 도달성, 가로 넘침, 카드 간격을 검사하고 실제 합성 화면을 살폈다. 마지막 문장 수정 뒤 전용 화면 검사를 재실행했다. 라이브 카드·원고·고유 그림 매핑은 각각 84개, ID 중복은 없다.
+- 한계: 실제 독자 반응과 실기기 검증은 아직 없다. 기존 44편의 01·03 전수 보강도 미완료다. 커밋·푸시·배포하지 않았다.

@@ -1,10 +1,30 @@
 import { findHistoricalSettingExpansion, historicalLocations } from '@pastlife/content';
 import type { ResultCore } from '@pastlife/scoring';
 import type { ImageAsset } from './image.provider.js';
+import { storyImageAssets } from './library-image.provider.js';
 
 export type ImageCompatibilityIssue = { field: 'background' | 'character' | 'layers'; message: string };
 
 export function inspectImageCompatibility(core: ResultCore, image: ImageAsset): ImageCompatibilityIssue[] {
+  if (core.storyId) {
+    const artwork = storyImageAssets[core.storyId];
+    const backgrounds = image.layers?.filter((layer) => layer.role === 'BACKGROUND') ?? [];
+    const characters = image.layers?.filter((layer) => layer.role === 'CHARACTER') ?? [];
+    if (!artwork) {
+      return image.uri === 'asset://branding/main-bg-01.png'
+        && backgrounds.length === 1 && backgrounds[0]?.uri === image.uri
+        && characters.length === 0 && !image.compositeUri
+        ? [] : [{ field: 'background', message: 'Unillustrated story requires the neutral background without a character' }];
+    }
+    const issues: ImageCompatibilityIssue[] = [];
+    if (image.uri !== artwork.backgroundUri || backgrounds.length !== 1 || backgrounds[0]?.uri !== artwork.backgroundUri || image.compositeUri) {
+      issues.push({ field: 'background', message: `Story ${core.storyId} requires its own background` });
+    }
+    if (characters.length !== 1 || characters[0]?.uri !== artwork.characterUri) {
+      issues.push({ field: 'character', message: `Story ${core.storyId} requires its own character` });
+    }
+    return issues;
+  }
   const issues: ImageCompatibilityIssue[] = [];
   const expansion = findHistoricalSettingExpansion(core.locationId);
   const expected = expansion ? [...expansion.imageAssetKeys, ...(expansion.additionalImageAssetKeys ?? [])] : [];

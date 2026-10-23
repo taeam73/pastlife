@@ -9,8 +9,8 @@ import { presentChapters, presentHeadline, presentIdentity } from '../results/pr
 type ImageLayer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 type ImageAsset = { uri: string; alt: string; sourceType: 'AI' | 'LIBRARY'; status: 'READY' | 'FALLBACK'; layers?: ImageLayer[] | undefined; compositeUri?: string | undefined };
 type Highlight = { id: string; title: string; summary: string; detail: string };
-type Character = { name: string; occupation: string; gender: string; introduction: string; occupationDescription: string; appearance: string; temperament: string; hobby: string; dream: string; talent: string; formativeWound: string };
-type LifeSummary = { ageAtDeath: number; lifespanLabel: string; endingTitle: string };
+type Character = { name: string; occupation: string; gender: string | null; introduction: string; occupationDescription: string; favoritePlace: string; appearance: string; temperament: string; hobby: string; dream: string; talent: string; formativeWound: string };
+type LifeSummary = { ageAtDeath: number | null; lifespanLabel: string; endingTitle: string };
 
 type ResultExperienceProps = {
   image: ImageAsset;
@@ -31,6 +31,7 @@ function firstSentence(value: string) {
 
 export const ResultExperience = forwardRef<View, ResultExperienceProps>(function ResultExperience({
   image,
+  blocks,
   highlights,
   character,
   introTitle = '당신의 전생 이야기',
@@ -46,8 +47,9 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     : image.layers ?? [{ uri: sceneUri, role: 'BACKGROUND', alt: image.alt }];
   const legacyHighlights = highlights?.filter((item) => ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'].includes(item.id)).slice(0, 4);
   const chapters = presentation
-    ? presentation.chapters.map((chapter) => ({ id: chapter.id, title: chapter.title, summary: '', detail: chapter.body, crop: chapter.crop }))
-    : legacyHighlights ? presentChapters(legacyHighlights, sceneUri).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: chapter.body, crop: chapter.crop })) : [];
+    ? presentation.chapters.map((chapter) => ({ id: chapter.id, title: chapter.title, summary: '', detail: chapter.body, profilePages: chapter.id === 'MEETING' ? chapter.profilePages : undefined, crop: chapter.crop }))
+    : legacyHighlights?.length ? presentChapters(legacyHighlights, sceneUri).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: chapter.body, crop: chapter.crop }))
+      : blocks.map((block, index) => ({ id: block.id, title: block.title, summary: '', detail: block.body, crop: { focusX: (index + 1) / (blocks.length + 1), focusY: 0.5, zoom: 1.55 } }));
   const selectChapter = (index: number) => {
     setChapterIndex(index);
     onChapterSelect?.();
@@ -61,8 +63,10 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         imageAlt={image.alt}
         layers={layers}
         title={presentation?.hero.title ?? (headline ? presentHeadline(headline) : introTitle)}
-        characterLabel={character ? `${character.name} · ${character.occupation}` : undefined}
-        characterDescription={presentation?.hero.tagline ?? (character ? presentIdentity(character.introduction) : undefined)}
+        characterLabel={character ? (presentation?.version === 3 ? character.name : character.name === '이야기 속 당신' ? character.occupation : `${character.name} · ${character.occupation}`) : undefined}
+        roleLabel={presentation?.version === 3 ? character?.occupation : undefined}
+        placeLabel={presentation?.version === 3 ? character?.favoritePlace : undefined}
+        characterDescription={presentation?.version === 3 ? presentation.hero.signatureQuote : presentation?.hero.tagline ?? (character ? presentIdentity(character.introduction) : undefined)}
         introductionSummary={presentation?.hero.lifeSummary ?? (character ? firstSentence(character.introduction) : introDescription)}
         selectedIndex={chapterIndex}
         onSelect={selectChapter}

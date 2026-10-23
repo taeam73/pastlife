@@ -1,4 +1,4 @@
-import { axes, questions, tags, type AxisCode, type CoreTag, type Stage } from '@pastlife/content';
+import { axes, questions, storyQuestions, tags, type AxisCode, type CoreTag, type Stage } from '@pastlife/content';
 import { canonicalAnswers } from './hash.js';
 import type { AnswerInput, ScoreSummary } from './types.js';
 
@@ -29,7 +29,7 @@ export function calculateScores(answers: AnswerInput[]): ScoreSummary {
   const axisTotals = Object.fromEntries(axes.map((axis) => [axis, 0])) as Record<AxisCode, number>;
 
   for (const answer of canonicalAnswers(answers)) {
-    const question = questions.find(({ id }) => id === answer.questionId);
+    const question = [...questions, ...storyQuestions].find(({ id }) => id === answer.questionId);
     if (!question || question.stage !== answer.stage) throw new Error(`Question ${answer.questionId} does not match stage ${answer.stage}`);
     const choice = question.choices.find(({ id }) => id === answer.choiceId);
     if (!choice) throw new Error(`Choice ${answer.choiceId} does not belong to ${answer.questionId}`);

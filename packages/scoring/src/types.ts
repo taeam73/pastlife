@@ -1,4 +1,4 @@
-import type { AxisCode, CoreTag, Stage } from '@pastlife/content';
+import type { AxisCode, CoreTag, Stage, StorySignal } from '@pastlife/content';
 
 export type AnswerInput = {
   stage: Stage;
@@ -13,6 +13,8 @@ export type ScoreSummary = {
 };
 
 export type ResultCore = {
+  storyId?: string;
+  storySignals?: StorySignal[];
   contentVersion: string;
   answerHash: string;
   recordNo: number;

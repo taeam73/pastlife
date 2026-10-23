@@ -154,6 +154,15 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
     return row.presentationJson as unknown as StoredPresentation;
   }
 
+  async updateResultPresentation(resultId: string, presentation: StoredPresentation) {
+    const row = await this.prisma.result.update({
+      where: { id: resultId },
+      data: { presentationJson: presentation as unknown as Prisma.InputJsonValue },
+      select: { presentationJson: true },
+    });
+    return row.presentationJson as unknown as StoredPresentation;
+  }
+
   async completeAd(sessionId: string, slot: number, providerEventId: string) {
     await this.prisma.$transaction(async (tx) => {
       const prior = await tx.adEvent.findUnique({ where: { providerEventId } });

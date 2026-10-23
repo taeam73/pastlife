@@ -28,7 +28,7 @@ export const QuestionResponseSchema = z.object({
   id: z.string(),
   stage: z.number().int().min(1).max(6),
   text: z.string(),
-  choices: z.array(ChoiceSchema).length(6),
+  choices: z.array(ChoiceSchema).refine((choices) => choices.length === 4 || choices.length === 6, 'A question must have four or six choices'),
 });
 
 export const SaveAnswerRequestSchema = z.object({ questionId: z.string(), choiceId: z.string() });

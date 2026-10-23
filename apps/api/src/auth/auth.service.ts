@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
-import { eras, historicalLocations, occupations } from '@pastlife/content';
+import { eras, findStoryCard, historicalLocations, occupations } from '@pastlife/content';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
@@ -38,7 +38,25 @@ export class AuthService {
     return { accessToken: this.sign(user.id), user: { id: user.id, email: user.email, name: user.name } };
   }
   archive(resultId: string, token: string) { const userId = this.verify(token); return this.repository.getResult(resultId).then(async (result) => { if (!result) throw new BadRequestException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' }); if (this.dbEnabled) await this.prisma.$executeRawUnsafe('INSERT INTO archive_entries (id, "userId", "resultId", "createdAt") VALUES ($1,$2,$3,NOW()) ON CONFLICT ("userId", "resultId") DO NOTHING', randomUUID(), userId, resultId); else { const set = this.archives.get(userId) ?? new Set<string>(); set.add(resultId); this.archives.set(userId, set); } return { resultId, saved: true }; }); }
-  async list(token: string) { const userId = this.verify(token); const ids = this.dbEnabled ? (await this.prisma.$queryRawUnsafe<Array<{ resultId: string; createdAt: Date }>>('SELECT "resultId" as "resultId", "createdAt" as "createdAt" FROM archive_entries WHERE "userId" = $1 ORDER BY "createdAt" DESC', userId)).map((r) => ({ resultId: r.resultId, createdAt: r.createdAt })) : [...(this.archives.get(userId) ?? [])].map((resultId) => ({ resultId, createdAt: new Date() })); const items = []; for (const entry of ids) { const result = await this.repository.getResult(entry.resultId); if (!result) continue; const era = eras.find((e) => e.id === result.core.eraId); const location = historicalLocations.find((l) => l.id === result.core.locationId); const occupation = occupations.find((o) => o.id === result.core.occupationId); items.push({ resultId: entry.resultId, recordNo: result.core.recordNo, headline: `${era?.label ?? ''} ${location?.label ?? ''} · ${occupation?.label ?? ''}`, createdAt: entry.createdAt.toISOString() }); } return { items }; }
+  async list(token: string) {
+    const userId = this.verify(token);
+    const ids = this.dbEnabled
+      ? (await this.prisma.$queryRawUnsafe<Array<{ resultId: string; createdAt: Date }>>('SELECT "resultId" as "resultId", "createdAt" as "createdAt" FROM archive_entries WHERE "userId" = $1 ORDER BY "createdAt" DESC', userId)).map((row) => ({ resultId: row.resultId, createdAt: row.createdAt }))
+      : [...(this.archives.get(userId) ?? [])].map((resultId) => ({ resultId, createdAt: new Date() }));
+    const items = [];
+    for (const entry of ids) {
+      const result = await this.repository.getResult(entry.resultId);
+      if (!result) continue;
+      const story = result.core.storyId ? findStoryCard(result.core.storyId) : undefined;
+      const era = eras.find((item) => item.id === result.core.eraId);
+      const location = historicalLocations.find((item) => item.id === result.core.locationId);
+      const occupation = occupations.find((item) => item.id === result.core.occupationId);
+      items.push({ resultId: entry.resultId, recordNo: result.core.recordNo,
+        headline: story?.title ?? `${era?.label ?? ''} ${location?.label ?? ''} · ${occupation?.label ?? ''}`,
+        createdAt: entry.createdAt.toISOString() });
+    }
+    return { items };
+  }
   async detail(resultId: string, token: string) {
     const userId = this.verify(token);
     const owned = this.dbEnabled

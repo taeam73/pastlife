@@ -8,7 +8,7 @@ import {
   lifeEvents,
   occupations,
   personalities,
-  questions,
+  questionsForVersion,
   regions,
   relationships,
   socialClasses,
@@ -19,7 +19,8 @@ import {
 } from '@pastlife/content';
 
 const prisma = new PrismaClient();
-const version = process.env.CONTENT_VERSION ?? '2.5.0';
+const version = process.env.CONTENT_VERSION ?? '3.0.0';
+const questions = questionsForVersion(version);
 const digest = createHash('sha256').update(JSON.stringify(questions)).digest('hex');
 
 const tagGroup = (tag: string) => {

@@ -56,8 +56,8 @@ export function inspectStagingEnv(env = process.env) {
   if (env.USE_IN_MEMORY_DB !== 'false') {
     throw new Error('USE_IN_MEMORY_DB must be false for staging');
   }
-  if (env.CONTENT_VERSION !== '2.5.0') {
-    throw new Error('CONTENT_VERSION must be 2.5.0 for this release');
+  if (env.CONTENT_VERSION !== '3.0.0') {
+    throw new Error('CONTENT_VERSION must be 3.0.0 for this release');
   }
 
   const runtime = parsePostgresUrl(env.DATABASE_URL, 'DATABASE_URL');
