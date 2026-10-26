@@ -15,6 +15,12 @@ export class ResultsController {
   @Get(':id/deep')
   deep(@Param('id') id: string) { return this.results.deep(id); }
 
+  @Get(':id/final-moment')
+  finalMoment(@Param('id') id: string) { return this.results.finalMoment(id); }
+
+  @Post(':id/final-moment/read')
+  markFinalMomentRead(@Param('id') id: string) { return this.results.markFinalMomentRead(id); }
+
   @Get(':id/guide')
   guide(@Param('id') id: string) { return this.results.guide(id); }
 

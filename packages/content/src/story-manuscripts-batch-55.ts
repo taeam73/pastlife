@@ -53,7 +53,7 @@ export const storyManuscriptsBatch55: readonly StoryManuscript[] = [
       { when: '833년 · 57세', event: '다른 곳에서 연주하던 아음이 장안에 들름' },
       { when: '840년 · 64세', event: '찻집 일을 줄이고 위영의 조카에게 자리를 내줌' },
       { when: '845년 · 69세', event: '처음으로 장안 밖에 나가 낙양의 아음 만나기' },
-      { when: '852년 · 76세', event: '장안에서 생을 마침' },
+      { when: '852년 · 76세', event: '며칠간 쇠약해진 뒤 장안의 집 마당에서 위영 곁에 생을 마침. 숨쉬기 어려워진 원인은 미상' },
     ],
     memories: [
       { label: '오래 한 일', detail: '찻잔과 자리를 내주며 손님이 다시 오기 좋은 곳 만들기' },

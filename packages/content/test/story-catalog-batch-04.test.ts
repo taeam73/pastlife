@@ -187,7 +187,8 @@ describe('fourth story-library group', () => {
       expect(episode).toContain('빵의 주인도, 빵값도');
       expect(episode).toContain('그냥 찢을 수도 있었잖아요');
       expect(episode).toContain('없어진 빵 둘과 버린 빵 셋');
-      expect(episode).toContain('여담은 오래 살았습니다');
+      expect(episode).toContain('보리가 공동 주인이 된 뒤에도 여담은 가게에 나와');
+      expect(episode).toContain('소미는 그 모임에 오지 않았습니다');
       expect(episode.length).toBeGreaterThan(2200);
     }
   });

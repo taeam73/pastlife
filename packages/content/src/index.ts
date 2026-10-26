@@ -12,6 +12,7 @@ export * from './historical/settings.js';
 export * from './historical/expansions.js';
 export * from './story-catalog.js';
 export * from './story-manuscripts.js';
+export * from './story-final-moments.js';
 
 export const questions = questionsJson as Question[];
 export { storyQuestions };

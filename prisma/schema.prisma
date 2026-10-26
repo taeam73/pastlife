@@ -356,6 +356,7 @@ model Result {
   coreJson         Json
   storyProfileJson Json?
   presentationJson  Json?
+  finalMomentReadAt DateTime? @map("final_moment_read_at")
   status           ResultStatus   @default(NARRATIVE_GENERATING)
   createdAt        DateTime       @default(now())
   texts            ResultText[]

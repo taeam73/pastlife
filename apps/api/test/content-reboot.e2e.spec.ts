@@ -3,10 +3,11 @@ import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { BasicResultResponseSchema, ExtendedResultResponseSchema, QuestionResponseSchema } from '@pastlife/contracts';
-import { storyCards, findStoryManuscript } from '@pastlife/content';
+import { BasicResultResponseSchema, ExtendedResultResponseSchema, FinalMomentReadResponseSchema, QuestionResponseSchema, StoryFinalMomentResponseSchema } from '@pastlife/contracts';
+import { storyCards, storyFinalMoments, findStoryManuscript } from '@pastlife/content';
 import { AppModule } from '../src/app.module.js';
 import { storyImageAssets } from '../src/providers/library-image.provider.js';
+import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../src/repositories/assessment.repository.js';
 
 describe('story-first content 3.0 vertical flow', () => {
   let app!: INestApplication;
@@ -87,6 +88,48 @@ describe('story-first content 3.0 vertical flow', () => {
     await request(app.getHttpServer()).post(`/api/v1/sessions/${sessionId}/ads/3/complete`).send({ providerEventId: `fake-ad-3-story-${sessionId}` }).expect(201);
     const guide = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/guide`).expect(200);
     expect(() => ExtendedResultResponseSchema.parse(guide.body)).not.toThrow();
+
+    const repository = app.get<AssessmentRepository>(ASSESSMENT_REPOSITORY);
+    const sourceResult = await repository.getResult(resultId);
+    expect(sourceResult).toBeDefined();
+    const finalSessionId = `final-moment-${sessionId}`;
+    const finalResultId = `final-moment-${resultId}`;
+    await repository.createSession({ id: finalSessionId, anonymousId: 'final-moment-test', locale: 'ko', seed: 'final-moment-test', contentVersion: '3.0.0', status: 'RESULT_READY', viewMode: 'TEXT', expiresAt: new Date(Date.now() + 60000) });
+    await repository.saveResult({ ...sourceResult!, id: finalResultId, sessionId: finalSessionId, core: { ...sourceResult!.core, storyId: 'NIGER_SANDBAR' } });
+    await request(app.getHttpServer()).post(`/api/v1/sessions/${finalSessionId}/ads/1/complete`).send({ providerEventId: `fake-ad-1-${finalSessionId}` }).expect(201);
+    await request(app.getHttpServer()).get(`/api/v1/results/${finalResultId}/final-moment`).expect(403).expect(({ body }) => expect(body.slot).toBe(2));
+    await request(app.getHttpServer()).post(`/api/v1/results/${finalResultId}/final-moment/read`).expect(403);
+    await request(app.getHttpServer()).post(`/api/v1/sessions/${finalSessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${finalSessionId}` }).expect(201);
+    const finalMoment = await request(app.getHttpServer()).get(`/api/v1/results/${finalResultId}/final-moment`).expect(200);
+    expect(() => StoryFinalMomentResponseSchema.parse(finalMoment.body)).not.toThrow();
+    expect(finalMoment.body.storyId).toBe('NIGER_SANDBAR');
+    expect(finalMoment.body.scene).toContain('사리');
+    expect(finalMoment.body.afterword).toContain('전생록');
+    expect(finalMoment.body.illustration.uri).toContain('niger-sandbar-final-moment');
+    await request(app.getHttpServer()).post(`/api/v1/results/${finalResultId}/share-assets`).send({ type: 'IMAGE', locale: 'ko' }).expect(403).expect(({ body }) => expect(body.code).toBe('FINAL_MOMENT_REQUIRED'));
+    const beforeRead = await request(app.getHttpServer()).get(`/api/v1/results/${finalResultId}/basic`).expect(200);
+    expect(beforeRead.body.finalMomentRead).toBe(false);
+    expect(beforeRead.body.finalMomentAvailable).toBe(true);
+    const read = await request(app.getHttpServer()).post(`/api/v1/results/${finalResultId}/final-moment/read`).expect(201);
+    expect(() => FinalMomentReadResponseSchema.parse(read.body)).not.toThrow();
+    const readAgain = await request(app.getHttpServer()).post(`/api/v1/results/${finalResultId}/final-moment/read`).expect(201);
+    expect(readAgain.body.readAt).toBe(read.body.readAt);
+    const afterRead = await request(app.getHttpServer()).get(`/api/v1/results/${finalResultId}/basic`).expect(200);
+    expect(afterRead.body.finalMomentRead).toBe(true);
+    await request(app.getHttpServer()).post(`/api/v1/results/${finalResultId}/share-assets`).send({ type: 'IMAGE', locale: 'ko' }).expect(201);
+
+    for (const [index, moment] of storyFinalMoments.entries()) {
+      if (moment.storyId === 'NIGER_SANDBAR') continue;
+      const catalogSessionId = `final-catalog-session-${index}`;
+      const catalogResultId = `final-catalog-result-${index}`;
+      await repository.createSession({ id: catalogSessionId, anonymousId: 'final-catalog-test', locale: 'ko', seed: 'final-catalog-test', contentVersion: '3.0.0', status: 'RESULT_READY', viewMode: 'TEXT', expiresAt: new Date(Date.now() + 60000) });
+      await repository.saveResult({ ...sourceResult!, id: catalogResultId, sessionId: catalogSessionId, core: { ...sourceResult!.core, storyId: moment.storyId } });
+      await request(app.getHttpServer()).post(`/api/v1/sessions/${catalogSessionId}/ads/1/complete`).send({ providerEventId: `fake-ad-1-${catalogSessionId}` }).expect(201);
+      await request(app.getHttpServer()).post(`/api/v1/sessions/${catalogSessionId}/ads/2/complete`).send({ providerEventId: `fake-ad-2-${catalogSessionId}` }).expect(201);
+      const response = await request(app.getHttpServer()).get(`/api/v1/results/${catalogResultId}/final-moment`).expect(200);
+      expect(StoryFinalMomentResponseSchema.parse(response.body).storyId).toBe(moment.storyId);
+      expect(response.body.illustration.uri).toBe(moment.artUri);
+    }
 
     const auth = await request(app.getHttpServer()).post('/api/v1/auth/google/exchange').send({ idToken: 'mock-google:story-reader@example.com' }).expect(201);
     const bearer = { Authorization: `Bearer ${auth.body.accessToken}` };

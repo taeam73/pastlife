@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Image, ImageBackground, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Screen } from '../src/components/Screen';
-import { PrimaryButton } from '../src/components/PrimaryButton';
+import { ParchmentButton } from '../src/components/ParchmentButton';
 import { AppNav } from '../src/components/AppNav';
 import { startNewSession } from '../src/session/start';
 import { loadPreferences } from '../src/session/store';
@@ -10,6 +10,10 @@ import { colors, spacing } from '../src/theme/tokens';
 
 const backgrounds = [
   require('../assets/branding/cinematic-start-bg.png'),
+  require('../assets/branding/cinematic-start-bg-egypt.png'),
+  require('../assets/branding/cinematic-start-bg-venice.png'),
+  require('../assets/branding/cinematic-start-bg-sahara.png'),
+  require('../assets/branding/cinematic-start-bg-andes.png'),
 ];
 export default function StartScreen() {
   const router = useRouter();
@@ -61,7 +65,7 @@ export default function StartScreen() {
             <Text style={styles.copy}>시간 너머의 뜻밖의 이야기에서, 지금의 마음과 닮은 장면을 찾아보세요.</Text>
           </Animated.View>
           <Animated.View style={{ opacity: buttonOpacity, transform: [{ translateY: buttonY }] }}>
-            <PrimaryButton leadingIcon="✦" onPress={() => void start()}>나의 전생 찾아보기</PrimaryButton>
+            <ParchmentButton label="나의 전생 찾아보기" onPress={() => void start()} />
           </Animated.View>
         </View>
         <AppNav />

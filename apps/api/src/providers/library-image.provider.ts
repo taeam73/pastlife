@@ -6,13 +6,146 @@ import { selectLifeIdentity } from './life-identity-catalog.js';
 
 type StoryImageArtwork = {
   backgroundUri: string;
-  characterUri: string;
+  characterUri?: string;
   alt: string;
   backgroundAlt: string;
   characterAlt: string;
 };
 
 export const storyImageAssets: Record<string, StoryImageArtwork> = {
+  THE_CORD_BEFORE_THE_BRIDGE: {
+    backgroundUri: 'asset://stories/v3/apurimac-grass-bridge-bg.jpg',
+    characterUri: 'asset://stories/v3/apurimac-killa-rope-maker.webp',
+    alt: '1490년 무렵 쿠스코 고원의 풀줄 제작자 키야',
+    backgroundAlt: '아푸리막강 협곡의 풀다리와 새 줄을 준비하는 창작한 길',
+    characterAlt: '풀줄의 한 가닥을 살피는 서른아홉 살 키야',
+  },
+  THE_WALL_FOR_TWO_DAYS: {
+    backgroundUri: 'asset://stories/v3/baghdad-paper-wall-bg.jpg',
+    characterUri: 'asset://stories/v3/baghdad-hasim-papermaker.webp',
+    alt: '1220년 바그다드의 종이 제작자 하심 이븐 유수프',
+    backgroundAlt: '벽에 종이가 붙어 마르는 창작한 바그다드 제지 작업장',
+    characterAlt: '갈대 틀을 든 서른 살 하심',
+  },
+  THE_DOG_IN_THE_PORTRAIT: {
+    backgroundUri: 'asset://stories/v3/reykjavik-portrait-studio-bg.jpg',
+    characterUri: 'asset://stories/v3/reykjavik-asta-photographer.webp',
+    alt: '1895년 레이캬비크의 사진가 아스타 욘스도티르',
+    backgroundAlt: '목제 사진기와 의자가 놓인 창작한 레이캬비크 사진관',
+    characterAlt: '건판 상자를 들고 웃음을 참는 서른두 살 아스타',
+  },
+  THE_QUIET_REHEARSAL: {
+    backgroundUri: 'asset://stories/v3/hue-quiet-rehearsal-bg.jpg',
+    characterUri: 'asset://stories/v3/hue-tran-van-hoa.webp',
+    alt: '1850년 후에의 궁중 음악 연주자 쩐반호아',
+    backgroundAlt: '강이 멀리 보이는 후에의 창작한 집 안뜰과 접힌 천 위 타악기',
+    characterAlt: '나무 박자채를 들고 귀 기울이는 서른한 살 호아',
+  },
+  THE_DONKEY_TURNED_BACK: {
+    backgroundUri: 'asset://stories/v3/fez-donkey-alley-bg.jpg',
+    characterUri: 'asset://stories/v3/fez-yusuf-porter.webp',
+    alt: '1870년 모로코 페스의 짐꾼 유수프',
+    backgroundAlt: '붉은 천 꾸러미를 실은 당나귀가 멈춘 창작한 페스 메디나 골목',
+    characterAlt: '밧줄을 들고 돌아보는 서른세 살 유수프',
+  },
+  THE_BIRTHDAY_WITHOUT_CAKE: {
+    backgroundUri: 'asset://stories/v3/berlin-birthday-bakery-bg.jpg',
+    characterUri: 'asset://stories/v3/berlin-lotte-baker.webp',
+    alt: '1948년 서베를린의 제빵사 로테 노이만',
+    backgroundAlt: '손녀의 생일 저녁을 맞는 창작한 서베를린 빵집',
+    characterAlt: '초와 종이 왕관을 든 예순 살 로테',
+  },
+  THE_SHADE_NO_ONE_OWNED: {
+    backgroundUri: 'asset://stories/v3/abomey-shade-market-bg.jpg',
+    characterUri: 'asset://stories/v3/abomey-zossou-repairer.webp',
+    alt: '1760년 다호메 왕국 아보메의 차양 수리 일꾼 조수',
+    backgroundAlt: '비구름 아래 식물섬유 차양이 걸린 창작한 아보메 장터',
+    characterAlt: '줄과 나무 기둥을 든 서른여섯 살 조수',
+  },
+  THE_NAME_LEFT_BLANK: {
+    backgroundUri: 'asset://stories/v3/kristiania-signature-workshop-bg.jpg',
+    characterUri: 'asset://stories/v3/kristiania-inga-worker.webp',
+    alt: '1905년 크리스티아니아의 직물 노동자 잉가 라르센',
+    backgroundAlt: '서명지와 천이 놓인 크리스티아니아의 창작한 직물 작업장',
+    characterAlt: '종이와 연필을 들고 선 서른네 살 잉가',
+  },
+  THE_FACE_ON_THE_SALON_SIGN: {
+    backgroundUri: 'asset://stories/v3/lagos-salon-sign-bg.jpg',
+    characterUri: 'asset://stories/v3/lagos-bisi-hairdresser.webp',
+    alt: '1981년 라고스의 미용실 주인 비시',
+    backgroundAlt: '손그림 머리 간판과 열린 문이 보이는 창작한 라고스 미용실',
+    characterAlt: '빗을 들고 가게 앞을 보는 스물아홉 살 비시',
+  },
+  TWO_WAYS_TO_THE_FLOWER_MARKET: {
+    backgroundUri: 'asset://stories/v3/xochimilco-flower-waterway-bg.jpg',
+    characterUri: 'asset://stories/v3/xochimilco-xochitl.webp',
+    alt: '1518년 소치밀코의 꽃 재배자 소치틀',
+    backgroundAlt: '꽃밭 사이 두 수로와 나무배가 있는 소치밀코의 창작한 물길',
+    characterAlt: '꽃 묶음을 안고 물길을 보는 스물여덟 살 소치틀',
+  },
+  THE_PIGEON_WITHOUT_A_RING: {
+    backgroundUri: 'asset://stories/v3/shahjahanabad-pigeon-court-bg.jpg',
+    characterUri: 'asset://stories/v3/shahjahanabad-rafiq.webp',
+    alt: '1650년 무굴 제국 샤자하나바드의 비둘기 돌봄 일꾼 라피크',
+    backgroundAlt: '비둘기 두 마리가 앉은 샤자하나바드의 창작한 새장 마당',
+    characterAlt: '먹이 그릇을 들고 위를 보는 마흔 살 라피크',
+  },
+  THE_TWO_TRUNKS_AT_LEVUKA: {
+    backgroundUri: 'asset://stories/v3/levuka-two-trunks-bg.jpg',
+    characterUri: 'asset://stories/v3/levuka-luisa.webp',
+    alt: '1882년 영국령 피지 레부카의 숙박집 주인 루이사',
+    backgroundAlt: '여행 상자 둘이 놓인 레부카 항구의 해안길',
+    characterAlt: '장부와 두 매듭을 든 마흔한 살 루이사',
+  },
+  THE_QUIET_BRIDE_BATH: {
+    backgroundUri: 'asset://stories/v3/istanbul-quiet-bath-bg.jpg',
+    characterUri: 'asset://stories/v3/istanbul-zeynep-hammam.webp',
+    alt: '1718년 오스만 제국 이스탄불의 하맘 일꾼 제이네프',
+    backgroundAlt: '수건과 물그릇이 놓인 이스탄불의 하맘 휴게 공간',
+    characterAlt: '수건과 물바가지를 든 마흔여섯 살 제이네프',
+  },
+  THE_OX_AND_THE_HEMP: {
+    backgroundUri: 'asset://stories/v3/gaegyeong-hemp-market-bg.jpg',
+    characterUri: 'asset://stories/v3/gaegyeong-yeonhwa.webp',
+    alt: '1120년 고려 개경의 삼베 장수 연화',
+    backgroundAlt: '삼베와 나무 그릇이 놓인 개경의 시장길과 빈 마당',
+    characterAlt: '삼베 한 필을 펼쳐 든 마흔 살 연화',
+  },
+  THE_UNSENT_INVITATION: {
+    backgroundUri: 'asset://stories/v3/oxyrhynchus-scribe-bg.jpg',
+    characterUri: 'asset://stories/v3/oxyrhynchus-demetrios.webp',
+    alt: '205년 로마 제국 이집트의 편지 서기 데메트리오스',
+    backgroundAlt: '파피루스와 갈대 펜이 놓인 옥시링코스의 작은 서기 자리',
+    characterAlt: '편지와 갈대 펜을 들고 읽기 전 잠시 멈춘 서른다섯 살 데메트리오스',
+  },
+  THE_MOON_ON_THE_STAIRS: {
+    backgroundUri: 'asset://stories/v3/valparaiso-moon-on-stairs-bg.jpg',
+    characterUri: 'asset://stories/v3/valparaiso-manuel-ibarra.webp',
+    alt: '1900년 칠레 발파라이소의 항구 짐꾼이자 공연 소품 제작자 마누엘 이바라',
+    backgroundAlt: '승강기 아랫역과 가파른 계단, 문보다 큰 무대의 달이 놓인 발파라이소 언덕',
+    characterAlt: '붓과 접힌 무대 천을 든 서른여덟 살 마누엘',
+  },
+  THREE_DOLLARS_AT_DAWN: {
+    backgroundUri: 'asset://stories/v3/columbia-rosas-kitchen-bg.jpg',
+    characterUri: 'asset://stories/v3/columbia-rosa-vega.webp',
+    alt: '1852년 캘리포니아 컬럼비아 광산촌의 음식 장사 로사 베가',
+    backgroundAlt: '천막과 목조 건물이 있는 컬럼비아의 작은 빵 가마와 음식 자리',
+    characterAlt: '밀가루 묻은 천을 들고 생각에 잠긴 스물여덟 살 로사',
+  },
+  THE_TILE_WITH_NO_TWIN: {
+    backgroundUri: 'asset://stories/v3/samarkand-tile-workshop-bg.jpg',
+    characterUri: 'asset://stories/v3/samarkand-yusuf-tile-maker.webp',
+    alt: '1432년 티무르 왕조 사마르칸트의 타일 장인 유수프',
+    backgroundAlt: '푸른 장식 타일과 흙·안료가 놓인 사마르칸트의 공방',
+    characterAlt: '무늬가 다른 타일 한 장을 들고 살피는 마흔 살 유수프',
+  },
+  RIVER_WITH_ONE_LESS_OAR: {
+    backgroundUri: 'asset://stories/v3/binondo-river-empty-place-bg.jpg',
+    characterUri: 'asset://stories/v3/binondo-mariana-de-la-cruz.webp',
+    alt: '1832년 스페인 통치 아래 마닐라 비논도의 강변 화물선 일꾼 마리아나 데 라 크루스',
+    backgroundAlt: '비논도 강변의 창고와 밧줄로 묶어 둔 목조 화물선 카스코',
+    characterAlt: '밧줄을 쥐고 떠나는 딸을 바라보는 마흔두 살 마리아나',
+  },
   TWO_GAMES_ONE_TICKET: {
     backgroundUri: 'asset://stories/v3/havana-two-games-bg.jpg',
     characterUri: 'asset://stories/v3/havana-teresa-rojas.webp',
@@ -449,7 +582,7 @@ export const storyImageAssets: Record<string, StoryImageArtwork> = {
   },
   NIGHT_GUIDE: {
     backgroundUri: 'asset://stories/v3/night-guide-soldeung-fork-bg-v3.jpg',
-    characterUri: 'asset://stories/v3/night-guide-maru.webp',
+    characterUri: 'asset://stories/v3/night-guide-maru-v2.webp',
     alt: '솔등 산골의 비 젖은 갈림길과 밤길 안내자 마루',
     backgroundAlt: '흔들리는 다리와 집으로 돌아가는 산길',
     characterAlt: '등불을 든 밤길 안내자 마루',
@@ -680,7 +813,7 @@ export const storyImageAssets: Record<string, StoryImageArtwork> = {
   },
   HERBALIST: {
     backgroundUri: 'asset://stories/v3/herbalist-mistwood-bg.jpg',
-    characterUri: 'asset://stories/v3/herbalist-ravi.webp',
+    characterUri: 'asset://stories/v3/herbalist-ravi-v2.webp',
     alt: '안개숲 마을의 빨간 실과 약초지기 라비',
     backgroundAlt: '비에 젖은 안개숲 마을과 실이 묶인 낮은 문턱',
     characterAlt: '쪽지와 빨간 실을 살피는 약초지기 라비',
@@ -722,6 +855,18 @@ export const storyImageAssets: Record<string, StoryImageArtwork> = {
   },
 };
 
+Object.assign(storyImageAssets, {
+  MOON_SIGNAL_WINDOW: { backgroundUri: 'asset://stories/v3/titanic-nora-bg.jpg', alt: '1912년 타이타닉호에서 승객의 외투를 고치는 재봉사 노라', backgroundAlt: '타이타닉호 3등실 공동 공간과 바느질 도구', characterAlt: '재봉사 노라 오루크' },
+  OPEN_GOAL_LEFT: { backgroundUri: 'asset://stories/v3/pompeii-lucius-bg.jpg', alt: '서기 79년 폼페이 세탁 작업장의 장부 담당 루키우스', backgroundAlt: '베수비오산 아래 폼페이 세탁 작업장', characterAlt: '장부를 확인하는 루키우스' },
+  TWO_BLACK_COATS: { backgroundUri: 'asset://stories/v3/black-death-beatrice-bg.jpg', alt: '1348년 피렌체 빵집에서 빵을 나누는 베아트리체', backgroundAlt: '중세 피렌체 외곽 공동 화덕과 빵 바구니', characterAlt: '제빵사 베아트리체 콘티' },
+  SWAYING_SPEAKER: { backgroundUri: 'asset://stories/v3/warsaw-zofia-bg.jpg', alt: '1944년 바르샤바에서 대피 경로를 설명하는 조피아', backgroundAlt: '전차 옆에서 지도를 함께 보는 바르샤바 시민들', characterAlt: '전차 차장 조피아 코발스카' },
+  RING_IN_BROOM: { backgroundUri: 'asset://stories/v3/imjin-yeonok-bg.jpg', alt: '1593년 진주 인근 가마터에서 피란길을 알리는 한연옥', backgroundAlt: '도자기 가마와 산길로 떠나는 피란 수레', characterAlt: '도공 한연옥' },
+  HOUSE_WITH_WHEELS: { backgroundUri: 'asset://stories/v3/samurai-jirobei-bg.jpg', alt: '1582년 가이 지방 곡물 창고의 하급 무사 지로베에', backgroundAlt: '눈 덮인 산촌 곡물 창고와 농민들', characterAlt: '곡물 문서를 확인하는 마쓰다 지로베에' },
+  WIRE_OUTSIDE_THE_DOOR: { backgroundUri: 'asset://stories/v3/giza-merit-bg.jpg', alt: '고대 기자 노동자 마을에서 빵을 배급하는 메리트', backgroundAlt: '피라미드 공사장 인근 공동 화덕과 빵 바구니', characterAlt: '배급 담당 제빵 일꾼 메리트' },
+  TWO_GAMES_ONE_TICKET: { backgroundUri: 'asset://stories/v3/tibet-tenzin-bg.jpg', alt: '11세기 티베트 사원에서 경전을 대조하는 텐진과 페마', backgroundAlt: '티베트 고원 사원의 필사실', characterAlt: '승려 텐진 도르제' },
+  THE_FACE_ON_THE_SALON_SIGN: { backgroundUri: 'asset://stories/v3/prague-eliska-bg.jpg', alt: '1609년 프라하 작업장에서 실험 장부를 확인하는 엘리슈카', backgroundAlt: '증류 기구와 장부가 놓인 프라하 약방 작업장', characterAlt: '약방과 연금술 작업장 조수 엘리슈카' },
+} satisfies Record<string, StoryImageArtwork>);
+
 @Injectable()
 export class LibraryImageProvider implements ImageProvider {
   async getImage(core: ResultCore): Promise<ImageAsset> {
@@ -731,7 +876,7 @@ export class LibraryImageProvider implements ImageProvider {
         return { sourceType: 'LIBRARY', uri: artwork.backgroundUri, alt: artwork.alt, status: 'READY', attemptCount: 0,
           matchQuality: 'EXACT', layers: [
             { uri: artwork.backgroundUri, role: 'BACKGROUND', alt: artwork.backgroundAlt },
-            { uri: artwork.characterUri, role: 'CHARACTER', alt: artwork.characterAlt },
+            ...(artwork.characterUri ? [{ uri: artwork.characterUri, role: 'CHARACTER' as const, alt: artwork.characterAlt }] : []),
           ] };
       }
       const uri = 'asset://branding/main-bg-01.png';

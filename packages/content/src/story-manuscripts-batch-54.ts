@@ -51,7 +51,7 @@ export const storyManuscriptsBatch54: readonly StoryManuscript[] = [
       { when: '1972년 · 53세', event: '아마와 사별' },
       { when: '1978년 · 59세', event: '손녀 출생' },
       { when: '1985년 · 66세', event: '작은 나사 일을 줄이고 야우에게 공구 일부 넘기기' },
-      { when: '1993년 · 74세', event: '아크라에서 생을 마침' },
+      { when: '1993년 · 74세', event: '손녀와 학교에서 집으로 걷다 가슴이 조여 오고 숨쉬기 어려워져, 아크라의 학교 앞길에서 생을 마침. 정확한 병명은 알 수 없음' },
     ],
     memories: [
       { label: '오래 한 일', detail: '유선 라디오 수신 상자와 집 안 전선 고치기' },

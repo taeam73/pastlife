@@ -52,7 +52,7 @@ export const storyManuscriptsBatch41: readonly StoryManuscript[] = [
       { when: '1872년 · 59세', event: '깊은 물질을 줄이고 테왁과 망사리 수선 늘리기' },
       { when: '1879년 · 66세', event: '연화가 다른 집을 꾸린 뒤 덕수 부부와 같은 동네에서 지내기' },
       { when: '1883년 · 70세', event: '손녀에게 박을 말려 테왁 만드는 법 가르치기' },
-      { when: '1887년 · 74세', event: '제주 해안 마을에서 생을 마침' },
+      { when: '1887년 · 74세', event: '제주 해안 마을의 집에서 며칠째 열을 앓다 복례 곁에서 생을 마침. 정확한 병명은 미상' },
     ],
     memories: [
       { label: '오래 한 일', detail: '얕은 바다의 미역과 전복을 건져 식구의 살림을 보태기' },

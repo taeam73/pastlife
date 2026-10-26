@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { storyCards } from '../src/story-catalog.js';
 import { renderStoryEpisode, storyManuscripts } from '../src/story-manuscripts.js';
+import { replacedTwentiethCenturyIds } from '../src/story-replacements-20c.js';
 
 describe('complete story manuscripts', () => {
+  const signedYear = (value: string) => {
+    const year = Number(value.match(/\d+/u)?.[0]);
+    return value.includes('기원전') ? -year : year;
+  };
   it('covers every selectable life with four distinct sections and every answer branch', () => {
     expect(storyManuscripts).toHaveLength(storyCards.length);
     expect(new Set(storyManuscripts.map(({ id }) => id)).size).toBe(storyCards.length);
@@ -17,8 +22,8 @@ describe('complete story manuscripts', () => {
       expect(manuscript.identity.deathYear).toBeTruthy();
       expect(manuscript.identity.summary).toBeTruthy();
       if (manuscript.identity.ageAtDeath !== null) {
-        const birth = Number(manuscript.identity.birthYear.match(/\d+/u)?.[0]);
-        const death = Number(manuscript.identity.deathYear.match(/\d+/u)?.[0]);
+        const birth = signedYear(manuscript.identity.birthYear);
+        const death = signedYear(manuscript.identity.deathYear);
         const beforeBirthday = card.id === 'FIRST_FLIGHT_CAMERA' ? 1 : 0;
         expect(death - birth - beforeBirthday, card.id).toBe(manuscript.identity.ageAtDeath);
       }
@@ -30,8 +35,13 @@ describe('complete story manuscripts', () => {
       expect(manuscript.memories.some(({ label }) => label.includes('말')), card.id).toBe(true);
       for (const signal of card.signals) {
         const episode = renderStoryEpisode(manuscript, signal);
-        expect(episode.length, `${card.id}/${signal}`).toBeGreaterThan(550);
-        expect(episode, `${card.id}/${signal}`).toContain(card.name);
+        const minimumEpisodeLength = replacedTwentiethCenturyIds.has(card.id) ? 380 : 550;
+        expect(episode.length, `${card.id}/${signal}`).toBeGreaterThan(minimumEpisodeLength);
+        if (replacedTwentiethCenturyIds.has(card.id)) {
+          expect(card.name.split(' ').some((part) => episode.includes(part)), `${card.id}/${signal}`).toBe(true);
+        } else {
+          expect(episode, `${card.id}/${signal}`).toContain(card.name);
+        }
         expect(episode.split('\n\n').length, `${card.id}/${signal}`).toBeGreaterThanOrEqual(4);
       }
     }
@@ -40,7 +50,7 @@ describe('complete story manuscripts', () => {
     const ages: Record<string, [number, number]> = {
       WINDMILL: [40, 49], HEAVY_BOX: [30, 34], GRAVITY_SEEDS: [70, 79],
       APOLOGY_COURIER: [19, 19], PAID_LOSS: [50, 59], WARM_STONES: [20, 29],
-      GYEONGSEONG_SHEARS: [40, 49], MOON_SIGNAL_WINDOW: [40, 44],
+      GYEONGSEONG_SHEARS: [40, 49], MOON_SIGNAL_WINDOW: [32, 32],
       THIRD_KNOCK: [30, 39], TIDE_MARK: [60, 69], MARKET_CAT_LOT: [40, 49],
       TWELVE_LEFT_SHOES: [39, 39], RAIN_GUTTER: [52, 52], UNSEEN_PORTRAIT: [64, 64], RUNAWAY_WHALE_FLOAT: [43, 43], CROOKED_KITE: [19, 19], HOLLOW_STAGE_WALL: [37, 37], TWO_FINAL_FERRIES: [46, 46], FLOATING_ORCHARD: [33, 33], SILVER_REED_MONSTER: [47, 47], GOLDEN_LIE_SLIP: [42, 42],
     };

@@ -116,6 +116,16 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
     return row ? this.toResult(row) : undefined;
   }
 
+  async markFinalMomentRead(resultId: string) {
+    await this.prisma.result.updateMany({
+      where: { id: resultId, finalMomentReadAt: null },
+      data: { finalMomentReadAt: new Date() },
+    });
+    const row = await this.prisma.result.findUniqueOrThrow({ where: { id: resultId }, select: { finalMomentReadAt: true } });
+    if (!row.finalMomentReadAt) throw new Error(`Result ${resultId} final moment read was not stored`);
+    return row.finalMomentReadAt;
+  }
+
   async saveResultImage(resultId: string, image: StoredImage) {
     const row = await this.prisma.resultImage.upsert({
       where: { resultId },
@@ -204,11 +214,12 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
     };
   }
 
-  private toResult(row: { id: string; sessionId: string; status: string; coreJson: Prisma.JsonValue; storyProfileJson: Prisma.JsonValue | null; presentationJson: Prisma.JsonValue | null; texts: Array<{ blocksJson: Prisma.JsonValue }>; image: { sourceType: string; storageUrl: string; altText: string; status: string; attemptCount: number; errorCode: string | null; layersJson: Prisma.JsonValue | null; compositeUri: string | null } | null }): StoredResult {
+  private toResult(row: { id: string; sessionId: string; status: string; coreJson: Prisma.JsonValue; storyProfileJson: Prisma.JsonValue | null; presentationJson: Prisma.JsonValue | null; finalMomentReadAt: Date | null; texts: Array<{ blocksJson: Prisma.JsonValue }>; image: { sourceType: string; storageUrl: string; altText: string; status: string; attemptCount: number; errorCode: string | null; layersJson: Prisma.JsonValue | null; compositeUri: string | null } | null }): StoredResult {
     return {
       id: row.id,
       sessionId: row.sessionId,
       status: row.status === 'READY' ? 'READY' : 'FAILED',
+      ...(row.finalMomentReadAt ? { finalMomentReadAt: row.finalMomentReadAt } : {}),
       core: row.coreJson as unknown as ResultCore,
       ...(row.storyProfileJson ? { storyProfile: row.storyProfileJson as unknown as StoryProfile } : {}),
       ...(row.presentationJson ? { presentation: row.presentationJson as unknown as StoredPresentation } : {}),

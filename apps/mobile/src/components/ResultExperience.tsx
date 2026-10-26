@@ -22,6 +22,7 @@ type ResultExperienceProps = {
   introDescription?: string;
   headline?: string;
   presentation?: z.infer<typeof ResultPresentationSchema> | undefined;
+  recordNo?: number | undefined;
   onChapterSelect?: (() => void) | undefined;
 };
 
@@ -38,9 +39,12 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
   introDescription = '당신의 전생을 살았던 사람의 기록입니다.',
   headline,
   presentation,
+  recordNo,
   onChapterSelect,
 }, ref) {
-  const [chapterIndex, setChapterIndex] = useState(0);
+  const [position, setPosition] = useState({ chapterIndex: 0, pageIndex: 0 });
+  const { chapterIndex, pageIndex } = position;
+  const hasCover = presentation?.version === 3 && Boolean(presentation.hero.cover && recordNo);
   const sceneUri = presentation?.hero.backgroundUri ?? image.layers?.find((layer) => layer.role === 'BACKGROUND')?.uri ?? image.uri;
   const layers: ImageLayer[] = presentation
     ? [{ uri: sceneUri, role: 'BACKGROUND', alt: image.alt }, ...(presentation.hero.characterUri ? [{ uri: presentation.hero.characterUri, role: 'CHARACTER' as const, alt: '전생 인물' }] : [])]
@@ -50,8 +54,8 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     ? presentation.chapters.map((chapter) => ({ id: chapter.id, title: chapter.title, summary: '', detail: chapter.body, profilePages: chapter.id === 'MEETING' ? chapter.profilePages : undefined, crop: chapter.crop }))
     : legacyHighlights?.length ? presentChapters(legacyHighlights, sceneUri).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: chapter.body, crop: chapter.crop }))
       : blocks.map((block, index) => ({ id: block.id, title: block.title, summary: '', detail: block.body, crop: { focusX: (index + 1) / (blocks.length + 1), focusY: 0.5, zoom: 1.55 } }));
-  const selectChapter = (index: number) => {
-    setChapterIndex(index);
+  const selectChapter = (index: number, nextPageIndex = 0) => {
+    setPosition({ chapterIndex: index, pageIndex: nextPageIndex });
     onChapterSelect?.();
   };
 
@@ -69,9 +73,12 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         characterDescription={presentation?.version === 3 ? presentation.hero.signatureQuote : presentation?.hero.tagline ?? (character ? presentIdentity(character.introduction) : undefined)}
         introductionSummary={presentation?.hero.lifeSummary ?? (character ? firstSentence(character.introduction) : introDescription)}
         selectedIndex={chapterIndex}
+        selectedPageIndex={pageIndex}
         onSelect={selectChapter}
+        cover={presentation?.version === 3 ? presentation.hero.cover : undefined}
+        recordNo={recordNo}
       />
-      <ChapterFilmstrip chapters={chapters} imageUri={sceneUri} imageAlt={image.alt} selectedIndex={chapterIndex} onSelect={selectChapter} />
+      <ChapterFilmstrip chapters={chapters} imageUri={sceneUri} imageAlt={image.alt} selectedIndex={hasCover ? chapterIndex - 1 : chapterIndex} onSelect={(index) => selectChapter(index + (hasCover ? 1 : 0), 0)} />
     </> : null}
   </View>;
 });

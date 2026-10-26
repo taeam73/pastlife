@@ -15,6 +15,16 @@ test('reads all four rewritten 3.0 sections at narrow width', async ({ page }) =
   await expect(summary).toContainText('~');
   await page.screenshot({ path: 'output/playwright/manuscript-01-320.png', fullPage: true });
 
+  await page.getByRole('button', { name: /^1장 .* 보기$/ }).click();
+  await expect(page.getByText('1 / 3')).toBeVisible();
+  await page.getByRole('button', { name: '다음 페이지', exact: true }).click();
+  await expect(page.getByText('2 / 3')).toBeVisible();
+  await page.getByRole('button', { name: '다음 페이지', exact: true }).click();
+  await expect(page.getByText('3 / 3')).toBeVisible();
+  await page.getByRole('button', { name: '다음 페이지', exact: true }).click();
+  await expect(page.getByTestId('chapter-reader-panel')).toContainText('02 에피소드');
+  await expect(page.getByText(/^1 \/ \d+$/)).toBeVisible();
+
   await page.getByRole('button', { name: /^2장 .* 보기$/ }).click();
   const reader = page.getByTestId('chapter-reader-panel');
   await expect(reader).toContainText('02 에피소드');

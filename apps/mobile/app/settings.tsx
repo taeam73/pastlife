@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { AppNav } from '../src/components/AppNav';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
+import { SubpageHeader } from '../src/components/SubpageHeader';
 import {
   clearAuth,
   DEFAULT_PREFERENCES,
@@ -41,7 +42,7 @@ export default function SettingsScreen() {
   };
 
   return <Screen>
-    <Text style={styles.title}>설정</Text>
+    <SubpageHeader title="설정" />
     <Setting label="배경 음악" value={preferences.bgmEnabled} onChange={(value) => change('bgmEnabled', value)} />
     <Setting label="효과음" value={preferences.effectsEnabled} onChange={(value) => change('effectsEnabled', value)} />
     <Setting label="동작 줄이기" value={preferences.reduceMotion} onChange={(value) => change('reduceMotion', value)} />
@@ -71,7 +72,6 @@ function Setting({ label, value, onChange }: { label: string; value: boolean; on
 }
 
 const styles = StyleSheet.create({
-  title: { color: colors.text, fontSize: 30, fontWeight: '700' },
   row: { minHeight: 64, padding: spacing.md, borderRadius: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   label: { color: colors.text, fontSize: 17 },
   note: { color: colors.muted, lineHeight: 22 },

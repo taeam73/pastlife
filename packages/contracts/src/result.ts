@@ -44,12 +44,24 @@ export const ResultPresentationV2Schema = z.object({
 });
 export const ResultPresentationV3Schema = z.object({
   version: z.literal(3),
-  hero: ResultPresentationHeroV2Schema.extend({ signatureQuote: z.string().min(1).max(80) }),
+  hero: ResultPresentationHeroV2Schema.extend({
+    signatureQuote: z.string().min(1).max(80),
+    cover: z.object({
+      era: z.string().min(1),
+      place: z.string().min(1),
+      role: z.string().min(1),
+      birthYear: z.string().min(1),
+      deathYear: z.string().min(1),
+      lifeLine: z.string().min(1),
+    }).optional(),
+  }),
   chapters: ResultPresentationChaptersSchema,
 });
 export const ResultPresentationSchema = z.discriminatedUnion('version', [ResultPresentationV2Schema, ResultPresentationV3Schema]);
 export const BasicResultResponseSchema = z.object({
   resultId: z.string(),
+  finalMomentRead: z.boolean().optional(),
+  finalMomentAvailable: z.boolean().optional(),
   recordNo: z.number().int().min(1).max(99),
   headline: z.string(),
   character: z.object({
@@ -72,6 +84,23 @@ export const ExtendedResultResponseSchema = z.object({
   image: ResultImageSchema,
   blocks: z.array(BasicBlockSchema).length(4),
   disclaimer: z.string(),
+});
+
+export const StoryFinalMomentResponseSchema = z.object({
+  resultId: z.string(),
+  storyId: z.string().min(1),
+  protagonist: z.string().min(1),
+  year: z.string().min(1),
+  place: z.string().min(1),
+  scene: z.string().min(1),
+  afterword: z.string().min(1),
+  illustration: z.object({ uri: z.string().min(1), alt: z.string().min(1) }),
+});
+
+export const FinalMomentReadResponseSchema = z.object({
+  resultId: z.string(),
+  finalMomentRead: z.literal(true),
+  readAt: z.string().datetime(),
 });
 
 export const ShareResultResponseSchema = z.object({

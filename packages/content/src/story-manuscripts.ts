@@ -60,6 +60,26 @@ import { storyManuscriptsBatch58 } from './story-manuscripts-batch-58.js';
 import { storyManuscriptsBatch59 } from './story-manuscripts-batch-59.js';
 import { storyManuscriptsBatch60 } from './story-manuscripts-batch-60.js';
 import { storyManuscriptsBatch61 } from './story-manuscripts-batch-61.js';
+import { storyManuscriptsBatch62 } from './story-manuscripts-batch-62.js';
+import { storyManuscriptsBatch63 } from './story-manuscripts-batch-63.js';
+import { storyManuscriptsBatch64 } from './story-manuscripts-batch-64.js';
+import { storyManuscriptsBatch65 } from './story-manuscripts-batch-65.js';
+import { storyManuscriptsBatch66 } from './story-manuscripts-batch-66.js';
+import { storyManuscriptsBatch67 } from './story-manuscripts-batch-67.js';
+import { storyManuscriptsBatch68 } from './story-manuscripts-batch-68.js';
+import { storyManuscriptsBatch69 } from './story-manuscripts-batch-69.js';
+import { storyManuscriptsBatch70 } from './story-manuscripts-batch-70.js';
+import { storyManuscriptsBatch71 } from './story-manuscripts-batch-71.js';
+import { storyManuscriptsBatch72 } from './story-manuscripts-batch-72.js';
+import { storyManuscriptsBatch73 } from './story-manuscripts-batch-73.js';
+import { storyManuscriptsBatch74 } from './story-manuscripts-batch-74.js';
+import { storyManuscriptsBatch75 } from './story-manuscripts-batch-75.js';
+import { storyManuscriptsBatch76 } from './story-manuscripts-batch-76.js';
+import { storyManuscriptsBatch77 } from './story-manuscripts-batch-77.js';
+import { storyManuscriptsBatch78 } from './story-manuscripts-batch-78.js';
+import { storyManuscriptsBatch79 } from './story-manuscripts-batch-79.js';
+import { storyManuscriptsBatch80 } from './story-manuscripts-batch-80.js';
+import { replacementStoryManuscripts } from './story-replacements-20c.js';
 
 export type StoryManuscript = {
   id: string;
@@ -82,7 +102,7 @@ export type StoryManuscript = {
   memories: readonly { label: string; detail: string }[];
 };
 
-export const storyManuscripts: readonly StoryManuscript[] = [
+const originalStoryManuscripts: readonly StoryManuscript[] = [
   ...storyManuscriptsBatch01,
   ...storyManuscriptsBatch02,
   ...storyManuscriptsBatch03,
@@ -144,7 +164,34 @@ export const storyManuscripts: readonly StoryManuscript[] = [
   ...storyManuscriptsBatch59,
   ...storyManuscriptsBatch60,
   ...storyManuscriptsBatch61,
+  ...storyManuscriptsBatch62,
+  ...storyManuscriptsBatch63,
+  ...storyManuscriptsBatch64,
+  ...storyManuscriptsBatch65,
+  ...storyManuscriptsBatch66,
+  ...storyManuscriptsBatch67,
+  ...storyManuscriptsBatch68,
+  ...storyManuscriptsBatch69,
+  ...storyManuscriptsBatch70,
+  ...storyManuscriptsBatch71,
+  ...storyManuscriptsBatch72,
+  ...storyManuscriptsBatch73,
+  ...storyManuscriptsBatch74,
+  ...storyManuscriptsBatch75,
+  ...storyManuscriptsBatch76,
+  ...storyManuscriptsBatch77,
+  ...storyManuscriptsBatch78,
+  ...storyManuscriptsBatch79,
+  ...storyManuscriptsBatch80,
 ];
+
+const replacementManuscriptById = new Map(
+  replacementStoryManuscripts.map((manuscript) => [manuscript.id, manuscript]),
+);
+
+export const storyManuscripts: readonly StoryManuscript[] = originalStoryManuscripts.map(
+  (manuscript) => replacementManuscriptById.get(manuscript.id) ?? manuscript,
+);
 
 export function findStoryManuscript(id: string): StoryManuscript | undefined {
   return storyManuscripts.find((manuscript) => manuscript.id === id);

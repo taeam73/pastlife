@@ -52,7 +52,7 @@ export const storyManuscriptsBatch34: readonly StoryManuscript[] = [
       { when: '1913년 · 27세', event: '파라와 결혼해 작은 방 얻기' },
       { when: '1915~1918년 · 29~32세', event: '전쟁기에 불안정한 항구 일과 식탁 견디기' },
       { when: '1918년 · 32세', event: '미리암에게 다시 안부 편지 받기' },
-      { when: '1919년 · 33세', event: '베이루트에서 병으로 생을 마침' },
+      { when: '1919년 · 33세', event: '베이루트의 집에서 나흘째 열과 호흡 곤란을 겪다가 파라 곁에서 병으로 생을 마침. 병명은 알 수 없음' },
     ],
     memories: [
       { label: '아낀 물건', detail: '어릴 때 나빌과 깎아 만든 작은 나무배' },

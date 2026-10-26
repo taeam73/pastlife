@@ -50,7 +50,7 @@ export const storyManuscriptsBatch44: readonly StoryManuscript[] = [
       { when: '1690년 · 42세', event: '도제 미요에게 붓과 주문 장부 가르치기' },
       { when: '1702년 · 54세', event: '손가락 통증으로 세밀한 그림 줄이기' },
       { when: '1708년 · 60세', event: '그림 일을 미요에게 넘기고 손님 맞기 맡기' },
-      { when: '1712년 · 64세', event: '교토에서 생을 마침' },
+      { when: '1712년 · 64세', event: '교토 집에서 이틀간 복통과 열을 앓다 마당으로 나가려던 아침, 동생 료타 곁에서 생을 마침. 병명 미상' },
     ],
     memories: [
       { label: '오래 한 일', detail: '부채 종이에 계절의 길과 나무를 그리고 공방 손님 맞기' },

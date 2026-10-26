@@ -1,0 +1,14 @@
+# 마지막 순간 미등록 실제 ID 대조 — 2026-10-25
+
+`storyCards`의 라이브 순서와 `storyFinalMoments`의 실제 `storyId` 집합을 대조했다. 64번의 두 유사 제작안을 취소한 뒤 세 번째 안의 원고·삽화·URI를 등록해 **기술 등록 64/120, 미등록 56/120**이다. 번호는 파일의 배치 번호가 아니라 결과 후보의 실제 라이브 순서다. 이 목록은 원고·삽화·앱 URI의 **기술 등록 상태**만 표시하며 생애 보강 필요 여부나 새 편집 기준 승인을 판정하지 않는다. 등록된 89번 `GROOM_UNDER_SAIL`, 76번 `ONE_REED_KNOT`, 62번 `SECOND_WAGON`, 63번 `CAKES_ON_ICE`, 64번 `PULLED_WALL`을 다시 만드는 일을 피한다. 64번의 새 안은 서사 승인 전이다.
+
+| 라이브 번호 | 미등록 ID |
+| --- | --- |
+| 9~18 | `LAST_SIGNAL`, `SHADE_TENT`, `REVERSE_MAP`, `SHORE_ROCK`, `TASTER`, `CLOUD_PAINTER`, `FESTIVAL_KING`, `SNOW_REFEREE`, `SHADOW_TAILOR`, `UNDERWATER_SCALE` |
+| 19~28 | `FIREWORKS`, `DOORLESS_KEEPER`, `LOST_AUTUMN`, `THEATRE_VILLAIN`, `WINDMILL`, `HEAVY_BOX`, `GRAVITY_SEEDS`, `PAID_LOSS`, `WARM_STONES`, `APOLOGY_COURIER` |
+| 29~38 | `FIRST_FLIGHT_CAMERA`, `GYEONGSEONG_SHEARS`, `MOON_SIGNAL_WINDOW`, `TIDE_MARK`, `THIRD_KNOCK`, `MARKET_CAT_LOT`, `TWELVE_LEFT_SHOES`, `RAIN_GUTTER`, `UNSEEN_PORTRAIT`, `RUNAWAY_WHALE_FLOAT` |
+| 39~44 | `CROOKED_KITE`, `HOLLOW_STAGE_WALL`, `TWO_FINAL_FERRIES`, `FLOATING_ORCHARD`, `SILVER_REED_MONSTER`, `GOLDEN_LIE_SLIP` |
+| 49~59 | `BROKEN_SWORD_PUPPET`, `RED_SHAWL_CAMP`, `PALM_BEAT_TANGO`, `LOOSE_HEM_RIDE`, `TWO_SPOONS_DABBA`, `WARM_FLOOR_ROOM`, `MISSING_BLUE_TUNIC`, `FOUR_LOOSE_PAGES`, `KNEELING_PUPPET`, `BROKEN_TWELFTH_STRING`, `OPEN_GOAL_LEFT` |
+| 65~73 | `WHITE_SCREEN_TUNE`, `EMPTY_PHOTO_SEAT`, `MASKED_FARE`, `SECOND_LANDING`, `CUT_BOW_ROPE`, `TWO_BLACK_COATS`, `EMPTY_FRONT_ROW`, `BALL_UNDER_SLED`, `TWO_MARKET_VOICES` |
+
+다음에는 원고의 생애 재설계 범위가 확정된 5~10편 묶음을 고른다. 01~04·마지막 낭독과 역사 사실/창작 경계, 그림 구도 비교를 생략하지 않는다. PDF·공유 이미지 전편 검수는 모든 원고·데이터·삽화가 확정된 뒤에 한다.

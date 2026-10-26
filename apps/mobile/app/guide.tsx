@@ -4,7 +4,7 @@ import { Animated, ImageBackground, Platform, StyleSheet, Text, useWindowDimensi
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
 import { startNewSession } from '../src/session/start';
-import { loadSession } from '../src/session/store';
+import { loadPreferences, loadSession } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
 
 const backgrounds = [
@@ -20,10 +20,20 @@ export default function GuideScreen() {
   const contentY = useRef(new Animated.Value(18)).current;
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(contentOpacity, { toValue: 1, duration: 650, useNativeDriver: Platform.OS !== 'web' }),
-      Animated.timing(contentY, { toValue: 0, duration: 650, useNativeDriver: Platform.OS !== 'web' }),
-    ]).start();
+    let active = true;
+    void loadPreferences().then((preferences) => {
+      if (!active) return;
+      if (preferences.reduceMotion) {
+        contentOpacity.setValue(1);
+        contentY.setValue(0);
+        return;
+      }
+      Animated.parallel([
+        Animated.timing(contentOpacity, { toValue: 1, duration: 520, useNativeDriver: Platform.OS !== 'web' }),
+        Animated.timing(contentY, { toValue: 0, duration: 520, useNativeDriver: Platform.OS !== 'web' }),
+      ]).start();
+    });
+    return () => { active = false; };
   }, [contentOpacity, contentY]);
 
   const beginQuestions = async () => {

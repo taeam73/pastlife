@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { eras, historicalLocations, occupations } from '@pastlife/content';
+import { eras, findStoryFinalMoment, historicalLocations, occupations } from '@pastlife/content';
 import type { ResultCore } from '@pastlife/scoring';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { IMAGE_PROVIDER, type ImageProvider } from '../providers/image.provider.js';
@@ -13,7 +13,7 @@ import { inspectNarrative } from '../providers/narrative-quality.js';
 import { inspectResultCanon } from '../providers/narrative-canon.js';
 import { inspectImageCompatibility } from '../providers/image-compatibility.js';
 import { buildResultPresentation } from './build-result-presentation.js';
-import { ResultPresentationSchema } from '@pastlife/contracts';
+import { FinalMomentReadResponseSchema, ResultPresentationSchema, StoryFinalMomentResponseSchema } from '@pastlife/contracts';
 import { buildContentStoryExtended, buildContentStoryResult } from './story-result.js';
 
 export const RESULT_DISCLAIMER = '';
@@ -42,7 +42,7 @@ export class ResultsService {
     if (!session?.unlocks.includes('BASIC')) throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: 'AD 1 completion is required', slot: 1 });
     if (result.core.storyId) {
       const image = await this.presentImage(await this.ensureImage(resultId), result.core);
-      return buildContentStoryResult(resultId, result.core, image);
+      return buildContentStoryResult(resultId, result.core, image, Boolean(result.finalMomentReadAt));
     }
     const era = eras.find(({ id }) => id === result.core.eraId)!;
     const location = historicalLocations.find(({ id }) => id === result.core.locationId)!;
@@ -76,6 +76,8 @@ export class ResultsService {
     const blocks = blocksNeedRefresh ? buildStoryNarrative(result.core) : result.blocks;
     return {
       resultId,
+      finalMomentRead: Boolean(result.finalMomentReadAt),
+      finalMomentAvailable: false,
       recordNo: result.core.recordNo,
       headline: `${era.label}, ${location.label}에서 일한 ${occupation.label}`,
       character: {
@@ -118,12 +120,38 @@ export class ResultsService {
     return this.extended(resultId, 'DEEP', 2);
   }
 
+  async finalMoment(resultId: string) {
+    const result = await this.requireResult(resultId);
+    const session = await this.repository.getSession(result.sessionId);
+    if (!session?.unlocks.includes('DEEP')) throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: 'AD 2 completion is required', slot: 2 });
+    if (!session.contentVersion.startsWith('3.')) throw new NotFoundException({ code: 'FEATURE_UNAVAILABLE', message: 'Final moment is available for 3.0 stories only' });
+    const moment = result.core.storyId ? findStoryFinalMoment(result.core.storyId) : undefined;
+    if (!moment) throw new NotFoundException({ code: 'CONTENT_NOT_READY', message: 'Final moment is not ready for this story' });
+    return StoryFinalMomentResponseSchema.parse({
+      resultId,
+      storyId: moment.storyId,
+      protagonist: moment.protagonist,
+      year: moment.year,
+      place: moment.place,
+      scene: moment.scene,
+      afterword: moment.afterword,
+      illustration: { uri: moment.artUri, alt: moment.artAlt },
+    });
+  }
+
+  async markFinalMomentRead(resultId: string) {
+    await this.finalMoment(resultId);
+    const readAt = await this.repository.markFinalMomentRead(resultId);
+    return FinalMomentReadResponseSchema.parse({ resultId, finalMomentRead: true, readAt: readAt.toISOString() });
+  }
+
   async guide(resultId: string) {
     return this.extended(resultId, 'GUIDE', 3);
   }
 
   async share(resultId: string) {
-    await this.requireResult(resultId);
+    const result = await this.requireResult(resultId);
+    await this.requireFinalMomentReadFor3(result);
     const shareToken = createHash('sha256').update(`pastlife-share:${resultId}`).digest('hex').slice(0, 24);
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
     const baseUrl = process.env.PUBLIC_WEB_URL ?? 'http://localhost:8081';
@@ -135,6 +163,7 @@ export class ResultsService {
       throw new BadRequestException({ code: 'FEATURE_UNAVAILABLE', message: '영상 보기는 첫 출시 이후 제공됩니다.' });
     }
     const result = await this.requireResult(resultId);
+    await this.requireFinalMomentReadFor3(result);
     const image = await this.presentImage(await this.ensureImage(resultId), result.core);
     const shareId = createHash('sha256').update(`pastlife-share:${resultId}:${type}:${locale}`).digest('hex').slice(0, 24);
     const publicBaseUrl = (process.env.PUBLIC_SHARE_URL ?? process.env.PUBLIC_WEB_URL ?? 'https://past-life.example').replace(/\/$/, '');
@@ -219,5 +248,13 @@ export class ResultsService {
     const result = await this.repository.getResult(id);
     if (!result) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Result not found' });
     return result;
+  }
+
+  private async requireFinalMomentReadFor3(result: Awaited<ReturnType<AssessmentRepository['getResult']>>) {
+    if (!result) return;
+    const session = await this.repository.getSession(result.sessionId);
+    if (session?.contentVersion.startsWith('3.') && !result.finalMomentReadAt) {
+      throw new ForbiddenException({ code: 'FINAL_MOMENT_REQUIRED', message: '마지막 순간을 마치면 공유할 수 있습니다.' });
+    }
   }
 }

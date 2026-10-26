@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { PrimaryButton } from './PrimaryButton';
+import { ParchmentButton } from './ParchmentButton';
 
-export function UnlockAction({ label, loadingLabel, onUnlock }: { label: string; loadingLabel: string; onUnlock: () => Promise<void> }) {
+export function UnlockAction({ label, loadingLabel, onUnlock, appearance = 'primary' }: { label: string; loadingLabel: string; onUnlock: () => Promise<void>; appearance?: 'primary' | 'parchment' }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
 
@@ -20,8 +21,11 @@ export function UnlockAction({ label, loadingLabel, onUnlock }: { label: string;
     }
   };
 
+  const buttonLabel = busy ? loadingLabel : error ? '광고 다시 시도' : label;
   return <View style={styles.container}>
-    <PrimaryButton disabled={busy} onPress={() => void run()}>{busy ? loadingLabel : error ? '광고 다시 시도' : label}</PrimaryButton>
+    {appearance === 'parchment'
+      ? <ParchmentButton label={buttonLabel} disabled={busy} onPress={() => void run()} />
+      : <PrimaryButton disabled={busy} onPress={() => void run()}>{buttonLabel}</PrimaryButton>}
     {error ? <Text accessibilityRole="alert" style={styles.error}>광고를 불러오지 못했습니다. 현재 기록은 유지됩니다. 네트워크를 확인하고 다시 시도해 주세요.</Text> : null}
   </View>;
 }

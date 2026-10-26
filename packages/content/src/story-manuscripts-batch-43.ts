@@ -51,7 +51,7 @@ export const storyManuscriptsBatch43: readonly StoryManuscript[] = [
       { when: '1992년 · 52세', event: '젊은 팀원에게 양모 선별 가르치기' },
       { when: '1998년 · 58세', event: '현장 일을 그만두고 도서관 봉사·정원 가꾸기 시작' },
       { when: '2004년 · 64세', event: '마스터턴으로 돌아온 조이와 같은 거리에서 지내기' },
-      { when: '2011년 · 71세', event: '마스터턴에서 생을 마침' },
+      { when: '2011년 · 71세', event: '마스터턴의 병원에서 폐렴으로 며칠 치료받다가, 친구 조이가 곁에 있는 동안 생을 마침' },
     ],
     memories: [
       { label: '오래 한 일', detail: '깎은 양털을 걷고 골라 깨끗한 양모가 따로 모이게 하기' },

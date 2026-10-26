@@ -1,4 +1,4 @@
-import { AnalyticsEventResponseSchema, ArchiveDetailResponseSchema, ArchiveResponseSchema, ArchiveSaveResponseSchema, AuthResponseSchema, BasicResultResponseSchema, CompleteResponseSchema, CreateAnalyticsEventRequestSchema, CreateSessionResponseSchema, ExtendedResultResponseSchema, GoogleExchangeRequestSchema, ProgressResponseSchema, QuestionResponseSchema, ResultStatusResponseSchema, ShareAssetResponseSchema, ShareResultResponseSchema, UnlockResponseSchema, ViewModeResponseSchema } from '@pastlife/contracts';
+import { AnalyticsEventResponseSchema, ArchiveDetailResponseSchema, ArchiveResponseSchema, ArchiveSaveResponseSchema, AuthResponseSchema, BasicResultResponseSchema, CompleteResponseSchema, CreateAnalyticsEventRequestSchema, CreateSessionResponseSchema, ExtendedResultResponseSchema, FinalMomentReadResponseSchema, GoogleExchangeRequestSchema, ProgressResponseSchema, QuestionResponseSchema, ResultStatusResponseSchema, ShareAssetResponseSchema, ShareResultResponseSchema, StoryFinalMomentResponseSchema, UnlockResponseSchema, ViewModeResponseSchema } from '@pastlife/contracts';
 import type { AnalyticsEventName, AnalyticsMetadata } from '@pastlife/contracts';
 import type { ViewMode } from '../session/store';
 import type { z } from 'zod';
@@ -33,6 +33,8 @@ export const api = {
   fakeAd: (sessionId: string, slot: 1 | 2 | 3) => request(`/sessions/${sessionId}/ads/${slot}/complete`, { method: 'POST', body: JSON.stringify({ providerEventId: `fake-ad-${slot}-${sessionId}` }) }, UnlockResponseSchema),
   basic: (resultId: string) => request(`/results/${resultId}/basic`, { method: 'GET' }, BasicResultResponseSchema),
   deep: (resultId: string) => request(`/results/${resultId}/deep`, { method: 'GET' }, ExtendedResultResponseSchema),
+  finalMoment: (resultId: string) => request(`/results/${resultId}/final-moment`, { method: 'GET' }, StoryFinalMomentResponseSchema),
+  markFinalMomentRead: (resultId: string) => request(`/results/${resultId}/final-moment/read`, { method: 'POST' }, FinalMomentReadResponseSchema),
   guide: (resultId: string) => request(`/results/${resultId}/guide`, { method: 'GET' }, ExtendedResultResponseSchema),
   share: (resultId: string) => request(`/results/${resultId}/share`, { method: 'GET' }, ShareResultResponseSchema),
   shareAsset: (resultId: string, type: 'VIDEO' | 'IMAGE') => request(`/results/${resultId}/share-assets`, { method: 'POST', body: JSON.stringify({ type, locale: 'ko' }) }, ShareAssetResponseSchema),

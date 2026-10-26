@@ -20,8 +20,12 @@ export function inspectImageCompatibility(core: ResultCore, image: ImageAsset): 
     if (image.uri !== artwork.backgroundUri || backgrounds.length !== 1 || backgrounds[0]?.uri !== artwork.backgroundUri || image.compositeUri) {
       issues.push({ field: 'background', message: `Story ${core.storyId} requires its own background` });
     }
-    if (characters.length !== 1 || characters[0]?.uri !== artwork.characterUri) {
-      issues.push({ field: 'character', message: `Story ${core.storyId} requires its own character` });
+    if (artwork.characterUri) {
+      if (characters.length !== 1 || characters[0]?.uri !== artwork.characterUri) {
+        issues.push({ field: 'character', message: `Story ${core.storyId} requires its own character` });
+      }
+    } else if (characters.length !== 0) {
+      issues.push({ field: 'character', message: `Story ${core.storyId} uses a complete single-layer scene` });
     }
     return issues;
   }

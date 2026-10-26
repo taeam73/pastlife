@@ -54,7 +54,7 @@ export const storyManuscriptsBatch22: readonly StoryManuscript[] = [
       { when: '130년 · 61세', event: '루키우스 사망' },
       { when: '136년 · 67세', event: '네리아와 손녀가 찾아와 한 계절 함께 지냄' },
       { when: '139년 · 70세', event: '수선 일을 줄이고 바늘집을 젊은 일꾼에게 넘김' },
-      { when: '142년 · 73세', event: '코르브리지에서 생을 마침' },
+      { when: '142년 · 73세', event: '코르브리지 집에서 나흘간 배가 아프고 구토를 한 뒤 손녀가 곁에 있는 동안 생을 마침. 정확한 병명은 알 수 없음' },
     ],
     memories: [
       { label: '가장 아낀 물건', detail: '어머니에게 받은 작은 바늘집' },

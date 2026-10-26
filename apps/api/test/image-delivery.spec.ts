@@ -42,6 +42,156 @@ function createService(getDownloadUrl: ImageStorage['getDownloadUrl']) {
 }
 
 describe('private result image delivery', () => {
+  it('serves Killa with her own Apurímac bridge and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_CORD_BEFORE_THE_BRIDGE' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/apurimac-grass-bridge-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/apurimac-killa-rope-maker.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Hasim with his own Baghdad paper workshop and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_WALL_FOR_TWO_DAYS' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/baghdad-paper-wall-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/baghdad-hasim-papermaker.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Ásta with her own Reykjavík studio and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_DOG_IN_THE_PORTRAIT' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/reykjavik-portrait-studio-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/reykjavik-asta-photographer.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Hoa with his own Huế courtyard and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_QUIET_REHEARSAL' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/hue-quiet-rehearsal-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/hue-tran-van-hoa.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Yusuf with his own Fez alley and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_DONKEY_TURNED_BACK' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/fez-donkey-alley-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/fez-yusuf-porter.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Lotte with her own Berlin bakery and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_BIRTHDAY_WITHOUT_CAKE' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/berlin-birthday-bakery-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/berlin-lotte-baker.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Zossou with his own Abomey market shade and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_SHADE_NO_ONE_OWNED' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/abomey-shade-market-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/abomey-zossou-repairer.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Inga with her own Kristiania workshop and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_NAME_LEFT_BLANK' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/kristiania-signature-workshop-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/kristiania-inga-worker.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Eliska with her own Prague alchemy workshop scene', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_FACE_ON_THE_SALON_SIGN' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/prague-eliska-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Xochitl with her own Xochimilco flower waterway and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'TWO_WAYS_TO_THE_FLOWER_MARKET' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/xochimilco-flower-waterway-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/xochimilco-xochitl.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Rafiq with his own Shahjahanabad pigeon court and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_PIGEON_WITHOUT_A_RING' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/shahjahanabad-pigeon-court-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/shahjahanabad-rafiq.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+  it('serves Luisa with her own Levuka port and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_TWO_TRUNKS_AT_LEVUKA' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/levuka-two-trunks-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/levuka-luisa.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+
+  it('serves Zeynep with her own Istanbul hammam and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_QUIET_BRIDE_BATH' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/istanbul-quiet-bath-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/istanbul-zeynep-hammam.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+
+  it('serves Yeonhwa with her own Gaegyeong market and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_OX_AND_THE_HEMP' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/gaegyeong-hemp-market-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/gaegyeong-yeonhwa.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+
+  it('serves Demetrios with his own Oxyrhynchus scribe alcove and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_UNSENT_INVITATION' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/oxyrhynchus-scribe-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/oxyrhynchus-demetrios.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+
+  it('serves Manuel with his own Valparaíso hillside and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_MOON_ON_THE_STAIRS' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/valparaiso-moon-on-stairs-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/valparaiso-manuel-ibarra.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+
+  it('serves Rosa with her own Columbia kitchen and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THREE_DOLLARS_AT_DAWN' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/columbia-rosas-kitchen-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/columbia-rosa-vega.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+
+  it('serves Yusuf with his own Samarkand workshop and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'THE_TILE_WITH_NO_TWIN' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/samarkand-tile-workshop-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/samarkand-yusuf-tile-maker.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
+  });
+
   it('uses separate story-locked background and character layers for the clown', async () => {
     const provider = new LibraryImageProvider();
     const clown = await provider.getImage({ ...core, contentVersion: '3.0.0', storyId: 'CLOWN' } as ResultCore);
@@ -53,6 +203,15 @@ describe('private result image delivery', () => {
     ]);
     expect(clown.compositeUri).toBeUndefined();
     expect(other.uri).toBe('asset://branding/main-bg-01.png');
+  });
+
+  it('serves Mariana with her own Binondo background and transparent character layer', async () => {
+    const image = await new LibraryImageProvider().getImage({ ...core, contentVersion: '3.0.0', storyId: 'RIVER_WITH_ONE_LESS_OAR' } as ResultCore);
+    expect(image.matchQuality).toBe('EXACT');
+    expect(image.layers).toEqual([
+      { uri: 'asset://stories/v3/binondo-river-empty-place-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/binondo-mariana-de-la-cruz.webp', role: 'CHARACTER', alt: expect.any(String) },
+    ]);
   });
 
   it('pairs the sleeping dragon library with dream recorder Orr', async () => {
@@ -148,7 +307,7 @@ describe('private result image delivery', () => {
     expect(image.matchQuality).toBe('EXACT');
     expect(image.layers).toEqual([
       { uri: 'asset://stories/v3/night-guide-soldeung-fork-bg-v3.jpg', role: 'BACKGROUND', alt: expect.any(String) },
-      { uri: 'asset://stories/v3/night-guide-maru.webp', role: 'CHARACTER', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/night-guide-maru-v2.webp', role: 'CHARACTER', alt: expect.any(String) },
     ]);
   });
 
@@ -328,18 +487,17 @@ describe('private result image delivery', () => {
     expect(buildContentStoryResult('haewon-setting', storyCore, image).character.gender).toBe('여성');
   });
 
-  it('pairs the Parkes hall with the fictional television repairer May', async () => {
+  it('pairs the Titanic third-class room with the fictional seamstress Nora', async () => {
     const storyCore = { ...core, storyId: 'MOON_SIGNAL_WINDOW', storySignals: ['repair'] } as ResultCore;
     const image = await new LibraryImageProvider().getImage(storyCore);
     expect(image.matchQuality).toBe('EXACT');
     expect(image.layers).toEqual([
-      { uri: 'asset://stories/v3/moon-signal-parkes-hall-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
-      { uri: 'asset://stories/v3/moon-signal-may.webp', role: 'CHARACTER', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/titanic-nora-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
     ]);
-    const result = buildContentStoryResult('may-setting', storyCore, image);
+    const result = buildContentStoryResult('nora-setting', storyCore, image);
     expect(result.character.gender).toBe('여성');
     expect(result.presentation?.chapters).toHaveLength(4);
-    expect(result.presentation?.chapters[1]?.body).toContain('전시용 수상기');
+    expect(result.presentation?.chapters[1]?.body).toContain('타이타닉호');
   });
 
   it('pairs the estuary flood marks with Rao and preserves his registered gender', async () => {
@@ -533,7 +691,7 @@ describe('private result image delivery', () => {
     expect(image.matchQuality).toBe('EXACT');
     expect(image.layers).toEqual([
       { uri: 'asset://stories/v3/herbalist-mistwood-bg.jpg', role: 'BACKGROUND', alt: expect.any(String) },
-      { uri: 'asset://stories/v3/herbalist-ravi.webp', role: 'CHARACTER', alt: expect.any(String) },
+      { uri: 'asset://stories/v3/herbalist-ravi-v2.webp', role: 'CHARACTER', alt: expect.any(String) },
     ]);
   });
 

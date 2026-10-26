@@ -1,4 +1,4 @@
-import { findStoryCard, findStoryManuscript, renderStoryEpisode, renderStoryIdentity, renderStoryMemories, renderStoryTimeline, type StoryCard, type StorySignal } from '@pastlife/content';
+import { findStoryCard, findStoryFinalMoment, findStoryManuscript, renderStoryEpisode, renderStoryIdentity, renderStoryMemories, renderStoryTimeline, type StoryCard, type StorySignal } from '@pastlife/content';
 import { BasicResultResponseSchema, ExtendedResultResponseSchema, type ResultPresentationSchema } from '@pastlife/contracts';
 import type { ResultCore } from '@pastlife/scoring';
 import type { z } from 'zod';
@@ -17,6 +17,13 @@ function storyParts(core: ResultCore) {
   const moment = card.signalMoments[signal];
   if (!moment) throw new Error(`Missing signal moment: ${card.id}/${signal}`);
   return { card, signal, moment, echo: `${card.presentEcho}\n\n${card.readerQuestion}` };
+}
+
+function compactPresentationText(value: string, max: number) {
+  const clean = value.replace(/\s+/g, ' ').trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max - 1).replace(/[,、。.!?]?[一-龥ぁ-んァ-ン가-힣A-Za-z0-9 ]*$/, '').trim();
+  return `${cut || clean.slice(0, max - 1).trim()}…`;
 }
 
 export function buildContentStoryBlocks(core: ResultCore) {
@@ -38,20 +45,36 @@ function presentation(core: ResultCore, image: ImageAsset): z.infer<typeof Resul
   const manuscript = findStoryManuscript(card.id);
   if (!manuscript) throw new Error(`Missing story manuscript: ${card.id}`);
   const backgroundUri = image.layers?.find((layer) => layer.role === 'BACKGROUND')?.uri ?? image.uri;
-  const crop = { focusX: 0.5, focusY: 0.5, zoom: 1 };
+  const crops = [
+    { focusX: 0.38, focusY: 0.5, zoom: 1.18 },
+    { focusX: 0.63, focusY: 0.42, zoom: 1.27 },
+    { focusX: 0.44, focusY: 0.64, zoom: 1.32 },
+    { focusX: 0.65, focusY: 0.6, zoom: 1.2 },
+  ] as const;
   return {
     version: 3,
-    hero: { title: card.title, tagline: card.flavor, lifeSummary: renderStoryIdentity(manuscript, card.name), signatureQuote: manuscript.identity.summary, backgroundUri, characterUri: image.layers?.find((layer) => layer.role === 'CHARACTER')?.uri ?? null },
+    hero: {
+      title: card.title, tagline: card.flavor, lifeSummary: renderStoryIdentity(manuscript, card.name), signatureQuote: compactPresentationText(manuscript.identity.summary, 80),
+      backgroundUri, characterUri: image.layers?.find((layer) => layer.role === 'CHARACTER')?.uri ?? null,
+      cover: {
+        era: card.setting?.year ?? manuscript.identity.era,
+        place: card.setting ? `${card.setting.polity} · ${card.home}` : manuscript.identity.region,
+        role: card.role,
+        birthYear: manuscript.identity.birthYear,
+        deathYear: manuscript.identity.deathYear,
+        lifeLine: manuscript.identity.summary,
+      },
+    },
     chapters: [
-      { id: 'MEETING', title: '전생의 나', body: renderStoryIdentity(manuscript, card.name), profilePages: manuscript.identity.profilePages ? [...manuscript.identity.profilePages] : undefined, crop },
-      { id: 'TRIAL', title: '에피소드', body: renderStoryEpisode(manuscript, signal), crop },
-      { id: 'CHOICE', title: '삶의 기록', body: renderStoryTimeline(manuscript), crop },
-      { id: 'NOW', title: '전생의 기억', body: renderStoryMemories(manuscript), crop },
+      { id: 'MEETING', title: '전생의 나', body: renderStoryIdentity(manuscript, card.name), profilePages: manuscript.identity.profilePages ? [...manuscript.identity.profilePages] : undefined, crop: crops[0] },
+      { id: 'TRIAL', title: '에피소드', body: renderStoryEpisode(manuscript, signal), crop: crops[1] },
+      { id: 'CHOICE', title: '삶의 기록', body: renderStoryTimeline(manuscript), crop: crops[2] },
+      { id: 'NOW', title: '전생의 기억', body: renderStoryMemories(manuscript), crop: crops[3] },
     ],
   };
 }
 
-export function buildContentStoryResult(resultId: string, core: ResultCore, image: ImageAsset) {
+export function buildContentStoryResult(resultId: string, core: ResultCore, image: ImageAsset, finalMomentRead = false) {
   const { card, moment, echo } = storyParts(core);
   const manuscript = findStoryManuscript(card.id);
   if (!manuscript) throw new Error(`Missing story manuscript: ${card.id}`);
@@ -66,7 +89,7 @@ export function buildContentStoryResult(resultId: string, core: ResultCore, imag
     { id: 'PRESENT_ECHO', title: '지금의 여운', summary: echo, detail: echo },
   ];
   return BasicResultResponseSchema.parse({
-    resultId, recordNo: core.recordNo, headline: card.title,
+    resultId, finalMomentRead, finalMomentAvailable: Boolean(findStoryFinalMoment(card.id)), recordNo: core.recordNo, headline: card.title,
     character: {
       name: card.name, gender: manuscript.identity.gender === '성별 없음' ? null : manuscript.identity.gender, fictional: true, occupation: card.role,
       introduction: renderStoryIdentity(manuscript, card.name), occupationDescription: manuscript.identity.summary,

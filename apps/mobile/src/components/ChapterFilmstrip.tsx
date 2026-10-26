@@ -28,7 +28,6 @@ export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, 
       </ScrollView>
       <View pointerEvents="none" style={styles.timeline}><View style={styles.timelineLine} />{chapters.map((chapter, index) => <View key={`${chapter.id}-dot`} style={[styles.timelineDot, index === selectedIndex && styles.timelineDotActive]} />)}</View>
     </View>
-    <View style={styles.hint}><Text style={styles.arrow}>‹</Text><Text style={styles.hintText}>좌우로 밀어 보세요</Text><Text style={styles.arrow}>›</Text></View>
   </View>;
 }
 
@@ -51,7 +50,4 @@ const styles = StyleSheet.create({
   timelineLine: { position: 'absolute', left: 0, right: 0, height: 1, backgroundColor: '#c7983e' },
   timelineDot: { width: 7, height: 7, borderRadius: 4, borderWidth: 1, borderColor: '#d7a847', backgroundColor: '#10100f' },
   timelineDotActive: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#f0c75e' },
-  hint: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.md },
-  arrow: { color: '#e0c48b', fontSize: 27, lineHeight: 27 },
-  hintText: { color: '#d8d0c2', fontSize: 13 },
 });

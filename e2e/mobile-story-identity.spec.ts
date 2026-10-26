@@ -315,7 +315,7 @@ test('keeps the mountain fork and night-path guide Maru in separate readable lay
     const response = await route.fetch();
     const body = await response.json();
     const backgroundUri = 'asset://stories/v3/night-guide-soldeung-fork-bg-v3.jpg';
-    const characterUri = 'asset://stories/v3/night-guide-maru.webp';
+    const characterUri = 'asset://stories/v3/night-guide-maru-v2.webp';
     body.image = { sourceType: 'LIBRARY', uri: backgroundUri, alt: '솔등 산골의 갈림길과 마루', status: 'READY', attemptCount: 0,
       matchQuality: 'EXACT', layers: [
         { uri: backgroundUri, role: 'BACKGROUND', alt: '비 젖은 산길의 갈림길' },
@@ -578,7 +578,7 @@ for (const story of [
     alt: '비늘빛 골목의 깨진 거울과 수선공 모아', backgroundAlt: '빠진 조각 너머로 골목이 보이는 거울 작업대', characterAlt: '거울 조각을 살피는 수선공 모아' },
   { id: 'herbalist', name: '라비', home: '안개숲 마을', role: '약초지기', title: '빨간 실의 비밀',
     quote: '마을의 모든 문에 빨간 실이 묶인 아침, 사람들은 당신을 마법사라고 불렀습니다.',
-    backgroundUri: 'asset://stories/v3/herbalist-mistwood-bg.jpg', characterUri: 'asset://stories/v3/herbalist-ravi.webp',
+    backgroundUri: 'asset://stories/v3/herbalist-mistwood-bg.jpg', characterUri: 'asset://stories/v3/herbalist-ravi-v2.webp',
     alt: '안개숲 마을의 빨간 실과 약초지기 라비', backgroundAlt: '비에 젖은 안개숲 마을과 실이 묶인 낮은 문턱', characterAlt: '쪽지와 빨간 실을 살피는 약초지기 라비' },
   { id: 'first-flight', name: '존 T. 대니얼스', home: '킬데빌힐스', role: '해안 구조대원', title: '열두 초의 셔터',
     quote: '하늘을 나는 기계를 찍어 달라는 부탁을 받은 날, 당신은 사진기를 한 번도 써 본 적이 없었습니다.',

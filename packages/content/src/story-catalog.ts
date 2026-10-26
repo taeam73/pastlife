@@ -59,6 +59,26 @@ import { storyCardsBatch58 } from './story-catalog-batch-58.js';
 import { storyCardsBatch59 } from './story-catalog-batch-59.js';
 import { storyCardsBatch60 } from './story-catalog-batch-60.js';
 import { storyCardsBatch61 } from './story-catalog-batch-61.js';
+import { storyCardsBatch62 } from './story-catalog-batch-62.js';
+import { storyCardsBatch63 } from './story-catalog-batch-63.js';
+import { storyCardsBatch64 } from './story-catalog-batch-64.js';
+import { storyCardsBatch65 } from './story-catalog-batch-65.js';
+import { storyCardsBatch66 } from './story-catalog-batch-66.js';
+import { storyCardsBatch67 } from './story-catalog-batch-67.js';
+import { storyCardsBatch68 } from './story-catalog-batch-68.js';
+import { storyCardsBatch69 } from './story-catalog-batch-69.js';
+import { storyCardsBatch70 } from './story-catalog-batch-70.js';
+import { storyCardsBatch71 } from './story-catalog-batch-71.js';
+import { storyCardsBatch72 } from './story-catalog-batch-72.js';
+import { storyCardsBatch73 } from './story-catalog-batch-73.js';
+import { storyCardsBatch74 } from './story-catalog-batch-74.js';
+import { storyCardsBatch75 } from './story-catalog-batch-75.js';
+import { storyCardsBatch76 } from './story-catalog-batch-76.js';
+import { storyCardsBatch77 } from './story-catalog-batch-77.js';
+import { storyCardsBatch78 } from './story-catalog-batch-78.js';
+import { storyCardsBatch79 } from './story-catalog-batch-79.js';
+import { storyCardsBatch80 } from './story-catalog-batch-80.js';
+import { replacementStoryCards } from './story-replacements-20c.js';
 
 export type StoryCard = {
   id: string;
@@ -103,18 +123,18 @@ const storyCardsBatch01: readonly StoryCard[] = [
     signalMoments: { speak: '당신은 먼저 “저 신발이 우리보다 공연을 잘하겠는데?” 하고 받아쳤습니다. 객석의 웃음이 동료의 다음 동작을 열었죠.', connect: '당신은 옆자리 아이에게 “저 신발, 어디로 갈까?” 하고 물었습니다. 아이가 가리킨 방향으로 동료가 비틀거리며 걸어갔어요.', release: '당신은 무대에 뛰어들려던 손을 멈췄습니다. 오늘의 장면을 동료에게 맡기기로 한 거죠.' },
   },
   {
-    id: 'ROOM7', name: '이루', home: '비돌개 고개', identityLine: '그 삶에서 당신은 비돌개 고개에서 작은 여관을 지키던 이루였습니다. 손님을 맞으며 살았지만 7번 방만은 늘 비워 두었죠.', title: '7번 방의 두 번째 박수', role: '여관 주인', world: '비 오는 길목의 여관', flavor: '조용한 미스터리', signals: ['rest', 'connect', 'notice'],
+    id: 'ROOM7', name: '이루', home: '비돌개 고개', identityLine: '그 삶에서 당신은 비돌개 고개에서 작은 여관을 지키던 이루였습니다. 계단에서 숨이 찬 날에는 7번 방에서 쉬었죠.', title: '7번 방의 두 번째 박수', role: '여관 주인', world: '비 오는 길목의 여관', flavor: '조용한 미스터리', signals: ['rest', 'connect', 'notice'],
     opening: '비어 있는 7번 방에서는 밤마다 박수 소리가 났습니다.',
-    life: '여관 주인인 당신은 그 방을 손님에게 내주지 않았어요. 천식이 있던 당신에게 계단을 오르내린 뒤 혼자 쉬는 시간은 필요했습니다. 그렇다고 사람을 싫어한 것은 아니었죠.',
-    turn: '어느 밤 손님이 문틈으로 방을 보았습니다. 방 안에서는 나무 인형 둘이 서로 부딪히고 있었어요. 문밖에서 박수처럼 들리던 소리였죠. 당신은 혼자 인형극을 연습하고 있었습니다.',
-    decision: '손님은 이유를 캐묻지 않고 옆에 앉아 종이로 인형의 작은 모자를 접었습니다. 당신은 그날 공연은 혼자 마쳤지만, 다음 날을 위해 의자 하나를 더 놓아 두었습니다.',
-    cost: '방 하나를 빌려줄 기회는 놓쳤습니다. 또 누군가를 들이면 혼자 쉬던 시간도 조금 달라질 겁니다.',
-    after: '다음 밤 인형들이 부딪힐 때는 나무 소리가, 막이 내린 뒤에는 손님의 손에서 진짜 박수가 났습니다. 두 소리를 당신은 이제 구별할 수 있었어요.',
-    presentEcho: '혼자 숨을 고르는 자리와 누군가를 들일 자리가 꼭 서로를 밀어내지는 않을지도 모릅니다.',
-    secondLook: '7번 방을 비워 둔 이유는 숨을 고를 자리와 혼자만의 놀이터가 필요해서였습니다. 그 방에 의자 하나를 더 놓는 일은 방을 포기하는 것과 달랐죠.',
-    unresolved: '손님은 언제까지 머물지 모릅니다. 빈 의자를 다시 혼자 보게 되는 밤도 오겠지만, 그날의 박수까지 없어지는 것은 아니에요.',
-    readerQuestion: '혼자만의 시간을 지키면서 누군가를 들일 수 있는 작은 자리가 있을까요?',
-    signalMoments: { rest: '당신은 문을 바로 열지 않고 잠시 숨을 골랐습니다. 손님도 재촉하지 않고 문밖에서 기다렸죠.', connect: '당신은 손님에게 작은 인형 하나를 건넸습니다. 손님은 대사 대신 인형 모자를 먼저 만들었어요.', notice: '당신은 문밖의 손님이 박수 소리를 흉내 내는 대신, 나무가 부딪히는 박자를 맞추고 있다는 걸 알아챘습니다.' },
+    life: '계단을 오르내리면 숨이 차는 날이 있었습니다. 당신은 7번 방에서 쉬고 혼자 인형극을 연습했죠. 손님에게는 그 방을 내주지 않았습니다.',
+    turn: '비가 오던 밤, 다른 방이 모두 찼습니다. 늦게 온 손님은 7번 방 안에서 나는 박수 소리를 들었죠. 당신은 나무 인형 둘이 부딪히는 소리라고 말하기가 망설여졌습니다.',
+    decision: '당신은 손님에게 7번 방 침대를 내주고 무대 천은 그대로 두었습니다. 다음 날 손님은 인형 옆에 종이 모자를 남겼죠. 당신은 인형극을 시작하기 전에 의자를 하나 더 놓았습니다.',
+    cost: '그 밤에는 혼자 쉬던 방을 손님에게 내주었습니다. 훗날 방을 거절당한 손님도 있었고, 여관을 맡은 조카는 그 이유를 대신 설명해야 했죠.',
+    after: '다음 밤 인형의 나무 손바닥이 부딪혔습니다. 복도에서 보던 손님도 한 번 박수를 쳤죠. 당신은 손님을 부르지는 않았지만 무대 앞에 의자를 더 놓았습니다.',
+    presentEcho: '누군가에게 한 번 문을 열어 준 뒤에도, 다음에는 쉬어야 한다고 말할 수 있습니다.',
+    secondLook: '7번 방은 당신이 숨을 고르고 인형극을 연습하던 곳이었습니다. 한밤의 손님에게 방을 내준 일과, 다른 날 방을 지킨 일은 모두 당신의 삶에 남았습니다.',
+    unresolved: '조카가 여관을 맡아 7번 방을 객실로 쓴 뒤, 당신은 고개 아래 다른 방으로 옮겼습니다. 그곳에서도 나무 인형은 계속 고쳤죠.',
+    readerQuestion: '내게 꼭 필요한 쉼이 다른 사람에게 불편을 줄 때, 그 이유를 어떻게 말할 수 있을까요?',
+    signalMoments: { rest: '당신은 문을 열기 전에 난간에 기대 숨을 골랐습니다. 손님은 창문을 닫고 기다렸죠.', connect: '당신은 방 안에 작은 인형극 무대가 있다고 말했습니다. 손님도 어릴 때 종이 인형을 만들었다고 했죠.', notice: '당신은 손님이 박수 소리보다 당신의 거친 숨을 걱정한다는 걸 알아챘습니다. 손님은 계단을 오르지 말고 앉으라고 했죠.' },
   },
   {
     id: 'BLANK_ORDER', name: '세아', home: '안개성', identityLine: '그 삶에서 당신은 안개성의 왕궁 서기관 세아였습니다. 명령 한 줄이 누군가의 내일을 바꿀 수 있어 종이를 두 번씩 읽던 사람이었죠.', title: '글자 없는 왕명', role: '왕궁 서기관', world: '비 내리는 성문', flavor: '선택의 긴장', signals: ['notice', 'speak', 'protect'],
@@ -159,18 +179,18 @@ const storyCardsBatch01: readonly StoryCard[] = [
     signalMoments: { protect: '당신은 아이보다 먼저 젖은 돌을 밟아 보고 안전한 쪽으로 손을 내밀었습니다.', connect: '당신은 아이에게 등불을 함께 들자고 했습니다. 빛이 두 사람 사이에서 흔들렸어요.', rest: '당신은 갈림길에서 무리해 걷지 않고 잠시 멈춰 아이와 따뜻한 물을 나눠 마셨습니다.' },
   },
   {
-    id: 'MIRROR', name: '모아', home: '비늘빛 골목', identityLine: '그 삶에서 당신은 비늘빛 골목의 거울 수선공 모아였습니다. 남의 깨진 거울은 이어 붙이면서 자기 거울의 빈칸은 오래 바라보던 사람이었죠.', title: '마지막 조각의 얼굴', role: '거울 수선공', world: '거울이 말을 건네는 골목', flavor: '기묘한 동화', signals: ['repair', 'notice', 'release'],
-    opening: '당신은 남의 거울은 모두 고쳤지만 자기 거울만 맞출 수 없었습니다.',
-    life: '깨진 거울 조각을 이어 붙이는 일을 했어요. 당신의 작업대는 창문 앞에 있었지만, 늘 거울을 세워 두어 바깥을 볼 틈이 없었습니다.',
-    turn: '어느 날 자신의 거울을 붙이자 눈과 입이 서로 다른 방향을 보였어요. 빠진 조각을 찾던 당신은 빈틈 사이로 누군가 손을 흔드는 걸 봤습니다. 거울 뒤 창밖의 아이였습니다. 아이가 입 모양으로 말했죠. “그 틈으로도 보여요!”',
-    decision: '당신은 빠진 조각을 다시 끼우지 않고 거울을 창문 앞에 그대로 두었습니다. 낮에는 빈틈으로 골목의 하루가 보였어요. 처음에는 어색했지만, 자기 얼굴만 보던 자리에서 밖을 바라보게 됐습니다.',
-    cost: '예전처럼 한 장의 반듯한 거울은 갖지 못했습니다.',
-    after: '해 질 무렵, 당신은 비친 얼굴보다 거울 뒤 창밖에서 손을 흔드는 아이를 먼저 봤습니다. 자신을 보는 방법이 하나일 필요는 없을지도 몰랐죠.',
-    presentEcho: '완벽하게 맞추려던 틈에서 뜻밖에 바깥이 보이는 날도 있습니다.',
-    secondLook: '당신은 수선이 실패했다고 여겼지만, 창밖 아이는 거울의 빈틈에서 먼저 당신을 봤습니다. 같은 틈이 한 사람에게는 흠이고 다른 사람에게는 인사할 자리였죠.',
-    unresolved: '거울은 여전히 반듯하지 않습니다. 내일 아침에는 다시 맞추고 싶어질 수도 있지만, 오늘은 그 틈으로 골목을 보았어요.',
-    readerQuestion: '맞추려 애쓰던 것에 다른 쓰임이 있다면 어떤 모습일까요?',
-    signalMoments: { repair: '당신은 조각을 끼워 보다가 창밖 아이의 손이 가려지는 것을 보고 다시 빼냈습니다.', notice: '당신은 거울 속 자기 얼굴 사이로, 바깥 아이의 손이 실제로 보인다는 걸 알아챘습니다.', release: '당신은 마지막 조각을 끼우려던 손을 멈췄습니다. 아이의 손이 보이는 빈틈을 남겨 두었죠.' },
+    id: 'MIRROR', name: '모아', home: '비늘빛 골목', identityLine: '그 삶에서 당신은 비늘빛 골목의 거울 수선공 모아였습니다. 나중에는 화재로 가게를 잃고 친구 연주의 빈방에서 지내다 다시 자기 가게를 열었습니다.', title: '마지막 조각의 얼굴', role: '거울 수선공', world: '거울이 말을 건네는 골목', flavor: '기묘한 동화', signals: ['repair', 'notice', 'release'],
+    opening: '축제 사흘 전, 모아는 잃어버린 거울 조각을 골목 건너 아이의 손에서 발견했습니다. 아이는 그 조각으로 계단을 내려오기 어려운 할머니의 방에 햇빛을 비추고 있었습니다.',
+    life: '모아는 유리 상인의 집에서 자라 거울 수선 가게를 열었습니다. 마흔여덟 살에는 골목 화재로 가게와 재료를 잃고 친구 연주의 빈방에 머물렀습니다. 몇 해 뒤 다시 자기 방과 가게를 마련했지만, 함께 살던 동안 연주가 치른 불편도 남았습니다.',
+    turn: '모아가 찾던 것은 스승이 준 거울의 마지막 조각이었습니다. 아이는 조금만 더 쓰고 돌려주겠다고 했습니다. 모아가 언제까지 필요한지 묻자 아이는 할머니가 아래층으로 내려올 수 있을 때까지라고 답했습니다. 모아는 축제에 완성된 거울을 내놓고 싶은 마음과 아이의 사정 사이에서 멈췄습니다.',
+    decision: '모아는 조각을 아이에게 잠시 빌려주었습니다. 축제에는 빈칸이 남은 거울을 내놓았고, 왜 비었는지 묻는 손님에게 아이 이야기를 들려주었습니다.',
+    cost: '축제에 완성된 거울을 보여 주려던 계획은 이루지 못했습니다. 빈칸을 본 어떤 손님은 수선공의 거울이 이래도 되느냐고 물었습니다.',
+    after: '겨울이 지나 할머니가 다시 아래층에 나오자 아이는 조각을 돌려주었습니다. 모아는 그 조각을 상자에 넣어 두고 거울의 작은 빈칸을 당장은 그대로 두었습니다.',
+    presentEcho: '아이가 조각을 쓰는 동안 모아는 자기 거울을 완성할 수 없었습니다. 아이의 할머니는 위층 방에서 오후의 빛을 볼 수 있었습니다.',
+    secondLook: '모아에게는 잃어버린 거울 조각이었지만, 아이에게는 할머니 방에 빛을 보내는 물건이었습니다. 모아는 조각의 주인이면서도 언제 돌려받을지 아이에게 먼저 물었습니다.',
+    unresolved: '조각은 돌아왔어도 모아는 거울에 곧바로 끼우지 않았습니다. 몇 해 뒤 화재로 가게를 잃었을 때는 그 거울만 들고 나왔습니다. 화재 뒤 연주의 방에서 지낸 시간은 두 사람에게 서로 다르게 남았습니다.',
+    readerQuestion: '내 물건이 다른 사람에게 잠시 꼭 필요할 때, 무엇을 확인하고 빌려주겠습니까?',
+    signalMoments: { repair: '모아는 아이가 조각의 날카로운 모서리에 손을 베지 않도록 얇은 테를 둘러 주기로 했습니다.', notice: '모아는 아이가 조각으로 위층 할머니의 방에 햇빛을 보내고 있다는 걸 보았습니다.', release: '모아는 조각을 당장 돌려달라고 하려던 말을 멈추고 아이에게 언제까지 필요한지 물었습니다.' },
   },
   {
     id: 'HERBALIST', name: '라비', home: '안개숲 마을', identityLine: '그 삶에서 당신은 안개숲 마을의 약초지기 라비였습니다. 비가 오기 전에 산길과 물길을 살피는 일이 몸에 밴 사람이었죠.', title: '빨간 실의 비밀', role: '약초지기', world: '안개 낀 동화 속 마을', flavor: '두려움과 진실', signals: ['notice', 'protect', 'speak'],
@@ -188,59 +208,59 @@ const storyCardsBatch01: readonly StoryCard[] = [
   },
   {
     id: 'DRAGON_DREAM', name: '오르', home: '잠든 용의 도서관', identityLine: '그 삶에서 당신은 잠든 용의 도서관에 살던 꿈 기록자 오르였습니다. 밤마다 용이 부르는 이름을 책에 옮겨 적었죠.', title: '용의 꿈에서 지워진 이름', role: '꿈 기록자', world: '잠든 용의 도서관', flavor: '경이로운 미스터리', signals: ['notice', 'connect', 'release'],
-    opening: '잠든 용의 꿈을 적던 날, 책에서 당신 이름만 사라졌습니다.',
-    life: '당신은 용이 잠꼬대로 부르는 이름을 밤마다 책에 적었습니다. 누군가의 꿈에 남는 것이 오래 사는 일처럼 느껴졌어요.',
-    turn: '그날 용은 이름 대신 작은 종소리를 반복했습니다. 당신은 책장이 젖은 줄 알았지만, 다른 이름은 멀쩡했죠. 창가에 달린 종을 울리자 용은 처음으로 꿈속에서 “이제 네가 깨워 줘”라고 말했습니다.',
-    decision: '당신은 빈 칸을 남겨 두고 종을 한 번 더 울렸어요. 용은 눈을 뜨지 않았지만 깊게 숨을 쉬었고, 밤새 이어지던 악몽은 멎었습니다.',
-    cost: '그 책을 읽는 사람은 당신이 거기 있었다는 것을 모를 겁니다.',
-    after: '아침에 도서관을 나서며 당신은 종을 만져 봤어요. 이름이 남지 않은 밤에도 자신이 한 일은 사라지지 않았습니다.',
-    presentEcho: '누가 알아주지 않아도 내가 했던 작은 일을 오래 기억하는 때가 있습니다.',
-    secondLook: '당신은 이름이 지워진 것을 버려졌다는 뜻으로 읽었습니다. 그러나 용의 꿈은 누가 종을 울릴지 묻고 있었죠.',
-    unresolved: '빈 칸은 그대로 남았습니다. 다음 기록자가 거기에 무엇을 쓸지는 알 수 없지만, 당신은 종을 제자리에 걸어 두었어요.',
-    readerQuestion: '이름이 남지 않아도 내가 한 일의 의미가 사라지지 않는 순간은 언제일까요?',
-    signalMoments: { notice: '당신은 사라진 이름보다 책장에 반복된 종 모양을 먼저 보았습니다.', connect: '당신은 혼자 기록을 고집하지 않고 옆 방의 종지기에게 꿈 이야기를 들려주었습니다.', release: '당신은 자기 이름을 빈 칸에 다시 쓰려던 손을 거뒀습니다.' },
+    opening: '도서관의 오래된 기록에서 당신의 이름이 칼끝으로 지워져 있었습니다.',
+    life: '당신은 잠든 용이 꿈에서 부른 이름을 기록했습니다. 하지만 그 책은 앞날을 알려 주지 않았어요. 제본사 라엔과 함께 책을 살피던 비 오는 아침, 어릴 때부터 있던 당신의 이름이 사라진 걸 보았습니다.',
+    turn: '열 살 니아가 이름을 지웠다고 털어놓았습니다. 수문 관리인인 어머니가 밤새 돌아오지 않자, 이름이 없어도 사람이 돌아올 수 있는지 확인하고 싶었던 거죠. 그때 경고 종이 울렸습니다. 비로 불어난 물이 마을 쪽으로 밀려오고 있었습니다.',
+    decision: '당신은 라엔·니아와 상류 수문으로 갔습니다. 틀에 걸린 나무를 아래로 누르는 동안 라엔이 쇠사슬을 당겨 수문을 열었죠. 발을 헛디딘 당신은 니아의 어머니에게 구해졌습니다.',
+    cost: '니아가 긁어낸 종이는 원래의 기록으로 되돌릴 수 없었습니다. 당신은 지운 날짜와 이유까지 여백에 남겼습니다.',
+    after: '니아의 어머니가 돌아온 아침, 당신은 니아가 기다리며 듣고 싶었던 어머니의 말도 적었습니다. 그 뒤로 용의 꿈뿐 아니라 찾아온 사람의 이야기도 오래 들었습니다.',
+    presentEcho: '기록 속 이름이 사라져도 사람은 눈앞에 남아 있을 수 있습니다. 니아는 어머니를 찾으러 함께 간 뒤 그 사실을 알게 됐죠.',
+    secondLook: '니아는 당신을 해치려고 이름을 지운 게 아니었습니다. 당신은 긁힌 자국을 보고 누가 왜 지웠는지 물었고, 책보다 먼저 수문에 갔습니다.',
+    unresolved: '훗날 용의 꿈이 들리지 않게 되자 당신은 이유를 모른다고 말했습니다. 라엔과 떠돌다 혼자 은등으로 돌아왔고, 두 사람은 편지를 주고받았습니다.',
+    readerQuestion: '눈앞의 사람이 두려워할 때, 기록을 확인하는 일과 함께 움직이는 일 중 무엇을 먼저 하겠습니까?',
+    signalMoments: { notice: '당신은 종탑 아래 계단의 물 자국이 어제보다 두 칸 높아진 걸 보았습니다. 수문에 가야 했죠.', connect: '당신은 라엔에게 혼자서는 늦을 것 같으니 함께 가 달라고 했습니다. 라엔은 밧줄을 들고 앞장섰죠.', release: '당신은 이름이 지워진 책을 덮었습니다. 그 책을 고칠 일은 돌아온 뒤에 생각하기로 했죠.' },
   },
   {
     id: 'LAST_SIGNAL', name: '한결', home: '여울호 우주선', identityLine: '그 삶에서 당신은 먼 별로 향하는 여울호 우주선의 통신 기록관 한결이었습니다. 답장이 오지 않은 칸도 지우지 않던 사람이었죠.', title: '오지 않은 답장', role: '우주선 통신 기록관', world: '먼 별을 향하던 우주선', flavor: '고독과 수수께끼', signals: ['connect', 'notice', 'speak'],
     opening: '당신은 도착하지 않은 답장을 매일 정리하는 기록관이었습니다.',
     life: '우주선이 먼 별로 갈수록 지구의 답장은 늦어졌어요. 당신은 수신 시각이 비어 있는 줄도 버리지 않았습니다.',
     turn: '어느 날 비어 있던 칸에 소리 없는 신호가 찍혔습니다. 고장이라 여겼지만 간격은 오래전 당신이 보낸 노래의 박자와 같았죠. 답장이 아니라 우주선 밖에서 반사되어 돌아온 옛 신호였습니다.',
-    decision: '당신은 그 신호를 누군가의 목소리라고 꾸미지 않았어요. 대신 “아직 여기 있다”고 새 메시지를 보냈습니다. 동료가 옆에 앉아 마지막 문장을 함께 읽어 주었죠.',
-    cost: '그 메시지에도 답이 올지 알 수 없었습니다.',
-    after: '전송 표시가 꺼진 뒤에도 당신은 빈 칸을 지우지 않았습니다. 기다리는 일과 먼저 말하는 일은 함께 있을 수 있었어요.',
-    presentEcho: '답이 없을까 봐 망설이면서도 먼저 한마디를 남겨 보고 싶은 순간이 있습니다.',
-    secondLook: '옛 노래가 돌아왔을 때 당신은 답장을 찾았다고 말할 수 있었습니다. 하지만 반사된 자기 신호를 다른 사람의 목소리로 꾸미지 않았어요.',
-    unresolved: '새 메시지에도 답이 없을지 모릅니다. 다만 이번 빈 칸은 아무 말도 못 한 자리가 아니라, 이미 한마디를 보낸 뒤의 자리였죠.',
-    readerQuestion: '답을 기다리면서 내가 먼저 전하고 싶은 말은 무엇인가요?',
-    signalMoments: { connect: '당신은 동료를 불러 신호의 박자를 함께 들었습니다. 둘은 한동안 아무 말도 하지 않았어요.', notice: '당신은 신호의 간격을 오래된 노래 기록과 하나씩 대조했습니다.', speak: '당신은 먼저 짧은 인사를 녹음하고, 그 뒤에 정말 전하고 싶던 문장을 덧붙였습니다.' },
+    decision: '당신은 장부에 “자기 송신 신호 반사”라고 적었습니다. 동료는 실망했지만 기록을 막지 않았죠. 당신이 동생에게 틀린 음이 있던 노래를 다시 보내자 동료도 옆에서 다음 마디를 불렀습니다.',
+    cost: '동생이 새 노래를 듣기까지 몇 달이 걸렸습니다. 동료는 한동안 답장이 왔다고 믿고 싶었지만, 당신은 그럴 수 없었죠.',
+    after: '당신은 이미 말을 보낸 뒤 기다리는 빈칸을 남겼습니다. 몇 년 뒤에는 젊은 기록관들에게 전송 시간을 먼저 확인하라고 가르쳤습니다.',
+    presentEcho: '기대하던 답이 아니어도 실제로 들은 신호와 바라는 말을 구분할 수 있습니다.',
+    secondLook: '오래된 중계기에서 돌아온 것은 동생의 답장이 아니라 당신이 보낸 노래였습니다. 당신은 한 음이 어긋난 자리까지 대조한 뒤 기록했죠.',
+    unresolved: '훗날 당신은 오류 기록에 동료 지안의 이름을 실어 지안의 다음 항로 지원에도 영향을 주었습니다. 지안이 이름을 빼 달라고 했지만, 당신은 끝내 기록 방식이 옳았다고 믿었습니다.',
+    readerQuestion: '정확한 기록을 남기면서 다른 사람의 이름을 공개할 때는 무엇을 먼저 물어야 할까요?',
+    signalMoments: { connect: '당신은 동료에게 헤드셋 한쪽을 건넸습니다. 둘이 박자를 셌고, 당신은 송신 장부를 다시 펼쳤죠.', notice: '당신은 한 음이 늦는 자리를 찾았습니다. 자신이 보낸 노래에서 틀렸던 바로 그 자리였죠.', speak: '당신은 동료에게 답장이라면 좋겠지만 아직 확인할 수 없다고 말하고 옛 송신 기록을 띄웠습니다.' },
   },
   {
     id: 'SHADE_TENT', name: '이로', home: '낮별 행성', identityLine: '그 삶에서 당신은 밤이 오지 않는 낮별 행성의 천막 배달자 이로였습니다. 사람들이 잠들 수 있도록 빛을 가리는 천막을 빌려주었죠.', title: '구멍 난 그늘', role: '그늘 천막 배달자', world: '밤이 오지 않는 행성', flavor: '낯선 세계의 장난', signals: ['repair', 'rest', 'release'],
     opening: '밤이 오지 않는 별에서, 당신은 잠들 시간을 배달했습니다.',
     life: '당신이 빌려주는 두꺼운 천막 안에서는 햇빛을 피하고 잘 수 있었어요. 작은 구멍도 그냥 두지 않았습니다. 빛이 새면 잠을 설칠 수 있으니까요.',
     turn: '돌아온 천막에는 구멍 일곱 개가 있었습니다. 빌려 간 아이가 허락 없이 낸 것이었죠. 당신이 안에 앉자 바닥에 점 일곱 개가 맺혔습니다. 아이는 책에서 본 밤하늘을 흉내 낸 거였습니다.',
-    decision: '당신은 아이에게 빌린 물건을 바꾸기 전에는 물어야 한다고 말했습니다. 아이는 실을 가져와 함께 수선했어요. 잠이 필요한 사람을 위해 큰 구멍은 모두 막고, 작은 빛 몇 개를 남길지 두 사람은 누워서 직접 시험했습니다.',
-    cost: '수선 때문에 다음 손님에게 천막을 늦게 가져다주고 직접 사과해야 했습니다.',
-    after: '아이를 보낸 뒤 당신은 천막 안에 다시 앉았습니다. 달라진 천을 마음에 들어 하면서도 원래처럼 어둡던 천막이 조금 그리웠어요.',
+    decision: '당신은 다음 손님인 배달부에게 천막의 구멍과 지연을 먼저 알렸습니다. 함께 밝기를 확인하고 큰 구멍 네 개를 기웠죠. 배달부는 남은 작은 빛 세 점을 오늘만 받아들였습니다.',
+    cost: '천막이 늦어져 배달부에게 빌리는 값 일부를 돌려주었습니다. 작은 빛이 남은 천막을 앞으로 모든 손님에게 빌려줄 수도 없었죠.',
+    after: '당신은 장부에 “작은 빛 셋”이라고 쓰고 다음 손님부터 원하는 밝기를 물었습니다. 아이와는 남는 천으로 따로 별 천막을 만들었죠.',
     presentEcho: '아끼던 모양이 달라져 속상한 마음과 새 모습이 마음에 드는 마음은 함께 남을 수 있습니다.',
     secondLook: '아이에게 별은 선물이었지만, 누군가에게는 잠을 깨우는 구멍이었습니다. 당신은 둘 중 하나만 옳다고 정하지 않고 천막 안에 직접 누워 봤죠.',
-    unresolved: '다음 손님은 세 개의 작은 빛도 싫어할 수 있습니다. 그래서 별이 있는 천막을 원하는지 먼저 물을 생각이에요.',
-    readerQuestion: '아끼던 것을 바꿀 때, 누구의 허락이나 마음을 먼저 살펴야 할까요?',
-    signalMoments: { repair: '당신은 빛이 가장 많이 새는 구멍부터 기웠습니다. 아이는 실의 반대편을 잡았어요.', rest: '당신은 수선을 시작하기 전 천막 아래 누워 눈을 감았습니다. 얼마나 밝은지 직접 느껴 봐야 했죠.', release: '당신은 일곱 구멍을 모두 없애려던 계획을 접고, 잠을 방해하지 않는 작은 빛만 남겼습니다.' },
+    unresolved: '훗날 당신은 단비와 상의하지 않고 대여료를 낮췄습니다. 손님은 쉬었지만 공동 가게는 새 천을 살 돈이 모자랐고, 단비는 자기 가게를 열어 값을 직접 정했습니다.',
+    readerQuestion: '손님에게 좋은 값을 정할 때 함께 일하는 사람에게 먼저 무엇을 물어야 할까요?',
+    signalMoments: { repair: '당신은 가장 큰 구멍부터 바늘을 댔습니다. 아이가 실의 반대편을 잡았고 둘은 빛을 하나씩 확인했죠.', rest: '당신은 아이와 천막 아래 누워 눈을 감았습니다. 빛이 눈꺼풀에 얼마나 비치는지 느껴 봤죠.', release: '당신은 일곱 구멍을 전부 막겠다는 마음을 내려놓았습니다. 먼저 다음 손님이 원하는 어둠을 묻기로 했죠.' },
   },
   {
     id: 'REVERSE_MAP', name: '누리', home: '물방울 바다', identityLine: '그 삶에서 당신은 물방울 바다의 길잡이 누리였습니다. 물이 하늘로 솟는 항로를 누구보다 잘 안다고 믿던 사람이었죠.', title: '거꾸로 든 지도', role: '낮은 중력의 바다 길잡이', world: '물방울이 떠오르는 행성', flavor: '탐험과 발견', signals: ['explore', 'notice', 'connect'],
     opening: '바다 위에서 길을 잃은 사람은 지도가 아니라 당신이었습니다.',
     life: '당신은 중력이 약한 바다에서 길을 안내했어요. 파도가 위로 솟으면 작은 물방울이 공중에 오래 머물렀죠. 그 움직임만 보고도 섬을 찾을 수 있다고 믿었습니다.',
-    turn: '여행자가 지도를 거꾸로 들고도 자꾸 오른쪽을 가리켰습니다. 당신은 웃으려다 멈췄어요. 지도에 찍힌 점들의 간격이 섬의 자리가 아니라, 하늘에 떠 있는 물방울 무리와 같았거든요. 물방울은 바람을 타고 섬 쪽으로 천천히 흘렀습니다.',
-    decision: '당신은 익숙한 수평선 대신 머리 위의 물방울을 길잡이로 삼았습니다. 여행자는 지도를 계속 거꾸로 든 채 방향을 불렀어요.',
-    cost: '빠른 길은 아니었습니다. 늦게 도착해 기다리던 사람들에게 이유를 설명해야 했죠.',
-    after: '섬에 닿자 여행자가 지도를 바로 돌렸습니다. 방금 지나온 섬이 종이 위에서는 다시 엉뚱한 자리에 있었어요. 두 사람은 지도를 접고 동시에 고개를 들었습니다. 머리 위 물방울은 아직도 길을 그리고 있었죠.',
+    turn: '바람이 바뀌고 떠 있는 물방울이 수평선을 가렸습니다. 처음 배를 탄 여행자가 지도를 거꾸로 들자 당신은 바로 돌려 주었죠. 하지만 그 지도 구석의 푸른 점은 섬이 아니라 머리 위 물방울 무리의 자리였습니다.',
+    decision: '당신은 여행자에게 거꾸로 든 지도의 푸른 점을 읽게 했습니다. 자신은 돛과 바람을 보며 배를 몰았죠. 비슷한 물방울 무리에서 한번 잘못 꺾은 뒤 가장 큰 세 무리를 다시 찾았습니다.',
+    cost: '둘은 늦게 섬에 닿아 기다리던 사람들에게 돌아온 길을 설명했습니다. 당신도 처음에는 여행자의 지도를 제대로 보지 않았다고 인정했죠.',
+    after: '그 뒤 당신은 출항 전에 접힌 지도 구석부터 펼쳤습니다. 젊은 길잡이에게 바다와 하늘을 함께 보라고 가르쳤고, 지도를 거꾸로 든 사람에게는 먼저 이유를 물었습니다.',
     presentEcho: '늘 길을 알려 주던 사람도 다른 사람에게 길을 묻는 날이 있습니다.',
     secondLook: '길잡이는 익숙한 길을 잘 알았지만, 그 익숙함 때문에 하늘에 떠 있는 물방울을 한동안 지도에서 빼놓았습니다.',
-    unresolved: '다음 항해에도 모든 물방울이 같은 곳을 가리키지는 않을 겁니다. 그래도 두 사람은 위를 보는 방법을 하나 더 얻었어요.',
-    readerQuestion: '익숙한 문제를 다른 방향에서 본다면 무엇이 먼저 보일까요?',
-    signalMoments: { explore: '당신은 익숙한 항로를 벗어나 물방울이 향하는 쪽으로 먼저 배를 틀었습니다.', notice: '당신은 지도 점과 머리 위 물방울의 간격이 같다는 걸 하나씩 확인했습니다.', connect: '당신은 여행자에게 지도를 계속 들고 방향을 불러 달라고 부탁했습니다. 두 사람의 눈이 다른 곳을 봤죠.' },
+    unresolved: '마흔 살에는 친구 소라가 함께 살 집을 구하자고 했지만, 당신은 먼 항로를 택하고 혼자 떠났습니다. 돌아온 뒤에도 두 사람은 따로 살며 가끔 만났습니다.',
+    readerQuestion: '남의 의견을 배에서 받아들일 수 있었는데, 친구에게는 왜 떠날 계획을 먼저 말하지 못했을까요?',
+    signalMoments: { explore: '당신은 수평선을 찾는 일을 멈추고 물방울 무리 아래로 배를 틀었습니다. 바람이 바뀔 때마다 방향을 고쳤죠.', notice: '당신은 가까운 세 물방울 무리의 간격을 세었습니다. 지도에는 없는 작은 무리도 있었습니다.', connect: '당신은 여행자에게 지도를 계속 거꾸로 들게 했습니다. 자신은 돛과 바람을 보고 여행자는 하늘의 푸른 점을 읽었죠.' },
   },
   {
     id: 'SHORE_ROCK', name: '파도틈', home: '바람턱 해안', identityLine: '그 삶에서 당신은 바람턱 해안에서 파도틈이라 불리던 바위였습니다. 수백 해 동안 같은 자리에서 파도와 소라를 맞았죠.', title: '해안가 바위의 마지막 웅덩이', role: '해안가의 바위', world: '오래된 바닷가', flavor: '뜻밖의 시점', signals: ['rest', 'protect', 'release'], rare: true,
@@ -261,7 +281,7 @@ const storyCardsBatch01: readonly StoryCard[] = [
 // A drafted life enters the live pool only after its layered art and result UI pass QA.
 const promotedBatch02Ids = new Set(['FIREWORKS', 'TASTER', 'CLOUD_PAINTER', 'FESTIVAL_KING', 'SNOW_REFEREE', 'SHADOW_TAILOR', 'UNDERWATER_SCALE', 'DOORLESS_KEEPER', 'LOST_AUTUMN', 'THEATRE_VILLAIN', 'WINDMILL', 'HEAVY_BOX']);
 const promotedBatch03Ids = new Set(['GRAVITY_SEEDS', 'PAID_LOSS', 'WARM_STONES', 'APOLOGY_COURIER', 'FIRST_FLIGHT_CAMERA', 'GYEONGSEONG_SHEARS', 'MOON_SIGNAL_WINDOW', 'TIDE_MARK', 'THIRD_KNOCK', 'MARKET_CAT_LOT']);
-export const storyCards: readonly StoryCard[] = [
+const originalStoryCards: readonly StoryCard[] = [
   ...storyCardsBatch01,
   ...storyCardsBatch02.filter(({ id }) => promotedBatch02Ids.has(id)),
   ...storyCardsBatch03.filter(({ id }) => promotedBatch03Ids.has(id)),
@@ -323,7 +343,32 @@ export const storyCards: readonly StoryCard[] = [
   ...storyCardsBatch59,
   ...storyCardsBatch60,
   ...storyCardsBatch61,
+  ...storyCardsBatch62,
+  ...storyCardsBatch63,
+  ...storyCardsBatch64,
+  ...storyCardsBatch65,
+  ...storyCardsBatch66,
+  ...storyCardsBatch67,
+  ...storyCardsBatch68,
+  ...storyCardsBatch69,
+  ...storyCardsBatch70,
+  ...storyCardsBatch71,
+  ...storyCardsBatch72,
+  ...storyCardsBatch73,
+  ...storyCardsBatch74,
+  ...storyCardsBatch75,
+  ...storyCardsBatch76,
+  ...storyCardsBatch77,
+  ...storyCardsBatch78,
+  ...storyCardsBatch79,
+  ...storyCardsBatch80,
 ];
+
+const replacementCardById = new Map(replacementStoryCards.map((card) => [card.id, card]));
+
+export const storyCards: readonly StoryCard[] = originalStoryCards.map(
+  (card) => replacementCardById.get(card.id) ?? card,
+);
 
 export function findStoryCard(id: string): StoryCard | undefined {
   return storyCards.find((card) => card.id === id);

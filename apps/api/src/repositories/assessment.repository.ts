@@ -31,6 +31,7 @@ export type StoredResult = {
   storyProfile?: StoryProfile;
   image?: StoredImage;
   presentation?: StoredPresentation;
+  finalMomentReadAt?: Date;
 };
 
 export type StoredImage = {
@@ -60,5 +61,6 @@ export interface AssessmentRepository {
   saveResultImage(resultId: string, image: StoredImage): Promise<StoredImage>;
   saveResultPresentation(resultId: string, presentation: StoredPresentation): Promise<StoredPresentation>;
   updateResultPresentation(resultId: string, presentation: StoredPresentation): Promise<StoredPresentation>;
+  markFinalMomentRead(resultId: string): Promise<Date>;
   completeAd(sessionId: string, slot: number, providerEventId: string): Promise<boolean>;
 }

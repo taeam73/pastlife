@@ -73,6 +73,13 @@ export class MemoryAssessmentRepository implements AssessmentRepository {
     return result ? structuredClone(result) : undefined;
   }
 
+  async markFinalMomentRead(resultId: string) {
+    const result = this.results.get(resultId);
+    if (!result) throw new Error(`Result ${resultId} not found`);
+    result.finalMomentReadAt ??= new Date();
+    return result.finalMomentReadAt;
+  }
+
   async saveResultImage(resultId: string, image: StoredImage) {
     const result = this.results.get(resultId);
     if (!result) throw new Error(`Result ${resultId} not found`);

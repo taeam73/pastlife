@@ -21,7 +21,7 @@ function NavItem({ icon, label, onPress }: { icon: string; label: string; onPres
 const styles = StyleSheet.create({
   nav: { flexDirection: 'row', gap: spacing.sm, borderTopColor: 'rgba(244, 240, 231, 0.28)', borderTopWidth: 1, paddingTop: spacing.sm },
   item: { flex: 1, minHeight: 54, alignItems: 'center', justifyContent: 'center', gap: 3 },
-  icon: { color: colors.accent, fontSize: 20, lineHeight: 22 },
+  icon: { color: colors.accent, fontSize: 28, lineHeight: 31 },
   text: { color: colors.text, fontSize: 12, fontWeight: '700' },
   pressed: { opacity: 0.65, transform: [{ translateY: 1 }] },
 });

@@ -54,7 +54,7 @@ export const storyManuscriptsBatch25: readonly StoryManuscript[] = [
       { when: '1960년 · 64세', event: '타라의 작은 간판 작업실 돕기 시작' },
       { when: '1966년 · 70세', event: '오랜 동료 디네시 사망' },
       { when: '1968년 · 72세', event: '밤 공연을 그만두고 낮에 하모니움 수업' },
-      { when: '1970년 · 74세', event: '봄베이에서 생을 마침' },
+      { when: '1970년 · 74세', event: '봄베이의 누이 리나 집 옥상에서 젖은 빨래를 걷다 벼락을 맞고 생을 마침. 조카 타라와 리나가 곁에 있었음' },
     ],
     memories: [
       { label: '오래 쓴 물건', detail: '손잡이 한쪽이 닳은 작은 하모니움' },

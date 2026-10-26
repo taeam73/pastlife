@@ -16,6 +16,14 @@ describe('result image compatibility', () => {
     expect(inspectImageCompatibility({ ...core, storyId: 'BLANK_ORDER' }, fallback)).toEqual([]);
   });
 
+  it('accepts a complete single-layer scene when the story has no separate character asset', async () => {
+    const provider = new LibraryImageProvider();
+    const core = { storyId: 'THE_FACE_ON_THE_SALON_SIGN', contentVersion: '3.0.0' } as ResultCore;
+    const image = await provider.getImage(core);
+    expect(image.layers).toHaveLength(1);
+    expect(inspectImageCompatibility(core, image)).toEqual([]);
+  });
+
   it('keeps every historical setting background and character layer aligned', async () => {
     const provider = new LibraryImageProvider();
     for (const setting of historicalSettings) {

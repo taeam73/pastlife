@@ -22,15 +22,19 @@ type Props = {
   profilePages?: { title: string; body: string }[] | undefined;
   introductionSummary: string;
   index: number;
+  standaloneProfile?: boolean | undefined;
+  pageIndex?: number | undefined;
+  onPageChange?: ((index: number) => void) | undefined;
 };
 
 function sourceFor(uri: string) {
   return resolveLibraryImage(uri) ?? (/^https?:\/\//.test(uri) ? { uri } : undefined);
 }
 
-export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, chapterTitle, chapterDetail, profilePages, introductionSummary, index }: Props) {
+export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, chapterTitle, chapterDetail, profilePages, introductionSummary, index, standaloneProfile = false, pageIndex = 0, onPageChange }: Props) {
   const { width } = useWindowDimensions();
-  const isIntroduction = index === 0;
+  const isIntroduction = index === 0 && !standaloneProfile;
+  const isProfile = index === 0 && standaloneProfile;
   const mobile = width < 768;
   const [summaryHeight, setSummaryHeight] = useState(0);
   const sourceUri = compositeUri ?? imageUri;
@@ -48,9 +52,9 @@ export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, ch
       <Text style={styles.title}>{title}</Text>
       <Text testID="result-signature-quote" style={styles.description}>{characterDescription ?? '당신의 전생을 살아간 인물의 기록입니다.'}</Text>
     </View> : null}
-    <View testID={isIntroduction ? 'result-summary-panel' : undefined} onLayout={isIntroduction ? (event) => setSummaryHeight(event.nativeEvent.layout.height) : undefined} style={[styles.parchment, !isIntroduction && styles.readingParchment, !isIntroduction && mobile && styles.mobileReadingParchment]}>{isIntroduction
-      ? <ParchmentSummary title={chapterTitle} body={chapterDetail || introductionSummary} pages={profilePages} />
-      : <ParchmentReader chapterKey={chapterTitle} title={`${String(index + 1).padStart(2, '0')} ${chapterTitle}`} body={chapterDetail} />}</View>
+    <View testID={isIntroduction ? 'result-summary-panel' : undefined} onLayout={isIntroduction ? (event) => setSummaryHeight(event.nativeEvent.layout.height) : undefined} style={[styles.parchment, !isIntroduction && styles.readingParchment, !isIntroduction && mobile && styles.mobileReadingParchment]}>{isIntroduction || isProfile
+      ? <ParchmentSummary title={isProfile ? `01 ${chapterTitle}` : chapterTitle} body={chapterDetail || introductionSummary} pages={profilePages} fullPage={isProfile} pageIndex={pageIndex} onPageChange={onPageChange} />
+      : <ParchmentReader chapterKey={chapterTitle} title={`${String(index + 1).padStart(2, '0')} ${chapterTitle}`} body={chapterDetail} pageIndex={pageIndex} onPageChange={onPageChange} />}</View>
   </View>;
 }
 
@@ -68,6 +72,6 @@ const styles = StyleSheet.create({
   placeLabel: { color: '#f1dfb2', fontSize: 13, lineHeight: 19, fontWeight: '700', textShadowColor: 'rgba(0,0,0,.72)', textShadowRadius: 8 },
   description: { color: '#fff8e8', fontSize: 14, lineHeight: 21 },
   parchment: { position: 'absolute', left: spacing.md, right: spacing.md, bottom: spacing.md, zIndex: 6, alignItems: 'center' },
-  readingParchment: { top: 70, bottom: 70, left: spacing.lg, right: spacing.lg },
-  mobileReadingParchment: { top: 70, bottom: 68, left: spacing.sm, right: spacing.sm },
+  readingParchment: { top: 70, bottom: 70, left: 66, right: 66 },
+  mobileReadingParchment: { top: 70, bottom: 68, left: 46, right: 46 },
 });

@@ -1,5 +1,7 @@
 # 101번째 원고·그림 검수 — 그날의 두 경기
 
+**2026-10-24 후속 고증 보정:** 기존 검수는 1949년 사건의 경기·장소를 확인했으나 1968년 이후 가게의 소유 변화를 놓쳤다. [미 국무부 역사 자료](https://history.state.gov/historicaldocuments/frus1969-76ve10/d207)에 맞춰 01·03에 1968년 가족 가게 운영 종료와 국영 문구 매장 직원 생활을 추가했다. 02의 1949년 사건·답변 신호·결과는 그대로다. 테레사가 직원으로 남은 개인 경로는 창작이다.
+
 - **집계:** 101개 고유 `storyCards`, 101개 고유 원고, 101쌍의 별도 배경·인물 그림과 API·모바일 매핑. 120편까지 19편 남음. 작업 전에는 각 100개였다.
 - **선행 설정:** [설정 대장](story-setting-register.md)에 집필·그림 제작 전에 1949년 쿠바 공화국 아바나 세로 지구, 여성 테레사 로하스(1920~1978), 종이 가게·혼인·아들·조카·아버지의 병과 죽음·노년의 일을 확정했다. 첫 번째 폼페이 후보가 78번째와 겹쳐 제작 전에 폐기된 기록도 남겼다.
 - **역사 근거:** [미 국무부 역사실](https://history.state.gov/countries/cuba)은 1902년 쿠바 공화국 성립을 기록한다. [미국 야구 명예의 전당의 첫 카리브 시리즈 기록](https://baseballhall.org/discover/shortstops/taking-the-world-series-worldwide-caribbean-world-series)과 [그란 에스타디오 기록](https://baseballhall.org/discover/a-trip-back-in-time)은 1949년 2월 20일 아바나의 첫 시리즈와 1946년 경기장 개장을 뒷받침한다. [스미스소니언의 1949년 종이 스코어 카드](https://www.si.edu/object/cuban-baseball-league-score-card%3Anmah_1064795), [1947년 아바나 여자 야구 경기 기록](https://baseballhall.org/discover/shortstops/spring-training%20in%20Cuba)도 확인했다(2026-10-23). 테레사·가족·가게·입장권·공터 시합·대사는 창작이며 실제 경기의 점수나 선수를 재현하지 않는다.
