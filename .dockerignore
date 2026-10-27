@@ -8,5 +8,12 @@ node_modules
 .next
 coverage
 output
+dist
+tmp
+.local-postgres
+apps/mobile/assets
+apps/mobile/.expo
+apps/mobile/dist
+apps/admin/.next
 *.log
 *.tsbuildinfo

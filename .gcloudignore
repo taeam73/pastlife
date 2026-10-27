@@ -1,0 +1,7 @@
+#!include:.gitignore
+.git/
+apps/mobile/assets/
+apps/mobile/.expo/
+apps/mobile/dist/
+apps/admin/.next/
+
