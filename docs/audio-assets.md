@@ -7,7 +7,7 @@
 - 출처: https://opengameart.org/content/pencil-sounds
 - 라이선스: Creative Commons CC0 1.0. 실제 연필로 종이에 쓰는 소리를 녹음한 파일이다.
 - 저장된 안내 사본: `apps/mobile/assets/audio/pencil-sounds-readme.txt`
-- 앱 사용: 결과 양피지의 각 본문 줄이 나타날 때 18% 음량으로 짧게 재생한다. 빠른 페이지 전환에서 소리가 겹치지 않도록 기존 재생을 중단한 뒤 처음부터 재생한다.
+- 앱 사용: 결과 양피지의 글이 나타나기 시작할 때 28% 음량으로 한 번만 재생한다. 줄마다 반복하지 않으며, 다음 양피지 페이지가 열리면 그 페이지의 시작에서 다시 한 번 재생한다.
 
 - 파일: `apps/mobile/assets/audio/choice-heavy.ogg`
 - 원본: BMacZero, **Metal Impact Sounds**의 `thud3.wav`

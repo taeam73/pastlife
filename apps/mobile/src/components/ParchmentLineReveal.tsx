@@ -9,7 +9,6 @@ export function ParchmentLineReveal({ items, style }: { items: ReactNode[]; styl
 
   useEffect(() => {
     let active = true;
-    const timers: ReturnType<typeof setTimeout>[] = [];
     opacities.forEach((value) => value.setValue(0));
     offsets.forEach((value) => value.setValue(5));
     void loadPreferences().then((preferences) => {
@@ -23,14 +22,10 @@ export function ParchmentLineReveal({ items, style }: { items: ReactNode[]; styl
         Animated.timing(opacities[index]!, { toValue: 1, duration: 400, useNativeDriver: Platform.OS !== 'web' }),
         Animated.timing(offsets[index]!, { toValue: 0, duration: 400, useNativeDriver: Platform.OS !== 'web' }),
       ]))).start();
-      if (preferences.effectsEnabled) items.forEach((_, index) => {
-        const timer = setTimeout(() => { if (active) void playWritingEffect(); }, index * 170);
-        timers.push(timer);
-      });
+      if (preferences.effectsEnabled && items.length > 0) void playWritingEffect();
     });
     return () => {
       active = false;
-      timers.forEach(clearTimeout);
     };
   }, [offsets, opacities]);
 
