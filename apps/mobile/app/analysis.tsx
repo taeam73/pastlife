@@ -35,6 +35,10 @@ export default function AnalysisScreen() {
         await saveResultId(completed.resultId);
         const status = await api.status(completed.resultId);
         void trackEvent(status.imageStatus === 'FALLBACK' ? 'image_fallback_used' : 'image_ready', { sessionId: session.sessionId, resultId: completed.resultId, contentVersion: session.contentVersion, imageStatus: status.imageStatus === 'FALLBACK' ? 'FALLBACK' : 'READY' });
+        // Make the ad transition explicit before opening the native ad. This
+        // avoids the impression that the result flow was interrupted.
+        if (active) setPhase(2);
+        await new Promise((resolve) => setTimeout(resolve, 900));
         void trackEvent('ad_started', { sessionId: session.sessionId, resultId: completed.resultId, adPlacement: 1, contentVersion: session.contentVersion });
         try {
           if (Platform.OS !== 'web') await showTransitionAd();
@@ -51,7 +55,12 @@ export default function AnalysisScreen() {
   const phases = [
     localeText(locale, { ko: '당신의 선택을 살펴보고 있습니다', en: 'Reading the choices you made', th: 'กำลังพิจารณาตัวเลือกของคุณ', ja: 'あなたの選択を読み解いています' }),
     t('당신의 전생 기록을 복원하고 있습니다'),
-    localeText(locale, { ko: '마지막 장면을 준비하고 있습니다', en: 'Preparing the final scene', th: 'กำลังเตรียมฉากสุดท้าย', ja: '最後の場面を準備しています' }),
+    localeText(locale, {
+      ko: '당신의 전생 기록을 찾았습니다.\n잠시 후 짧은 광고가 재생되며,\n광고가 끝나면 결과를 보여드립니다.',
+      en: 'Your past-life record is ready.\nA short ad will play, then your result will appear.',
+      th: 'พบบันทึกอดีตชาติของคุณแล้ว\nโฆษณาสั้น ๆ จะเล่นก่อนแสดงผลลัพธ์',
+      ja: 'あなたの前世の記録が見つかりました。\n短い広告の後に結果を表示します。',
+    }),
   ];
   return <ImageBackground source={require('../assets/branding/cinematic-question-bg.png')} resizeMode="cover" style={styles.background}><View pointerEvents="none" style={styles.overlay} /><Screen scroll={false} transparent logoInContent><View style={styles.center}><Text style={styles.kicker}>{localeText(locale, { ko: '기억의 문을 여는 중', en: 'Opening the door to memory', th: 'กำลังเปิดประตูแห่งความทรงจำ', ja: '記憶の扉を開いています' })}</Text><Text style={styles.title}>{phases[phase]}</Text><ActivityIndicator color={colors.accent} size="large" />{error ? <View style={styles.errorBlock}><Text accessibilityRole="alert" style={styles.error}>{error}</Text><PrimaryButton onPress={() => { setError(null); setRetry((value) => value + 1); }}>{t('다시 시도')}</PrimaryButton></View> : null}</View></Screen></ImageBackground>;
 }

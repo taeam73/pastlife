@@ -4,7 +4,6 @@ import { Animated, Image, ImageBackground, Platform, StyleSheet, Text, useWindow
 import { Screen } from '../src/components/Screen';
 import { ParchmentButton } from '../src/components/ParchmentButton';
 import { AppNav } from '../src/components/AppNav';
-import { startNewSession } from '../src/session/start';
 import { loadPreferences } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
 import { useLocale, useTranslate } from '../src/i18n/locale';
@@ -26,7 +25,6 @@ export default function StartScreen() {
   const contentY = useRef(new Animated.Value(18)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
   const buttonY = useRef(new Animated.Value(14)).current;
-  const [startError, setStartError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -53,11 +51,10 @@ export default function StartScreen() {
     return () => { active = false; };
   }, [buttonOpacity, buttonY, contentOpacity, contentY]);
 
-  const start = async () => {
-    setStartError(null);
-    try { await startNewSession(); router.push('/guide'); }
-    catch { setStartError(t('새 전생 기록을 시작하지 못했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.')); }
-  };
+  // Keep the first tap responsive. Session creation needs the network and can
+  // take a few seconds on a cold start, so the guide screen owns that work and
+  // provides an explicit loading/error state when the user starts the questions.
+  const start = () => router.push('/guide');
 
   return <ImageBackground source={background} resizeMode="cover" style={[styles.background, { width, height }]} imageStyle={styles.backgroundImage}>
     <View style={styles.overlay}>
@@ -70,8 +67,7 @@ export default function StartScreen() {
             <Text style={styles.copy}>{t('시간 너머의 뜻밖의 이야기에서, 지금의 마음과 닮은 장면을 찾아보세요.')}</Text>
           </Animated.View>
           <Animated.View style={{ opacity: buttonOpacity, transform: [{ translateY: buttonY }] }}>
-            <ParchmentButton label={t('나의 전생 찾아보기')} onPress={() => void start()} />
-            {startError ? <Text accessibilityRole="alert" style={styles.copy}>{startError}</Text> : null}
+            <ParchmentButton label={t('나의 전생 찾아보기')} onPress={start} />
           </Animated.View>
         </View>
         <AppNav />

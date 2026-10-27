@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Animated, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import type { z } from 'zod';
 import { BasicResultResponseSchema } from '@pastlife/contracts';
@@ -37,10 +37,26 @@ export default function ResultScreen() {
   const [pdfStatus, setPdfStatus] = useState<AsyncStatus>('IDLE');
   const [showShareCard, setShowShareCard] = useState(false);
   const [deepUnlocked, setDeepUnlocked] = useState(false);
+  const [atStoryEnd, setAtStoryEnd] = useState(false);
+  const endHintOpacity = useRef(new Animated.Value(0.35)).current;
   const shareCardRef = useRef<View>(null);
   const shareCardReadyRef = useRef(false);
   const shareCardReadyResolverRef = useRef<(() => void) | null>(null);
   const pageScrollRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    if (!atStoryEnd) {
+      endHintOpacity.stopAnimation();
+      endHintOpacity.setValue(0.35);
+      return;
+    }
+    const pulse = Animated.loop(Animated.sequence([
+      Animated.timing(endHintOpacity, { toValue: 1, duration: 650, useNativeDriver: Platform.OS !== 'web' }),
+      Animated.timing(endHintOpacity, { toValue: 0.35, duration: 650, useNativeDriver: Platform.OS !== 'web' }),
+    ]));
+    pulse.start();
+    return () => pulse.stop();
+  }, [atStoryEnd, endHintOpacity]);
 
   useEffect(() => {
     if (!result) return;
@@ -48,22 +64,30 @@ export default function ResultScreen() {
     return () => cancelAnimationFrame(frame);
   }, [result]);
 
-  useEffect(() => { void (async () => {
-    const session = await loadSession();
-    if (!session?.resultId) { setError(t('결과 기록을 찾을 수 없습니다.')); return; }
-    if (session.locale && !isContentLocaleAvailable(session.locale, process.env.NODE_ENV === 'production')) { setError(t('이 결과의 영어 번역은 아직 준비되지 않았습니다.')); return; }
-    if (session.locale && session.locale !== locale) { await setLocale(session.locale); return; }
-    void api.adStatus(session.sessionId, 2).then((status) => setDeepUnlocked(status.unlocked)).catch(() => undefined);
-    try {
-      const loaded = await api.basic(session.resultId);
-      if (loaded.presentation?.version !== 3 || !loaded.presentation.hero.cover) throw new Error('3.0 presentation required');
-      setResult(loaded);
-      void trackEvent('basic_result_viewed', { sessionId: session.sessionId, resultId: loaded.resultId, contentVersion: session.contentVersion, viewMode: 'TEXT', locale });
-    } catch (cause) {
-      const code = (cause as { body?: { code?: string } })?.body?.code;
-      setError(t(code === 'TRANSLATION_NOT_READY' ? '이 결과의 영어 번역은 아직 준비되지 않았습니다.' : '기본 결과를 불러오지 못했습니다.'));
-    }
-  })(); }, [locale, setLocale, t]);
+  useFocusEffect(useCallback(() => {
+    let active = true;
+    void (async () => {
+      const session = await loadSession();
+      if (!active) return;
+      if (!session?.resultId) { setError(t('결과 기록을 찾을 수 없습니다.')); return; }
+      if (session.locale && !isContentLocaleAvailable(session.locale, process.env.NODE_ENV === 'production')) { setError(t('이 결과의 영어 번역은 아직 준비되지 않았습니다.')); return; }
+      if (session.locale && session.locale !== locale) { await setLocale(session.locale); return; }
+      void api.adStatus(session.sessionId, 2).then((status) => { if (active) setDeepUnlocked(status.unlocked); }).catch(() => undefined);
+      try {
+        const loaded = await api.basic(session.resultId);
+        if (loaded.presentation?.version !== 3 || !loaded.presentation.hero.cover) throw new Error('3.0 presentation required');
+        if (!active) return;
+        setError(null);
+        setResult(loaded);
+        void trackEvent('basic_result_viewed', { sessionId: session.sessionId, resultId: loaded.resultId, contentVersion: session.contentVersion, viewMode: 'TEXT', locale });
+      } catch (cause) {
+        if (!active) return;
+        const code = (cause as { body?: { code?: string } })?.body?.code;
+        setError(t(code === 'TRANSLATION_NOT_READY' ? '이 결과의 영어 번역은 아직 준비되지 않았습니다.' : '기본 결과를 불러오지 못했습니다.'));
+      }
+    })();
+    return () => { active = false; };
+  }, [locale, setLocale, t]));
 
   const shareImage = async () => {
     if (!result) return;
@@ -155,11 +179,12 @@ export default function ResultScreen() {
       <Text style={styles.eyebrow}>{t('전생 기록')} No.{String(result.recordNo).padStart(2, '0')} {t('발견')}</Text>
     </View>
     <Text style={styles.headline}>{result.headline}</Text>
-    <ResultExperience image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} headline={result.headline} presentation={result.presentation} recordNo={result.recordNo} onChapterSelect={() => pageScrollRef.current?.scrollTo({ y: 0, animated: false })} />
+    <ResultExperience image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} headline={result.headline} presentation={result.presentation} recordNo={result.recordNo} onChapterSelect={() => pageScrollRef.current?.scrollTo({ y: 0, animated: false })} onEndStateChange={setAtStoryEnd} />
+    {atStoryEnd ? <Animated.View accessibilityLiveRegion="polite" style={[styles.endHint, { opacity: endHintOpacity }]}><Text style={styles.endHintArrow}>⌄</Text><Text style={styles.endHintText}>{localeText(locale, { ko: '아래에서 마지막 순간을 확인해 보세요', en: 'Continue below to discover the final moment', th: 'เลื่อนลงเพื่อดูช่วงเวลาสุดท้าย', ja: '下に進んで最期の瞬間をご覧ください' })}</Text></Animated.View> : null}
     <View style={styles.actionRail}>
     {!result.finalMomentAvailable
       ? <><ParchmentButton label={t('마지막 순간 준비 중')} disabled onPress={() => undefined} /><Text style={styles.lockNotice}>{t('이 이야기의 마지막 순간은 준비 중입니다.')}</Text></>
-      : <UnlockAction appearance="parchment" label={t(deepUnlocked ? '마지막 순간 보러 가기' : '광고 보고 마지막 순간 보러 가기')} loadingLabel={t('광고를 준비하고 있어요')} onUnlock={async () => { const session = await loadSession(); if (!session?.sessionId) throw new Error('Session not found'); if (!deepUnlocked) void trackEvent('ad_started', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); try { await unlockWithRewardedAd(session.sessionId, 2); } catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); throw error; } if (!deepUnlocked) void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); setDeepUnlocked(true); router.push('/final-moment'); }} />}
+      : <UnlockAction appearance="parchment" label={t(deepUnlocked ? '마지막 순간 보러 가기' : '광고 보고 마지막 순간 보러 가기')} loadingLabel={t('광고를 준비하고 있어요')} onUnlock={async () => { const session = await loadSession(); if (!session?.sessionId) throw new Error('Session not found'); if (!deepUnlocked) void trackEvent('ad_started', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); try { await unlockWithRewardedAd(session.sessionId, 2); } catch (error) { void trackEvent('ad_failed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); throw error; } if (!deepUnlocked) void trackEvent('ad_completed', { sessionId: session.sessionId, resultId: result.resultId, contentVersion: session.contentVersion, adPlacement: 2 }); setDeepUnlocked(true); router.push({ pathname: '/final-moment', params: { resultId: result.resultId } }); }} />}
     <PrimaryButton disabled onPress={() => undefined}>{t('영상 공유 · 출시 예정')}</PrimaryButton>
     <Text style={styles.videoNotice}>{t('영상 보기와 영상 공유는 첫 출시 이후 제공됩니다.')}</Text>
     {!result.finalMomentRead ? <Text style={[styles.lockNotice, styles.combinedLockNotice]}>{t('마지막 순간을 보고 나면 이미지 공유/전생기록 다운로드가 활성화됩니다.')}</Text> : null}
@@ -182,4 +207,4 @@ export default function ResultScreen() {
   </Screen>;
 }
 
-const styles = StyleSheet.create({ resultReveal: { width: '100%' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'column', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { width: '100%', minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });
+const styles = StyleSheet.create({ resultReveal: { width: '100%' }, endHint: { alignItems: 'center', justifyContent: 'center', gap: 2, paddingTop: 4, paddingBottom: 14, paddingHorizontal: spacing.md }, endHintArrow: { color: colors.accent, fontSize: 34, lineHeight: 32, fontWeight: '700' }, endHintText: { color: colors.accent, fontSize: 14, lineHeight: 20, fontWeight: '700', textAlign: 'center' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'column', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { width: '100%', minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });

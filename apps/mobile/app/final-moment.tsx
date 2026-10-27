@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import type { z } from 'zod';
 import { StoryFinalMomentResponseSchema } from '@pastlife/contracts';
 import { api } from '../src/api/client';
@@ -17,6 +17,7 @@ export default function FinalMomentScreen() {
   const { locale } = useLocale();
   const t = useTranslate();
   const router = useRouter();
+  const params = useLocalSearchParams<{ resultId?: string }>();
   const { width } = useWindowDimensions();
   const [moment, setMoment] = useState<FinalMoment | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -24,10 +25,18 @@ export default function FinalMomentScreen() {
   const [finishError, setFinishError] = useState<string | null>(null);
   useEffect(() => { void (async () => {
     const session = await loadSession();
-    if (!session?.resultId) { setError(t('결과 기록을 찾을 수 없습니다.')); return; }
-    try { setMoment(await api.finalMoment(session.resultId)); }
+    const resultId = typeof params.resultId === 'string' ? params.resultId : session?.resultId;
+    if (!resultId) { router.replace('/'); return; }
+    try {
+      const loaded = await api.finalMoment(resultId);
+      setMoment(loaded);
+      // Loading the actual final scene counts as reading it. Persist this here
+      // so Android back gestures cannot leave sharing/download locked.
+      try { await api.markFinalMomentRead(loaded.resultId); }
+      catch { /* The finish button below provides an explicit retry. */ }
+    }
     catch { setError(t('마지막 순간을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')); }
-  })(); }, [t]);
+  })(); }, [params.resultId, router, t]);
 
   if (error) return <Screen><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.replace('/result')}>{t('결과로 돌아가기')}</PrimaryButton></Screen>;
   if (!moment) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>;

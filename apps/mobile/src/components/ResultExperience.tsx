@@ -25,6 +25,7 @@ type ResultExperienceProps = {
   presentation?: z.infer<typeof ResultPresentationSchema> | undefined;
   recordNo?: number | undefined;
   onChapterSelect?: (() => void) | undefined;
+  onEndStateChange?: ((atEnd: boolean) => void) | undefined;
 };
 
 function firstSentence(value: string) {
@@ -42,6 +43,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
   presentation,
   recordNo,
   onChapterSelect,
+  onEndStateChange,
 }, ref) {
   const { locale } = useLocale();
   const [position, setPosition] = useState({ chapterIndex: 0, pageIndex: 0 });
@@ -77,6 +79,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         selectedIndex={chapterIndex}
         selectedPageIndex={pageIndex}
         onSelect={selectChapter}
+        onEndStateChange={onEndStateChange}
         cover={presentation?.version === 3 ? presentation.hero.cover : undefined}
         recordNo={recordNo}
       />

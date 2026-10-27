@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { Image, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { ResultCover, type Cover } from './ResultCover';
@@ -7,12 +7,12 @@ import { localeText, useLocale, useTranslate } from '../i18n/locale';
 
 type Chapter = { id: string; title: string; summary: string; detail: string; profilePages?: { title: string; body: string }[] | undefined };
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
-type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; compositeUri?: string | undefined; layers?: Layer[]; title: string; characterLabel?: string | undefined; roleLabel?: string | undefined; placeLabel?: string | undefined; characterDescription?: string | undefined; introductionSummary: string; selectedIndex: number; selectedPageIndex: number; onSelect: (index: number, pageIndex?: number) => void; cover?: Cover | undefined; recordNo?: number | undefined };
+type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; compositeUri?: string | undefined; layers?: Layer[]; title: string; characterLabel?: string | undefined; roleLabel?: string | undefined; placeLabel?: string | undefined; characterDescription?: string | undefined; introductionSummary: string; selectedIndex: number; selectedPageIndex: number; onSelect: (index: number, pageIndex?: number) => void; onEndStateChange?: ((atEnd: boolean) => void) | undefined; cover?: Cover | undefined; recordNo?: number | undefined };
 export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => void };
 
 const chevron = require('../../assets/branding/page-chevron.png');
 
-export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, introductionSummary, selectedIndex, selectedPageIndex, onSelect, cover, recordNo }, ref) {
+export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Props>(function CinematicChapterPager({ chapters, imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, introductionSummary, selectedIndex, selectedPageIndex, onSelect, onEndStateChange, cover, recordNo }, ref) {
   const { locale } = useLocale();
   const t = useTranslate();
   const { width, height, fontScale } = useWindowDimensions();
@@ -37,6 +37,7 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
   const visiblePageIndex = Math.min(selectedPageIndex, Math.max(0, currentPageCount - 1));
   const atBeginning = selectedIndex === 0 && visiblePageIndex === 0;
   const atEnd = selectedIndex === sectionCount - 1 && visiblePageIndex === currentPageCount - 1;
+  useEffect(() => onEndStateChange?.(atEnd), [atEnd, onEndStateChange]);
   const goPrevious = () => {
     if (visiblePageIndex > 0) return onSelect(selectedIndex, visiblePageIndex - 1);
     if (selectedIndex === 0) return;
