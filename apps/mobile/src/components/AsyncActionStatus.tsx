@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
 import { PrimaryButton } from './PrimaryButton';
+import { useTranslate } from '../i18n/locale';
 
 export type AsyncStatus = 'IDLE' | 'LOADING' | 'READY' | 'ERROR';
 
 export function AsyncActionStatus({ status, loadingText, readyText, errorText, onRetry }: { status: AsyncStatus; loadingText: string; readyText: string; errorText: string; onRetry: () => void }) {
+  const t = useTranslate();
   if (status === 'IDLE') return null;
   if (status === 'LOADING') return <View accessibilityLiveRegion="polite" style={styles.row}><Text style={styles.loading}>{loadingText}</Text></View>;
   if (status === 'READY') return <View accessibilityLiveRegion="polite" style={styles.row}><Text style={styles.ready}>{readyText}</Text></View>;
-  return <View accessibilityRole="alert" style={styles.errorBox}><Text style={styles.error}>{errorText}</Text><PrimaryButton onPress={onRetry}>다시 시도</PrimaryButton></View>;
+  return <View accessibilityRole="alert" style={styles.errorBox}><Text style={styles.error}>{errorText}</Text><PrimaryButton onPress={onRetry}>{t('다시 시도')}</PrimaryButton></View>;
 }
 
 const styles = StyleSheet.create({

@@ -10,22 +10,26 @@ import { PrimaryButton } from '../src/components/PrimaryButton';
 import { SubpageHeader } from '../src/components/SubpageHeader';
 import { loadAuth } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
+import { useLocale, useTranslate } from '../src/i18n/locale';
+import { contentLocales } from '@pastlife/content/locales';
 
 type Item = z.infer<typeof ArchiveItemSchema>;
 
 export default function ArchiveScreen() {
+  const { locale } = useLocale();
+  const t = useTranslate();
   const router = useRouter();
   const [items, setItems] = useState<Item[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => { void (async () => {
     const auth = await loadAuth();
-    if (!auth) { setError('저장한 전생 기록을 보려면 로그인이 필요합니다.'); return; }
+    if (!auth) { setError(t('저장한 전생 기록을 보려면 로그인이 필요합니다.')); return; }
     try { setItems((await api.archiveList(auth.accessToken)).items); }
-    catch { setError('아카이브를 불러오지 못했습니다. 다시 시도해 주세요.'); }
-  })(); }, []);
-  if (error) return <Screen><SubpageHeader title="나의 전생" /><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.push('/login')}>로그인하기</PrimaryButton><AppNav /></Screen>;
-  if (!items) return <Screen scroll={false}><SubpageHeader title="나의 전생" /><ActivityIndicator color={colors.accent} /></Screen>;
-  return <Screen><SubpageHeader title="나의 전생" />{items.length === 0 ? <Text style={styles.empty}>저장된 전생 기록이 없습니다.</Text> : items.map((item) => <Pressable accessibilityRole="button" accessibilityLabel={`전생 기록 ${item.recordNo} ${item.headline}`} key={item.resultId} onPress={() => router.push({ pathname: '/archive/[resultId]' as never, params: { resultId: item.resultId } })} style={({ pressed }) => [styles.card, pressed && styles.pressed]}><Text style={styles.record}>No.{String(item.recordNo).padStart(2, '0')}</Text><Text style={styles.headline}>{item.headline}</Text><Text style={styles.date}>{new Date(item.createdAt).toLocaleDateString('ko-KR')}</Text><Text style={styles.open}>기록 열기</Text></Pressable>)}<AppNav /></Screen>;
+    catch { setError(t('아카이브를 불러오지 못했습니다. 다시 시도해 주세요.')); }
+  })(); }, [t]);
+  if (error) return <Screen><SubpageHeader title={t('나의 전생')} /><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.push('/login')}>{t('로그인하기')}</PrimaryButton><AppNav /></Screen>;
+  if (!items) return <Screen scroll={false}><SubpageHeader title={t('나의 전생')} /><ActivityIndicator color={colors.accent} /></Screen>;
+  return <Screen><SubpageHeader title={t('나의 전생')} />{items.length === 0 ? <Text style={styles.empty}>{t('저장된 전생 기록이 없습니다.')}</Text> : items.map((item) => <Pressable accessibilityRole="button" accessibilityLabel={`${t('전생 기록')} ${item.recordNo} ${item.headline}`} key={item.resultId} onPress={() => router.push({ pathname: '/archive/[resultId]' as never, params: { resultId: item.resultId } })} style={({ pressed }) => [styles.card, pressed && styles.pressed]}><Text style={styles.record}>No.{String(item.recordNo).padStart(2, '0')}</Text><Text style={styles.headline}>{item.headline}</Text><Text style={styles.date}>{new Date(item.createdAt).toLocaleDateString(contentLocales[locale].languageTag)}</Text><Text style={styles.open}>{t('기록 열기')}</Text></Pressable>)}<AppNav /></Screen>;
 }
 
 const styles = StyleSheet.create({ card: { backgroundColor: colors.surfaceRaised, borderRadius: 16, padding: spacing.md, marginBottom: spacing.md, borderWidth: 1, borderColor: colors.border }, pressed: { opacity: 0.8 }, record: { color: colors.accent }, headline: { color: colors.text, fontSize: 18, marginTop: 4 }, date: { color: colors.muted, marginTop: 8 }, open: { color: colors.accent, fontWeight: '700', marginTop: spacing.sm }, empty: { color: colors.muted }, error: { color: colors.error, lineHeight: 23 } });

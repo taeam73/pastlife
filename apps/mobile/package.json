@@ -9,6 +9,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@pastlife/content": "workspace:*",
     "@pastlife/contracts": "workspace:*",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "expo": "^57.0.17",
@@ -26,6 +27,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
+    "react-native-google-mobile-ads": "17.4.0",
     "react-native-safe-area-context": "^5.6.0",
     "react-native-screens": "^4.18.0",
     "react-native-view-shot": "^6.0.1",

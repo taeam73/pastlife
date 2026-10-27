@@ -11,10 +11,13 @@ import { loadPreferences, loadSession } from '../../src/session/store';
 import { colors } from '../../src/theme/tokens';
 import { trackEvent } from '../../src/analytics/track';
 import { playChoiceEffect } from '../../src/audio/effects';
+import { useLocale, useTranslate } from '../../src/i18n/locale';
 
 type Question = z.infer<typeof QuestionResponseSchema>;
 
 export default function QuestionScreen() {
+  const { locale } = useLocale();
+  const t = useTranslate();
   const { stage: stageParam } = useLocalSearchParams<{ stage: string }>();
   const stage = Number(stageParam);
   const router = useRouter();
@@ -30,11 +33,11 @@ export default function QuestionScreen() {
       try {
         const value = await api.question(session.sessionId, stage);
         if (active) setQuestion(value);
-        void trackEvent('question_shown', { sessionId: session.sessionId, questionId: value.id, stage: value.stage, contentVersion: session.contentVersion, locale: 'ko' });
-      } catch { if (active) setError('질문을 불러오지 못했어요. 다시 시도해 주세요.'); }
+        void trackEvent('question_shown', { sessionId: session.sessionId, questionId: value.id, stage: value.stage, contentVersion: session.contentVersion, locale });
+      } catch { if (active) setError(t('질문을 불러오지 못했어요. 다시 시도해 주세요.')); }
     });
     return () => { active = false; };
-  }, [router, stage]);
+  }, [router, stage, locale, t]);
 
   const choose = async (choiceId: string) => {
     if (!question || busy) return;
@@ -44,10 +47,10 @@ export default function QuestionScreen() {
       const session = await loadSession();
       if (!session) { router.replace('/'); return; }
       await api.answer(session.sessionId, stage, question.id, choiceId);
-      void trackEvent('answer_selected', { sessionId: session.sessionId, questionId: question.id, choiceId, stage, contentVersion: session.contentVersion, locale: 'ko' });
-      if (stage === 6) void trackEvent('questions_completed', { sessionId: session.sessionId, contentVersion: session.contentVersion, locale: 'ko', sessionStatus: 'QUESTION_COMPLETE' });
+      void trackEvent('answer_selected', { sessionId: session.sessionId, questionId: question.id, choiceId, stage, contentVersion: session.contentVersion, locale });
+      if (stage === 6) void trackEvent('questions_completed', { sessionId: session.sessionId, contentVersion: session.contentVersion, locale, sessionStatus: 'QUESTION_COMPLETE' });
       router.replace(stage === 6 ? '/analysis' : `/question/${stage + 1}`);
-    } catch { setBusy(false); setSelectedChoiceId(null); setError('선택을 저장하지 못했어요. 다시 선택해 주세요.'); }
+    } catch { setBusy(false); setSelectedChoiceId(null); setError(t('선택을 저장하지 못했어요. 다시 선택해 주세요.')); }
   };
 
   return <ImageBackground source={require('../../assets/branding/cinematic-question-bg.png')} resizeMode="cover" style={styles.background} imageStyle={styles.backgroundImage}><View pointerEvents="none" style={styles.overlay} /><Screen transparent logoInContent><View style={styles.questionScreen}><View style={styles.progressRow}><ProgressBar stage={stage} /><Text style={styles.stage}>{stage}/6</Text></View>{question ? <QuestionSequence trigger={question.id} question={<Text style={styles.question}>{question.text}</Text>} choices={question.choices.map((choice) => <ChoiceButton key={choice.id} label={choice.text} selected={selectedChoiceId === choice.id} disabled={busy} onPress={() => void choose(choice.id)} />)} /> : <ActivityIndicator color={colors.accent} />}{error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}</View></Screen></ImageBackground>;

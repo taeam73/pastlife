@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./locales": "./src/locales.ts"
   },
   "scripts": {
     "generate": "node scripts/extract-questions.mjs ../../전생록_Codex_개발_착수_명세.md",

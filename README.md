@@ -1,6 +1,6 @@
 # 전생록 (Past Life Archive)
 
-PRD 2.5를 반영한 실행 가능한 MVP입니다. 익명 질문 6단계, 이전 세션과 겹치지 않는 서버 질문 선택, 결정론적 판정, Fake AD 1~3, 영상형·텍스트형 기본/심화/현생 가이드, 이미지·영상 공유 템플릿, Google 로그인과 사용자 아카이브를 확인할 수 있습니다. 결과 상태 최초 조회에서 AI 대표 이미지 1장을 low 품질로 자동 생성해 저장·재사용하며, 외부 AI·이미지 공급자가 없거나 두 번 실패하면 템플릿 문장과 라이브러리 이미지로 안전하게 대체됩니다.
+첫 Google Play 출시는 3.0 원고 120편만 사용합니다. 앱은 2.5 세션을 다시 열지 않으며, 운영 API는 3.0 이외의 콘텐츠 버전으로 시작하지 않습니다. 사용자 여정은 익명 질문 6단계, 3.0 결과와 마지막 순간, 이미지 공유·PDF, Google 로그인과 아카이브를 포함합니다. AdMob 계정 값과 Android 실기기 검증이 끝나기 전까지 실광고 송출은 준비 단계입니다.
 
 ## 시작
 
@@ -47,6 +47,16 @@ iOS·Android는 `pastlife://login` 스킴을 사용합니다. 모바일 OAuth는
 development build 또는 배포 빌드에서 확인합니다. 실제 비밀값과 배포 URL은 Git에
 추가하지 않고 로컬 `.env` 또는 배포 플랫폼의 secret/environment 설정에만 저장합니다.
 
+## Android 광고 연동
+
+전생록 3.0 Android 앱은 여섯 번째 답변 뒤 결과로 넘어갈 때 화면 전환 광고를 표시하고, 사용자가 `마지막 순간`을 열 때 보상형 광고를 표시합니다. 화면 전환 광고를 불러오지 못해도 기본 결과는 열리며, 마지막 순간은 보상형 광고 완료가 서버에서 확인된 뒤 열립니다.
+
+개발 빌드에서는 Google의 데모 앱 ID와 데모 광고 단위를 사용합니다. `apps/mobile/eas.json`의 `preview` 프로필은 테스트 광고용 Android APK를 만들며 비운영 API에 연결해야 합니다. 운영 Android AAB를 빌드할 때는 `EXPO_PUBLIC_ADMOB_APP_ID`, `EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID`, `EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID`를 실제 AdMob 값으로 지정하고 `EXPO_PUBLIC_ADMOB_TEST_ADS`를 사용하지 않습니다. API에는 동일한 보상형 광고 단위를 `ADMOB_REWARDED_UNIT_ID`로 지정합니다.
+
+AdMob 보상형 광고 단위의 서버 측 확인(SSV) URL은 공개 HTTPS API의 `/api/v1/ads/admob/ssv`입니다. 앱이 발급받은 30분 유효 챌린지를 `custom_data`로 보내면 API가 Google 공개키로 서명과 광고 단위·거래 ID를 확인합니다. AdMob 콘솔에서 Android 앱·광고 단위를 만들고 SSV URL을 등록해야 실제 보상 해제가 동작합니다. 앱을 Play에 연결한 뒤에는 개발자 사이트의 `app-ads.txt` 소유권 확인과 Play Console의 광고 포함 신고도 완료합니다. 대상 연령에 아동이 포함되는지에 따라 광고 정책과 동의 설정을 검토합니다. 테스트 중에는 실광고를 클릭하지 않습니다.
+
+현재 로컬 작업에는 AdMob 계정 값과 Android 네이티브 빌드 환경이 없어 실제 광고 재생과 Google SSV 왕복은 아직 검증되지 않았습니다. 타입·단위·API E2E 검사를 통과해도 이 실기기 검사는 Play 내부 테스트 전에 별도로 필요합니다.
+
 ## 검증
 
 ```powershell
@@ -64,7 +74,9 @@ $env:EXPO_NO_TELEMETRY='1'; $env:EXPO_OFFLINE='1'; $env:CI='1'; corepack pnpm --
 
 자세한 구현 범위와 제한은 [첫 구현 보고서](docs/first-slice-report.md)와 [실행 계획](docs/superpowers/plans/2026-09-16-past-life-vertical-slice.md)을 참고하세요.
 
-## PRD 2.5 운영 설정
+## 과거 PRD 2.5 구현 참고
+
+아래 항목은 과거 구현 기록이며 첫 Google Play 출시의 사용자 흐름에 포함되지 않습니다.
 
 다음 값은 기획서에서 출시 전 운영 결정으로 남긴 항목이므로 코드에 확정값으로 묻지 않습니다.
 
@@ -98,3 +110,23 @@ API 응답 시점에 15분 동안 유효한 서명 URL을 생성합니다. S3 �
 로그에 기록하지 않으며, 저장 또는 서명 실패 시 검수된 라이브러리 이미지를 사용합니다.
 
 `VIDEO` 공유 응답의 `TEMPLATE_READY`는 동일한 결과 이미지와 텍스트로 MP4를 만들 입력이 고정됐다는 뜻입니다. 실제 H.264/AAC 인코딩은 배포 환경의 렌더 워커가 연결된 뒤 `READY`로 승격해야 합니다. 자세한 반영 내역은 [PRD 2.5 구현 보고서](docs/prd-2.5-implementation-report.md)를 참고하세요.
+
+## Railway API 배포
+
+Railway 서비스는 저장소 루트의 `Dockerfile`을 자동으로 사용합니다. 서비스 설정은
+다음 값으로 지정합니다.
+
+- Pre-deploy command: `corepack pnpm db:migrate:deploy`
+- Start command: 비워 두고 Dockerfile의 `CMD` 사용
+- Healthcheck path: `/api/v1/health`
+- Healthcheck timeout: `300`초
+- Restart policy: `Always`
+
+Railway 변수에는 `NODE_ENV=production`, `USE_IN_MEMORY_DB=false`,
+`CONTENT_VERSION=3.0.0`, Neon pooled `DATABASE_URL`, Neon direct `DIRECT_URL`,
+32자 이상의 `JWT_SECRET`, 별도의 `ADMIN_TOKEN`, 실제
+`ADMOB_REWARDED_UNIT_ID`를 등록합니다. 자격 증명과 토큰은 저장소에 커밋하지 않습니다.
+
+배포 후 `GET /api/v1/health`가 `200`과
+`{"status":"ok","contentVersion":"3.0.0"}`을 반환해야 모바일 및 AdMob 설정을
+해당 HTTPS 도메인으로 전환할 수 있습니다.

@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { eras, findStoryFinalMoment, historicalLocations, occupations } from '@pastlife/content';
+import { eras, findEnglishStoryTranslation, findJapaneseStoryTranslation, findThaiStoryTranslation, findStoryFinalMoment, historicalLocations, isEnglishStoryReady, isJapaneseStoryReady, isThaiStoryReady, occupations, parseContentLocale } from '@pastlife/content';
 import type { ResultCore } from '@pastlife/scoring';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { IMAGE_PROVIDER, type ImageProvider } from '../providers/image.provider.js';
@@ -15,6 +15,7 @@ import { inspectImageCompatibility } from '../providers/image-compatibility.js';
 import { buildResultPresentation } from './build-result-presentation.js';
 import { FinalMomentReadResponseSchema, ResultPresentationSchema, StoryFinalMomentResponseSchema } from '@pastlife/contracts';
 import { buildContentStoryExtended, buildContentStoryResult } from './story-result.js';
+import { RELEASE_CONTENT_VERSION } from '../config/content.js';
 
 export const RESULT_DISCLAIMER = '';
 
@@ -39,10 +40,23 @@ export class ResultsService {
   async basic(resultId: string) {
     const result = await this.requireResult(resultId);
     const session = await this.repository.getSession(result.sessionId);
-    if (!session?.unlocks.includes('BASIC')) throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: 'AD 1 completion is required', slot: 1 });
+    if (!session || (!session.contentVersion?.startsWith('3.') && !session.unlocks.includes('BASIC'))) {
+      throw new ForbiddenException({ code: 'UNLOCK_REQUIRED', message: 'AD 1 completion is required', slot: 1 });
+    }
+    if (process.env.NODE_ENV === 'production' && !result.core.storyId) {
+      throw new NotFoundException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' });
+    }
     if (result.core.storyId) {
       const image = await this.presentImage(await this.ensureImage(resultId), result.core);
-      return buildContentStoryResult(resultId, result.core, image, Boolean(result.finalMomentReadAt));
+      const locale = parseContentLocale(session.locale);
+      if (!locale) throw new NotFoundException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported session locale' });
+      try { return buildContentStoryResult(resultId, result.core, image, Boolean(result.finalMomentReadAt), locale); }
+      catch (error) {
+        if ((session.locale === 'en' || session.locale === 'th' || session.locale === 'ja') && error instanceof Error && error.message.startsWith(`${{ en: 'English', th: 'Thai', ja: 'Japanese' }[session.locale]} preview unavailable`)) {
+          throw new NotFoundException({ code: 'TRANSLATION_NOT_READY', message: 'Translation for this story is not ready' });
+        }
+        throw error;
+      }
     }
     const era = eras.find(({ id }) => id === result.core.eraId)!;
     const location = historicalLocations.find(({ id }) => id === result.core.locationId)!;
@@ -117,6 +131,7 @@ export class ResultsService {
   }
 
   async deep(resultId: string) {
+    if (process.env.NODE_ENV === 'production') throw new NotFoundException({ code: 'FEATURE_UNAVAILABLE', message: 'Result not found' });
     return this.extended(resultId, 'DEEP', 2);
   }
 
@@ -127,15 +142,35 @@ export class ResultsService {
     if (!session.contentVersion.startsWith('3.')) throw new NotFoundException({ code: 'FEATURE_UNAVAILABLE', message: 'Final moment is available for 3.0 stories only' });
     const moment = result.core.storyId ? findStoryFinalMoment(result.core.storyId) : undefined;
     if (!moment) throw new NotFoundException({ code: 'CONTENT_NOT_READY', message: 'Final moment is not ready for this story' });
+    const locale = parseContentLocale(session.locale);
+    if (!locale) throw new NotFoundException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported session locale' });
+    let translated: NonNullable<ReturnType<typeof findEnglishStoryTranslation>>['finalMoment'] | null;
+    if (locale === 'ko') translated = null;
+    else if (locale === 'en') {
+      if (!isEnglishStoryReady(result.core.storyId ?? '')) throw new NotFoundException({ code: 'TRANSLATION_NOT_READY', message: 'English story preview is unavailable' });
+      translated = findEnglishStoryTranslation(result.core.storyId ?? '')?.finalMoment ?? null;
+      if (!translated) throw new NotFoundException({ code: 'TRANSLATION_NOT_READY', message: 'English story preview is unavailable' });
+    } else if (locale === 'th') {
+      if (!isThaiStoryReady(result.core.storyId ?? '')) throw new NotFoundException({ code: 'TRANSLATION_NOT_READY', message: 'Thai story preview is unavailable' });
+      translated = findThaiStoryTranslation(result.core.storyId ?? '')?.finalMoment ?? null;
+      if (!translated) throw new NotFoundException({ code: 'TRANSLATION_NOT_READY', message: 'Thai story translation is unavailable' });
+    } else if (locale === 'ja') {
+      if (!isJapaneseStoryReady(result.core.storyId ?? '')) throw new NotFoundException({ code: 'TRANSLATION_NOT_READY', message: 'Japanese story translation is unavailable' });
+      translated = findJapaneseStoryTranslation(result.core.storyId ?? '')?.finalMoment ?? null;
+      if (!translated) throw new NotFoundException({ code: 'TRANSLATION_NOT_READY', message: 'Japanese story translation is unavailable' });
+    } else {
+      const unsupported: never = locale;
+      throw new Error(`Missing final moment locale implementation: ${unsupported}`);
+    }
     return StoryFinalMomentResponseSchema.parse({
       resultId,
       storyId: moment.storyId,
-      protagonist: moment.protagonist,
-      year: moment.year,
-      place: moment.place,
-      scene: moment.scene,
-      afterword: moment.afterword,
-      illustration: { uri: moment.artUri, alt: moment.artAlt },
+      protagonist: translated?.protagonist ?? moment.protagonist,
+      year: translated?.year ?? moment.year,
+      place: translated?.place ?? moment.place,
+      scene: translated?.scene ?? moment.scene,
+      afterword: translated?.afterword ?? moment.afterword,
+      illustration: { uri: moment.artUri, alt: translated?.artAlt ?? moment.artAlt },
     });
   }
 
@@ -146,6 +181,7 @@ export class ResultsService {
   }
 
   async guide(resultId: string) {
+    if (process.env.NODE_ENV === 'production') throw new NotFoundException({ code: 'FEATURE_UNAVAILABLE', message: 'Result not found' });
     return this.extended(resultId, 'GUIDE', 3);
   }
 
@@ -247,6 +283,9 @@ export class ResultsService {
   private async requireResult(id: string) {
     const result = await this.repository.getResult(id);
     if (!result) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Result not found' });
+    if (process.env.NODE_ENV === 'production' && result.core.contentVersion !== RELEASE_CONTENT_VERSION) {
+      throw new NotFoundException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' });
+    }
     return result;
   }
 

@@ -5,6 +5,8 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { requestIdMiddleware } from './request-id.middleware.js';
 import { resolveDatabaseRuntimeConfig } from './config/database.js';
+import { resolveAdsRuntimeConfig } from './config/ads.js';
+import { resolveContentRuntimeConfig } from './config/content.js';
 
 async function bootstrap() {
   const envPath = [resolve(process.cwd(), '.env'), resolve(process.cwd(), '../../.env')]
@@ -12,6 +14,8 @@ async function bootstrap() {
   if (envPath) process.loadEnvFile(envPath);
 
   const database = resolveDatabaseRuntimeConfig();
+  resolveAdsRuntimeConfig();
+  resolveContentRuntimeConfig();
   const { AppModule } = await import('./app.module.js');
   const app = await NestFactory.create(AppModule);
   Logger.log(

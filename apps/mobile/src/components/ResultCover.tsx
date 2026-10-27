@@ -3,6 +3,7 @@ import { Animated, Platform, StyleSheet, Text, useWindowDimensions, View } from 
 import { resolveLibraryImage } from '../results/libraryImages';
 import { loadPreferences } from '../session/store';
 import { colors, spacing } from '../theme/tokens';
+import { localeText, useLocale } from '../i18n/locale';
 
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 export type Cover = { era: string; place: string; role: string; birthYear: string; deathYear: string; lifeLine: string };
@@ -12,6 +13,7 @@ function sourceFor(uri: string) {
 }
 
 export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover }: { imageUri: string; imageAlt: string; layers?: Layer[] | undefined; name: string; recordNo: number; cover: Cover }) {
+  const { locale } = useLocale();
   const { width } = useWindowDimensions();
   const mobile = width < 768;
   const background = sourceFor(imageUri);
@@ -19,13 +21,13 @@ export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover 
   const characterOpacity = useRef(new Animated.Value(0)).current;
   const characterY = useRef(new Animated.Value(20)).current;
   const lines = useMemo(() => [
-    `당신의 ${recordNo}번째 전생은`,
+    localeText(locale, { ko: `당신의 ${recordNo}번째 전생은`, en: `Your past life No. ${recordNo}`, th: `ชาติที่แล้วของคุณลำดับ ${recordNo}`, ja: `あなたの第${recordNo}の前世は` }),
     name,
     `(${cover.birthYear}~${cover.deathYear})`,
     `${cover.era} · ${cover.place}`,
     cover.role,
     cover.lifeLine,
-  ], [cover.birthYear, cover.deathYear, cover.era, cover.lifeLine, cover.place, cover.role, name, recordNo]);
+  ], [cover.birthYear, cover.deathYear, cover.era, cover.lifeLine, cover.place, cover.role, name, recordNo, locale]);
   const [typedLengths, setTypedLengths] = useState(() => lines.map(() => 0));
 
   useEffect(() => {

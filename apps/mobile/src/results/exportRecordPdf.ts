@@ -1,7 +1,9 @@
 import { resolveLibraryImage } from './libraryImages';
+import { localeText, translate, type Locale } from '../i18n/locale';
 
 type Chapter = { id: 'MEETING' | 'TRIAL' | 'CHOICE' | 'NOW'; title: string; body: string; profilePages?: { title: string; body: string }[] | undefined };
 export type PdfRecord = {
+  locale?: Locale;
   resultId: string;
   recordNo: number;
   name: string;
@@ -72,7 +74,7 @@ function wrappedLines(context: CanvasRenderingContext2D, value: string, width: n
       if (context.measureText(candidate).width <= width) { line = candidate; continue; }
       if (line) { lines.push(line); line = ''; }
       if (context.measureText(word).width <= width) { line = word; continue; }
-      for (const character of word) {
+      for (const character of Array.from(word.matchAll(/\P{M}\p{M}*|\p{M}+/gu), (match) => match[0])) {
         if (context.measureText(line + character).width > width && line) { lines.push(line); line = ''; }
         line += character;
       }
@@ -82,19 +84,19 @@ function wrappedLines(context: CanvasRenderingContext2D, value: string, width: n
   return lines;
 }
 
-function drawTextPageHeader(context: CanvasRenderingContext2D, title: string) {
+function drawTextPageHeader(context: CanvasRenderingContext2D, title: string, locale: Locale) {
   context.fillStyle = '#796034';
   context.font = '600 29px MaruBuri, serif';
-  context.fillText('전 생 록   ·   나의 전생 이야기', MARGIN, 105);
+  context.fillText(localeText(locale, { ko: '전 생 록   ·   나의 전생 이야기', en: 'PAST LIFE ARCHIVE · MY STORY', th: 'บันทึกชาติก่อน · เรื่องราวของฉัน', ja: '前世録・私の物語' }), MARGIN, 105);
   context.fillRect(MARGIN, 135, PAGE_WIDTH - MARGIN * 2, 2);
   context.fillStyle = INK;
   context.font = 'bold 62px MaruBuri, serif';
   context.fillText(title, MARGIN, 238);
 }
 
-function newTextPage(title: string, pages: HTMLCanvasElement[]) {
+function newTextPage(title: string, pages: HTMLCanvasElement[], locale: Locale = 'ko') {
   const page = canvasPage();
-  drawTextPageHeader(page.context, title);
+  drawTextPageHeader(page.context, title, locale);
   pages.push(page.canvas);
   return { ...page, y: 325 };
 }
@@ -119,8 +121,8 @@ function compactTextLayout(context: CanvasRenderingContext2D, title: string, bod
   return candidates.find((candidate) => pageCount(candidate) < initialCount) ?? candidates[0]!;
 }
 
-function drawSection(pages: HTMLCanvasElement[], title: string, body: string, initial?: { canvas: HTMLCanvasElement; context: CanvasRenderingContext2D; y: number }, keepParagraphs = false, compact = false) {
-  let page = initial ?? newTextPage(title, pages);
+function drawSection(pages: HTMLCanvasElement[], title: string, body: string, initial?: { canvas: HTMLCanvasElement; context: CanvasRenderingContext2D; y: number }, keepParagraphs = false, compact = false, locale: Locale = 'ko') {
+  let page = initial ?? newTextPage(title, pages, locale);
   const startY = compact && title.startsWith('03 ') ? 290 : 325;
   if (!initial) page.y = startY;
   const layout = compact ? compactTextLayout(page.context, title, body) : undefined;
@@ -134,13 +136,13 @@ function drawSection(pages: HTMLCanvasElement[], title: string, body: string, in
     const paragraphHeight = lines.reduce((height, line) => height + (line ? lineHeight : 34), 0);
     if (keepParagraphs && paragraphIndex > 0) page.y += 34;
     if (keepParagraphs && page.y + paragraphHeight > bottom && paragraphHeight <= bottom - 325) {
-      page = newTextPage(`${title} · 계속`, pages);
+      page = newTextPage(`${title} · ${localeText(locale, { ko: '계속', en: 'continued', th: 'ต่อ', ja: '続き' })}`, pages, locale);
       page.y = startY;
       page.context.font = font;
     }
     for (const line of lines) {
       if (page.y + lineHeight > bottom) {
-        page = newTextPage(`${title} · 계속`, pages);
+        page = newTextPage(`${title} · ${localeText(locale, { ko: '계속', en: 'continued', th: 'ต่อ', ja: '続き' })}`, pages, locale);
         page.y = startY;
         page.context.font = font;
       }
@@ -200,6 +202,7 @@ function createImagePdf(pages: HTMLCanvasElement[]) {
 }
 
 export async function renderRecordPdf(record: PdfRecord) {
+  const locale = record.locale ?? 'ko';
   if (record.chapters.length !== 4) throw new Error('Complete story chapters are required');
   await document.fonts.ready;
   const [background, character, finalArt, logo] = await Promise.all([
@@ -214,7 +217,8 @@ export async function renderRecordPdf(record: PdfRecord) {
   topShade.addColorStop(0, 'rgba(10,16,25,0.8)');
   topShade.addColorStop(1, 'rgba(10,16,25,0)');
   context.fillStyle = topShade; context.fillRect(0, 0, PAGE_WIDTH, 320);
-  context.drawImage(logo, MARGIN, 45, 360, 181);
+  if (locale !== 'ko') { context.fillStyle = '#f3d896'; context.font = 'bold 42px sans-serif'; context.fillText(locale === 'en' ? 'PAST LIFE ARCHIVE' : translate(locale, '전생록'), MARGIN, 112); }
+  else context.drawImage(logo, MARGIN, 45, 360, 181);
   if (character) {
     const portraitScale = Math.min(860 / character.width, 1260 / character.height);
     context.drawImage(character, PAGE_WIDTH - character.width * portraitScale - 20, 110, character.width * portraitScale, character.height * portraitScale);
@@ -225,7 +229,7 @@ export async function renderRecordPdf(record: PdfRecord) {
   shade.addColorStop(1, 'rgba(10,16,25,0.98)');
   context.fillStyle = shade; context.fillRect(0, 820, PAGE_WIDTH, PAGE_HEIGHT - 820);
   context.fillStyle = '#f3d896'; context.font = 'bold 40px MaruBuri, serif';
-  context.fillText(`나의 ${record.recordNo}번째 전생 기록`, MARGIN, 1200);
+  context.fillText(localeText(locale, { ko: `나의 ${record.recordNo}번째 전생 기록`, en: `My past life record No. ${record.recordNo}`, th: `บันทึกชาติก่อนของฉัน ลำดับ ${record.recordNo}`, ja: `私の第${record.recordNo}の前世記録` }), MARGIN, 1200);
   context.fillStyle = '#fff8ea'; context.font = 'bold 80px MaruBuri, serif';
   context.fillText(record.name, MARGIN, 1330);
   context.font = '34px MaruBuri, serif';
@@ -238,15 +242,17 @@ export async function renderRecordPdf(record: PdfRecord) {
   const sectionNumbers = ['01', '02', '03', '04'];
   record.chapters.forEach((chapter, index) => {
     if (index === 0 && chapter.profilePages?.length) {
-      drawSection(pages, `${sectionNumbers[index]} ${chapter.title}`, chapter.profilePages.map((profile) => `${profile.title}\n${profile.body}`).join('\n\n'));
-    } else drawSection(pages, `${sectionNumbers[index]} ${chapter.title}`, chapter.body, undefined, false, index >= 1);
+      drawSection(pages, `${sectionNumbers[index]} ${chapter.title}`, chapter.profilePages.map((profile) => `${profile.title}\n${profile.body}`).join('\n\n'), undefined, false, false, locale);
+    } else drawSection(pages, `${sectionNumbers[index]} ${chapter.title}`, chapter.body, undefined, false, index >= 1, locale);
   });
 
-  const finalPage = newTextPage('마지막 순간', pages);
+  const finalTitle = localeText(locale, { ko: '마지막 순간', en: 'The final moment', th: 'ช่วงสุดท้าย', ja: '最期の瞬間' });
+  const afterTitle = localeText(locale, { ko: '전생록의 기록', en: 'From the archive', th: 'จากคลังบันทึก', ja: '前世録より' });
+  const finalPage = newTextPage(finalTitle, pages, locale);
   drawCoverImage(finalPage.context, finalArt, MARGIN, 295, PAGE_WIDTH - MARGIN * 2, 650);
-  drawSection(pages, '마지막 순간', `${record.finalMoment.year} · ${record.finalMoment.place}\n\n${record.finalMoment.scene}`, { ...finalPage, y: 1015 }, true);
-  const closingPage = newTextPage('전생록의 기록', pages);
-  drawSection(pages, '전생록의 기록', record.finalMoment.afterword, { ...closingPage, y: 480 });
+  drawSection(pages, finalTitle, `${record.finalMoment.year} · ${record.finalMoment.place}\n\n${record.finalMoment.scene}`, { ...finalPage, y: 1015 }, true, false, locale);
+  const closingPage = newTextPage(afterTitle, pages, locale);
+  drawSection(pages, afterTitle, record.finalMoment.afterword, { ...closingPage, y: 480 }, false, false, locale);
   pages.forEach((page, index) => {
     const pageContext = page.getContext('2d');
     if (!pageContext) return;
@@ -257,13 +263,13 @@ export async function renderRecordPdf(record: PdfRecord) {
   return createImagePdf(pages);
 }
 
-export function downloadRecordPdf(blob: Blob, name: string, resultId: string) {
+export function downloadRecordPdf(blob: Blob, name: string, resultId: string, locale: Locale = 'ko') {
   const safeName = name.replace(/[^\p{L}\p{N}-]+/gu, '-').slice(0, 40) || '전생';
   const safeId = resultId.replace(/[^a-zA-Z0-9-]+/gu, '').slice(0, 60);
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `전생기록-${safeName}-${safeId}.pdf`;
+  link.download = `${locale === 'ko' ? '전생기록' : 'past-life-record'}-${safeName}-${safeId}.pdf`;
   document.body.appendChild(link);
   link.click();
   link.remove();

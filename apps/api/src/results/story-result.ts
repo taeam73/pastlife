@@ -1,4 +1,4 @@
-import { findStoryCard, findStoryFinalMoment, findStoryManuscript, renderStoryEpisode, renderStoryIdentity, renderStoryMemories, renderStoryTimeline, type StoryCard, type StorySignal } from '@pastlife/content';
+import { findEnglishStoryTranslation, findJapaneseStoryTranslation, findThaiStoryTranslation, findStoryCard, findStoryFinalMoment, findStoryManuscript, isEnglishStorySignalReady, isJapaneseStorySignalReady, isThaiStorySignalReady, renderStoryEpisode, renderStoryIdentity, renderStoryMemories, renderStoryTimeline, type ContentLocale, type StoryCard, type StoryManuscript, type StorySignal } from '@pastlife/content';
 import { BasicResultResponseSchema, ExtendedResultResponseSchema, type ResultPresentationSchema } from '@pastlife/contracts';
 import type { ResultCore } from '@pastlife/scoring';
 import type { z } from 'zod';
@@ -74,8 +74,98 @@ function presentation(core: ResultCore, image: ImageAsset): z.infer<typeof Resul
   };
 }
 
-export function buildContentStoryResult(resultId: string, core: ResultCore, image: ImageAsset, finalMomentRead = false) {
-  const { card, moment, echo } = storyParts(core);
+function translatedManuscript(source: StoryManuscript, text: NonNullable<ReturnType<typeof findEnglishStoryTranslation>>): StoryManuscript {
+  return {
+    id: source.id,
+    identity: { ...source.identity, ...text.manuscript.identity },
+    episode: text.manuscript.episode,
+    timeline: text.manuscript.timeline,
+    memories: text.manuscript.memories,
+  };
+}
+
+function localizedStoryResult(korean: z.infer<typeof BasicResultResponseSchema>, source: StoryManuscript, card: StoryCard, signal: StorySignal, locale: 'en' | 'th' | 'ja') {
+  const text = locale === 'en' ? findEnglishStoryTranslation(card.id) : locale === 'th' ? findThaiStoryTranslation(card.id) : findJapaneseStoryTranslation(card.id);
+  const ready = locale === 'en' ? isEnglishStorySignalReady(card.id, signal) : locale === 'th' ? isThaiStorySignalReady(card.id, signal) : isJapaneseStorySignalReady(card.id, signal);
+  if (!text || !ready) throw new Error(`${{ en: 'English', th: 'Thai', ja: 'Japanese' }[locale]} preview unavailable for ${card.id}/${signal}`);
+  const manuscript = translatedManuscript(source, text);
+  const c = text.card;
+  const labels = locale === 'en' ? {
+    highlights: ['The person', 'Everyday hopes', 'Where they lived', 'The hesitation', 'Someone beside them', 'An unexpected day', 'What remained', 'A thought for today'],
+    blocks: ['The person I was', 'The beginning', 'That day', 'What followed', 'A life in years', 'Memories'],
+    chapters: ['The Person I Was', 'The Episode', 'A Life in Years', 'Memories'],
+    disclaimer: 'This is an imagined past life story for entertainment, not a diagnosis or a statement of historical fact.',
+    imagePlace: 'in',
+  } : locale === 'th' ? {
+    highlights: ['คนคนนั้น', 'ความหวังในทุกวัน', 'ถิ่นที่อยู่', 'ความลังเล', 'คนข้างกาย', 'วันที่ไม่คาดคิด', 'สิ่งที่ยังอยู่', 'ความคิดสำหรับวันนี้'],
+    blocks: ['ตัวฉันในชาติก่อน', 'จุดเริ่มต้น', 'วันนั้น', 'สิ่งที่ตามมา', 'ชีวิตตามกาลเวลา', 'ความทรงจำ'],
+    chapters: ['ตัวฉันในชาติก่อน', 'เรื่องราว', 'ชีวิตตามกาลเวลา', 'ความทรงจำ'],
+    disclaimer: 'นี่คือเรื่องราวชาติก่อนจากจินตนาการเพื่อความบันเทิง ไม่ใช่การวินิจฉัยหรือข้อเท็จจริงทางประวัติศาสตร์',
+    imagePlace: 'ที่',
+  } : {
+    highlights: ['その人', '日々の願い', '暮らした場所', 'ためらい', 'そばにいた人', '思いがけない日', '残されたもの', '今への問い'],
+    blocks: ['かつての私', '物語の始まり', 'あの日', 'その後', '人生の歩み', '記憶'],
+    chapters: ['かつての私', 'エピソード', '人生の歩み', '記憶'],
+    disclaimer: 'これは娯楽のために創作された前世の物語です。診断や歴史的事実を示すものではありません。',
+    imagePlace: '、',
+  };
+  const identity = renderStoryIdentity(manuscript, c.name);
+  const episode = renderStoryEpisode(manuscript, signal);
+  const timeline = renderStoryTimeline(manuscript);
+  const memories = renderStoryMemories(manuscript);
+  const echo = `${c.presentEcho}\n\n${c.readerQuestion}`;
+  const translated = structuredClone(korean);
+  translated.headline = c.title;
+  Object.assign(translated.character, {
+    name: c.name, gender: manuscript.identity.gender, occupation: c.role,
+    introduction: identity, occupationDescription: manuscript.identity.summary,
+    favoritePlace: c.home, realization: c.after,
+  });
+  translated.lifeSummary.lifespanLabel = `${manuscript.identity.birthYear}–${manuscript.identity.deathYear}`;
+  translated.lifeSummary.endingTitle = c.title;
+  translated.image.alt = `${c.name}, ${c.role} ${labels.imagePlace} ${c.home}`;
+  translated.image.layers?.forEach((layer) => { layer.alt = layer.role === 'CHARACTER' ? `${c.name}, ${c.role}` : c.home; });
+  translated.highlights = [
+    { id: 'IDENTITY', title: labels.highlights[0]!, summary: `${c.name} · ${c.role}`, detail: c.identityLine },
+    { id: 'DREAM_AND_DAILY', title: labels.highlights[1]!, summary: c.flavor, detail: c.life },
+    { id: 'LIFE_FOUNDATION', title: labels.highlights[2]!, summary: c.home, detail: c.world },
+    { id: 'INNER_WOUND', title: labels.highlights[3]!, summary: c.cost, detail: c.cost },
+    { id: 'KEY_RELATIONSHIP', title: labels.highlights[4]!, summary: c.decision, detail: c.decision },
+    { id: 'DECISIVE_EVENT', title: labels.highlights[5]!, summary: c.turn, detail: `${c.turn}\n\n${c.signalMoments[signal]}` },
+    { id: 'LIFE_LEGACY', title: labels.highlights[6]!, summary: c.after, detail: c.after },
+    { id: 'PRESENT_ECHO', title: labels.highlights[7]!, summary: echo, detail: echo },
+  ];
+  translated.blocks = [
+    { id: 'STORY_OPEN', title: labels.blocks[0]!, body: identity },
+    { id: 'STORY_LIFE', title: labels.blocks[1]!, body: manuscript.episode.beforeSignal },
+    { id: 'STORY_TURN', title: labels.blocks[2]!, body: manuscript.episode.signalMoments[signal]! },
+    { id: 'STORY_CHOICE', title: labels.blocks[3]!, body: manuscript.episode.afterSignal },
+    { id: 'STORY_COST', title: labels.blocks[4]!, body: timeline },
+    { id: 'STORY_ECHO', title: labels.blocks[5]!, body: memories },
+  ];
+  translated.disclaimer = labels.disclaimer;
+  if (translated.presentation?.version === 3) {
+    const { hero, chapters } = translated.presentation;
+    Object.assign(hero, { title: c.title, tagline: c.flavor, lifeSummary: identity, signatureQuote: compactPresentationText(c.opening, 80) });
+    if (hero.cover) Object.assign(hero.cover, {
+      era: c.setting?.year ?? manuscript.identity.era,
+      place: c.setting ? `${c.setting.polity} · ${c.home}` : manuscript.identity.region,
+      role: c.role, birthYear: manuscript.identity.birthYear, deathYear: manuscript.identity.deathYear,
+      lifeLine: manuscript.identity.summary,
+    });
+    const chapterCopy = [
+      { title: labels.chapters[0], body: identity, profilePages: manuscript.identity.profilePages },
+      { title: labels.chapters[1], body: episode },
+      { title: labels.chapters[2], body: timeline },
+      { title: labels.chapters[3], body: memories },
+    ];
+    chapters.forEach((chapter, index) => Object.assign(chapter, chapterCopy[index]));
+  }
+  return BasicResultResponseSchema.parse(translated);
+}
+
+export function buildContentStoryResult(resultId: string, core: ResultCore, image: ImageAsset, finalMomentRead = false, locale: ContentLocale = 'ko') {
+  const { card, signal, moment, echo } = storyParts(core);
   const manuscript = findStoryManuscript(card.id);
   if (!manuscript) throw new Error(`Missing story manuscript: ${card.id}`);
   const highlights = [
@@ -88,7 +178,7 @@ export function buildContentStoryResult(resultId: string, core: ResultCore, imag
     { id: 'LIFE_LEGACY', title: '남은 장면', summary: card.after, detail: card.after },
     { id: 'PRESENT_ECHO', title: '지금의 여운', summary: echo, detail: echo },
   ];
-  return BasicResultResponseSchema.parse({
+  const korean = BasicResultResponseSchema.parse({
     resultId, finalMomentRead, finalMomentAvailable: Boolean(findStoryFinalMoment(card.id)), recordNo: core.recordNo, headline: card.title,
     character: {
       name: card.name, gender: manuscript.identity.gender === '성별 없음' ? null : manuscript.identity.gender, fictional: true, occupation: card.role,
@@ -102,6 +192,10 @@ export function buildContentStoryResult(resultId: string, core: ResultCore, imag
     highlights, image, presentation: presentation(core, image), blocks: buildContentStoryBlocks(core),
     disclaimer: '상상으로 엮은 전생 이야기입니다. 지금의 몸과 마음을 진단하거나 과거의 사실을 확인하는 결과는 아닙니다.',
   });
+  if (locale === 'ko') return korean;
+  if (locale === 'en' || locale === 'th' || locale === 'ja') return localizedStoryResult(korean, manuscript, card, signal, locale);
+  const unsupported: never = locale;
+  throw new Error(`Unsupported story locale: ${unsupported}`);
 }
 
 export function buildContentStoryExtended(resultId: string, core: ResultCore, image: ImageAsset, kind: 'DEEP' | 'GUIDE') {

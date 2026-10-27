@@ -5,6 +5,7 @@ import type { ResultPresentationSchema } from '@pastlife/contracts';
 import { ChapterFilmstrip } from './ChapterFilmstrip';
 import { CinematicChapterPager } from './CinematicChapterPager';
 import { presentChapters, presentHeadline, presentIdentity } from '../results/presentation';
+import { localeText, useLocale } from '../i18n/locale';
 
 type ImageLayer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 type ImageAsset = { uri: string; alt: string; sourceType: 'AI' | 'LIBRARY'; status: 'READY' | 'FALLBACK'; layers?: ImageLayer[] | undefined; compositeUri?: string | undefined };
@@ -42,12 +43,13 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
   recordNo,
   onChapterSelect,
 }, ref) {
+  const { locale } = useLocale();
   const [position, setPosition] = useState({ chapterIndex: 0, pageIndex: 0 });
   const { chapterIndex, pageIndex } = position;
   const hasCover = presentation?.version === 3 && Boolean(presentation.hero.cover && recordNo);
   const sceneUri = presentation?.hero.backgroundUri ?? image.layers?.find((layer) => layer.role === 'BACKGROUND')?.uri ?? image.uri;
   const layers: ImageLayer[] = presentation
-    ? [{ uri: sceneUri, role: 'BACKGROUND', alt: image.alt }, ...(presentation.hero.characterUri ? [{ uri: presentation.hero.characterUri, role: 'CHARACTER' as const, alt: '전생 인물' }] : [])]
+    ? [{ uri: sceneUri, role: 'BACKGROUND', alt: image.alt }, ...(presentation.hero.characterUri ? [{ uri: presentation.hero.characterUri, role: 'CHARACTER' as const, alt: localeText(locale, { ko: '전생 인물', en: 'Past life character', th: 'ตัวละครในชาติก่อน', ja: '前世の人物' }) }] : [])]
     : image.layers ?? [{ uri: sceneUri, role: 'BACKGROUND', alt: image.alt }];
   const legacyHighlights = highlights?.filter((item) => ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'].includes(item.id)).slice(0, 4);
   const chapters = presentation
@@ -66,12 +68,12 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
         imageUri={sceneUri}
         imageAlt={image.alt}
         layers={layers}
-        title={presentation?.hero.title ?? (headline ? presentHeadline(headline) : introTitle)}
+        title={presentation?.hero.title ?? (headline ? presentHeadline(headline) : localeText(locale, { ko: introTitle, en: 'Your past life story', th: 'เรื่องราวชาติที่แล้วของคุณ', ja: 'あなたの前世の物語' }))}
         characterLabel={character ? (presentation?.version === 3 ? character.name : character.name === '이야기 속 당신' ? character.occupation : `${character.name} · ${character.occupation}`) : undefined}
         roleLabel={presentation?.version === 3 ? character?.occupation : undefined}
         placeLabel={presentation?.version === 3 ? character?.favoritePlace : undefined}
         characterDescription={presentation?.version === 3 ? presentation.hero.signatureQuote : presentation?.hero.tagline ?? (character ? presentIdentity(character.introduction) : undefined)}
-        introductionSummary={presentation?.hero.lifeSummary ?? (character ? firstSentence(character.introduction) : introDescription)}
+        introductionSummary={presentation?.hero.lifeSummary ?? (character ? firstSentence(character.introduction) : localeText(locale, { ko: introDescription, en: 'A record of the person who lived your imagined past life.', th: 'บันทึกของคนในชาติที่แล้วจากจินตนาการของคุณ', ja: '想像上の前世を生きた人物の記録です。' }))}
         selectedIndex={chapterIndex}
         selectedPageIndex={pageIndex}
         onSelect={selectChapter}

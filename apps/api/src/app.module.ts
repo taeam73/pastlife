@@ -7,8 +7,18 @@ import { AuthModule } from './auth/auth.module.js';
 import { AdminModule } from './admin/admin.module.js';
 import { rateLimitMiddleware } from './rate-limit.middleware.js';
 import { AnalyticsModule } from './analytics/analytics.module.js';
+import { HealthModule } from './health/health.module.js';
 
 @Module({
-  imports: [ProvidersModule, SessionsModule, ResultsModule, AdsModule, AuthModule, AdminModule, AnalyticsModule],
+  imports: [
+    ProvidersModule,
+    SessionsModule,
+    ResultsModule,
+    AdsModule,
+    AuthModule,
+    AdminModule,
+    AnalyticsModule,
+    HealthModule,
+  ],
 })
 export class AppModule implements NestModule { configure(consumer: MiddlewareConsumer) { consumer.apply(rateLimitMiddleware).forRoutes('{*path}'); } }

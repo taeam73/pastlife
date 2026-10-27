@@ -15,12 +15,18 @@ import {
   type Preferences,
 } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
+import { adPrivacyOptionsRequired, showAdPrivacyOptions } from '../src/ads/admob';
+import { useLocale, useTranslate } from '../src/i18n/locale';
+import { contentLocales, isContentLocaleAvailable, selectableContentLocales } from '@pastlife/content/locales';
 
 export default function SettingsScreen() {
+  const { locale, setLocale } = useLocale();
+  const t = useTranslate();
   const router = useRouter();
   const [preferences, setPreferences] = useState<Preferences>(DEFAULT_PREFERENCES);
   const [auth, setAuth] = useState<AuthState | null>(null);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [showAdPrivacy, setShowAdPrivacy] = useState(false);
 
   useEffect(() => {
     void Promise.all([loadPreferences(), loadAuth()]).then(([nextPreferences, nextAuth]) => {
@@ -28,6 +34,8 @@ export default function SettingsScreen() {
       setAuth(nextAuth);
     });
   }, []);
+
+  useEffect(() => { void adPrivacyOptionsRequired().then(setShowAdPrivacy).catch(() => undefined); }, []);
 
   const change = (key: keyof Preferences, value: boolean) => {
     const next = { ...preferences, [key]: value };
@@ -42,25 +50,28 @@ export default function SettingsScreen() {
   };
 
   return <Screen>
-    <SubpageHeader title="설정" />
-    <Setting label="배경 음악" value={preferences.bgmEnabled} onChange={(value) => change('bgmEnabled', value)} />
-    <Setting label="효과음" value={preferences.effectsEnabled} onChange={(value) => change('effectsEnabled', value)} />
-    <Setting label="동작 줄이기" value={preferences.reduceMotion} onChange={(value) => change('reduceMotion', value)} />
-    <Text style={styles.note}>음악과 효과음 기본값은 출시 운영 설정으로 연결됩니다. 음소거나 동작 줄이기 선택은 이 기기에 저장됩니다.</Text>
+    <SubpageHeader title={t('설정')} />
+    <Text style={styles.sectionTitle}>{t('언어')}</Text>
+    <View style={styles.languageRow}>{selectableContentLocales(process.env.NODE_ENV === 'production').map((choice) => <PrimaryButton key={choice} onPress={() => void setLocale(choice)}>{locale === choice ? '✓ ' : ''}{t(contentLocales[choice].uiNameKey)}{!isContentLocaleAvailable(choice, true) ? ` (${t('미리보기')})` : ''}</PrimaryButton>)}</View>
+    <Setting label={t('배경 음악')} value={preferences.bgmEnabled} onChange={(value) => change('bgmEnabled', value)} />
+    <Setting label={t('효과음')} value={preferences.effectsEnabled} onChange={(value) => change('effectsEnabled', value)} />
+    <Setting label={t('동작 줄이기')} value={preferences.reduceMotion} onChange={(value) => change('reduceMotion', value)} />
+    <Text style={styles.note}>{t('음악과 효과음 기본값은 출시 운영 설정으로 연결됩니다. 음소거나 동작 줄이기 선택은 이 기기에 저장됩니다.')}</Text>
+    {showAdPrivacy ? <PrimaryButton onPress={() => { void showAdPrivacyOptions(); }}>{t('광고 개인정보 설정')}</PrimaryButton> : null}
 
     <View style={styles.accountCard}>
-      <Text style={styles.sectionTitle}>계정</Text>
+      <Text style={styles.sectionTitle}>{t('계정')}</Text>
       {auth ? <>
         <Text style={styles.accountName}>{auth.user.name}</Text>
         <Text style={styles.accountEmail}>{auth.user.email}</Text>
         {confirmLogout ? <View style={styles.confirmBox}>
-          <Text style={styles.confirmText}>이 기기의 로그인 정보만 삭제되며 현재 전생 결과는 유지됩니다.</Text>
-          <PrimaryButton onPress={() => void logout()}>로그아웃 확인</PrimaryButton>
-          <PrimaryButton onPress={() => setConfirmLogout(false)}>취소</PrimaryButton>
-        </View> : <PrimaryButton onPress={() => setConfirmLogout(true)}>로그아웃</PrimaryButton>}
+          <Text style={styles.confirmText}>{t('이 기기의 로그인 정보만 삭제되며 현재 전생 결과는 유지됩니다.')}</Text>
+          <PrimaryButton onPress={() => void logout()}>{t('로그아웃 확인')}</PrimaryButton>
+          <PrimaryButton onPress={() => setConfirmLogout(false)}>{t('취소')}</PrimaryButton>
+        </View> : <PrimaryButton onPress={() => setConfirmLogout(true)}>{t('로그아웃')}</PrimaryButton>}
       </> : <>
-        <Text style={styles.accountEmail}>로그인하면 저장한 전생 기록을 다시 볼 수 있습니다.</Text>
-        <PrimaryButton onPress={() => router.push('/login')}>Google 로그인</PrimaryButton>
+        <Text style={styles.accountEmail}>{t('로그인하면 저장한 전생 기록을 다시 볼 수 있습니다.')}</Text>
+        <PrimaryButton onPress={() => router.push('/login')}>{t('Google 로그인')}</PrimaryButton>
       </>}
     </View>
     <AppNav />
@@ -72,7 +83,7 @@ function Setting({ label, value, onChange }: { label: string; value: boolean; on
 }
 
 const styles = StyleSheet.create({
-  row: { minHeight: 64, padding: spacing.md, borderRadius: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  languageRow: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' }, row: { minHeight: 64, padding: spacing.md, borderRadius: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   label: { color: colors.text, fontSize: 17 },
   note: { color: colors.muted, lineHeight: 22 },
   accountCard: { gap: spacing.sm, padding: spacing.md, borderRadius: 14, backgroundColor: colors.surface },

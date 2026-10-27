@@ -1,6 +1,11 @@
 node_modules/
 .pnpm-store/
 .env
+.env.local
+apps/mobile/.env.local
+.playwright-cli/
+output/
+tmp/
 .expo/
 .next/
 .next-e2e/

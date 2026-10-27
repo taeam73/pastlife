@@ -9,10 +9,13 @@ import { Screen } from '../src/components/Screen';
 import { resolveLibraryImage } from '../src/results/libraryImages';
 import { loadSession } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
+import { localeText, useLocale, useTranslate } from '../src/i18n/locale';
 
 type FinalMoment = z.infer<typeof StoryFinalMomentResponseSchema>;
 
 export default function FinalMomentScreen() {
+  const { locale } = useLocale();
+  const t = useTranslate();
   const router = useRouter();
   const { width } = useWindowDimensions();
   const [moment, setMoment] = useState<FinalMoment | null>(null);
@@ -21,23 +24,23 @@ export default function FinalMomentScreen() {
   const [finishError, setFinishError] = useState<string | null>(null);
   useEffect(() => { void (async () => {
     const session = await loadSession();
-    if (!session?.resultId) { setError('결과 기록을 찾을 수 없습니다.'); return; }
+    if (!session?.resultId) { setError(t('결과 기록을 찾을 수 없습니다.')); return; }
     try { setMoment(await api.finalMoment(session.resultId)); }
-    catch { setError('마지막 순간을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'); }
-  })(); }, []);
+    catch { setError(t('마지막 순간을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')); }
+  })(); }, [t]);
 
-  if (error) return <Screen><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.replace('/result')}>결과로 돌아가기</PrimaryButton></Screen>;
+  if (error) return <Screen><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.replace('/result')}>{t('결과로 돌아가기')}</PrimaryButton></Screen>;
   if (!moment) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>;
   const illustration = resolveLibraryImage(moment.illustration.uri) ?? { uri: moment.illustration.uri };
   return <Screen logoInContent>
-    <View style={styles.head}><Text style={styles.kicker}>{moment.year} · {moment.place}</Text><Text style={styles.heading}>{moment.protagonist}의{'\n'}마지막 순간</Text></View>
+    <View style={styles.head}><Text style={styles.kicker}>{moment.year} · {moment.place}</Text><Text style={styles.heading}>{localeText(locale, { ko: `${moment.protagonist}의\n마지막 순간`, en: `${moment.protagonist}’s\nfinal moment`, th: `ช่วงสุดท้าย\nของ${moment.protagonist}`, ja: `${moment.protagonist}の\n最期の瞬間` })}</Text></View>
     <Image source={illustration} accessibilityLabel={moment.illustration.alt} resizeMode="cover" style={[styles.illustration, { height: Math.round(Math.min(width - spacing.lg * 2, 712) * 2 / 3) }]} />
     <View style={styles.parchment}>
       <Image source={require('../assets/parchment/reader-texture.png')} resizeMode="stretch" style={styles.texture} accessible={false} />
-      <Text style={styles.sectionTitle}>마지막 순간</Text>
+      <Text style={styles.sectionTitle}>{t('마지막 순간')}</Text>
       {moment.scene.split('\n\n').map((paragraph, index) => <Text key={index} style={styles.scene}>{paragraph}</Text>)}
       <View style={styles.rule} />
-      <Text style={styles.narratorTitle}>전생록의 기록</Text>
+      <Text style={styles.narratorTitle}>{t('전생록의 기록')}</Text>
       <Text style={styles.afterword}>{moment.afterword}</Text>
     </View>
     {finishError ? <Text style={styles.error}>{finishError}</Text> : null}
@@ -48,9 +51,9 @@ export default function FinalMomentScreen() {
         await api.markFinalMomentRead(moment.resultId);
         router.replace('/result');
       } catch {
-        setFinishError('읽은 기록을 저장하지 못했습니다. 다시 눌러 주세요.');
+        setFinishError(t('읽은 기록을 저장하지 못했습니다. 다시 눌러 주세요.'));
       } finally { setFinishBusy(false); }
-    })(); }}>마지막 순간 마치기</PrimaryButton>
+    })(); }}>{t('마지막 순간 마치기')}</PrimaryButton>
   </Screen>;
 }
 

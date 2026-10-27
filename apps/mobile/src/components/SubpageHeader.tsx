@@ -1,8 +1,10 @@
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
+import { localeText, useLocale } from '../i18n/locale';
 
 export function SubpageHeader({ title }: { title: string }) {
+  const { locale } = useLocale();
   const router = useRouter();
   const close = () => {
     if (router.canGoBack()) router.back();
@@ -12,7 +14,7 @@ export function SubpageHeader({ title }: { title: string }) {
   return <View style={styles.header}>
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${title} 닫기`}
+      accessibilityLabel={localeText(locale, { ko: `${title} 닫기`, en: `Close ${title}`, th: `ปิด ${title}`, ja: `${title}を閉じる` })}
       hitSlop={10}
       onPress={close}
       style={({ pressed }) => [styles.close, pressed && styles.pressed]}

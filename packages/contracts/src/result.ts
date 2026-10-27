@@ -11,6 +11,8 @@ export const ResultStatusResponseSchema = z.object({
 
 export const AdCompletionRequestSchema = z.object({ providerEventId: z.string().min(1) });
 export const UnlockResponseSchema = z.object({ sessionId: z.string(), unlockType: z.enum(['BASIC', 'DEEP', 'GUIDE']), unlocked: z.boolean() });
+export const AdChallengeResponseSchema = z.object({ customData: z.string().min(1) });
+export const AdStatusResponseSchema = z.object({ sessionId: z.string(), slot: z.number().int().min(1).max(3), unlocked: z.boolean() });
 
 export const BasicBlockSchema = z.object({ id: z.string(), title: z.string(), body: z.string() });
 export const ImageLayerSchema = z.object({ uri: z.string(), role: z.enum(['BACKGROUND', 'CHARACTER', 'EFFECT']), alt: z.string() });
@@ -65,7 +67,7 @@ export const BasicResultResponseSchema = z.object({
   recordNo: z.number().int().min(1).max(99),
   headline: z.string(),
   character: z.object({
-    name: z.string(), gender: z.enum(['여성', '남성']).nullable(), fictional: z.literal(true), appearance: z.string(),
+    name: z.string(), gender: z.string().min(1).nullable(), fictional: z.literal(true), appearance: z.string(),
     introduction: z.string(), occupationDescription: z.string(),
     temperament: z.string(), complex: z.string(), socialMask: z.string(), stressResponse: z.string(), familyStructure: z.string(), primaryCaregiver: z.string(),
     occupation: z.string(), hobby: z.string(), dream: z.string(), talent: z.string(), weakness: z.string(), favoritePlace: z.string(), belief: z.string(),

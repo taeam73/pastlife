@@ -6,11 +6,13 @@ import { Screen } from '../src/components/Screen';
 import { startNewSession } from '../src/session/start';
 import { loadPreferences, loadSession } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
+import { useTranslate } from '../src/i18n/locale';
 
 const backgrounds = [
   require('../assets/branding/cinematic-start-bg.png'),
 ];
 export default function GuideScreen() {
+  const t = useTranslate();
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const [busy, setBusy] = useState(false);
@@ -46,7 +48,7 @@ export default function GuideScreen() {
       router.replace('/question/1');
     } catch {
       setBusy(false);
-      setError('질문을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      setError(t('질문을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.'));
     }
   };
 
@@ -54,11 +56,11 @@ export default function GuideScreen() {
     <View style={styles.overlay}>
       <Screen scroll={false} transparent>
         <Animated.View style={[styles.content, { opacity: contentOpacity, transform: [{ translateY: contentY }] }]}>
-          <Text style={styles.eyebrow}>기억의 조각</Text>
-          <Text style={styles.title}>기억은 생각보다{ '\n' }먼저 반응합니다.</Text>
-          <Text style={styles.body}>너무 오래 고민하지 말고,{ '\n' }가장 먼저 마음이 가는 것을 선택해 주세요.</Text>
+          <Text style={styles.eyebrow}>{t('기억의 조각')}</Text>
+          <Text style={styles.title}>{t('기억은 생각보다\n먼저 반응합니다.')}</Text>
+          <Text style={styles.body}>{t('너무 오래 고민하지 말고,\n가장 먼저 마음이 가는 것을 선택해 주세요.')}</Text>
           {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
-          <View style={styles.buttonWrap}><PrimaryButton leadingIcon="✦" disabled={busy} onPress={() => void beginQuestions()}>{busy ? '질문 준비 중' : '질문 시작하기'}</PrimaryButton></View>
+          <View style={styles.buttonWrap}><PrimaryButton leadingIcon="✦" disabled={busy} onPress={() => void beginQuestions()}>{busy ? t('질문 준비 중') : t('질문 시작하기')}</PrimaryButton></View>
         </Animated.View>
       </Screen>
     </View>

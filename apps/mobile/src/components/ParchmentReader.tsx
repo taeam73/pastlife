@@ -1,18 +1,24 @@
-import { Image, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { separateDialogueParagraphs, splitDialogueSegments } from '../results/dialogue';
-import { paginateMemoryItems, paginateText } from '../results/paginate';
 import { spacing } from '../theme/tokens';
 import { ParchmentLineReveal } from './ParchmentLineReveal';
+import { MeasuredPageFlow } from './MeasuredPageFlow';
+import { localeText, useLocale } from '../i18n/locale';
 
-function ProsePage({ body, separateDialogue = false }: { body: string; separateDialogue?: boolean }) {
+function PageItems({ items, style, measuring }: { items: ReactNode[]; style: object; measuring: boolean }) {
+  return measuring ? <View style={style}>{items.map((item, index) => <View key={index}>{item}</View>)}</View> : <ParchmentLineReveal items={items} style={style} />;
+}
+
+function ProsePage({ body, separateDialogue = false, measuring }: { body: string; separateDialogue?: boolean; measuring: boolean }) {
   const paragraphs = body.split(/\n{2,}/u).filter(Boolean);
   const segments = separateDialogue
     ? paragraphs.flatMap(splitDialogueSegments)
     : paragraphs.map((text) => ({ kind: 'narration' as const, text }));
-  return <ParchmentLineReveal items={segments.map((segment, index) => <Text key={index} style={[styles.body, segment.kind === 'dialogue' && styles.dialogue]}>{segment.text}</Text>)} style={styles.proseList} />;
+  return <PageItems measuring={measuring} items={segments.map((segment, index) => <Text key={index} style={[styles.body, segment.kind === 'dialogue' && styles.dialogue]}>{segment.text}</Text>)} style={styles.proseList} />;
 }
 
-function TimelinePage({ body }: { body: string }) {
+function TimelinePage({ body, measuring }: { body: string; measuring: boolean }) {
   const items = body.split('\n').filter(Boolean).map((line, index) => {
     const [label, ...rest] = line.split(/\s*·\s*/u);
     const detail = rest.join(' · ');
@@ -21,10 +27,10 @@ function TimelinePage({ body }: { body: string }) {
       <Text style={styles.entryBody}>{detail || line}</Text>
     </View>;
   });
-  return <ParchmentLineReveal items={items} style={styles.entryList} />;
+  return <PageItems measuring={measuring} items={items} style={styles.entryList} />;
 }
 
-function MemoryPage({ body }: { body: string }) {
+function MemoryPage({ body, measuring }: { body: string; measuring: boolean }) {
   const items = body.split(/\n{2,}/u).filter(Boolean).map((item, index) => {
     const [label, ...detailLines] = item.split('\n');
     const detail = detailLines.join('\n');
@@ -33,36 +39,37 @@ function MemoryPage({ body }: { body: string }) {
       <Text style={[styles.entryBody, /^[“"]/u.test(detail) && styles.quote]}>{detail}</Text>
     </View>;
   });
-  return <ParchmentLineReveal items={items} style={styles.entryList} />;
+  return <PageItems measuring={measuring} items={items} style={styles.entryList} />;
 }
 
-function FormattedPage({ chapterKey, body }: { chapterKey: string; body: string }) {
-  if (chapterKey === '삶의 기록') return <TimelinePage body={body} />;
-  if (chapterKey === '전생의 기억') return <MemoryPage body={body} />;
-  return <ProsePage body={body} separateDialogue={chapterKey === '에피소드'} />;
+function FormattedPage({ chapterKey, body, measuring }: { chapterKey: string; body: string; measuring: boolean }) {
+  if (chapterKey === 'CHOICE') return <TimelinePage body={body} measuring={measuring} />;
+  if (chapterKey === 'NOW') return <MemoryPage body={body} measuring={measuring} />;
+  return <ProsePage body={body} separateDialogue={chapterKey === 'TRIAL'} measuring={measuring} />;
 }
 
-export function ParchmentReader({ title, body, chapterKey, pageIndex = 0, onPageChange }: { title: string; body: string; chapterKey: string; pageIndex?: number; onPageChange?: ((index: number) => void) | undefined }) {
-  const { width } = useWindowDimensions();
-  const paginatedBody = chapterKey === '에피소드' ? separateDialogueParagraphs(body) : body;
-  const pages = chapterKey === '전생의 기억'
-    ? paginateMemoryItems(body, width < 600 ? 2 : 3)
-    : paginateText(paginatedBody, chapterKey === '에피소드' ? 160 : 190);
-  const visibleIndex = Math.min(pageIndex, Math.max(0, pages.length - 1));
+export function ParchmentReader({ title, body, chapterKey, pageIndex = 0, onPageChange, onPageCountChange }: { title: string; body: string; chapterKey: string; pageIndex?: number; onPageChange?: ((index: number) => void) | undefined; onPageCountChange?: ((count: number) => void) | undefined }) {
+  const { locale } = useLocale();
+  const [pageCount, setPageCount] = useState(1);
+  const pageBody = chapterKey === 'TRIAL' ? separateDialogueParagraphs(body) : body;
+  const sources = useMemo(() => [{ body: pageBody }], [pageBody]);
+  const onCount = useCallback((count: number) => { setPageCount(count); onPageCountChange?.(count); }, [onPageCountChange]);
+  const renderPage = useCallback((_source: { body: string }, text: string, measuring: boolean) => <FormattedPage key={`${chapterKey}-${text}`} chapterKey={chapterKey} body={text} measuring={measuring} />, [chapterKey]);
+  const visibleIndex = Math.min(pageIndex, Math.max(0, pageCount - 1));
   const goTo = (index: number) => {
-    const next = Math.max(0, Math.min(pages.length - 1, index));
+    const next = Math.max(0, Math.min(pageCount - 1, index));
     onPageChange?.(next);
   };
   return <View testID="chapter-reader-panel" style={styles.panel}>
     <Image source={require('../../assets/parchment/reader-texture.png')} resizeMode="stretch" style={styles.texture} accessibilityIgnoresInvertColors />
     <Text style={styles.title}>{title}</Text>
-    <View style={styles.pages} accessibilityLabel={`${chapterKey} 내용`}>
-      <View testID="chapter-text-page" style={styles.page}><FormattedPage key={`${chapterKey}-${visibleIndex}`} chapterKey={chapterKey} body={pages[visibleIndex] ?? ''} /></View>
+    <View style={styles.pages} accessibilityLabel={localeText(locale, { ko: `${chapterKey} 내용`, en: `${title} content`, th: `เนื้อหา ${title}`, ja: `${title}の本文` })}>
+      <View style={styles.page}><MeasuredPageFlow testID="chapter-text-page" sources={sources} pageIndex={visibleIndex} onPageCountChange={onCount} renderPage={renderPage} /></View>
     </View>
-    {pages.length > 1 ? <View style={styles.controls}>
-      <Pressable accessibilityRole="button" accessibilityLabel="이전 글 페이지" disabled={visibleIndex === 0} onPress={() => goTo(visibleIndex - 1)} style={styles.arrow}><Text style={styles.arrowText}>‹</Text></Pressable>
-      <Text style={styles.pageCount}>{visibleIndex + 1} / {pages.length}</Text>
-      <Pressable accessibilityRole="button" accessibilityLabel="다음 글 페이지" disabled={visibleIndex === pages.length - 1} onPress={() => goTo(visibleIndex + 1)} style={styles.arrow}><Text style={styles.arrowText}>›</Text></Pressable>
+    {pageCount > 1 ? <View style={styles.controls}>
+      <Pressable accessibilityRole="button" accessibilityLabel={localeText(locale, { ko: '이전 글 페이지', en: 'Previous story page', th: 'หน้าเรื่องก่อนหน้า', ja: '前のページ' })} disabled={visibleIndex === 0} onPress={() => goTo(visibleIndex - 1)} style={styles.arrow}><Text style={styles.arrowText}>‹</Text></Pressable>
+      <Text style={styles.pageCount}>{visibleIndex + 1} / {pageCount}</Text>
+      <Pressable accessibilityRole="button" accessibilityLabel={localeText(locale, { ko: '다음 글 페이지', en: 'Next story page', th: 'หน้าเรื่องถัดไป', ja: '次のページ' })} disabled={visibleIndex === pageCount - 1} onPress={() => goTo(visibleIndex + 1)} style={styles.arrow}><Text style={styles.arrowText}>›</Text></Pressable>
     </View> : null}
   </View>;
 }

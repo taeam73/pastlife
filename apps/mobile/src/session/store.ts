@@ -2,10 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
+import { parseContentLocale, type ContentLocale } from '@pastlife/content/locales';
 
 const STORAGE_KEY = 'pastlife.session.v1';
+export const RELEASE_CONTENT_VERSION = '3.0.0';
 export type ViewMode = 'VIDEO' | 'TEXT';
-export type SessionState = { sessionId: string; seed: string; contentVersion: string; viewMode: ViewMode; resultId?: string };
+export type SessionState = { sessionId: string; seed: string; contentVersion: string; viewMode: ViewMode; resultId?: string; locale?: ContentLocale };
 const AUTH_KEY = 'pastlife.auth.v1';
 const DEVICE_KEY = 'pastlife.device.v1';
 const PREFERENCES_KEY = 'pastlife.preferences.v1';
@@ -14,14 +16,23 @@ export type Preferences = { bgmEnabled: boolean; effectsEnabled: boolean; reduce
 export const DEFAULT_PREFERENCES: Preferences = { bgmEnabled: true, effectsEnabled: true, reduceMotion: false };
 
 export async function saveSession(state: SessionState) {
+  if (state.contentVersion !== RELEASE_CONTENT_VERSION) throw new Error('Unsupported content version');
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 export async function loadSession(): Promise<SessionState | null> {
   const value = await AsyncStorage.getItem(STORAGE_KEY);
   if (!value) return null;
-  const parsed = JSON.parse(value) as Omit<SessionState, 'viewMode'> & { viewMode?: ViewMode };
-  return { ...parsed, viewMode: parsed.viewMode ?? 'TEXT' };
+  let parsed: Omit<SessionState, 'viewMode'> & { viewMode?: ViewMode };
+  try { parsed = JSON.parse(value) as typeof parsed; }
+  catch { await AsyncStorage.removeItem(STORAGE_KEY); return null; }
+  if (parsed.contentVersion !== RELEASE_CONTENT_VERSION) {
+    await AsyncStorage.removeItem(STORAGE_KEY);
+    return null;
+  }
+  const { locale: storedLocale, ...rest } = parsed;
+  const locale = parseContentLocale(storedLocale);
+  return { ...rest, viewMode: parsed.viewMode ?? 'TEXT', ...(locale ? { locale } : {}) };
 }
 
 export async function saveResultId(resultId: string) {

@@ -3,11 +3,14 @@ import { colors, spacing } from '../theme/tokens';
 import { resolveLibraryImage } from '../results/libraryImages';
 import { CroppedScene } from './CroppedScene';
 import type { Crop } from '../results/crop';
+import { localeText, useLocale, useTranslate } from '../i18n/locale';
 
 type Chapter = { id: string; title: string; summary: string; detail: string; imageUri?: string | undefined; crop?: Crop | undefined };
 type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; selectedIndex: number; onSelect: (index: number) => void };
 
 export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, onSelect }: Props) {
+  const { locale } = useLocale();
+  const t = useTranslate();
   const { width } = useWindowDimensions();
   const contentWidth = Math.min(width, 760) - spacing.lg * 2;
   const cardWidth = Math.max(64, Math.floor((contentWidth - spacing.md * 2 - spacing.sm * 3) / 4));
@@ -15,12 +18,12 @@ export function ChapterFilmstrip({ chapters, imageUri, imageAlt, selectedIndex, 
   const fallback = resolveLibraryImage(imageUri) ?? (/^https?:\/\//.test(imageUri) ? { uri: imageUri } : undefined);
   if (!fallback) return null;
   return <View style={styles.section}>
-    <View style={styles.headingRow}><View style={styles.headingLine} /><Text style={styles.sectionTitle}>나의 전생 이야기</Text><View style={styles.headingLine} /></View>
+    <View style={styles.headingRow}><View style={styles.headingLine} /><Text style={styles.sectionTitle}>{t('나의 전생 이야기')}</Text><View style={styles.headingLine} /></View>
     <View style={styles.railWrap}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.rail} accessibilityLabel="전생 이야기 챕터 목록">
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.rail} accessibilityLabel={t('전생 이야기 챕터 목록')}>
         {chapters.map((chapter, index) => {
-          return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={`${index + 1}장 ${chapter.title}`} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, { width: cardWidth, height: cardHeight }, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
-            <View style={styles.image}><CroppedScene uri={imageUri} crop={chapter.crop ?? { focusX: (index + 1) / 5, focusY: 0.5, zoom: 1.55 }} accessibilityLabel={`${imageAlt} · ${chapter.title} 미리보기`} /></View>
+          return <Pressable key={chapter.id} accessibilityRole="button" accessibilityLabel={localeText(locale, { ko: `${index + 1}장 ${chapter.title}`, en: `Chapter ${index + 1}: ${chapter.title}`, th: `บทที่ ${index + 1}: ${chapter.title}`, ja: `第${index + 1}章：${chapter.title}` })} accessibilityState={{ selected: selectedIndex === index }} onPress={() => onSelect(index)} style={({ pressed }) => [styles.card, { width: cardWidth, height: cardHeight }, selectedIndex === index && styles.selected, pressed && styles.pressed]}>
+            <View style={styles.image}><CroppedScene uri={imageUri} crop={chapter.crop ?? { focusX: (index + 1) / 5, focusY: 0.5, zoom: 1.55 }} accessibilityLabel={localeText(locale, { ko: `${imageAlt} · ${chapter.title} 미리보기`, en: `${chapter.title} preview`, th: `ตัวอย่าง ${chapter.title}`, ja: `${chapter.title}のプレビュー` })} /></View>
             <View style={styles.shade} />
             <View style={styles.cardCopy}><Text style={styles.chapterNumber}>{String(index + 1).padStart(2, '0')}</Text><Text numberOfLines={2} style={styles.chapterTitle}>{chapter.title}</Text></View>
           </Pressable>;

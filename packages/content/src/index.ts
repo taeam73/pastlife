@@ -2,9 +2,11 @@ import questionsJson from './generated/questions.ko.json';
 
 import type { Question, Stage } from './types.js';
 import { storyQuestions } from './story-questions.js';
+import { localizeStoryQuestion } from './translations/questions.js';
 
 export * from './catalogs.js';
 export * from './types.js';
+export * from './locales.js';
 export * from './historical/types.js';
 export * from './historical/validate.js';
 export * from './historical/occupations.js';
@@ -13,9 +15,21 @@ export * from './historical/expansions.js';
 export * from './story-catalog.js';
 export * from './story-manuscripts.js';
 export * from './story-final-moments.js';
+export * from './translations/en/coverage.js';
+export * from './translations/en/catalog.js';
+export * from './translations/th/catalog.js';
+export * from './translations/th/coverage.js';
+export * from './translations/ja/catalog.js';
+export * from './translations/ja/coverage.js';
 
 export const questions = questionsJson as Question[];
 export { storyQuestions };
+export { localizeStoryQuestion } from './translations/questions.js';
+export { englishStoryQuestionIds } from './translations/en/questions.js';
+export { clownEnglish, clownEnglishEpisode, clownEnglishFinalMoment, renderClownEnglishEpisode } from './translations/en/CLOWN.js';
+export { clownThai, clownThaiEpisode, clownThaiFinalMoment, renderClownThaiEpisode } from './translations/th/CLOWN.js';
+export { thaiStoryQuestionIds } from './translations/th/questions.js';
+export { japaneseStoryQuestionIds } from './translations/ja/questions.js';
 
 export function questionsForVersion(contentVersion: string): Question[] {
   return contentVersion.startsWith('3.') ? storyQuestions : questions;

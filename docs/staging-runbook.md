@@ -1,5 +1,16 @@
 # Staging 실행 순서
 
+첫 Play 출시는 3.0 원고 120편만 사용합니다. 운영 API의 `CONTENT_VERSION`은 `3.0.0`으로 지정합니다. 운영 서버는 다른 버전으로 시작하지 않으며, 앱은 기기에 남은 2.5 세션을 제거합니다. 운영 아카이브 목록과 결과 조회에도 이전 버전을 노출하지 않습니다.
+
+## Android AdMob 단계
+
+1. AdMob에서 Android 앱 ID, 화면 전환 광고 단위, 보상형 광고 단위를 만든다. 스테이징 실기기 시험에는 데모 광고 단위 또는 등록된 테스트 기기를 사용한다.
+2. `apps/mobile/eas.json`의 `preview` APK를 비운영 API에 연결한다. 이 빌드는 `EXPO_PUBLIC_ADMOB_TEST_ADS=true`이며 테스트 보상 완료를 비운영 API의 기존 시뮬레이션 경로로 확인한다.
+3. 운영 API에 실제 `ADMOB_REWARDED_UNIT_ID`와 32자 이상 `JWT_SECRET`을 지정한다. AdMob 보상형 광고 단위의 SSV 콜백은 공개 HTTPS `https://<api-host>/api/v1/ads/admob/ssv`로 등록한다. AdMob의 SSV 테스트 도구로 서명·거래 ID·중복 요청을 확인한다.
+4. 운영 AAB에는 실제 `EXPO_PUBLIC_ADMOB_APP_ID`, `EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID`, `EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID`를 설정한다. 운영 서버는 클라이언트의 가짜 광고 완료 요청을 거부한다.
+5. Play 내부 테스트에서 여섯 번째 답변→화면 전환 광고→기본 결과, 보상형 광고 완료→마지막 순간, 조기 닫기·광고 없음·SSV 지연·재시도·앱 재시작을 실제 Android 기기에서 확인한다. AdMob 앱 검토 및 `app-ads.txt`, Play Console 광고/대상 연령 신고가 끝나기 전에는 실광고 수익을 출시 완료로 세지 않는다.
+
+
 Neon을 사용하는 경우 Docker/PostgreSQL 없이도 API DB를 실행할 수 있습니다. Neon Dashboard의 Connect 메뉴에서 pooled URL을 복사하고, migration 시에는 direct(non-pooler) URL을 사용합니다. Neon은 pooled URL을 애플리케이션 연결에, direct URL을 migration 같은 세션 의존 작업에 권장합니다. [Neon connection pooling 문서](https://neon.com/docs/connect/connection-pooling)
 
 ```powershell

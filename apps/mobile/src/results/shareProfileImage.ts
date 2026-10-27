@@ -1,4 +1,5 @@
 import { resolveLibraryImage } from './libraryImages';
+import { localeText, translate, type Locale } from '../i18n/locale';
 
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 type Cover = { era: string; place: string; role: string; birthYear: string; deathYear: string; lifeLine: string };
@@ -27,7 +28,17 @@ async function loadBrandLogo() {
 }
 
 function drawWrapped(context: CanvasRenderingContext2D, text: string, x: number, y: number, width: number, lineHeight: number, maxLines: number) {
-  const words = text.split(/\s+/u);
+  const words = text.split(/\s+/u).flatMap((word) => {
+    if (context.measureText(word).width <= width) return [word];
+    const parts: string[] = [];
+    let part = '';
+    for (const unit of Array.from(word.matchAll(/\P{M}\p{M}*|\p{M}+/gu), (match) => match[0])) {
+      if (part && context.measureText(part + unit).width > width) { parts.push(part); part = ''; }
+      part += unit;
+    }
+    if (part) parts.push(part);
+    return parts;
+  });
   let line = '';
   let drawn = 0;
   const drawEllipsis = (value: string, lineY: number) => {
@@ -57,12 +68,13 @@ function drawWrapped(context: CanvasRenderingContext2D, text: string, x: number,
   return drawn;
 }
 
-export async function renderShareProfileImage({ name, recordNo, cover, layers, relationship }: {
+export async function renderShareProfileImage({ name, recordNo, cover, layers, relationship, locale = 'ko' }: {
   name: string;
   recordNo: number;
   cover: Cover;
   layers: Layer[];
   relationship: string;
+  locale?: Locale;
 }) {
   const backgroundUri = layers.find((layer) => layer.role === 'BACKGROUND')?.uri;
   const characterUri = layers.find((layer) => layer.role === 'CHARACTER')?.uri;
@@ -95,12 +107,16 @@ export async function renderShareProfileImage({ name, recordNo, cover, layers, r
   lowerShade.addColorStop(1, 'rgba(8,14,24,0.98)');
   context.fillStyle = lowerShade;
   context.fillRect(0, 960, canvas.width, 840);
-  context.drawImage(logo, 72, 24, 276, 130);
+  if (locale !== 'ko') {
+    context.fillStyle = '#f8e3b8';
+    context.font = 'bold 42px sans-serif';
+    context.fillText(locale === 'en' ? 'PAST LIFE ARCHIVE' : translate(locale, '전생록'), 72, 98);
+  } else context.drawImage(logo, 72, 24, 276, 130);
   const x = 74;
   const width = canvas.width - x * 2;
   context.fillStyle = '#e9c981';
   context.font = 'bold 38px sans-serif';
-  context.fillText(`당신의 ${recordNo}번째 전생은`, x, 1105);
+  context.fillText(localeText(locale, { ko: `당신의 ${recordNo}번째 전생은`, en: `Your past life No. ${recordNo}`, th: `ชาติที่แล้วของคุณลำดับ ${recordNo}`, ja: `あなたの第${recordNo}の前世は` }), x, 1105);
   context.fillStyle = '#fff8e9';
   context.font = 'bold 76px sans-serif';
   const nameLines = drawWrapped(context, name, x, 1205, width, 78, 2);

@@ -1,13 +1,15 @@
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
+import { useTranslate } from '../i18n/locale';
 
 export function AppNav() {
   const router = useRouter();
+  const t = useTranslate();
   return <View accessibilityRole="tablist" style={styles.nav}>
-    <NavItem icon="⌂" label="메인" onPress={() => router.replace('/')} />
-    <NavItem icon="▤" label="나의 전생" onPress={() => router.push('/archive')} />
-    <NavItem icon="⚙" label="설정" onPress={() => router.push('/settings' as never)} />
+    <NavItem icon="⌂" label={t('메인')} onPress={() => router.replace('/')} />
+    <NavItem icon="▤" label={t('나의 전생')} onPress={() => router.push('/archive')} />
+    <NavItem icon="⚙" label={t('설정')} onPress={() => router.push('/settings' as never)} />
   </View>;
 }
 

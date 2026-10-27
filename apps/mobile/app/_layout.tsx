@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { AudioExperience } from '../src/audio/AudioExperience';
+import { LocaleProvider } from '../src/i18n/locale';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -9,5 +10,5 @@ export default function Layout() {
   });
 
   if (!fontsLoaded) return null;
-  return <AudioExperience><Stack screenOptions={{ headerShown: false, animation: 'fade' }} /></AudioExperience>;
+  return <LocaleProvider><AudioExperience><Stack screenOptions={{ headerShown: false, animation: 'fade' }} /></AudioExperience></LocaleProvider>;
 }

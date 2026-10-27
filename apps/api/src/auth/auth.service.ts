@@ -1,12 +1,13 @@
 import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
-import { eras, findStoryCard, historicalLocations, occupations } from '@pastlife/content';
+import { eras, findEnglishStoryTranslation, findJapaneseStoryTranslation, findThaiStoryTranslation, findStoryCard, historicalLocations, isEnglishStoryReady, isJapaneseStoryReady, isThaiStoryReady, occupations, parseContentLocale, type ContentLocale } from '@pastlife/content';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { GOOGLE_IDENTITY_PROVIDER, type GoogleIdentityProvider } from '../providers/google.provider.js';
 import { resolveAuthRuntimeConfig } from '../config/auth.js';
 import { ResultsService } from '../results/results.service.js';
+import { RELEASE_CONTENT_VERSION } from '../config/content.js';
 type User = { id: string; email: string; name: string; providerSub: string };
 @Injectable()
 export class AuthService {
@@ -37,7 +38,7 @@ export class AuthService {
     }
     return { accessToken: this.sign(user.id), user: { id: user.id, email: user.email, name: user.name } };
   }
-  archive(resultId: string, token: string) { const userId = this.verify(token); return this.repository.getResult(resultId).then(async (result) => { if (!result) throw new BadRequestException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' }); if (this.dbEnabled) await this.prisma.$executeRawUnsafe('INSERT INTO archive_entries (id, "userId", "resultId", "createdAt") VALUES ($1,$2,$3,NOW()) ON CONFLICT ("userId", "resultId") DO NOTHING', randomUUID(), userId, resultId); else { const set = this.archives.get(userId) ?? new Set<string>(); set.add(resultId); this.archives.set(userId, set); } return { resultId, saved: true }; }); }
+  archive(resultId: string, token: string) { const userId = this.verify(token); return this.repository.getResult(resultId).then(async (result) => { if (!result || (process.env.NODE_ENV === 'production' && result.core.contentVersion !== RELEASE_CONTENT_VERSION)) throw new BadRequestException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' }); if (this.dbEnabled) await this.prisma.$executeRawUnsafe('INSERT INTO archive_entries (id, "userId", "resultId", "createdAt") VALUES ($1,$2,$3,NOW()) ON CONFLICT ("userId", "resultId") DO NOTHING', randomUUID(), userId, resultId); else { const set = this.archives.get(userId) ?? new Set<string>(); set.add(resultId); this.archives.set(userId, set); } return { resultId, saved: true }; }); }
   async list(token: string) {
     const userId = this.verify(token);
     const ids = this.dbEnabled
@@ -46,13 +47,17 @@ export class AuthService {
     const items = [];
     for (const entry of ids) {
       const result = await this.repository.getResult(entry.resultId);
-      if (!result) continue;
+      if (!result || (process.env.NODE_ENV === 'production' && result.core.contentVersion !== RELEASE_CONTENT_VERSION)) continue;
       const story = result.core.storyId ? findStoryCard(result.core.storyId) : undefined;
+      const session = await this.repository.getSession(result.sessionId);
+      const locale = parseContentLocale(session?.locale ?? 'ko');
+      if (!locale || (locale === 'en' && !isEnglishStoryReady(result.core.storyId ?? '')) || (locale === 'th' && !isThaiStoryReady(result.core.storyId ?? '')) || (locale === 'ja' && !isJapaneseStoryReady(result.core.storyId ?? ''))) continue;
       const era = eras.find((item) => item.id === result.core.eraId);
       const location = historicalLocations.find((item) => item.id === result.core.locationId);
       const occupation = occupations.find((item) => item.id === result.core.occupationId);
+      const koreanHeadline = story?.title ?? `${era?.label ?? ''} ${location?.label ?? ''} · ${occupation?.label ?? ''}`;
       items.push({ resultId: entry.resultId, recordNo: result.core.recordNo,
-        headline: story?.title ?? `${era?.label ?? ''} ${location?.label ?? ''} · ${occupation?.label ?? ''}`,
+        headline: localizedHeadline(locale, koreanHeadline, result.core.storyId ?? ''),
         createdAt: entry.createdAt.toISOString() });
     }
     return { items };
@@ -104,4 +109,25 @@ export class AuthService {
     if (parsed.exp < Date.now() / 1000) throw new UnauthorizedException({ code: 'TOKEN_EXPIRED', message: 'Token expired' });
     return parsed.sub;
   }
+}
+
+function localizedHeadline(locale: ContentLocale, koreanHeadline: string, storyId: string): string {
+  if (locale === 'ko') return koreanHeadline;
+  if (locale === 'en') {
+    const title = findEnglishStoryTranslation(storyId)?.card.title;
+    if (!title) throw new Error(`English archive title missing: ${storyId}`);
+    return title;
+  }
+  if (locale === 'th') {
+    const title = findThaiStoryTranslation(storyId)?.card.title;
+    if (!title) throw new Error(`Thai archive title missing: ${storyId}`);
+    return title;
+  }
+  if (locale === 'ja') {
+    const title = findJapaneseStoryTranslation(storyId)?.card.title;
+    if (!title) throw new Error(`Japanese archive title missing: ${storyId}`);
+    return title;
+  }
+  const unsupported: never = locale;
+  throw new Error(`Missing archive locale implementation: ${unsupported}`);
 }

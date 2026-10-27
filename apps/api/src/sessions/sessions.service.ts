@@ -1,9 +1,10 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { BadRequestException, ConflictException, GoneException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { questionsForVersion, selectQuestion, type Stage } from '@pastlife/content';
+import { isContentLocaleAvailable, localizeStoryQuestion, parseContentLocale, questionsForVersion, selectQuestion, type Stage } from '@pastlife/content';
 import { calculateResult } from '@pastlife/scoring';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { NARRATIVE_PROVIDER, type NarrativeProvider } from '../providers/narrative.provider.js';
+import { RELEASE_CONTENT_VERSION, resolveContentRuntimeConfig } from '../config/content.js';
 
 @Injectable()
 export class SessionsService {
@@ -13,12 +14,15 @@ export class SessionsService {
   ) {}
 
   async create(locale = 'ko', deviceId?: string, _preferredViewMode: 'VIDEO' | 'TEXT' = 'TEXT') {
+    const parsedLocale = parseContentLocale(locale);
+    if (!parsedLocale) throw new BadRequestException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported locale' });
+    if (!isContentLocaleAvailable(parsedLocale, process.env.NODE_ENV === 'production')) throw new BadRequestException({ code: 'TRANSLATION_NOT_READY', message: 'This language is unavailable in production' });
     const session = await this.repository.createSession({
       id: randomUUID(),
       anonymousId: deviceId ?? randomUUID(),
-      locale,
+      locale: parsedLocale,
       seed: randomBytes(16).toString('hex'),
-      contentVersion: process.env.CONTENT_VERSION ?? '3.0.0',
+      contentVersion: resolveContentRuntimeConfig().contentVersion,
       status: 'CREATED',
       viewMode: 'TEXT',
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -44,11 +48,14 @@ export class SessionsService {
     const lockedQuestionId = await this.repository.lockQuestion(sessionId, stageNumber, selected.id);
     const question = sessionQuestions.find(({ id }) => id === lockedQuestionId);
     if (!question) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Question not found' });
+    const locale = parseContentLocale(session.locale);
+    if (!locale) throw new NotFoundException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported session locale' });
+    const localized = localizeStoryQuestion(question, locale);
     return {
       id: question.id,
       stage: question.stage,
-      text: question.text,
-      choices: question.choices.map(({ id, text, displayOrder }) => ({ id, text, displayOrder })),
+      text: localized.text,
+      choices: localized.choices.map(({ id, text, displayOrder }) => ({ id, text, displayOrder })),
     };
   }
 
@@ -93,6 +100,9 @@ export class SessionsService {
   private async requireSession(id: string) {
     const session = await this.repository.getSession(id);
     if (!session) throw new NotFoundException({ code: 'VALIDATION_ERROR', message: 'Session not found' });
+    if (process.env.NODE_ENV === 'production' && session.contentVersion !== RELEASE_CONTENT_VERSION) {
+      throw new NotFoundException({ code: 'SESSION_NOT_FOUND', message: 'Session not found' });
+    }
     if (session.expiresAt.getTime() <= Date.now() && !session.resultId) throw new GoneException({ code: 'SESSION_EXPIRED', message: 'Session expired' });
     return session;
   }
