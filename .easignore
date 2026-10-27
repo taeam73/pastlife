@@ -21,6 +21,9 @@ apps/api/
 apps/worker/
 apps/mobile/.expo/
 apps/mobile/dist/
+apps/mobile/assets/stories/
+apps/mobile/assets/library/
+apps/mobile/assets/characters/
 *.log
 *.tsbuildinfo
 
