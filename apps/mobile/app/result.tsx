@@ -38,6 +38,7 @@ export default function ResultScreen() {
   const [error, setError] = useState<string | null>(null);
   const [imageShareStatus, setImageShareStatus] = useState<AsyncStatus>('IDLE');
   const [pdfStatus, setPdfStatus] = useState<AsyncStatus>('IDLE');
+  const [pdfTextOnly, setPdfTextOnly] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
   const [deepUnlocked, setDeepUnlocked] = useState(false);
   const [atStoryEnd, setAtStoryEnd] = useState(false);
@@ -159,6 +160,7 @@ export default function ResultScreen() {
   const downloadPdf = async () => {
     if (!result || !result.finalMomentRead || result.presentation?.version !== 3 || !result.presentation.hero.cover) return;
     setPdfStatus('LOADING');
+    setPdfTextOnly(false);
     try {
       const finalMoment = await api.finalMoment(result.resultId);
       const record = {
@@ -177,10 +179,12 @@ export default function ResultScreen() {
         downloadRecordPdf(pdf, result.character?.name ?? t('전생의 나'), result.resultId, locale);
       } else {
         const { shareNativeRecordPdf } = await import('../src/results/exportNativeRecordPdf');
-        await shareNativeRecordPdf(record);
+        const exported = await shareNativeRecordPdf(record);
+        setPdfTextOnly(exported.textOnly);
       }
       setPdfStatus('READY');
-    } catch {
+    } catch (error) {
+      console.error('Past life PDF export failed', error);
       setPdfStatus('ERROR');
     }
   };
@@ -207,6 +211,7 @@ export default function ResultScreen() {
       <PrimaryButton disabled={imageShareStatus === 'LOADING' || !result.finalMomentRead} showWhenDisabled onPress={() => void shareImage()}>{t('이미지 공유')}</PrimaryButton>
       <PrimaryButton disabled={pdfStatus === 'LOADING' || !result.finalMomentRead} showWhenDisabled onPress={() => void downloadPdf()}>{t('전생기록 다운로드')}</PrimaryButton>
       <AsyncActionStatus status={pdfStatus} loadingText={t('전생기록 PDF를 만들고 있습니다.')} readyText={t(Platform.OS === 'web' ? '전생기록 PDF를 저장했습니다.' : 'PDF 공유창을 열었습니다. 저장 위치를 선택해 주세요.')} errorText={t('PDF를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.')} onRetry={() => void downloadPdf()} />
+      {pdfStatus === 'READY' && pdfTextOnly ? <Text style={styles.lockNotice}>{localeText(locale, { ko: '그림을 불러오지 못해 원고만 담은 PDF를 만들었습니다.', en: 'The artwork could not load, so this PDF contains the story text only.', th: 'ไม่สามารถโหลดภาพได้ PDF นี้จึงมีเฉพาะเนื้อเรื่อง', ja: '画像を読み込めなかったため、本文のみのPDFを作成しました。' })}</Text> : null}
     </View>
     {showShareCard && result.presentation?.version === 3 && result.presentation.hero.cover ? <View ref={shareCardRef} collapsable={false} style={styles.shareCardFrame}>
       <ShareProfileCard name={result.character?.name ?? t('전생의 나')} recordNo={result.recordNo} cover={result.presentation.hero.cover} layers={result.image.layers ?? []} relationship={result.presentation.chapters.find((chapter) => chapter.id === 'MEETING')?.profilePages?.flatMap((page) => page.body.split('\n')).find((line) => /^(가까운 사람|가족|친구|곁에 있던 사람|People close to him)\s*[·:]/u.test(line)) ?? ''} onImagesReady={() => { shareCardReadyRef.current = true; shareCardReadyResolverRef.current?.(); shareCardReadyResolverRef.current = null; }} />
