@@ -1,8 +1,0 @@
-.expo/
-dist/
-node_modules/
-assets/stories/
-assets/library/
-assets/characters/
-*.log
-*.tsbuildinfo

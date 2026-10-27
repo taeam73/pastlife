@@ -19,6 +19,7 @@ web-build/
 *.tsbuildinfo
 apps/mobile/.expo/
 apps/mobile/dist/
+apps/mobile/.eas-archive-inspect/
 prisma/*.db
 prisma/*.db-journal
 .git-codex-backup/
