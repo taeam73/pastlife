@@ -133,6 +133,8 @@ Railway 변수에는 `NODE_ENV=production`, `USE_IN_MEMORY_DB=false`,
 
 최초 공급자 설정과 운영 방법은 `docs/deployment/prompt-driven-deployment.md`를 참고하세요.
 
+Cloudflare Pages 정적 자산은 운영에서 `https://pastlife-assets.pages.dev`, 개발 미리보기에서 `https://dev.pastlife-assets.pages.dev`를 사용합니다.
+
 배포 후 `GET /api/v1/health`가 `200`과
 `{"status":"ok","contentVersion":"3.0.0"}`을 반환해야 모바일 및 AdMob 설정을
 해당 HTTPS 도메인으로 전환할 수 있습니다.
