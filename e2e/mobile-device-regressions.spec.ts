@@ -1,5 +1,17 @@
 import { expect, test } from '@playwright/test';
 
+test('start artwork keeps responsive width on narrow phones and tablets', async ({ page }) => {
+  for (const width of [320, 768]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('/');
+    const button = page.getByRole('button', { name: '나의 전생 찾아보기' });
+    const box = await button.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(100);
+    expect(box?.width).toBeLessThanOrEqual(width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
+});
+
 test('fresh start responds immediately and final-moment back navigation keeps exports unlocked', async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 360, height: 800 });
@@ -11,6 +23,7 @@ test('fresh start responds immediately and final-moment back navigation keeps ex
   await start.click();
   await expect(page).toHaveURL(/\/guide$/, { timeout: 2_000 });
 
+  await expect(page.getByRole('button', { name: '질문 시작하기' })).toHaveCount(0);
   await page.getByRole('button', { name: '질문 시작하기' }).click();
   for (let stage = 1; stage <= 6; stage += 1) {
     await expect(page).toHaveURL(new RegExp(`/question/${stage}$`));

@@ -79,12 +79,12 @@ function QuestionSequence({ trigger, question, choices }: { trigger: string; que
       }
       Animated.sequence([
         Animated.parallel([
-          Animated.timing(questionOpacity, { toValue: 1, duration: 420, useNativeDriver: Platform.OS !== 'web' }),
-          Animated.timing(questionY, { toValue: 0, duration: 420, useNativeDriver: Platform.OS !== 'web' }),
+          Animated.timing(questionOpacity, { toValue: 1, duration: 260, useNativeDriver: Platform.OS !== 'web' }),
+          Animated.timing(questionY, { toValue: 0, duration: 260, useNativeDriver: Platform.OS !== 'web' }),
         ]),
-        Animated.stagger(100, choices.map((_, index) => Animated.parallel([
-          Animated.timing(choiceOpacity[index]!, { toValue: 1, duration: 340, useNativeDriver: Platform.OS !== 'web' }),
-          Animated.timing(choiceY[index]!, { toValue: 0, duration: 340, useNativeDriver: Platform.OS !== 'web' }),
+        Animated.stagger(45, choices.map((_, index) => Animated.parallel([
+          Animated.timing(choiceOpacity[index]!, { toValue: 1, duration: 180, useNativeDriver: Platform.OS !== 'web' }),
+          Animated.timing(choiceY[index]!, { toValue: 0, duration: 180, useNativeDriver: Platform.OS !== 'web' }),
         ]))),
       ]).start();
     });

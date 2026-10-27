@@ -38,7 +38,8 @@ export default function ResultScreen() {
   const [showShareCard, setShowShareCard] = useState(false);
   const [deepUnlocked, setDeepUnlocked] = useState(false);
   const [atStoryEnd, setAtStoryEnd] = useState(false);
-  const endHintOpacity = useRef(new Animated.Value(0.35)).current;
+  const [nearStoryTop, setNearStoryTop] = useState(true);
+  const endHintOpacity = useRef(new Animated.Value(0.65)).current;
   const shareCardRef = useRef<View>(null);
   const shareCardReadyRef = useRef(false);
   const shareCardReadyResolverRef = useRef<(() => void) | null>(null);
@@ -47,12 +48,12 @@ export default function ResultScreen() {
   useEffect(() => {
     if (!atStoryEnd) {
       endHintOpacity.stopAnimation();
-      endHintOpacity.setValue(0.35);
+      endHintOpacity.setValue(0.65);
       return;
     }
     const pulse = Animated.loop(Animated.sequence([
       Animated.timing(endHintOpacity, { toValue: 1, duration: 650, useNativeDriver: Platform.OS !== 'web' }),
-      Animated.timing(endHintOpacity, { toValue: 0.35, duration: 650, useNativeDriver: Platform.OS !== 'web' }),
+      Animated.timing(endHintOpacity, { toValue: 0.65, duration: 650, useNativeDriver: Platform.OS !== 'web' }),
     ]));
     pulse.start();
     return () => pulse.stop();
@@ -172,15 +173,14 @@ export default function ResultScreen() {
 
   if (error) return <Screen><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.replace('/')}>{t('홈으로 돌아가기')}</PrimaryButton></Screen>;
   if (!result) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>;
-  return <Screen fullBleed logoInContent scrollRef={pageScrollRef}>
+  return <Screen fullBleed logoInContent scrollRef={pageScrollRef} onScroll={(event) => setNearStoryTop(event.nativeEvent.contentOffset.y < 140)} floatingFooter={atStoryEnd && nearStoryTop ? <Animated.View accessibilityLiveRegion="polite" style={[styles.endHint, { opacity: endHintOpacity }]}><Text style={styles.endHintArrow}>⌄</Text><Text style={styles.endHintText}>{localeText(locale, { ko: '아래에서 마지막 순간을 확인해 보세요', en: 'Continue below to discover the final moment', th: 'เลื่อนลงเพื่อดูช่วงเวลาสุดท้าย', ja: '下に進んで最期の瞬間をご覧ください' })}</Text></Animated.View> : null}>
     <SceneTransition variant="result" trigger={result.resultId} style={styles.resultReveal}>
     <View style={styles.resultHeader}>
       <View style={styles.headerSpacer} />
       <Text style={styles.eyebrow}>{t('전생 기록')} No.{String(result.recordNo).padStart(2, '0')} {t('발견')}</Text>
     </View>
     <Text style={styles.headline}>{result.headline}</Text>
-    <ResultExperience image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} headline={result.headline} presentation={result.presentation} recordNo={result.recordNo} onChapterSelect={() => pageScrollRef.current?.scrollTo({ y: 0, animated: false })} onEndStateChange={setAtStoryEnd} />
-    {atStoryEnd ? <Animated.View accessibilityLiveRegion="polite" style={[styles.endHint, { opacity: endHintOpacity }]}><Text style={styles.endHintArrow}>⌄</Text><Text style={styles.endHintText}>{localeText(locale, { ko: '아래에서 마지막 순간을 확인해 보세요', en: 'Continue below to discover the final moment', th: 'เลื่อนลงเพื่อดูช่วงเวลาสุดท้าย', ja: '下に進んで最期の瞬間をご覧ください' })}</Text></Animated.View> : null}
+    <ResultExperience image={result.image} blocks={result.blocks} highlights={result.highlights} character={result.character} lifeSummary={result.lifeSummary} headline={result.headline} presentation={result.presentation} recordNo={result.recordNo} onChapterSelect={() => { setNearStoryTop(true); pageScrollRef.current?.scrollTo({ y: 0, animated: false }); }} onEndStateChange={setAtStoryEnd} />
     <View style={styles.actionRail}>
     {!result.finalMomentAvailable
       ? <><ParchmentButton label={t('마지막 순간 준비 중')} disabled onPress={() => undefined} /><Text style={styles.lockNotice}>{t('이 이야기의 마지막 순간은 준비 중입니다.')}</Text></>
@@ -207,4 +207,4 @@ export default function ResultScreen() {
   </Screen>;
 }
 
-const styles = StyleSheet.create({ resultReveal: { width: '100%' }, endHint: { alignItems: 'center', justifyContent: 'center', gap: 2, paddingTop: 4, paddingBottom: 14, paddingHorizontal: spacing.md }, endHintArrow: { color: colors.accent, fontSize: 34, lineHeight: 32, fontWeight: '700' }, endHintText: { color: colors.accent, fontSize: 14, lineHeight: 20, fontWeight: '700', textAlign: 'center' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'column', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { width: '100%', minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });
+const styles = StyleSheet.create({ resultReveal: { width: '100%' }, endHint: { alignItems: 'center', justifyContent: 'center', gap: 2, paddingVertical: 6, paddingHorizontal: spacing.md, borderRadius: 16, backgroundColor: 'rgba(7, 13, 27, 0.86)' }, endHintArrow: { color: colors.accent, fontSize: 34, lineHeight: 32, fontWeight: '700' }, endHintText: { color: colors.accent, fontSize: 14, lineHeight: 20, fontWeight: '700', textAlign: 'center' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'column', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { width: '100%', minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });

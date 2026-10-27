@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Animated, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { resolveLibraryImage } from '../results/libraryImages';
 import { loadPreferences } from '../session/store';
 import { colors, spacing } from '../theme/tokens';
@@ -17,6 +17,10 @@ export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover 
   const { width } = useWindowDimensions();
   const mobile = width < 768;
   const background = sourceFor(imageUri);
+  const [loadedBackgroundUri, setLoadedBackgroundUri] = useState<string | null>(null);
+  const [loadedCharacters, setLoadedCharacters] = useState<string[]>([]);
+  const characterLayers = layers?.filter((layer) => layer.role === 'CHARACTER') ?? [];
+  const artworkReady = loadedBackgroundUri === imageUri && characterLayers.every((layer) => !sourceFor(layer.uri) || loadedCharacters.includes(layer.uri));
   const backgroundOpacity = useRef(new Animated.Value(0)).current;
   const characterOpacity = useRef(new Animated.Value(0)).current;
   const characterY = useRef(new Animated.Value(20)).current;
@@ -31,6 +35,7 @@ export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover 
   const [typedLengths, setTypedLengths] = useState(() => lines.map(() => 0));
 
   useEffect(() => {
+    if (!artworkReady) return;
     let active = true;
     const timers: ReturnType<typeof setTimeout>[] = [];
     const wait = (duration: number) => new Promise<void>((resolve) => {
@@ -73,17 +78,18 @@ export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover 
       active = false;
       timers.forEach(clearTimeout);
     };
-  }, [backgroundOpacity, characterOpacity, characterY, lines]);
+  }, [artworkReady, backgroundOpacity, characterOpacity, characterY, lines]);
 
   if (!background) return null;
   return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}>
-    <Animated.Image accessibilityLabel={imageAlt} source={background} resizeMode="cover" style={[styles.background, { opacity: backgroundOpacity }]} />
-    {layers?.filter((layer) => layer.role === 'CHARACTER').map((layer) => {
+    <Animated.Image accessibilityLabel={imageAlt} source={background} resizeMode="cover" onLoad={() => setLoadedBackgroundUri(imageUri)} onError={() => setLoadedBackgroundUri(imageUri)} style={[styles.background, { opacity: backgroundOpacity }]} />
+    {characterLayers.map((layer) => {
       const source = sourceFor(layer.uri);
-      return source ? <Animated.Image key={layer.uri} accessibilityLabel={layer.alt} source={source} resizeMode="contain" style={[styles.character, mobile && styles.mobileCharacter, { opacity: characterOpacity, transform: [{ translateY: characterY }] }]} /> : null;
+      return source ? <Animated.Image key={layer.uri} accessibilityLabel={layer.alt} source={source} resizeMode="contain" onLoad={() => setLoadedCharacters((current) => current.includes(layer.uri) ? current : [...current, layer.uri])} onError={() => setLoadedCharacters((current) => current.includes(layer.uri) ? current : [...current, layer.uri])} style={[styles.character, mobile && styles.mobileCharacter, { opacity: characterOpacity, transform: [{ translateY: characterY }] }]} /> : null;
     })}
     <View pointerEvents="none" style={styles.shade} />
     <View pointerEvents="none" style={styles.lowerShade} />
+    {!artworkReady ? <ActivityIndicator color={colors.accent} size="large" style={styles.loading} /> : null}
     <View style={[styles.copy, mobile && styles.mobileCopy]}>
       <Text style={styles.eyebrow}>{lines[0]!.slice(0, typedLengths[0])}</Text>
       <View style={styles.nameRow}>
@@ -104,6 +110,7 @@ const styles = StyleSheet.create({
   mobileCharacter: { width: '72%', height: '82%', bottom: 50 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.22)', zIndex: 3 },
   lowerShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 310, backgroundColor: 'rgba(5, 10, 18, 0.56)', zIndex: 3 },
+  loading: { position: 'absolute', top: '50%', left: '50%', zIndex: 5 },
   copy: { position: 'absolute', zIndex: 4, left: spacing.lg, right: spacing.lg, bottom: 82, maxWidth: 560, gap: 5 },
   mobileCopy: { left: spacing.md, right: spacing.md, bottom: 82 },
   eyebrow: { color: '#e8c676', fontSize: 13, fontWeight: '700', textShadowColor: '#000', textShadowRadius: 5 },

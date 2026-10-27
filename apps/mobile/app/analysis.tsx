@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native';
 import { api } from '../src/api/client';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
@@ -9,6 +9,17 @@ import { colors } from '../src/theme/tokens';
 import { trackEvent } from '../src/analytics/track';
 import { showTransitionAd } from '../src/ads/admob';
 import { localeText, useLocale, useTranslate } from '../src/i18n/locale';
+import { remoteAssetSource } from '../src/results/assetUrl';
+
+function warmResultArtwork(resultId: string) {
+  void api.basic(resultId).then((result) => {
+    const urls = [result.image.uri, result.presentation?.hero.backgroundUri, result.presentation?.hero.characterUri, ...((result.image.layers ?? []).map((layer) => layer.uri))]
+      .filter((uri): uri is string => Boolean(uri))
+      .map((uri) => uri.startsWith('asset://') ? remoteAssetSource(uri)?.uri : /^https?:\/\//u.test(uri) ? uri : undefined)
+      .filter((uri): uri is string => Boolean(uri));
+    void Promise.allSettled([...new Set(urls)].map((uri) => Image.prefetch(uri)));
+  }).catch(() => undefined);
+}
 
 export default function AnalysisScreen() {
   const t = useTranslate();
@@ -34,6 +45,7 @@ export default function AnalysisScreen() {
         const completed = session.resultId ? { resultId: session.resultId } : await api.complete(session.sessionId);
         await saveResultId(completed.resultId);
         const status = await api.status(completed.resultId);
+        warmResultArtwork(completed.resultId);
         void trackEvent(status.imageStatus === 'FALLBACK' ? 'image_fallback_used' : 'image_ready', { sessionId: session.sessionId, resultId: completed.resultId, contentVersion: session.contentVersion, imageStatus: status.imageStatus === 'FALLBACK' ? 'FALLBACK' : 'READY' });
         // Make the ad transition explicit before opening the native ad. This
         // avoids the impression that the result flow was interrupted.
@@ -56,13 +68,13 @@ export default function AnalysisScreen() {
     localeText(locale, { ko: '당신의 선택을 살펴보고 있습니다', en: 'Reading the choices you made', th: 'กำลังพิจารณาตัวเลือกของคุณ', ja: 'あなたの選択を読み解いています' }),
     t('당신의 전생 기록을 복원하고 있습니다'),
     localeText(locale, {
-      ko: '당신의 전생 기록을 찾았습니다.\n잠시 후 짧은 광고가 재생되며,\n광고가 끝나면 결과를 보여드립니다.',
-      en: 'Your past-life record is ready.\nA short ad will play, then your result will appear.',
-      th: 'พบบันทึกอดีตชาติของคุณแล้ว\nโฆษณาสั้น ๆ จะเล่นก่อนแสดงผลลัพธ์',
-      ja: 'あなたの前世の記録が見つかりました。\n短い広告の後に結果を表示します。',
+      ko: '전생 기록을 찾았습니다.\n짧은 광고 뒤에 결과가 열립니다.',
+      en: 'Your record is ready.\nThe result opens after a short ad.',
+      th: 'พบบันทึกของคุณแล้ว\nผลลัพธ์จะเปิดหลังโฆษณาสั้น ๆ',
+      ja: '前世の記録が見つかりました。\n短い広告の後に結果が開きます。',
     }),
   ];
-  return <ImageBackground source={require('../assets/branding/cinematic-question-bg.png')} resizeMode="cover" style={styles.background}><View pointerEvents="none" style={styles.overlay} /><Screen scroll={false} transparent logoInContent><View style={styles.center}><Text style={styles.kicker}>{localeText(locale, { ko: '기억의 문을 여는 중', en: 'Opening the door to memory', th: 'กำลังเปิดประตูแห่งความทรงจำ', ja: '記憶の扉を開いています' })}</Text><Text style={styles.title}>{phases[phase]}</Text><ActivityIndicator color={colors.accent} size="large" />{error ? <View style={styles.errorBlock}><Text accessibilityRole="alert" style={styles.error}>{error}</Text><PrimaryButton onPress={() => { setError(null); setRetry((value) => value + 1); }}>{t('다시 시도')}</PrimaryButton></View> : null}</View></Screen></ImageBackground>;
+  return <ImageBackground source={require('../assets/branding/cinematic-question-bg.png')} resizeMode="cover" style={styles.background}><View pointerEvents="none" style={styles.overlay} /><Screen scroll={false} transparent logoInContent><View style={styles.center}><Text style={styles.kicker}>{localeText(locale, { ko: '기억의 문을 여는 중', en: 'Opening the door to memory', th: 'กำลังเปิดประตูแห่งความทรงจำ', ja: '記憶の扉を開いています' })}</Text><Text style={[styles.title, phase === 2 && styles.adNotice]}>{phases[phase]}</Text><ActivityIndicator color={colors.accent} size="large" />{error ? <View style={styles.errorBlock}><Text accessibilityRole="alert" style={styles.error}>{error}</Text><PrimaryButton onPress={() => { setError(null); setRetry((value) => value + 1); }}>{t('다시 시도')}</PrimaryButton></View> : null}</View></Screen></ImageBackground>;
 }
 
-const styles = StyleSheet.create({ background: { flex: 1 }, overlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(4, 8, 16, 0.58)' }, center: { flex: 1, width: '100%', maxWidth: 560, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', gap: 22, paddingHorizontal: 22, paddingBottom: 40 }, kicker: { color: colors.accent, fontSize: 14, fontWeight: '700', letterSpacing: 1.2, textAlign: 'center' }, title: { color: '#fff8e8', fontSize: 25, lineHeight: 36, fontWeight: '700', textAlign: 'center', textShadowColor: 'rgba(0,0,0,.8)', textShadowRadius: 8 }, errorBlock: { width: '100%', gap: 14 }, error: { color: '#ffd7a0', fontSize: 16, lineHeight: 24, textAlign: 'center' } });
+const styles = StyleSheet.create({ background: { flex: 1 }, overlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(4, 8, 16, 0.58)' }, center: { flex: 1, width: '100%', maxWidth: 560, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', gap: 22, paddingHorizontal: 22, paddingBottom: 40 }, kicker: { color: colors.accent, fontSize: 14, fontWeight: '700', letterSpacing: 1.2, textAlign: 'center' }, title: { color: '#fff8e8', fontSize: 25, lineHeight: 36, fontWeight: '700', textAlign: 'center', textShadowColor: 'rgba(0,0,0,.8)', textShadowRadius: 8 }, adNotice: { fontSize: 20, lineHeight: 30, fontWeight: '500' }, errorBlock: { width: '100%', gap: 14 }, error: { color: '#ffd7a0', fontSize: 16, lineHeight: 24, textAlign: 'center' } });

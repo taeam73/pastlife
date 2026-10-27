@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   background: { flex: 1, backgroundColor: colors.background },
   backgroundImage: { opacity: 1 },
   overlay: { flex: 1, backgroundColor: 'rgba(5, 10, 18, 0.20)' },
-  hero: { flex: 1, justifyContent: 'flex-start', gap: spacing.md, paddingTop: 148 },
+  hero: { flex: 1, justifyContent: 'flex-start', gap: spacing.md, paddingTop: 128 },
   titleLogo: { width: 260, height: 92, alignSelf: 'center', marginBottom: spacing.sm }, englishLogo: { color: '#f4e6bf', fontSize: 24, fontWeight: '900', textAlign: 'center', paddingTop: 28 },
   kicker: { color: 'rgba(244, 231, 193, 0.78)', fontSize: 11, letterSpacing: 3, marginBottom: spacing.sm },
   title: { color: colors.text, fontSize: 30, lineHeight: 40, fontWeight: '700' },
