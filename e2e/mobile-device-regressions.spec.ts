@@ -44,4 +44,19 @@ test('fresh start responds immediately and final-moment back navigation keeps ex
   await expect(page).toHaveURL(/\/result$/);
   await expect(page.getByRole('button', { name: '이미지 공유' })).toBeEnabled();
   await expect(page.getByRole('button', { name: '전생기록 다운로드' })).toBeEnabled();
+
+  await page.getByRole('button', { name: /마지막 순간 보러 가기/ }).click();
+  await page.getByRole('button', { name: '마지막 순간 마치기' }).click();
+  await expect(page).toHaveURL(/\/result\?showExports=1$/);
+  for (const width of [320, 768]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.reload();
+    const exportActions = page.getByTestId('result-export-actions').last();
+    await expect(exportActions).toBeInViewport();
+    await expect.poll(async () => {
+      const box = await exportActions.boundingBox();
+      return Boolean(box && box.y >= 0 && box.y + box.height <= 800);
+    }).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
 });

@@ -63,7 +63,7 @@ export default function FinalMomentScreen() {
       setFinishError(null);
       try {
         await api.markFinalMomentRead(moment.resultId);
-        router.replace('/result');
+        router.replace({ pathname: '/result', params: { showExports: '1' } });
       } catch {
         setFinishError(t('읽은 기록을 저장하지 못했습니다. 다시 눌러 주세요.'));
       } finally { setFinishBusy(false); }
