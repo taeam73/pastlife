@@ -11,6 +11,8 @@
     "lint": "corepack pnpm -r --if-present lint",
     "typecheck": "corepack pnpm -r --if-present typecheck",
     "test": "corepack pnpm -r --if-present test",
+    "assets:build": "node scripts/build-static-assets.mjs",
+    "assets:test": "node --test scripts/build-static-assets.test.mjs",
     "content:check": "corepack pnpm --filter @pastlife/content test && corepack pnpm --filter @pastlife/scoring test && corepack pnpm --filter @pastlife/content typecheck && node scripts/check-story-art.mjs && node scripts/check-story-diversity.mjs && node scripts/check-release-image-registry.mjs",
     "final-moment:check": "node scripts/tsx-cli.mjs scripts/check-final-moment-art.ts",
     "translation:source": "node scripts/tsx-cli.mjs scripts/export-story-translation-source.ts",

@@ -6,6 +6,9 @@ apps/mobile/.env.local
 .playwright-cli/
 output/
 tmp/
+dist/
+.deploy/*.env
+!.deploy/*.env.example
 .expo/
 .next/
 .next-e2e/

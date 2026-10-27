@@ -1,4 +1,5 @@
 import type { ImageSourcePropType } from 'react-native';
+import { remoteAssetSource } from './assetUrl';
 
 const libraryImages: Record<string, ImageSourcePropType> = {
   'asset://stories/v3/titanic-nora-bg.jpg': require('../../assets/stories/v3/titanic-nora-bg.jpg'),
@@ -437,5 +438,5 @@ const libraryImages: Record<string, ImageSourcePropType> = {
 };
 
 export function resolveLibraryImage(uri: string): ImageSourcePropType | undefined {
-  return libraryImages[uri];
+  return remoteAssetSource(uri) ?? libraryImages[uri];
 }

@@ -127,6 +127,12 @@ Railway 변수에는 `NODE_ENV=production`, `USE_IN_MEMORY_DB=false`,
 32자 이상의 `JWT_SECRET`, 별도의 `ADMIN_TOKEN`, 실제
 `ADMOB_REWARDED_UNIT_ID`를 등록합니다. 자격 증명과 토큰은 저장소에 커밋하지 않습니다.
 
+## 프롬프트 기반 dev/prod 배포
+
+저장소에는 `.codex/skills/pastlife-deploy/SKILL.md`와 `scripts/deploy.ps1`이 포함됩니다. 명시적인 개발 또는 운영 배포 요청은 로컬 검증, Cloudflare Pages 정적 디렉터리 생성, 해당 `dev` 또는 `prod` 브랜치 푸시, 공급자 상태 확인을 순서대로 수행합니다. 운영 배포는 이미 `origin/dev`에 존재하는 커밋만 허용합니다.
+
+최초 공급자 설정과 운영 방법은 `docs/deployment/prompt-driven-deployment.md`를 참고하세요.
+
 배포 후 `GET /api/v1/health`가 `200`과
 `{"status":"ok","contentVersion":"3.0.0"}`을 반환해야 모바일 및 AdMob 설정을
 해당 HTTPS 도메인으로 전환할 수 있습니다.

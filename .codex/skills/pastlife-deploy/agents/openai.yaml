@@ -1,0 +1,7 @@
+interface:
+  display_name: "전생록 배포"
+  short_description: "전생록 dev/prod 배포를 검사하고 실행합니다"
+  default_prompt: "Use $pastlife-deploy to deploy Pastlife to the development environment."
+
+policy:
+  allow_implicit_invocation: true
