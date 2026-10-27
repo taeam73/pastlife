@@ -23,6 +23,7 @@ export default function FinalMomentScreen() {
   const [error, setError] = useState<string | null>(null);
   const [finishBusy, setFinishBusy] = useState(false);
   const [finishError, setFinishError] = useState<string | null>(null);
+  const [parchmentSize, setParchmentSize] = useState({ width: 0, height: 0 });
   useEffect(() => { void (async () => {
     const session = await loadSession();
     const resultId = typeof params.resultId === 'string' ? params.resultId : session?.resultId;
@@ -44,8 +45,12 @@ export default function FinalMomentScreen() {
   return <Screen logoInContent>
     <View style={styles.head}><Text style={styles.kicker}>{moment.year} · {moment.place}</Text><Text style={styles.heading}>{localeText(locale, { ko: `${moment.protagonist}의\n마지막 순간`, en: `${moment.protagonist}’s\nfinal moment`, th: `ช่วงสุดท้าย\nของ${moment.protagonist}`, ja: `${moment.protagonist}の\n最期の瞬間` })}</Text></View>
     <Image source={illustration} accessibilityLabel={moment.illustration.alt} resizeMode="cover" style={[styles.illustration, { height: Math.round(Math.min(width - spacing.lg * 2, 712) * 2 / 3) }]} />
-    <View style={styles.parchment}>
-      <Image source={require('../assets/parchment/reader-texture.png')} resizeMode="stretch" style={styles.texture} accessible={false} />
+    <View testID="final-moment-parchment" style={styles.parchment} onLayout={({ nativeEvent: { layout } }) => {
+      const width = Math.ceil(layout.width);
+      const height = Math.ceil(layout.height);
+      setParchmentSize((previous) => previous.width === width && previous.height === height ? previous : { width, height });
+    }}>
+      {parchmentSize.width > 0 && parchmentSize.height > 0 ? <Image testID="final-moment-texture" source={require('../assets/parchment/reader-texture.png')} resizeMode="stretch" style={[styles.texture, parchmentSize]} accessible={false} /> : null}
       <Text style={styles.sectionTitle}>{t('마지막 순간')}</Text>
       {moment.scene.split('\n\n').map((paragraph, index) => <Text key={index} style={styles.scene}>{paragraph}</Text>)}
       <View style={styles.rule} />
@@ -72,7 +77,7 @@ const styles = StyleSheet.create({
   heading: { color: colors.text, fontSize: 26, lineHeight: 34, fontWeight: '700' },
   illustration: { width: '100%', borderRadius: 12, borderWidth: 1, borderColor: '#a4783d' },
   parchment: { position: 'relative', overflow: 'hidden', borderRadius: 15, borderWidth: 2, borderColor: '#a4783d', backgroundColor: '#dcc79a', padding: spacing.lg, gap: spacing.md },
-  texture: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
+  texture: { position: 'absolute', top: 0, left: 0 },
   sectionTitle: { color: '#4a321e', fontSize: 23, lineHeight: 31, fontWeight: '800', textAlign: 'center' },
   scene: { color: '#4a321e', fontSize: 16, lineHeight: 27 },
   rule: { height: 1, backgroundColor: '#8a6841', marginVertical: spacing.sm },
