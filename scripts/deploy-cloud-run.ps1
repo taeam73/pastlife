@@ -20,6 +20,7 @@ $jwtSecret = "pastlife-$Environment-jwt-secret"
 $adminSecret = "pastlife-$Environment-admin-token"
 $runtimeServiceAccountName = 'pastlife-api-runtime'
 $runtimeServiceAccount = "$runtimeServiceAccountName@$project.iam.gserviceaccount.com"
+$cloudBuildServiceAccount = '31514748957-compute@developer.gserviceaccount.com'
 $gcloud = 'C:\Users\jyahn\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd'
 
 if (-not (Test-Path -LiteralPath $gcloud)) {
@@ -86,6 +87,12 @@ if ($DryRun) {
     'projects', 'add-iam-policy-binding', $project,
     "--member=serviceAccount:$runtimeServiceAccount",
     '--role=roles/secretmanager.secretAccessor',
+    '--condition=None', '--quiet'
+  )
+  Invoke-Gcloud @(
+    'projects', 'add-iam-policy-binding', $project,
+    "--member=serviceAccount:$cloudBuildServiceAccount",
+    '--role=roles/cloudbuild.builds.builder',
     '--condition=None', '--quiet'
   )
 }
