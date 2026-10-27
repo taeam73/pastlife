@@ -29,5 +29,10 @@ test('long final moment keeps the parchment texture behind all text', async ({ p
     expect(textureBox).not.toBeNull();
     expect(textureBox!.height).toBeGreaterThanOrEqual(parchmentBox!.height - 1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    const finishButton = page.getByRole('button', { name: '마지막 순간 마치기' });
+    await finishButton.scrollIntoViewIfNeeded();
+    await expect(finishButton).toBeVisible();
+    const finishBox = await finishButton.boundingBox();
+    expect(finishBox!.y + finishBox!.height).toBeLessThanOrEqual(900);
   }
 });
