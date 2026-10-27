@@ -3,7 +3,7 @@ export const english: Record<string, string> = {
   '나는 언제, 어디에서,\n어떤 삶을 살았을까?': 'When and where did I live,\nand who was I?',
   '시간 너머의 뜻밖의 이야기에서, 지금의 마음과 닮은 장면을 찾아보세요.': 'Find a scene that feels like you in an unexpected story beyond time.',
   '나의 전생 찾아보기': 'Discover my past life',
-  '새 전생 기록을 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.': 'Could not start a new story. Please try again shortly.',
+  '새 전생 기록을 시작하지 못했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.': 'Could not start a new story. Check your network connection and try again.',
   '기억의 조각': 'Fragments of memory', '기억은 생각보다\n먼저 반응합니다.': 'Memory responds\nbefore you think.',
   '너무 오래 고민하지 말고,\n가장 먼저 마음이 가는 것을 선택해 주세요.': 'Do not think too long. Choose what draws you first.',
   '질문 시작하기': 'Start the questions', '질문 준비 중': 'Preparing questions',

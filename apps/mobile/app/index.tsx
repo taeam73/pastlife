@@ -56,7 +56,7 @@ export default function StartScreen() {
   const start = async () => {
     setStartError(null);
     try { await startNewSession(); router.push('/guide'); }
-    catch { setStartError(t('새 전생 기록을 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.')); }
+    catch { setStartError(t('새 전생 기록을 시작하지 못했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.')); }
   };
 
   return <ImageBackground source={background} resizeMode="cover" style={[styles.background, { width, height }]} imageStyle={styles.backgroundImage}>
