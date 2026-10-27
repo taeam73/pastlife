@@ -8,6 +8,7 @@ function Assert-Contains([string]$Output, [string]$Expected) {
 $devOutput = (& powershell -NoProfile -ExecutionPolicy Bypass -File $scriptPath -Environment dev -DryRun -SkipChecks 2>&1 | Out-String)
 Assert-Contains $devOutput 'HEAD:refs/heads/dev'
 Assert-Contains $devOutput 'configure-dev-api.example'
+Assert-Contains $devOutput 'deploy-cloud-run.ps1 -Environment dev'
 
 $prodFailure = (& powershell -NoProfile -ExecutionPolicy Bypass -File $scriptPath -Environment prod -DryRun -SkipChecks 2>&1 | Out-String)
 if ($LASTEXITCODE -eq 0) { throw 'Production dry-run unexpectedly succeeded without confirmation.' }
@@ -16,6 +17,7 @@ Assert-Contains $prodFailure 'Production deployment requires -ConfirmProduction.
 $prodOutput = (& powershell -NoProfile -ExecutionPolicy Bypass -File $scriptPath -Environment prod -DryRun -SkipChecks -ConfirmProduction 2>&1 | Out-String)
 Assert-Contains $prodOutput 'HEAD:refs/heads/prod'
 Assert-Contains $prodOutput 'configure-prod-api.example'
+Assert-Contains $prodOutput 'deploy-cloud-run.ps1 -Environment prod'
 
 $temporaryRepository = Join-Path ([System.IO.Path]::GetTempPath()) ("pastlife-deploy-test-" + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $temporaryRepository | Out-Null

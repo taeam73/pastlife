@@ -31,9 +31,9 @@ Run the repository-owned deployment entrypoint; do not recreate provider command
    ```
 
 5. Never pass `-SkipChecks` during an actual deployment. It is permitted only with `-DryRun` while testing the deployment machinery.
-6. If Railway or Cloudflare credentials, Git integrations, deployment branches, or health URLs are missing, stop at that boundary and request only the specific account action needed. Never ask the user to paste passwords, database URLs, or API tokens into chat.
+6. If Google Cloud, Neon, or Cloudflare credentials, deployment branches, secrets, or health URLs are missing, stop at that boundary and request only the specific account action needed. Never ask the user to paste passwords, database URLs, or API tokens into chat.
 7. Do not force-push `dev` or `prod`, bypass a failed test, or deploy a production commit not already present on `origin/dev`.
 
 ## Report
 
-State the target, short commit SHA, checks run, branch pushed, Railway health result, Cloudflare health result, and any step that was not executed. A successful Git push alone is not a successful deployment; both configured health checks must pass.
+State the target, short commit SHA, checks run, branch pushed, Cloud Run health result, Cloudflare health result, and any step that was not executed. A successful Git push alone is not a successful deployment; both configured health checks must pass.

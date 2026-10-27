@@ -70,14 +70,25 @@ try {
   $prefix = "PASTLIFE_$($Environment.ToUpperInvariant())"
   $apiHealth = [Environment]::GetEnvironmentVariable("${prefix}_API_HEALTH_URL")
   $assetHealth = [Environment]::GetEnvironmentVariable("${prefix}_ASSET_HEALTH_URL")
+  if (-not $apiHealth) { $apiHealth = [Environment]::GetEnvironmentVariable("${prefix}_API_HEALTH_URL", 'User') }
+  if (-not $assetHealth) { $assetHealth = [Environment]::GetEnvironmentVariable("${prefix}_ASSET_HEALTH_URL", 'User') }
   if (-not $apiHealth) { $apiHealth = "https://configure-${Environment}-api.example/api/v1/health" }
   if (-not $assetHealth) { $assetHealth = "https://configure-${Environment}-assets.example/health.json" }
-  if (-not $DryRun -and ($apiHealth -match 'configure-' -or $assetHealth -match 'configure-')) {
-    throw "Set ${prefix}_API_HEALTH_URL and ${prefix}_ASSET_HEALTH_URL before deployment."
+  if (-not $DryRun -and $assetHealth -match 'configure-') {
+    throw "Set ${prefix}_ASSET_HEALTH_URL before deployment."
   }
 
   Invoke-Native git @('push', 'origin', "HEAD:refs/heads/$Environment")
-  Wait-ForUrl 'Railway API' $apiHealth
+  Invoke-Native powershell @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'scripts/deploy-cloud-run.ps1', '-Environment', $Environment)
+  if (-not $DryRun -and $apiHealth -match 'configure-') {
+    $gcloud = 'C:\Users\jyahn\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd'
+    $serviceUrl = (& $gcloud run services describe "pastlife-api-$Environment" --project=pastlife-gimmyoungsoft-2026 --region=asia-northeast3 --format='value(status.url)').Trim()
+    if ($LASTEXITCODE -ne 0 -or -not $serviceUrl) { throw 'Unable to resolve the Cloud Run service URL.' }
+    $apiHealth = "$serviceUrl/api/v1/health"
+    [Environment]::SetEnvironmentVariable("${prefix}_API_HEALTH_URL", $apiHealth, 'User')
+    Write-Host "Saved ${prefix}_API_HEALTH_URL for future deployments."
+  }
+  Wait-ForUrl 'Cloud Run API' $apiHealth
   Wait-ForUrl 'Cloudflare assets' $assetHealth
   Write-Host "Pastlife $Environment deployment completed for commit $(& git rev-parse --short HEAD)."
 } finally {
