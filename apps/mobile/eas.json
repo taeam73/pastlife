@@ -4,11 +4,17 @@
     "preview": {
       "distribution": "internal",
       "android": { "buildType": "apk" },
-      "env": { "EXPO_PUBLIC_ADMOB_TEST_ADS": "true" }
+      "env": {
+        "EXPO_PUBLIC_ADMOB_TEST_ADS": "true",
+        "EXPO_PUBLIC_ASSET_BASE_URL": "https://dev.pastlife-assets.pages.dev"
+      }
     },
     "production": {
       "autoIncrement": true,
-      "android": { "buildType": "app-bundle" }
+      "android": { "buildType": "app-bundle" },
+      "env": {
+        "EXPO_PUBLIC_ASSET_BASE_URL": "https://pastlife-assets.pages.dev"
+      }
     }
   }
 }
