@@ -24,6 +24,7 @@ Prisma migration용 Cloud Run Job, Cloud Run 서비스 배포, API와 정적 자
 - Cloud Run 리전: `asia-northeast3` (서울)
 - Artifact Registry: `pastlife`
 - API 서비스: `pastlife-api-dev`, `pastlife-api-prod`
+- dev API: `https://pastlife-api-dev-36h6kgjkxq-du.a.run.app`
 - migration Job: `pastlife-migrate-dev`, `pastlife-migrate-prod`
 - Neon 프로젝트: `pastlife`, 싱가포르
 - Neon dev 브랜치: `staging`
