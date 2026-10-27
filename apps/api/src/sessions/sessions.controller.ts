@@ -18,6 +18,13 @@ export class SessionsController {
     return this.sessions.setViewMode(id, parsed.viewMode);
   }
 
+  @Patch(':id/locale')
+  @HttpCode(204)
+  async locale(@Param('id') id: string, @Body() body: unknown) {
+    const locale = typeof body === 'object' && body !== null && 'locale' in body ? body.locale : undefined;
+    await this.sessions.setLocale(id, String(locale ?? ''));
+  }
+
   @Get(':id/questions/:stage')
   question(@Param('id') id: string, @Param('stage', ParseIntPipe) stage: number) {
     return this.sessions.question(id, stage);

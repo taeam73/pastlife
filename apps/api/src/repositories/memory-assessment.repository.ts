@@ -19,6 +19,10 @@ export class MemoryAssessmentRepository implements AssessmentRepository {
     return session ? structuredClone(session) : undefined;
   }
 
+  async setLocale(sessionId: string, locale: string) {
+    this.requireSession(sessionId).locale = locale;
+  }
+
   async saveAnswer(sessionId: string, answer: AnswerInput) {
     const session = this.requireSession(sessionId);
     const withoutStage = session.answers.filter(({ stage }) => stage !== answer.stage);

@@ -83,6 +83,14 @@ export class SessionsService {
     return { sessionId, viewMode: await this.repository.setViewMode(sessionId, viewMode) };
   }
 
+  async setLocale(sessionId: string, locale: string) {
+    const parsed = parseContentLocale(locale);
+    if (!parsed) throw new BadRequestException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported locale' });
+    if (!isContentLocaleAvailable(parsed, process.env.NODE_ENV === 'production')) throw new BadRequestException({ code: 'TRANSLATION_NOT_READY', message: 'This language is unavailable in production' });
+    await this.requireSession(sessionId);
+    await this.repository.setLocale(sessionId, parsed);
+  }
+
   async complete(sessionId: string) {
     const session = await this.requireSession(sessionId);
     const existing = await this.repository.getResultBySession(sessionId);

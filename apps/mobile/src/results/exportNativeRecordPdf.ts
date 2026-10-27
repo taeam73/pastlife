@@ -1,5 +1,5 @@
 import { Asset } from 'expo-asset';
-import { File } from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { resolveLibraryImage } from './libraryImages';
@@ -14,35 +14,51 @@ function paragraphs(value: string) {
   return value.split(/\n\s*\n/u).map((paragraph) => `<p>${escapeHtml(paragraph).replace(/\n/gu, '<br>')}</p>`).join('');
 }
 
-async function assetDataUri(module: number | string, mimeType: string) {
+function validatedImageDataUri(base64: string) {
+  const mimeType = base64.startsWith('/9j/') ? 'image/jpeg'
+    : base64.startsWith('iVBORw0KGgo') ? 'image/png'
+    : base64.startsWith('UklGR') ? 'image/webp'
+    : null;
+  if (!mimeType) throw new Error('Downloaded PDF artwork is not a supported image');
+  return `data:${mimeType};base64,${base64}`;
+}
+
+async function assetDataUri(module: number | string) {
   const asset = await Asset.fromModule(module).downloadAsync();
   const localUri = asset.localUri ?? asset.uri;
   if (!localUri) throw new Error('PDF illustration is unavailable on this device');
-  return `data:${mimeType};base64,${await new File(localUri).base64()}`;
+  return validatedImageDataUri(await new File(localUri).base64());
 }
 
 async function storyImage(uri: string) {
   const mapped = resolveLibraryImage(uri);
   const selected = Array.isArray(mapped) ? mapped[0] : mapped;
-  if (typeof selected === 'number') return assetDataUri(selected, /\.webp(?:$|\?)/u.test(uri) ? 'image/webp' : 'image/jpeg');
+  if (typeof selected === 'number') return assetDataUri(selected);
   if (selected && typeof selected === 'object' && 'uri' in selected && selected.uri) {
-    const asset = await Asset.fromURI(selected.uri).downloadAsync();
-    const localUri = asset.localUri ?? asset.uri;
-    return `data:${/\.webp(?:$|\?)/u.test(uri) ? 'image/webp' : 'image/jpeg'};base64,${await new File(localUri).base64()}`;
+    let lastError: unknown;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const file = await File.downloadFileAsync(selected.uri, Paths.cache, { idempotent: true });
+        if (!file.exists || file.size === 0) throw new Error('Downloaded PDF illustration is empty');
+        return validatedImageDataUri(await file.base64());
+      } catch (error) {
+        lastError = error;
+        if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 600 * (attempt + 1)));
+      }
+    }
+    throw lastError;
   }
   throw new Error(`PDF illustration is not mapped: ${uri}`);
 }
 
-export async function shareNativeRecordPdf(record: PdfRecord): Promise<{ textOnly: boolean }> {
+export async function shareNativeRecordPdf(record: PdfRecord): Promise<void> {
   const locale = record.locale ?? 'ko';
   if (record.chapters.length !== 4) throw new Error('Complete story chapters are required');
   if (!await Sharing.isAvailableAsync()) throw new Error('File sharing is unavailable on this device');
-  const artwork = await Promise.allSettled([
-    assetDataUri(require('../../assets/branding/title-logo-plain.png') as number, 'image/png'),
+  const [logo, background, character, finalArt] = await Promise.all([
+    assetDataUri(require('../../assets/branding/title-logo-plain.png') as number),
     storyImage(record.backgroundUri), record.characterUri ? storyImage(record.characterUri) : Promise.resolve(null), storyImage(record.finalMoment.illustrationUri),
   ]);
-  const [logo, background, character, finalArt] = artwork.map((item) => item.status === 'fulfilled' ? item.value : null);
-  const artworkComplete = artwork.every((item) => item.status === 'fulfilled');
   const cover = record.cover;
   const chapterHtml = record.chapters.map((chapter, index) => {
     const number = String(index + 1).padStart(2, '0');
@@ -51,7 +67,7 @@ export async function shareNativeRecordPdf(record: PdfRecord): Promise<{ textOnl
       : paragraphs(chapter.body);
     return `<section class="chapter"><h2>${number} ${escapeHtml(chapter.title)}</h2>${content}</section>`;
   }).join('');
-  const htmlFor = (withArtwork: boolean) => `<!DOCTYPE html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+  const html = `<!DOCTYPE html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
     @page { size: A4; margin: 16mm; }
     * { box-sizing: border-box; }
     body { margin: 0; color: #30261c; font-family: "Noto Sans Thai", "Apple SD Gothic Neo", "Noto Sans CJK KR", sans-serif; font-size: 11pt; line-height: 1.75; overflow-wrap: anywhere; }
@@ -71,21 +87,12 @@ export async function shareNativeRecordPdf(record: PdfRecord): Promise<{ textOnl
     .finalart { width: 100%; max-height: 100mm; object-fit: cover; margin: 3mm 0 7mm; }
     .afterword { page-break-before: always; }
   </style></head><body>
-    <div class="cover">${withArtwork && background ? `<img class="bg" src="${background}">` : ''}${withArtwork && character ? `<img class="character" src="${character}">` : ''}<div class="shade"></div>${locale !== 'ko' || !withArtwork || !logo ? `<div class="logo" style="color:#f3d896;font-weight:bold">${locale === 'en' ? 'PAST LIFE ARCHIVE' : translate(locale, '전생록')}</div>` : `<img class="logo" src="${logo}">`}<div class="covertext"><div>${localeText(locale, { ko: `나의 ${record.recordNo}번째 전생 기록`, en: `My past life record No. ${record.recordNo}`, th: `บันทึกชาติก่อนของฉัน ลำดับ ${record.recordNo}`, ja: `私の第${record.recordNo}の前世記録` })}</div><h1>${escapeHtml(record.name)}</h1><p>${escapeHtml(`${cover.birthYear}~${cover.deathYear} · ${cover.era} · ${cover.place}`)}</p><p>${escapeHtml(`${cover.role} · ${cover.lifeLine}`)}</p></div></div>
+    <div class="cover"><img class="bg" src="${background}">${character ? `<img class="character" src="${character}">` : ''}<div class="shade"></div>${locale !== 'ko' || !logo ? `<div class="logo" style="color:#f3d896;font-weight:bold">${locale === 'en' ? 'PAST LIFE ARCHIVE' : translate(locale, '전생록')}</div>` : `<img class="logo" src="${logo}">`}<div class="covertext"><div>${localeText(locale, { ko: `나의 ${record.recordNo}번째 전생 기록`, en: `My past life record No. ${record.recordNo}`, th: `บันทึกชาติก่อนของฉัน ลำดับ ${record.recordNo}`, ja: `私の第${record.recordNo}の前世記録` })}</div><h1>${escapeHtml(record.name)}</h1><p>${escapeHtml(`${cover.birthYear}~${cover.deathYear} · ${cover.era} · ${cover.place}`)}</p><p>${escapeHtml(`${cover.role} · ${cover.lifeLine}`)}</p></div></div>
     ${chapterHtml}
-    <section class="chapter"><h2>${localeText(locale, { ko: '마지막 순간', en: 'The final moment', th: 'ช่วงสุดท้าย', ja: '最期の瞬間' })}</h2>${withArtwork && finalArt ? `<img class="finalart" src="${finalArt}">` : ''}<p>${escapeHtml(`${record.finalMoment.year} · ${record.finalMoment.place}`)}</p>${paragraphs(record.finalMoment.scene)}</section>
+    <section class="chapter"><h2>${localeText(locale, { ko: '마지막 순간', en: 'The final moment', th: 'ช่วงสุดท้าย', ja: '最期の瞬間' })}</h2><img class="finalart" src="${finalArt}"><p>${escapeHtml(`${record.finalMoment.year} · ${record.finalMoment.place}`)}</p>${paragraphs(record.finalMoment.scene)}</section>
     <section class="afterword"><h2>${localeText(locale, { ko: '전생록의 기록', en: 'From the archive', th: 'จากคลังบันทึก', ja: '前世録より' })}</h2>${paragraphs(record.finalMoment.afterword)}</section>
   </body></html>`;
-  let textOnly = !artworkComplete;
-  let uri: string;
-  try {
-    ({ uri } = await Print.printToFileAsync({ html: htmlFor(!textOnly) }));
-  } catch (error) {
-    if (textOnly) throw error;
-    textOnly = true;
-    ({ uri } = await Print.printToFileAsync({ html: htmlFor(false) }));
-  }
+  const { uri } = await Print.printToFileAsync({ html });
   if (!uri || !new File(uri).exists || new File(uri).size === 0) throw new Error('PDF file was not created');
   await Sharing.shareAsync(uri, { mimeType: 'application/pdf', UTI: '.pdf', dialogTitle: `${localeText(locale, { ko: '전생기록', en: 'Past life record', th: 'บันทึกชาติก่อน', ja: '前世の記録' })} · ${record.name}` });
-  return { textOnly };
 }

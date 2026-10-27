@@ -24,9 +24,9 @@ export default function ArchiveScreen() {
   useEffect(() => { void (async () => {
     const auth = await loadAuth();
     if (!auth) { setError(t('저장한 전생 기록을 보려면 로그인이 필요합니다.')); return; }
-    try { setItems((await api.archiveList(auth.accessToken)).items); }
+    try { setItems((await api.archiveList(auth.accessToken, locale)).items); }
     catch { setError(t('아카이브를 불러오지 못했습니다. 다시 시도해 주세요.')); }
-  })(); }, [t]);
+  })(); }, [locale, t]);
   if (error) return <Screen><SubpageHeader title={t('나의 전생')} /><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.push('/login')}>{t('로그인하기')}</PrimaryButton><AppNav /></Screen>;
   if (!items) return <Screen scroll={false}><SubpageHeader title={t('나의 전생')} /><ActivityIndicator color={colors.accent} /></Screen>;
   return <Screen><SubpageHeader title={t('나의 전생')} />{items.length === 0 ? <Text style={styles.empty}>{t('저장된 전생 기록이 없습니다.')}</Text> : items.map((item) => <Pressable accessibilityRole="button" accessibilityLabel={`${t('전생 기록')} ${item.recordNo} ${item.headline}`} key={item.resultId} onPress={() => router.push({ pathname: '/archive/[resultId]' as never, params: { resultId: item.resultId } })} style={({ pressed }) => [styles.card, pressed && styles.pressed]}><Text style={styles.record}>No.{String(item.recordNo).padStart(2, '0')}</Text><Text style={styles.headline}>{item.headline}</Text><Text style={styles.date}>{new Date(item.createdAt).toLocaleDateString(contentLocales[locale].languageTag)}</Text><Text style={styles.open}>{t('기록 열기')}</Text></Pressable>)}<AppNav /></Screen>;

@@ -39,8 +39,10 @@ export class AuthService {
     return { accessToken: this.sign(user.id), user: { id: user.id, email: user.email, name: user.name } };
   }
   archive(resultId: string, token: string) { const userId = this.verify(token); return this.repository.getResult(resultId).then(async (result) => { if (!result || (process.env.NODE_ENV === 'production' && result.core.contentVersion !== RELEASE_CONTENT_VERSION)) throw new BadRequestException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' }); if (this.dbEnabled) await this.prisma.$executeRawUnsafe('INSERT INTO archive_entries (id, "userId", "resultId", "createdAt") VALUES ($1,$2,$3,NOW()) ON CONFLICT ("userId", "resultId") DO NOTHING', randomUUID(), userId, resultId); else { const set = this.archives.get(userId) ?? new Set<string>(); set.add(resultId); this.archives.set(userId, set); } return { resultId, saved: true }; }); }
-  async list(token: string) {
+  async list(token: string, requestedLocale?: string) {
     const userId = this.verify(token);
+    const displayLocale = requestedLocale ? parseContentLocale(requestedLocale) ?? undefined : undefined;
+    if (requestedLocale && !displayLocale) throw new BadRequestException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported locale' });
     const ids = this.dbEnabled
       ? (await this.prisma.$queryRawUnsafe<Array<{ resultId: string; createdAt: Date }>>('SELECT "resultId" as "resultId", "createdAt" as "createdAt" FROM archive_entries WHERE "userId" = $1 ORDER BY "createdAt" DESC', userId)).map((row) => ({ resultId: row.resultId, createdAt: row.createdAt }))
       : [...(this.archives.get(userId) ?? [])].map((resultId) => ({ resultId, createdAt: new Date() }));
@@ -50,7 +52,7 @@ export class AuthService {
       if (!result || (process.env.NODE_ENV === 'production' && result.core.contentVersion !== RELEASE_CONTENT_VERSION)) continue;
       const story = result.core.storyId ? findStoryCard(result.core.storyId) : undefined;
       const session = await this.repository.getSession(result.sessionId);
-      const locale = parseContentLocale(session?.locale ?? 'ko');
+      const locale = displayLocale ?? parseContentLocale(session?.locale ?? 'ko');
       if (!locale || (locale === 'en' && !isEnglishStoryReady(result.core.storyId ?? '')) || (locale === 'th' && !isThaiStoryReady(result.core.storyId ?? '')) || (locale === 'ja' && !isJapaneseStoryReady(result.core.storyId ?? ''))) continue;
       const era = eras.find((item) => item.id === result.core.eraId);
       const location = historicalLocations.find((item) => item.id === result.core.locationId);
@@ -62,8 +64,10 @@ export class AuthService {
     }
     return { items };
   }
-  async detail(resultId: string, token: string) {
+  async detail(resultId: string, token: string, requestedLocale?: string) {
     const userId = this.verify(token);
+    const displayLocale = requestedLocale ? parseContentLocale(requestedLocale) ?? undefined : undefined;
+    if (requestedLocale && !displayLocale) throw new BadRequestException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported locale' });
     const owned = this.dbEnabled
       ? (await this.prisma.archiveEntry.count({ where: { userId, resultId } })) > 0
       : this.archives.get(userId)?.has(resultId) === true;
@@ -71,7 +75,7 @@ export class AuthService {
     const result = await this.repository.getResult(resultId);
     if (!result) throw new BadRequestException({ code: 'RESULT_NOT_FOUND', message: 'Result not found' });
     const session = await this.repository.getSession(result.sessionId);
-    return { ...(await this.results.basic(resultId)), viewMode: session?.viewMode ?? 'TEXT' };
+    return { ...(await this.results.basic(resultId, displayLocale)), viewMode: session?.viewMode ?? 'TEXT' };
   }
   async deleteArchive(resultId: string, token: string) {
     const userId = this.verify(token);

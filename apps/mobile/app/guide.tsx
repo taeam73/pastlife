@@ -20,6 +20,7 @@ export default function GuideScreen() {
   const [error, setError] = useState<string | null>(null);
   const background = useState(() => backgrounds[Math.floor(Math.random() * backgrounds.length)])[0];
   const contentOpacity = useRef(new Animated.Value(0)).current;
+  const sceneShade = useRef(new Animated.Value(1)).current;
   const contentY = useRef(new Animated.Value(18)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
 
@@ -28,17 +29,19 @@ export default function GuideScreen() {
     void loadPreferences().then((preferences) => {
       if (!active) return;
       if (preferences.reduceMotion) {
+        sceneShade.setValue(0);
         contentOpacity.setValue(1);
         contentY.setValue(0);
         return;
       }
       Animated.parallel([
+        Animated.timing(sceneShade, { toValue: 0, duration: 560, useNativeDriver: Platform.OS !== 'web' }),
         Animated.timing(contentOpacity, { toValue: 1, duration: 520, useNativeDriver: Platform.OS !== 'web' }),
         Animated.timing(contentY, { toValue: 0, duration: 520, useNativeDriver: Platform.OS !== 'web' }),
       ]).start();
     });
     return () => { active = false; };
-  }, [contentOpacity, contentY]);
+  }, [contentOpacity, contentY, sceneShade]);
 
   useEffect(() => {
     let active = true;
@@ -67,6 +70,7 @@ export default function GuideScreen() {
 
   return <ImageBackground source={background} resizeMode="cover" style={[styles.background, { width, height }]} imageStyle={styles.backgroundImage}>
     <View style={styles.overlay}>
+      <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.sceneShade, { opacity: sceneShade }]} />
       <Screen scroll={false} transparent>
         <Animated.View style={[styles.content, { opacity: contentOpacity, transform: [{ translateY: contentY }] }]}>
           <Text style={styles.eyebrow}>{t('기억의 조각')}</Text>
@@ -84,6 +88,7 @@ const styles = StyleSheet.create({
   background: { flex: 1, backgroundColor: colors.background },
   backgroundImage: { opacity: 1 },
   overlay: { flex: 1, backgroundColor: 'rgba(5, 10, 18, 0.30)' },
+  sceneShade: { backgroundColor: colors.background },
   content: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: spacing.md, gap: spacing.md, transform: [{ translateY: -58 }] },
   eyebrow: { color: colors.accent, fontSize: 15, fontWeight: '700', textAlign: 'center', marginBottom: spacing.xs },
   title: { color: colors.text, fontSize: 30, lineHeight: 40, fontWeight: '700', textAlign: 'center' },

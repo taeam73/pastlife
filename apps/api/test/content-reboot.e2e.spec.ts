@@ -37,6 +37,18 @@ describe('story-first content 3.0 vertical flow', () => {
     }
   });
 
+  it('changes the language of an existing session without changing question identity', async () => {
+    const created = await request(app.getHttpServer()).post('/api/v1/sessions').send({ locale: 'ko' }).expect(201);
+    const sessionId = created.body.sessionId as string;
+    const korean = await request(app.getHttpServer()).get(`/api/v1/sessions/${sessionId}/questions/1`).expect(200);
+    await request(app.getHttpServer()).patch(`/api/v1/sessions/${sessionId}/locale`).send({ locale: 'ja' }).expect(204);
+    const japanese = await request(app.getHttpServer()).get(`/api/v1/sessions/${sessionId}/questions/1`).expect(200);
+    expect(japanese.body.id).toBe(korean.body.id);
+    expect(japanese.body.text).not.toBe(korean.body.text);
+    expect(japanese.body.choices.map((choice: { id: string }) => choice.id)).toEqual(korean.body.choices.map((choice: { id: string }) => choice.id));
+    await request(app.getHttpServer()).patch(`/api/v1/sessions/${sessionId}/locale`).send({ locale: 'invalid' }).expect(400);
+  });
+
   it('shows new questions and one coherent story throughout the result', async () => {
     const summary = await request(app.getHttpServer()).get('/api/v1/admin/content/summary').expect(200);
     expect(summary.body).toMatchObject({ contentVersion: '3.0.0', questions: 24, choices: 144 });
@@ -69,6 +81,11 @@ describe('story-first content 3.0 vertical flow', () => {
     expect(basic.body.lifeSummary.ageAtDeath).toBe(manuscript.identity.ageAtDeath);
     expect(basic.body.presentation.chapters).toHaveLength(4);
     expect(basic.body.presentation.chapters.map((chapter: { title: string }) => chapter.title)).toEqual(['전생의 나', '에피소드', '삶의 기록', '전생의 기억']);
+    await request(app.getHttpServer()).patch(`/api/v1/sessions/${sessionId}/locale`).send({ locale: 'ja' }).expect(204);
+    const japaneseResult = await request(app.getHttpServer()).get(`/api/v1/results/${resultId}/basic`).expect(200);
+    expect(japaneseResult.body.resultId).toBe(resultId);
+    expect(japaneseResult.body.presentation.chapters[0].title).not.toBe('전생의 나');
+    await request(app.getHttpServer()).patch(`/api/v1/sessions/${sessionId}/locale`).send({ locale: 'ko' }).expect(204);
     expect(basic.body.presentation.chapters[1].body.length).toBeGreaterThan(550);
     expect(basic.body.presentation.chapters.every((chapter: { body: string }) => chapter.body.trim().length > 0)).toBe(true);
     expect(basic.body.blocks).toHaveLength(6);

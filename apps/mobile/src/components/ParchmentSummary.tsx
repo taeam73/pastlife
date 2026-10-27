@@ -28,7 +28,7 @@ export function ParchmentSummary({ title, body, keyword, pages, fullPage = false
     {source.title ? <Text style={styles.pageTitle}>{source.title}</Text> : null}
     {pages?.length ? <ProfileBody key={`${source.title}-${text}`} body={text} measuring={measuring} />
       : measuring ? <View>{text.split('\n').filter(Boolean).map((line, index) => <Text key={index} style={styles.body}>{line}</Text>)}</View>
-        : <ParchmentLineReveal items={text.split('\n').filter(Boolean).map((line, index) => <Text key={index} style={styles.body}>{line}</Text>)} />}
+        : <ParchmentLineReveal key={text} items={text.split('\n').filter(Boolean).map((line, index) => <Text key={index} style={styles.body}>{line}</Text>)} />}
   </>, [pages]);
   const visibleIndex = Math.min(pageIndex, Math.max(0, pageCount - 1));
   return <View style={[styles.panel, fullPage ? styles.fullPagePanel : styles.compactPanel]}>

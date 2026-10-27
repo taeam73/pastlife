@@ -61,7 +61,7 @@ try {
 
     const mobile = start(
       ['node_modules/expo/bin/cli', 'start', '--web', '--port', mobilePort],
-      { CI: '1', EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_API_URL: apiUrl, EXPO_PUBLIC_USE_MOCK_GOOGLE: 'true', NODE_OPTIONS: shim },
+      { CI: '1', EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_API_URL: apiUrl, EXPO_PUBLIC_ASSET_BASE_URL: process.env.EXPO_PUBLIC_ASSET_BASE_URL ?? 'https://dev.pastlife-assets.pages.dev', EXPO_PUBLIC_USE_MOCK_GOOGLE: 'true', NODE_OPTIONS: shim },
       resolve(root, 'apps/mobile'),
     );
     await waitFor(`http://127.0.0.1:${mobilePort}`, mobile, 180_000);

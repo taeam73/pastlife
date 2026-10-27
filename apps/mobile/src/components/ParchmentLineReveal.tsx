@@ -1,33 +1,66 @@
-import { type ReactNode, useEffect, useRef } from 'react';
-import { Animated, Platform, type StyleProp, type ViewStyle } from 'react-native';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, View, useWindowDimensions, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { playWritingEffect } from '../audio/effects';
 import { loadPreferences } from '../session/store';
 
+const LINE_HEIGHT = 25;
+const MS_PER_LINE = 350;
+
 export function ParchmentLineReveal({ items, style }: { items: ReactNode[]; style?: StyleProp<ViewStyle> }) {
-  const opacities = useRef(items.map(() => new Animated.Value(0))).current;
-  const offsets = useRef(items.map(() => new Animated.Value(5))).current;
+  const { width } = useWindowDimensions();
+  const [heights, setHeights] = useState<number[]>([]);
+  const progress = useRef(new Animated.Value(0)).current;
+  const units = heights.map((height) => Math.max(1, Math.ceil(height / LINE_HEIGHT)));
+  const totalUnits = units.reduce((sum, count) => sum + count, 0);
+  const ready = items.length > 0 && items.every((_, index) => (heights[index] ?? 0) > 0);
 
   useEffect(() => {
+    progress.stopAnimation();
+    progress.setValue(0);
+    setHeights([]);
+  }, [width, items.length, progress]);
+
+  useEffect(() => {
+    if (!ready) return;
     let active = true;
-    opacities.forEach((value) => value.setValue(0));
-    offsets.forEach((value) => value.setValue(5));
+    let animation: Animated.CompositeAnimation | undefined;
     void loadPreferences().then((preferences) => {
       if (!active) return;
       if (preferences.reduceMotion) {
-        opacities.forEach((value) => value.setValue(1));
-        offsets.forEach((value) => value.setValue(0));
+        progress.setValue(totalUnits);
         return;
       }
-      Animated.stagger(170, items.map((_, index) => Animated.parallel([
-        Animated.timing(opacities[index]!, { toValue: 1, duration: 400, useNativeDriver: Platform.OS !== 'web' }),
-        Animated.timing(offsets[index]!, { toValue: 0, duration: 400, useNativeDriver: Platform.OS !== 'web' }),
-      ]))).start();
-      if (preferences.effectsEnabled && items.length > 0) void playWritingEffect();
+      animation = Animated.timing(progress, { toValue: totalUnits, duration: totalUnits * MS_PER_LINE, useNativeDriver: false });
+      animation.start();
+      if (preferences.effectsEnabled) void playWritingEffect();
     });
     return () => {
       active = false;
+      animation?.stop();
     };
-  }, [offsets, opacities]);
+  }, [progress, ready, totalUnits]);
 
-  return <Animated.View style={style}>{items.map((item, index) => <Animated.View key={index} style={{ opacity: opacities[index]!, transform: [{ translateY: offsets[index]! }] }}>{item}</Animated.View>)}</Animated.View>;
+  const revealAll = () => {
+    if (!ready) return;
+    progress.stopAnimation();
+    progress.setValue(totalUnits);
+  };
+  const onItemLayout = (index: number, event: LayoutChangeEvent) => {
+    const height = Math.ceil(event.nativeEvent.layout.height);
+    if (height <= 0) return;
+    setHeights((prior) => prior[index] === height ? prior : Object.assign([...prior], { [index]: height }));
+  };
+
+  let startUnit = 0;
+  return <Pressable testID="parchment-line-reveal" accessible={false} onPress={revealAll} style={style}>
+    {items.map((item, index) => {
+      const height = heights[index];
+      const itemUnits = units[index] ?? 1;
+      const clipHeight = progress.interpolate({ inputRange: [startUnit, startUnit + itemUnits], outputRange: [0, height ?? 0], extrapolate: 'clamp' });
+      startUnit += itemUnits;
+      return <View key={index} onLayout={(event) => onItemLayout(index, event)} style={{ width: '100%', height: height ?? undefined }}>
+        <Animated.View style={height ? { height: clipHeight, overflow: 'hidden' } : { opacity: 0 }}>{item}</Animated.View>
+      </View>;
+    })}
+  </Pressable>;
 }

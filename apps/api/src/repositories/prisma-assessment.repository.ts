@@ -32,6 +32,10 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
     return row ? this.toSession(row) : undefined;
   }
 
+  async setLocale(sessionId: string, locale: string) {
+    await this.prisma.session.update({ where: { id: sessionId }, data: { locale } });
+  }
+
   async saveAnswer(sessionId: string, answer: AnswerInput) {
     return this.prisma.$transaction(async (tx) => {
       await tx.sessionAnswer.upsert({

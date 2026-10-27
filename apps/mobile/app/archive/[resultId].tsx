@@ -10,12 +10,13 @@ import { Screen } from '../../src/components/Screen';
 import { loadAuth } from '../../src/session/store';
 import { colors, spacing } from '../../src/theme/tokens';
 import { AppNav } from '../../src/components/AppNav';
-import { useTranslate } from '../../src/i18n/locale';
+import { useLocale, useTranslate } from '../../src/i18n/locale';
 
 type ArchiveDetail = z.infer<typeof ArchiveDetailResponseSchema>;
 
 export default function ArchiveDetailScreen() {
   const t = useTranslate();
+  const { locale } = useLocale();
   const router = useRouter();
   const { resultId } = useLocalSearchParams<{ resultId: string }>();
   const [detail, setDetail] = useState<ArchiveDetail | null>(null);
@@ -27,11 +28,11 @@ export default function ArchiveDetailScreen() {
     const auth = await loadAuth();
     if (!auth || !resultId) { setError(t('이 기록을 열려면 로그인이 필요합니다.')); return; }
     try {
-      const loaded = await api.archiveDetail(resultId, auth.accessToken);
+      const loaded = await api.archiveDetail(resultId, auth.accessToken, locale);
       if (loaded.presentation?.version !== 3 || !loaded.presentation.hero.cover) throw new Error('3.0 presentation required');
       setDetail(loaded);
     } catch { setError(t('저장된 기록을 열 수 없습니다. 아카이브에서 다시 선택해 주세요.')); }
-  })(); }, [resultId, t]);
+  })(); }, [resultId, locale, t]);
   const deleteArchive = async () => {
     const auth = await loadAuth();
     if (!auth || !resultId) { setDeleteError(t('기록을 삭제하려면 로그인이 필요합니다.')); return; }

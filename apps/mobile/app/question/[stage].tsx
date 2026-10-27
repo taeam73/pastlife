@@ -14,6 +14,19 @@ import { playChoiceEffect } from '../../src/audio/effects';
 import { useLocale, useTranslate } from '../../src/i18n/locale';
 
 type Question = z.infer<typeof QuestionResponseSchema>;
+const questionCache = new Map<string, Promise<Question>>();
+function cachedQuestion(sessionId: string, locale: string, stage: number): Promise<Question> {
+  const key = `${sessionId}:${locale}:${stage}`;
+  const existing = questionCache.get(key);
+  if (existing) return existing;
+  const pending = api.question(sessionId, stage).catch((error: unknown) => {
+    questionCache.delete(key);
+    throw error;
+  });
+  questionCache.set(key, pending);
+  if (questionCache.size > 12) questionCache.delete(questionCache.keys().next().value!);
+  return pending;
+}
 
 export default function QuestionScreen() {
   const { locale } = useLocale();
@@ -25,14 +38,17 @@ export default function QuestionScreen() {
   const [busy, setBusy] = useState(false);
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const sessionRef = useRef<Awaited<ReturnType<typeof loadSession>>>(null);
 
   useEffect(() => {
     let active = true;
     void loadSession().then(async (session) => {
       if (!session) { router.replace('/'); return; }
+      sessionRef.current = session;
       try {
-        const value = await api.question(session.sessionId, stage);
+        const value = await cachedQuestion(session.sessionId, locale, stage);
         if (active) setQuestion(value);
+        if (stage < 6) void cachedQuestion(session.sessionId, locale, stage + 1).catch(() => undefined);
         void trackEvent('question_shown', { sessionId: session.sessionId, questionId: value.id, stage: value.stage, contentVersion: session.contentVersion, locale });
       } catch { if (active) setError(t('질문을 불러오지 못했어요. 다시 시도해 주세요.')); }
     });
@@ -44,7 +60,7 @@ export default function QuestionScreen() {
     void playChoiceEffect();
     setSelectedChoiceId(choiceId); setBusy(true); setError(null);
     try {
-      const session = await loadSession();
+      const session = sessionRef.current;
       if (!session) { router.replace('/'); return; }
       await api.answer(session.sessionId, stage, question.id, choiceId);
       void trackEvent('answer_selected', { sessionId: session.sessionId, questionId: question.id, choiceId, stage, contentVersion: session.contentVersion, locale });
@@ -79,12 +95,12 @@ function QuestionSequence({ trigger, question, choices }: { trigger: string; que
       }
       Animated.sequence([
         Animated.parallel([
-          Animated.timing(questionOpacity, { toValue: 1, duration: 260, useNativeDriver: Platform.OS !== 'web' }),
-          Animated.timing(questionY, { toValue: 0, duration: 260, useNativeDriver: Platform.OS !== 'web' }),
+          Animated.timing(questionOpacity, { toValue: 1, duration: 180, useNativeDriver: Platform.OS !== 'web' }),
+          Animated.timing(questionY, { toValue: 0, duration: 180, useNativeDriver: Platform.OS !== 'web' }),
         ]),
-        Animated.stagger(45, choices.map((_, index) => Animated.parallel([
-          Animated.timing(choiceOpacity[index]!, { toValue: 1, duration: 180, useNativeDriver: Platform.OS !== 'web' }),
-          Animated.timing(choiceY[index]!, { toValue: 0, duration: 180, useNativeDriver: Platform.OS !== 'web' }),
+        Animated.stagger(22, choices.map((_, index) => Animated.parallel([
+          Animated.timing(choiceOpacity[index]!, { toValue: 1, duration: 140, useNativeDriver: Platform.OS !== 'web' }),
+          Animated.timing(choiceY[index]!, { toValue: 0, duration: 140, useNativeDriver: Platform.OS !== 'web' }),
         ]))),
       ]).start();
     });
@@ -97,4 +113,4 @@ function QuestionSequence({ trigger, question, choices }: { trigger: string; que
   </View>;
 }
 
-const styles = StyleSheet.create({ background: { flex: 1 }, backgroundImage: { width: '100%', height: '100%' }, overlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(12, 8, 5, 0.54)' }, questionScreen: { paddingTop: 6, gap: 10 }, progressRow: { flexDirection: 'row', alignItems: 'center', gap: 10 }, stage: { width: 34, color: '#f1dfb2', fontSize: 13, opacity: 0.7, textAlign: 'right' }, question: { color: '#fff8e8', fontFamily: 'MaruBuriBold', fontSize: 21, lineHeight: 30, fontWeight: '700', marginTop: 12, marginBottom: 8, paddingHorizontal: 2, textAlign: 'center', textShadowColor: 'rgba(35, 16, 4, 0.7)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 5 }, choices: { width: '98%', maxWidth: 580, alignSelf: 'center', gap: 9 }, error: { color: '#ffd7a0', fontSize: 15 } });
+const styles = StyleSheet.create({ background: { flex: 1 }, backgroundImage: { width: '100%', height: '100%' }, overlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(12, 8, 5, 0.54)' }, questionScreen: { paddingTop: 6, gap: 10 }, progressRow: { flexDirection: 'row', alignItems: 'center', gap: 10 }, stage: { width: 34, color: '#f1dfb2', fontSize: 13, opacity: 0.7, textAlign: 'right' }, question: { color: '#fff8e8', fontFamily: 'MaruBuriBold', fontSize: 18, lineHeight: 27, fontWeight: '700', marginTop: 12, marginBottom: 8, paddingHorizontal: 2, textAlign: 'center', textShadowColor: 'rgba(35, 16, 4, 0.7)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 5 }, choices: { width: '98%', maxWidth: 580, alignSelf: 'center', gap: 9 }, error: { color: '#ffd7a0', fontSize: 15 } });

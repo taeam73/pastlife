@@ -50,6 +50,7 @@ export const ASSESSMENT_REPOSITORY = Symbol('ASSESSMENT_REPOSITORY');
 export interface AssessmentRepository {
   createSession(input: Omit<StoredSession, 'answers' | 'questions' | 'unlocks'>): Promise<StoredSession>;
   getSession(id: string): Promise<StoredSession | undefined>;
+  setLocale(sessionId: string, locale: string): Promise<void>;
   saveAnswer(sessionId: string, answer: AnswerInput): Promise<StoredSession>;
   lockQuestion(sessionId: string, stage: number, questionId: string): Promise<string>;
   getQuestionHistory(subjectKey: string, excludeSessionId: string, sessionLimit: number): Promise<string[]>;

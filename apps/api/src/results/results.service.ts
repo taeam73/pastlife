@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { eras, findEnglishStoryTranslation, findJapaneseStoryTranslation, findThaiStoryTranslation, findStoryFinalMoment, historicalLocations, isEnglishStoryReady, isJapaneseStoryReady, isThaiStoryReady, occupations, parseContentLocale } from '@pastlife/content';
+import { eras, findEnglishStoryTranslation, findJapaneseStoryTranslation, findThaiStoryTranslation, findStoryFinalMoment, historicalLocations, isEnglishStoryReady, isJapaneseStoryReady, isThaiStoryReady, occupations, parseContentLocale, type ContentLocale } from '@pastlife/content';
 import type { ResultCore } from '@pastlife/scoring';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
 import { IMAGE_PROVIDER, type ImageProvider } from '../providers/image.provider.js';
@@ -37,7 +37,7 @@ export class ResultsService {
     return { resultId, sessionId: result.sessionId, status: session?.status ?? 'FAILED', viewMode: session?.viewMode ?? 'TEXT', imageStatus: image.status === 'FALLBACK' ? 'FALLBACK' : 'READY' };
   }
 
-  async basic(resultId: string) {
+  async basic(resultId: string, requestedLocale?: ContentLocale) {
     const result = await this.requireResult(resultId);
     const session = await this.repository.getSession(result.sessionId);
     if (!session || (!session.contentVersion?.startsWith('3.') && !session.unlocks.includes('BASIC'))) {
@@ -48,7 +48,7 @@ export class ResultsService {
     }
     if (result.core.storyId) {
       const image = await this.presentImage(await this.ensureImage(resultId), result.core);
-      const locale = parseContentLocale(session.locale);
+      const locale = requestedLocale ?? parseContentLocale(session.locale);
       if (!locale) throw new NotFoundException({ code: 'UNSUPPORTED_LOCALE', message: 'Unsupported session locale' });
       try { return buildContentStoryResult(resultId, result.core, image, Boolean(result.finalMomentReadAt), locale); }
       catch (error) {
