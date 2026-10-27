@@ -42,6 +42,8 @@ Railway URL이나 비밀값을 저장소에 커밋하지 않는다.
 
 Cloudflare가 제공하는 운영 `*.pages.dev` 주소와 dev 브랜치 별칭 주소를 기록한다. `dist/static/health.json`과 `dist/static/manifest.json`이 열리는지 확인한다.
 
+현재 운영 정적 자산 주소는 `https://pastlife-assets.pages.dev`이며 상태 확인 주소는 `https://pastlife-assets.pages.dev/health.json`이다.
+
 ### 로컬의 비밀이 아닌 상태 URL
 
 `.deploy/dev.env.example`과 `.deploy/prod.env.example`을 참고해 Windows 사용자 환경변수를 설정한다. 값은 각각 실제 Railway와 Cloudflare 주소이다.
