@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   heading: { color: colors.text, fontSize: 26, lineHeight: 34, fontWeight: '700' },
   illustration: { width: '100%', borderRadius: 12, borderWidth: 1, borderColor: '#a4783d' },
   parchment: { position: 'relative', overflow: 'hidden', borderRadius: 15, borderWidth: 2, borderColor: '#a4783d', backgroundColor: '#dcc79a', padding: spacing.lg, gap: spacing.md },
-  texture: { ...StyleSheet.absoluteFill, width: '100%', height: '100%' },
+  texture: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
   sectionTitle: { color: '#4a321e', fontSize: 23, lineHeight: 31, fontWeight: '800', textAlign: 'center' },
   scene: { color: '#4a321e', fontSize: 16, lineHeight: 27 },
   rule: { height: 1, backgroundColor: '#8a6841', marginVertical: spacing.sm },

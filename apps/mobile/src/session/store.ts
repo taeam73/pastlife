@@ -14,6 +14,7 @@ const PREFERENCES_KEY = 'pastlife.preferences.v1';
 export type AuthState = { accessToken: string; user: { id: string; email: string; name: string } };
 export type Preferences = { bgmEnabled: boolean; effectsEnabled: boolean; reduceMotion: boolean };
 export const DEFAULT_PREFERENCES: Preferences = { bgmEnabled: true, effectsEnabled: true, reduceMotion: false };
+const preferenceListeners = new Set<(preferences: Preferences) => void>();
 
 export async function saveSession(state: SessionState) {
   if (state.contentVersion !== RELEASE_CONTENT_VERSION) throw new Error('Unsupported content version');
@@ -59,6 +60,12 @@ export async function loadPreferences(): Promise<Preferences> {
 
 export async function savePreferences(preferences: Preferences) {
   await AsyncStorage.setItem(PREFERENCES_KEY, JSON.stringify(preferences));
+  preferenceListeners.forEach((listener) => listener(preferences));
+}
+
+export function subscribePreferences(listener: (preferences: Preferences) => void) {
+  preferenceListeners.add(listener);
+  return () => { preferenceListeners.delete(listener); };
 }
 async function setAuthValue(value: string) {
   if (Platform.OS === 'web') await AsyncStorage.setItem(AUTH_KEY, value);

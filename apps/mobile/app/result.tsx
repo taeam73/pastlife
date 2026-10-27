@@ -42,6 +42,12 @@ export default function ResultScreen() {
   const shareCardReadyResolverRef = useRef<(() => void) | null>(null);
   const pageScrollRef = useRef<ScrollView>(null);
 
+  useEffect(() => {
+    if (!result) return;
+    const frame = requestAnimationFrame(() => pageScrollRef.current?.scrollTo({ y: 0, animated: false }));
+    return () => cancelAnimationFrame(frame);
+  }, [result]);
+
   useEffect(() => { void (async () => {
     const session = await loadSession();
     if (!session?.resultId) { setError(t('결과 기록을 찾을 수 없습니다.')); return; }
@@ -176,4 +182,4 @@ export default function ResultScreen() {
   </Screen>;
 }
 
-const styles = StyleSheet.create({ resultReveal: { width: '100%' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.lg, gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'row', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { flex: 1, minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });
+const styles = StyleSheet.create({ resultReveal: { width: '100%' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'column', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { width: '100%', minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });

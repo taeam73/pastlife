@@ -77,5 +77,5 @@ const styles = StyleSheet.create({
   description: { color: '#fff8e8', fontSize: 14, lineHeight: 21 },
   parchment: { position: 'absolute', left: spacing.md, right: spacing.md, bottom: spacing.md, zIndex: 6, alignItems: 'center' },
   readingParchment: { top: 70, bottom: 70, left: 66, right: 66 },
-  mobileReadingParchment: { top: 70, bottom: 68, left: 46, right: 46 },
+  mobileReadingParchment: { top: 64, bottom: 62, left: 28, right: 28 },
 });

@@ -31,13 +31,13 @@ function unitId(kind: 'interstitial' | 'rewarded') {
   return value;
 }
 
-export async function showTransitionAd(): Promise<void> {
+export async function showTransitionAd({ timeoutMs = 6000 }: { timeoutMs?: number } = {}): Promise<void> {
   await initializeAds();
   const ad = InterstitialAd.createForAdRequest(unitId('interstitial'), { requestNonPersonalizedAdsOnly: true });
   await new Promise<void>((resolve, reject) => {
     let settled = false;
     const subscriptions: Array<() => void> = [];
-    const timeout = setTimeout(() => finish(new Error('Interstitial load timed out')), 25_000);
+    const timeout = setTimeout(() => finish(new Error('Interstitial load timed out')), timeoutMs);
     const finish = (error?: Error) => {
       if (settled) return;
       settled = true;

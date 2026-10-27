@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   panel: { width: '100%', maxWidth: 760, minHeight: 122, padding: spacing.md, borderRadius: 14, borderWidth: 1, borderColor: '#b89456', backgroundColor: '#dcc79a', gap: 5 },
   compactPanel: { height: 185 },
   fullPagePanel: { height: '100%', maxWidth: 980, paddingTop: 52, paddingBottom: 8, paddingHorizontal: 22, borderWidth: 2, overflow: 'hidden', gap: 6 },
-  texture: { ...StyleSheet.absoluteFill, width: '100%', height: '100%' },
+  texture: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
   fullPageBody: { flex: 1, width: '100%', minHeight: 0 },
   title: { color: '#4a321e', fontSize: 17, lineHeight: 23, fontWeight: '800', textAlign: 'center' },
   fullPageTitle: { fontSize: 22, lineHeight: 28 },

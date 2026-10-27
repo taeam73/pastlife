@@ -1,19 +1,28 @@
-import { type PropsWithChildren, useEffect } from 'react';
-import { useAudioPlayer } from 'expo-audio';
+import { type PropsWithChildren, useEffect, useState } from 'react';
+import { setAudioModeAsync, useAudioPlayer } from 'expo-audio';
 import { usePathname } from 'expo-router';
 import { Platform } from 'react-native';
-import { loadPreferences } from '../session/store';
-
-const experienceRoute = /^\/(?:$|guide$|question\/\d+$|analysis$|result$|final-moment$|deep$)/u;
+import { DEFAULT_PREFERENCES, loadPreferences, subscribePreferences } from '../session/store';
+import { AUDIO_LEVELS, experienceRoute } from './config';
+import { hydrateEffectPreferences, prepareEffects } from './effects';
 
 export function AudioExperience({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const music = useAudioPlayer(require('../../assets/audio/empty-city.ogg'));
+  const [preferences, setPreferences] = useState(DEFAULT_PREFERENCES);
+
+  useEffect(() => {
+    void setAudioModeAsync({ playsInSilentMode: true, shouldPlayInBackground: false, interruptionMode: 'mixWithOthers' });
+    void prepareEffects();
+    void hydrateEffectPreferences();
+    void loadPreferences().then(setPreferences);
+    return subscribePreferences(setPreferences);
+  }, []);
 
   useEffect(() => {
     let active = true;
     let removeInteractionListeners: (() => void) | undefined;
-    void loadPreferences().then((preferences) => {
+    void Promise.resolve().then(() => {
       if (!active) return;
       const shouldPlay = preferences.bgmEnabled && experienceRoute.test(pathname);
       if (!shouldPlay) {
@@ -21,7 +30,7 @@ export function AudioExperience({ children }: PropsWithChildren) {
         return;
       }
       music.loop = true;
-      music.volume = 0.065;
+      music.volume = AUDIO_LEVELS.music;
       const play = () => { try { music.play(); } catch { /* Audio is optional. */ } };
       if (Platform.OS === 'web' && typeof document !== 'undefined' && !navigator.userActivation?.hasBeenActive) {
         const beginAfterInteraction = () => {
@@ -40,7 +49,7 @@ export function AudioExperience({ children }: PropsWithChildren) {
       active = false;
       removeInteractionListeners?.();
     };
-  }, [music, pathname]);
+  }, [music, pathname, preferences]);
 
   return children;
 }
