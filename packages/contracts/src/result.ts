@@ -34,7 +34,7 @@ const ResultPresentationHeroV2Schema = z.object({
   characterUri: z.string().nullable(),
 });
 const ResultPresentationChaptersSchema = z.tuple([
-    z.object({ id: z.literal('MEETING'), title: z.string().min(1), body: z.string().min(1), profilePages: z.array(z.object({ title: z.string().min(1), body: z.string().min(1) })).min(2).max(4).optional(), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
+    z.object({ id: z.literal('MEETING'), title: z.string().min(1), body: z.string().min(1), introPage: z.object({ title: z.string().min(1), summary: z.string().min(1), hook: z.string().min(1), invitation: z.string().min(1) }).optional(), profilePages: z.array(z.object({ title: z.string().min(1), body: z.string().min(1) })).min(2).max(4).optional(), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
     z.object({ id: z.literal('TRIAL'), title: z.string().min(1), body: z.string().min(1), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
     z.object({ id: z.literal('CHOICE'), title: z.string().min(1), body: z.string().min(1), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),
     z.object({ id: z.literal('NOW'), title: z.string().min(1), body: z.string().min(1), crop: z.object({ focusX: z.number().min(0).max(1), focusY: z.number().min(0).max(1), zoom: z.number().min(1) }) }),

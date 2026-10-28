@@ -5,7 +5,7 @@ import { ResultCover, type Cover } from './ResultCover';
 import { ResultHero } from './ResultHero';
 import { localeText, useLocale, useTranslate } from '../i18n/locale';
 
-type Chapter = { id: string; title: string; summary: string; detail: string; profilePages?: { title: string; body: string }[] | undefined };
+type Chapter = { id: string; title: string; summary: string; detail: string; introPage?: { title: string; summary: string; hook: string; invitation: string } | undefined; profilePages?: { title: string; body: string }[] | undefined };
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 type Props = { chapters: Chapter[]; imageUri: string; imageAlt: string; compositeUri?: string | undefined; layers?: Layer[]; title: string; characterLabel?: string | undefined; roleLabel?: string | undefined; placeLabel?: string | undefined; characterDescription?: string | undefined; introductionSummary: string; selectedIndex: number; selectedPageIndex: number; onSelect: (index: number, pageIndex?: number) => void; onEndStateChange?: ((atEnd: boolean) => void) | undefined; cover?: Cover | undefined; recordNo?: number | undefined };
 export type CinematicChapterPagerHandle = { scrollToIndex: (index: number) => void };
@@ -26,7 +26,7 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
   const pagesInChapter = (index: number) => {
     const item = chapters[index];
     if (!item) return 1;
-    return measuredCounts[countKey(index)] ?? (index === 0 && hasCover ? Math.max(1, item.profilePages?.length ?? 1) : 1);
+    return measuredCounts[countKey(index)] ?? (index === 0 && hasCover ? Math.max(1, (item.profilePages?.length ?? 0) + (item.introPage ? 1 : 0)) : 1);
   };
   const reportPageCount = useCallback((index: number, count: number) => {
     const key = countKey(index);
@@ -64,7 +64,7 @@ export const CinematicChapterPager = forwardRef<CinematicChapterPagerHandle, Pro
     <View {...(hasCover ? pager.panHandlers : {})} style={styles.page}>
       {hasCover && selectedIndex === 0 && cover && recordNo
         ? <ResultCover imageUri={imageUri} imageAlt={imageAlt} layers={layers} name={characterLabel ?? title} recordNo={recordNo} cover={cover} />
-        : chapter ? <ResultHero key={chapter.id} imageUri={imageUri} imageAlt={imageAlt} compositeUri={compositeUri} layers={layers} title={title} characterLabel={characterLabel} roleLabel={roleLabel} placeLabel={placeLabel} characterDescription={characterDescription} introductionSummary={introductionSummary} chapterTitle={chapter.title} chapterId={chapter.id} chapterDetail={chapter.detail} profilePages={chapter.profilePages} index={chapterIndex} standaloneProfile={hasCover} pageIndex={visiblePageIndex} onPageChange={(index) => onSelect(selectedIndex, index)} onPageCountChange={(count) => reportPageCount(chapterIndex, count)} /> : null}
+        : chapter ? <ResultHero key={chapter.id} imageUri={imageUri} imageAlt={imageAlt} compositeUri={compositeUri} layers={layers} title={title} characterLabel={characterLabel} roleLabel={roleLabel} placeLabel={placeLabel} characterDescription={characterDescription} introductionSummary={introductionSummary} chapterTitle={chapter.title} chapterId={chapter.id} chapterDetail={chapter.detail} introPage={chapter.introPage} profilePages={chapter.profilePages} index={chapterIndex} standaloneProfile={hasCover} pageIndex={visiblePageIndex} onPageChange={(index) => onSelect(selectedIndex, index)} onPageCountChange={(count) => reportPageCount(chapterIndex, count)} /> : null}
       {hasCover ? <>
         <Pressable accessibilityRole="button" accessibilityLabel={t('이전 페이지')} disabled={atBeginning} onPress={goPrevious} style={[styles.outerArrow, styles.previousArrow, atBeginning && styles.disabledArrow]}><Image source={chevron} resizeMode="contain" style={styles.flippedChevron} accessible={false} /></Pressable>
         <Pressable accessibilityRole="button" accessibilityLabel={t('다음 페이지')} disabled={atEnd || !currentCountReady} onPress={goNext} style={[styles.outerArrow, styles.nextArrow, (atEnd || !currentCountReady) && styles.disabledArrow]}><Image source={chevron} resizeMode="contain" style={styles.chevron} accessible={false} /></Pressable>

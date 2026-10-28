@@ -55,7 +55,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     : image.layers ?? [{ uri: sceneUri, role: 'BACKGROUND', alt: image.alt }];
   const legacyHighlights = highlights?.filter((item) => ['KEY_RELATIONSHIP', 'DECISIVE_EVENT', 'LIFE_LEGACY', 'PRESENT_ECHO'].includes(item.id)).slice(0, 4);
   const chapters = presentation
-    ? presentation.chapters.map((chapter) => ({ id: chapter.id, title: chapter.title, summary: '', detail: chapter.body, profilePages: chapter.id === 'MEETING' ? chapter.profilePages : undefined, crop: chapter.crop }))
+    ? presentation.chapters.map((chapter) => ({ id: chapter.id, title: chapter.title, summary: '', detail: chapter.body, introPage: chapter.id === 'MEETING' ? chapter.introPage : undefined, profilePages: chapter.id === 'MEETING' ? chapter.profilePages : undefined, crop: chapter.crop }))
     : legacyHighlights?.length ? presentChapters(legacyHighlights, sceneUri).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: chapter.body, crop: chapter.crop }))
       : blocks.map((block, index) => ({ id: block.id, title: block.title, summary: '', detail: block.body, crop: { focusX: (index + 1) / (blocks.length + 1), focusY: 0.5, zoom: 1.55 } }));
   const selectChapter = (index: number, nextPageIndex = 0) => {

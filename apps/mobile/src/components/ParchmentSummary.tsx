@@ -6,6 +6,7 @@ import { MeasuredPageFlow, type PageSource } from './MeasuredPageFlow';
 import { localeText, useLocale } from '../i18n/locale';
 
 type ProfilePage = { title: string; body: string };
+type IntroPage = { title: string; summary: string; hook: string; invitation: string };
 
 function ProfileBody({ body, measuring = false }: { body: string; measuring?: boolean }) {
   const items = body.split('\n').filter(Boolean).map((line, index) => {
@@ -19,14 +20,18 @@ function ProfileBody({ body, measuring = false }: { body: string; measuring?: bo
   return measuring ? <View style={styles.profileList}>{items.map((item, index) => <View key={index}>{item}</View>)}</View> : <ParchmentLineReveal items={items} style={styles.profileList} />;
 }
 
-export function ParchmentSummary({ title, body, keyword, pages, fullPage = false, pageIndex = 0, onPageChange, onPageCountChange }: { title: string; body: string; keyword?: string | undefined; pages?: ProfilePage[] | undefined; fullPage?: boolean; pageIndex?: number; onPageChange?: ((index: number) => void) | undefined; onPageCountChange?: ((count: number) => void) | undefined }) {
+export function ParchmentSummary({ title, body, keyword, introPage, pages, fullPage = false, pageIndex = 0, onPageChange, onPageCountChange }: { title: string; body: string; keyword?: string | undefined; introPage?: IntroPage | undefined; pages?: ProfilePage[] | undefined; fullPage?: boolean; pageIndex?: number; onPageChange?: ((index: number) => void) | undefined; onPageCountChange?: ((count: number) => void) | undefined }) {
   const { locale } = useLocale();
-  const [pageCount, setPageCount] = useState(pages?.length ?? 1);
-  const sources = useMemo<PageSource[]>(() => pages?.length ? pages : [{ body }], [body, pages]);
+  const [pageCount, setPageCount] = useState((pages?.length ?? 0) + (introPage ? 1 : 0) || 1);
+  const sources = useMemo<PageSource[]>(() => pages?.length ? [...(introPage ? [{ title: introPage.title, body: `${introPage.summary}\n\n${introPage.hook}\n\n${introPage.invitation}`, kind: 'intro' as const }] : []), ...pages] : [{ body }], [body, introPage, pages]);
   const onCount = useCallback((count: number) => { setPageCount(count); onPageCountChange?.(count); }, [onPageCountChange]);
   const renderPage = useCallback((source: PageSource, text: string, measuring: boolean) => <>
-    {source.title ? <Text style={styles.pageTitle}>{source.title}</Text> : null}
-    {pages?.length ? <ProfileBody key={`${source.title}-${text}`} body={text} measuring={measuring} />
+    {source.title ? <Text style={[styles.pageTitle, source.kind === 'intro' && styles.introTitle]}>{source.title}</Text> : null}
+    {source.kind === 'intro' ? (() => {
+      const items = text.split(/\n\n/u).filter(Boolean).map((part, index) => <Text key={index} style={[styles.introText, index === 0 && styles.introSummary, index === 2 && styles.introInvitation]}>{part}</Text>);
+      return measuring ? <View style={styles.introLayout}>{items}</View> : <ParchmentLineReveal key={text} items={items} style={styles.introLayout} />;
+    })()
+      : pages?.length ? <ProfileBody key={`${source.title}-${text}`} body={text} measuring={measuring} />
       : measuring ? <View>{text.split('\n').filter(Boolean).map((line, index) => <Text key={index} style={styles.body}>{line}</Text>)}</View>
         : <ParchmentLineReveal key={text} items={text.split('\n').filter(Boolean).map((line, index) => <Text key={index} style={styles.body}>{line}</Text>)} />}
   </>, [pages]);
@@ -58,6 +63,11 @@ const styles = StyleSheet.create({
   profileLabel: { color: '#7b5127', fontSize: 13, lineHeight: 17, fontWeight: '800' },
   profileValue: { color: '#3f2b1c', fontSize: 15, lineHeight: 22, fontWeight: '500' },
   pageTitle: { color: '#76502a', fontSize: 15, lineHeight: 20, fontWeight: '800', textAlign: 'center', paddingBottom: 4, borderBottomWidth: 1, borderBottomColor: 'rgba(122, 79, 37, 0.28)' },
+  introTitle: { color: '#795329', fontSize: 15, lineHeight: 22, letterSpacing: 1, paddingBottom: 12, borderBottomWidth: 0 },
+  introLayout: { width: '100%', paddingHorizontal: 2, paddingTop: 26, gap: 22 },
+  introText: { color: '#432e20', fontSize: 16, lineHeight: 25, fontWeight: '500', textAlign: 'center' },
+  introSummary: { color: '#352316', fontSize: 18, lineHeight: 28, fontWeight: '700' },
+  introInvitation: { color: '#76502a', fontSize: 14, lineHeight: 22, fontWeight: '700', marginTop: 14 },
   controls: { position: 'absolute', top: 10, right: 12, zIndex: 3, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5 },
   arrow: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
   arrowText: { color: '#5a3a20', fontSize: 24 },

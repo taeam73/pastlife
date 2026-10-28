@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { ActivityIndicator, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 
-export type PageSource = { title?: string; body: string };
+export type PageSource = { title?: string; body: string; kind?: 'intro' };
 type Page = { sourceIndex: number; body: string };
 type Progress = {
   key: string;

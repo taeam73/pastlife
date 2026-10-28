@@ -1,0 +1,2090 @@
+{
+  "CLOWN": {
+    "ko": {
+      "summary": "당신은 바람골 장터에서 침묵을 웃음으로 바꾸던 광대 루보였습니다.",
+      "hook": "공연 날, 당신은 맨 앞자리에서 동료와 거대한 신발의 뜻밖의 소동을 지켜봤습니다."
+    },
+    "en": {
+      "summary": "You were Lubo, the clown who stepped forward whenever Windvale Market fell quiet.",
+      "hook": "From the front row, you watched your fellow performer stumble into a curious quarrel with an enormous shoe."
+    },
+    "th": {
+      "summary": "คุณคือลูโบ ตัวตลกผู้ขึ้นเวทีเมื่อใดก็ตามที่ตลาดวินด์เวลเงียบลง",
+      "hook": "จากที่นั่งแถวหน้า คุณได้เห็นเพื่อนร่วมงานเปิดฉากโต้เถียงอย่างคาดไม่ถึงกับรองเท้ายักษ์"
+    },
+    "ja": {
+      "summary": "あなたは風の谷の市場が静まるたび、真っ先に舞台へ上がる道化師ルボでした。",
+      "hook": "最前列のあなたは、相棒と巨大な靴が繰り広げる思いがけない騒動を見守りました。"
+    }
+  },
+  "ROOM7": {
+    "ko": {
+      "summary": "당신은 비돌개 고개의 작은 여관을 지키며 7번 방에서 쉬던 이루였습니다.",
+      "hook": "비 오는 밤, 늦은 손님이 빈 7번 방의 박수 소리를 듣자 당신은 설명을 망설였습니다."
+    },
+    "en": {
+      "summary": "You were Iru, keeper of a small inn at Bidolgae Pass, where you rested in Room 7 when the stairs left you breathless.",
+      "hook": "When a late guest heard applause from empty Room 7, you hesitated to explain the two wooden puppets."
+    },
+    "th": {
+      "summary": "คุณคืออีรู ผู้ดูแลโรงเตี๊ยมเล็ก ๆ ที่ช่องเขาบีดลแก และพักในห้อง 7 เมื่อขึ้นบันไดจนหายใจไม่ทัน",
+      "hook": "เมื่อแขกยามดึกได้ยินเสียงปรบมือจากห้อง 7 ที่ว่างเปล่า คุณกลับลังเลที่จะเล่าถึงหุ่นไม้ 2 ตัว"
+    },
+    "ja": {
+      "summary": "あなたはピドルゲ峠の小さな宿を守り、息苦しい日には7号室で休むイルでした。",
+      "hook": "雨の夜、客が空の7号室から拍手を聞き、あなたは木の人形のことを話すか迷いました。"
+    }
+  },
+  "BLANK_ORDER": {
+    "ko": {
+      "summary": "당신은 한 줄의 무게를 알아 모든 문서를 두 번 읽던 안개성의 서기관 세아였습니다.",
+      "hook": "성문 밖 사람들이 비를 피하는 동안, 당신 앞에는 도장만 찍힌 왕명과 마지막 빗장이 놓였습니다."
+    },
+    "en": {
+      "summary": "You were Sea, a Mist Castle court scribe who read every paper twice, knowing one line could change someone's tomorrow.",
+      "hook": "As people sheltered from the rain outside, you faced a sealed but wordless order and a gatekeeper holding the final bar."
+    },
+    "th": {
+      "summary": "คุณคือเซอา อาลักษณ์แห่งปราสาทหมอก ผู้ตรวจเอกสารซ้ำสองเพราะรู้ว่าคำสั่งหนึ่งบรรทัดอาจเปลี่ยนวันพรุ่งนี้ได้",
+      "hook": "ขณะผู้คนหลบฝนอยู่นอกประตู คุณเผชิญพระบัญชาไร้ถ้อยคำกับคนเฝ้าประตูที่รอยกดาลสุดท้าย"
+    },
+    "ja": {
+      "summary": "あなたは一行の重みを知り、すべての紙を二度読む霧城の王宮書記官セアでした。",
+      "hook": "雨宿りする人々を前に、あなたには印章だけの王命と最後のかんぬきが示されました。"
+    }
+  },
+  "SILENT_BELL": {
+    "ko": {
+      "summary": "당신은 물건보다 마지막 목격자의 이야기를 먼저 찾던 갈대강 마을의 탐정 다온이었습니다.",
+      "hook": "소리 없는 종의 추에서 젖은 글씨를 발견한 당신은 그것을 바로 읽을 수 없었습니다."
+    },
+    "en": {
+      "summary": "You were Daon, the Reed River Village detective who sought the last witness's story before a missing object.",
+      "hook": "Inside the cloth muffling the bell, you found tiny writing, but the wet letters could not yet be read."
+    },
+    "th": {
+      "summary": "คุณคือดาอน นักสืบแห่งหมู่บ้านคัลแดกัง ผู้ตามหาเรื่องของพยานคนสุดท้ายก่อนตามหาของที่หาย",
+      "hook": "คุณพบตัวหนังสือเล็ก ๆ ในผ้าที่พันลูกกระทบระฆังไว้ แต่ความเปียกชื้นทำให้ยังอ่านไม่ได้"
+    },
+    "ja": {
+      "summary": "あなたは失せ物より先に最後の目撃者の話を探す、葦川村の探偵ダオンでした。",
+      "hook": "鐘の舌を包む布の内側で、あなたは濡れてまだ読めない小さな文字を見つけました。"
+    }
+  },
+  "NIGHT_GUIDE": {
+    "ko": {
+      "summary": "당신은 여행자를 집으로 이끌며 자기 집의 불빛도 잊지 않던 밤길 안내자 마루였습니다.",
+      "hook": "마지막 아이와 갈림길에 선 당신 앞에는 흔들리는 지름길과 꺼져 가는 등불이 있었습니다."
+    },
+    "en": {
+      "summary": "You were Maru, a night-road guide who led travelers home without forgetting the light of your own.",
+      "hook": "At the fork with the last child, you faced a swaying shortcut bridge, a fading lantern, and your family waiting at home."
+    },
+    "th": {
+      "summary": "คุณคือมารู ผู้นำทางยามค่ำคืนที่พาผู้เดินทางกลับบ้านโดยไม่เคยลืมแสงจากบ้านของคุณเอง",
+      "hook": "ที่ทางแยกกับเด็กคนสุดท้าย คุณเผชิญสะพานลัดที่สั่นไหว ตะเกียงใกล้ดับ และครอบครัวที่รออยู่"
+    },
+    "ja": {
+      "summary": "あなたは旅人を家へ導きながら、自分の家の明かりも忘れない夜道案内人マルでした。",
+      "hook": "最後の子と分かれ道に立つあなたを、揺れる近道の橋と消えかけた灯りが待っていました。"
+    }
+  },
+  "MIRROR": {
+    "ko": {
+      "summary": "당신은 화재로 가게를 잃은 뒤에도 다시 문을 연 비늘빛 골목의 거울 수선공 모아였습니다.",
+      "hook": "축제 사흘 전, 당신은 마지막 거울 조각이 한 할머니의 방에 햇빛을 보내는 모습을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Moa, a mirror mender in Shimmerscale Alley who reopened your own shop after a fire.",
+      "hook": "Three days before the festival, you found your final mirror piece casting sunlight into a grandmother's room."
+    },
+    "th": {
+      "summary": "คุณคือโมอา ช่างซ่อมกระจกแห่งตรอกแสงเกล็ด ผู้กลับมาเปิดร้านของคุณอีกครั้งหลังเหตุไฟไหม้",
+      "hook": "3 วันก่อนเทศกาล คุณพบเศษกระจกชิ้นสุดท้ายกำลังสะท้อนแสงแดดเข้าไปในห้องของคุณยาย"
+    },
+    "ja": {
+      "summary": "あなたは火事で店を失ったあとも再び店を開いた、鱗光の路地の鏡修理職人モアでした。",
+      "hook": "祭りの3日前、あなたは最後の鏡の欠片が老婦人の部屋へ日差しを届けるのを見ました。"
+    }
+  },
+  "HERBALIST": {
+    "ko": {
+      "summary": "당신은 안개숲 마을의 약초지기 라비로, 비 오기 전 산길과 물길을 살폈습니다.",
+      "hook": "빨간 실 묶인 문에만 물이 고이자, 당신은 그 문들을 표시한 아이의 쪽지를 받았습니다."
+    },
+    "en": {
+      "summary": "You were Ravi, Mistwood Village's herbalist, checking mountain paths and waterways before rain.",
+      "hook": "As water pooled only at the red-threaded doors, you received a note from the frightened child who had marked them."
+    },
+    "th": {
+      "summary": "คุณคือราวี ผู้ดูแลสมุนไพรแห่งหมู่บ้านป่าหมอก คอยตรวจทางบนเขาและทางน้ำก่อนฝนตก",
+      "hook": "เมื่อน้ำขังเฉพาะหน้าประตูที่ผูกด้ายแดง คุณได้รับโน้ตจากเด็กผู้หวาดกลัวที่ทำเครื่องหมายประตูเหล่านั้น"
+    },
+    "ja": {
+      "summary": "あなたは霧の森の村の薬草守ラビとして、雨の前に山道と水の流れを確かめました。",
+      "hook": "赤い糸の扉だけに水がたまり、あなたは印をつけた子どもの手紙を受け取りました。"
+    }
+  },
+  "DRAGON_DREAM": {
+    "ko": {
+      "summary": "당신은 잠든 용의 도서관에 살며 용이 부르는 이름을 적던 꿈 기록자 오르였습니다.",
+      "hook": "지워진 당신의 이름을 두고 니아가 고백한 순간, 불어난 물을 알리는 경고 종이 울렸습니다."
+    },
+    "en": {
+      "summary": "You were Or, a dream recorder in the Library of the Sleeping Dragon, writing down the names the dragon called each night.",
+      "hook": "As Nia confessed to erasing your name, a warning bell rang for rain-swollen water surging toward the village."
+    },
+    "th": {
+      "summary": "คุณคือออร์ ผู้บันทึกความฝันแห่งหอสมุดมังกรนิทรา คอยจดชื่อที่มังกรเอ่ยทุกค่ำคืน",
+      "hook": "ขณะที่เนียสารภาพว่าลบชื่อคุณ ระฆังเตือนน้ำจากฝนที่กำลังไหลบ่าเข้าหาหมู่บ้านก็ดังขึ้น"
+    },
+    "ja": {
+      "summary": "あなたは眠れる竜の図書館で、竜が呼ぶ名を書き留める夢の記録者オルでした。",
+      "hook": "ニアがあなたの名を消したと告げた瞬間、増水を知らせる警鐘が鳴りました。"
+    }
+  },
+  "LAST_SIGNAL": {
+    "ko": {
+      "summary": "당신은 여울호의 통신 기록관 한결로, 답장이 없는 칸도 지우지 않고 정리했습니다.",
+      "hook": "빈칸에 찍힌 신호는 답장이 아니라, 당신이 오래전 보낸 노래가 되돌아온 것이었습니다."
+    },
+    "en": {
+      "summary": "You were Han-gyeol, communications archivist aboard the starship Yeoul, preserving even the spaces where no reply arrived.",
+      "hook": "A signal appeared in an empty space—not a reply, but the rhythm of a song you had sent long ago returning from outside the ship."
+    },
+    "th": {
+      "summary": "คุณคือฮันกยอล เจ้าหน้าที่บันทึกการสื่อสารบนยานยออุลโฮ ผู้เก็บไว้แม้แต่ช่องที่ไร้คำตอบ",
+      "hook": "สัญญาณในช่องว่างไม่ใช่คำตอบ แต่เป็นจังหวะเพลงที่คุณเคยส่งไปนานแล้วสะท้อนกลับมาจากนอกยาน"
+    },
+    "ja": {
+      "summary": "あなたはヨウル号の通信記録官ハンギョルとして、返事のない欄も消さずに残しました。",
+      "hook": "空欄に現れた信号は返事ではなく、あなたが昔送った歌が船外から戻ったものでした。"
+    }
+  },
+  "SHADE_TENT": {
+    "ko": {
+      "summary": "당신은 밤이 없는 낮별 행성에서 빛을 가리는 천막을 빌려주던 배달자 이로였습니다.",
+      "hook": "돌아온 천막의 일곱 구멍 아래 앉자, 당신의 발밑에 책 속 밤하늘이 나타났습니다."
+    },
+    "en": {
+      "summary": "You were Iro, a tent deliveryman on a planet without night, renting light-blocking tents so people could sleep.",
+      "hook": "When you sat beneath the seven holes in a returned tent, a child's imitation of the night sky appeared at your feet."
+    },
+    "th": {
+      "summary": "คุณคืออีโร คนส่งกระโจมบนดาวที่ไร้ค่ำคืน ให้เช่ากระโจมบังแสงเพื่อให้ผู้คนหลับได้",
+      "hook": "เมื่อคุณนั่งใต้รูทั้งเจ็ดของกระโจมที่ถูกส่งคืน ท้องฟ้ายามคืนซึ่งเด็กเลียนแบบก็ปรากฏแทบเท้าคุณ"
+    },
+    "ja": {
+      "summary": "あなたは夜のない昼星で、眠りのための天幕を貸す配達人イロでした。",
+      "hook": "返された天幕の七つの穴の下に座ると、あなたの足元に本の夜空が現れました。"
+    }
+  },
+  "REVERSE_MAP": {
+    "ko": {
+      "summary": "당신은 물방울 바다의 길잡이 누리로, 물이 하늘로 솟는 항로를 안내했습니다.",
+      "hook": "당신이 바로잡은 지도에서 푸른 점들은 섬이 아니라 머리 위 물방울 무리를 가리켰습니다."
+    },
+    "en": {
+      "summary": "You were Nuri, a guide of the Droplet Sea, navigating routes where water rose into the sky.",
+      "hook": "The map you turned right side up held blue dots that marked not islands, but clusters of droplets overhead."
+    },
+    "th": {
+      "summary": "คุณคือนูรี ผู้นำทางแห่งทะเลหยดน้ำ คอยนำเรือผ่านเส้นทางที่สายน้ำพุ่งขึ้นสู่ฟ้า",
+      "hook": "บนแผนที่ที่คุณหมุนให้ถูก จุดสีน้ำเงินไม่ได้หมายถึงเกาะ แต่ชี้ตำแหน่งกลุ่มหยดน้ำเหนือศีรษะ"
+    },
+    "ja": {
+      "summary": "あなたは水滴の海の案内人ヌリとして、水が空へ噴き上がる航路を導きました。",
+      "hook": "あなたが直した地図の青い点は、島ではなく頭上の水滴の群れを示していました。"
+    }
+  },
+  "SHORE_ROCK": {
+    "ko": {
+      "summary": "당신은 바람턱 해안의 바위 파도틈으로, 수백 해 동안 파도와 소라를 맞았습니다.",
+      "hook": "큰 파도에 당신의 물웅덩이가 사라진 뒤, 다음 썰물에 소라가 그 자리를 찾아왔습니다."
+    },
+    "en": {
+      "summary": "You were Wavecleft, a rock on the Windledge Coast, meeting waves and sea snails in the same place for centuries.",
+      "hook": "After a great wave split you and emptied your pool, a sea snail returned at low tide and stopped where it had been."
+    },
+    "th": {
+      "summary": "คุณคือช่องคลื่น ก้อนหินแห่งชายฝั่งสันลม ซึ่งรับเกลียวคลื่นและหอยสังข์มาหลายร้อยปี",
+      "hook": "หลังคลื่นใหญ่ซัดคุณจนแอ่งน้ำหายไป หอยสังข์กลับมาหยุดตรงที่เดิมในคราวน้ำลงถัดมา"
+    },
+    "ja": {
+      "summary": "あなたは風の岬海岸の岩「波の隙間」として、数百年にわたり波と巻き貝を迎えました。",
+      "hook": "大波であなたの水たまりが消えたあと、次の干潮に巻き貝がその場所を訪れました。"
+    }
+  },
+  "TASTER": {
+    "ko": {
+      "summary": "당신은 석류성의 음식 감별사 여린으로, 왕의 음식을 먼저 맛보았습니다.",
+      "hook": "당신은 국에서 고향의 맛과 그릇 밑의 붉은 점을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Yeorin, Pomegranate Castle’s food taster, and you tasted the king’s meals first.",
+      "hook": "You found the taste of your forgotten home in the soup—and a tiny red speck beneath the bowl."
+    },
+    "th": {
+      "summary": "คุณคือยอริน ผู้ตรวจชิมอาหารแห่งปราสาททับทิม และคุณชิมอาหารของพระราชาก่อนพระองค์",
+      "hook": "คุณพบรสชาติของบ้านเกิดที่ลืมเลือนในซุป และจุดสีแดงเล็ก ๆ ใต้ชาม"
+    },
+    "ja": {
+      "summary": "あなたは石榴城の料理鑑定人ヨリンとして、王の料理を先に味見しました。",
+      "hook": "あなたは汁物に忘れた故郷の味と、器の底の小さな赤い点を見つけました。"
+    }
+  },
+  "CLOUD_PAINTER": {
+    "ko": {
+      "summary": "당신은 하늘다리 마을의 구름 화공 해루로, 마른 밭에 닿을 빗길을 그렸습니다.",
+      "hook": "당신이 그린 웃음에 빗길이 갈라져, 물은 아무도 심지 않은 돌밭에 떨어졌습니다."
+    },
+    "en": {
+      "summary": "You were Haeru, a cloud painter in Skybridge Village, drawing rain paths toward dry fields.",
+      "hook": "Your painted smile split the rain path, sending both streams toward rocky, unplanted ground."
+    },
+    "th": {
+      "summary": "คุณคือแฮรู ช่างวาดเมฆแห่งหมู่บ้านสะพานฟ้า ผู้วาดเส้นทางฝนไปยังไร่นาแห้งแล้ง",
+      "hook": "รอยยิ้มที่คุณวาดทำให้เส้นทางฝนแยก และสายน้ำตกลงบนลานหินที่ไม่มีใครเพาะปลูก"
+    },
+    "ja": {
+      "summary": "あなたはハヌルダリ村の雲絵師ヘルとして、乾いた畑へ続く雨の道を描きました。",
+      "hook": "あなたが描いた笑い口で雨の道が分かれ、水は誰も種をまかない石地へ落ちました。"
+    }
+  },
+  "FESTIVAL_KING": {
+    "ko": {
+      "summary": "당신은 돌빛성 축제의 하루짜리 왕 도겸으로, 사람들의 진짜 바람을 들었습니다.",
+      "hook": "당신은 해 지기 전, 무너진 다리를 고쳐 달라는 아이의 부탁을 받았습니다."
+    },
+    "en": {
+      "summary": "You were Do-gyeom, Stoneglow Castle’s king for a day, listening to the people’s real wishes beneath a borrowed crown.",
+      "hook": "Before sunset took back your crown and authority, a child asked you to repair a bridge the real king had left broken."
+    },
+    "th": {
+      "summary": "คุณคือโดกยอม กษัตริย์หนึ่งวันแห่งเทศกาลปราสาทศิลาแสง ผู้รับฟังความปรารถนาจริงใต้ มงกุฎยืม",
+      "hook": "ก่อนตะวันตกดิน คุณได้รับคำขอจากเด็กให้ซ่อมสะพานที่แม้แต่กษัตริย์ตัวจริงยังปล่อยให้พัง"
+    },
+    "ja": {
+      "summary": "あなたは石光城の祭りで1日だけ王となったドギョムとして、人々の本当の願いを聞きました。",
+      "hook": "日没で王冠と権限を返す前、あなたは崩れた橋を直してほしいと子どもに頼まれました。"
+    }
+  },
+  "SNOW_REFEREE": {
+    "ko": {
+      "summary": "당신은 눈언덕 마을의 경주 심판 미루로, 선수들보다 먼저 길을 살폈습니다.",
+      "hook": "당신은 결승선 뒤에서 친구의 발자국이 얼어붙은 다리 아래로 꺾인 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Miru, a race judge in Snowhill Village, inspecting the course before every racer.",
+      "hook": "You found your friend’s footprints beyond the finish line, turning beneath a frozen bridge where a whimper had been heard."
+    },
+    "th": {
+      "summary": "คุณคือมีรู กรรมการการแข่งขันแห่งหมู่บ้านเนินหิมะ ผู้ตรวจเส้นทางก่อนนักแข่งทุกคน",
+      "hook": "คุณพบรอยเท้าของเพื่อนหลังเส้นชัย เลี้ยวไปใต้สะพานน้ำแข็งที่มีผู้ได้ยินเสียงร้องแผ่วเบา"
+    },
+    "ja": {
+      "summary": "あなたは雪丘の村の競走審判ミルとして、選手より先にコースを確かめました。",
+      "hook": "あなたは友人の足跡がゴールを外れ、鳴き声がした凍る橋の下へ曲がるのを見つけました。"
+    }
+  },
+  "SHADOW_TAILOR": {
+    "ko": {
+      "summary": "당신은 달실 골목의 재단사 나린으로, 찢어진 그림자를 실과 바늘로 이었습니다.",
+      "hook": "당신의 그림자가 짧아지던 밤, 손님은 작업대 아래의 검은 조각들을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Narin, a tailor in Dalsil Alley, stitching torn shadows together with needle and thread.",
+      "hook": "As your own shadow grew shorter, a customer found the black scraps hidden beneath your worktable."
+    },
+    "th": {
+      "summary": "คุณคือนาริน ช่างตัดเย็บแห่งตรอกทัลชิล ผู้ใช้ด้ายกับเข็มเย็บเงาที่ฉีกขาด",
+      "hook": "ขณะที่เงาของคุณสั้นลง ลูกค้าก็พบเศษสีดำที่ซ่อนอยู่ใต้โต๊ะทำงาน"
+    },
+    "ja": {
+      "summary": "あなたは月糸路地の仕立屋ナリンとして、破れた影を糸と針でつなぎました。",
+      "hook": "あなたの影が短くなるなか、客は作業台の下に隠れた黒い切れ端を見つけました。"
+    }
+  },
+  "UNDERWATER_SCALE": {
+    "ko": {
+      "summary": "당신은 푸른샘 수중 장터의 저울지기 아람으로, 물살 속에서도 몫을 공평히 쟀습니다.",
+      "hook": "당신은 빈 접시가 내려가며 그 아래의 줄이 떨리는 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Aram, weighkeeper of Blue Spring Underwater Market, measuring fair shares amid the currents.",
+      "hook": "As suspicion spread around the sinking empty pan, you noticed the cord beneath it tremble."
+    },
+    "th": {
+      "summary": "คุณคืออารัม ผู้ดูแลตาชั่งแห่งตลาดใต้น้ำพรูนแซม ผู้ชั่งส่วนแบ่งอย่างยุติธรรมท่ามกลางกระแสน้ำ",
+      "hook": "ขณะผู้คนระแวงจานว่างเปล่าที่ลดลง คุณสังเกตเห็นเชือกใต้จานสั่นไหว"
+    },
+    "ja": {
+      "summary": "あなたは青い泉の水中市場の秤守りアラムとして、水流の中でも公平に取り分を量りました。",
+      "hook": "空の皿を巡って疑いが広がるなか、あなたは皿の下へ続く紐が震えるのを見ました。"
+    }
+  },
+  "FIREWORKS": {
+    "ko": {
+      "summary": "당신은 서릿골의 불꽃 장인 가온으로, 하늘꽃을 만들면서도 첫 굉음에는 움찔했습니다.",
+      "hook": "비로 불꽃을 띄울 수 없던 순간, 당신 앞에 덮어 둔 등과 염소의 재채기가 나타났습니다."
+    },
+    "en": {
+      "summary": "You were Gaon, a Seoritgol fireworks artisan who made sky flowers yet flinched at the first boom.",
+      "hook": "When rain halted your grand display, you encountered covered lanterns and a goat's startling sneeze."
+    },
+    "th": {
+      "summary": "คุณคือกาอน ช่างดอกไม้ไฟแห่งซอริตโกล ผู้สร้างดอกไม้บนฟ้าแต่สะดุ้งกับเสียงระเบิดแรก",
+      "hook": "เมื่อฝนขวางดอกไม้ไฟของคุณ คุณได้พบโคมที่คลุมไว้และเสียงจามชวนประหลาดใจของแพะ"
+    },
+    "ja": {
+      "summary": "あなたはソリッコルの花火職人ガオンで、空の花を作りながら最初の轟音には身をすくめました。",
+      "hook": "雨で花火を上げられない夜、あなたの前に覆われた灯籠とヤギのくしゃみが現れました。"
+    }
+  },
+  "DOORLESS_KEEPER": {
+    "ko": {
+      "summary": "당신은 유리숲의 문지기 서후로, 투명한 집 앞을 지키며 뒤편 길은 살피지 않았습니다.",
+      "hook": "길 잃은 아이가 집 안에서 손을 흔들자, 당신이 지켜 온 입구의 의미가 흔들렸습니다."
+    },
+    "en": {
+      "summary": "You were Seohu, gatekeeper of Glass Forest, guarding a transparent house without examining its rear path.",
+      "hook": "When a lost child waved to you from inside, the meaning of the entrance you guarded began to shift."
+    },
+    "th": {
+      "summary": "คุณคือซอฮู ผู้เฝ้าประตูแห่งป่าแก้ว ผู้เฝ้าบ้านโปร่งใสโดยไม่เคยสำรวจทางด้านหลัง",
+      "hook": "เมื่อเด็กหลงทางโบกมือให้คุณจากในบ้าน ความหมายของทางเข้าที่คุณเฝ้าก็เริ่มสั่นคลอน"
+    },
+    "ja": {
+      "summary": "あなたはガラスの森の門番ソフで、透明な家を守りながら裏の道を確かめませんでした。",
+      "hook": "迷子が家の内側から手を振ったとき、あなたが守ってきた入口の意味が揺らぎました。"
+    }
+  },
+  "LOST_AUTUMN": {
+    "ko": {
+      "summary": "당신은 사계 마을의 달력지기 온으로, 큰 달력을 보며 모두에게 계절을 알려 주었습니다.",
+      "hook": "가을장이 사라진 날, 당신은 푸른 열매와 찢긴 갈색 종이의 흔적을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were On, calendar keeper of Four Seasons Village, using the great calendar to tell everyone the season.",
+      "hook": "When autumn vanished, you found green fruit outside and the trace of a torn brown page on the calendar."
+    },
+    "th": {
+      "summary": "คุณคืออน ผู้ดูแลปฏิทินแห่งหมู่บ้านสี่ฤดู ผู้บอกฤดูกาลแก่ทุกคนจากปฏิทินเล่มใหญ่",
+      "hook": "เมื่อฤดูใบไม้ร่วงหายไป คุณพบผลไม้สีเขียวและรอยกระดาษสีน้ำตาลที่ถูกฉีกจากปฏิทิน"
+    },
+    "ja": {
+      "summary": "あなたは四季村の暦守オンで、大きな暦を見ながら皆に季節を告げていました。",
+      "hook": "秋が消えた日、あなたは青い実と、暦から破り取られた茶色い紙の跡を見つけました。"
+    }
+  },
+  "THEATRE_VILLAIN": {
+    "ko": {
+      "summary": "당신은 검은장막 극단의 배우 비안으로, 늘 미움받는 악역을 맡아 야유를 들었습니다.",
+      "hook": "당신이 무대 대신 객석에 앉은 날, 한 아이가 막힌 문에 뜻밖의 질문을 던졌습니다."
+    },
+    "en": {
+      "summary": "You were Vian, an actor in the Black Curtain Troupe who always played the hated villain and heard boos first.",
+      "hook": "When you sat in the audience instead of taking the stage, a child asked an unexpected question about the blocked door."
+    },
+    "th": {
+      "summary": "คุณคือบีอัน นักแสดงแห่งคณะม่านดำ ผู้รับบทตัวร้ายที่ใคร ๆ เกลียดและได้ยินเสียงโห่ก่อนเสมอ",
+      "hook": "วันที่คุณนั่งในหมู่ผู้ชมแทนการขึ้นเวที เด็กคนหนึ่งกลับถามถึงประตูที่ถูกขวางไว้อย่างคาดไม่ถึง"
+    },
+    "ja": {
+      "summary": "あなたは黒幕劇団の俳優ビアンで、いつも憎まれる悪役を演じ、先に野次を浴びました。",
+      "hook": "あなたが舞台でなく客席に座った日、子どもがふさがれた扉に思いがけない問いを向けました。"
+    }
+  },
+  "WINDMILL": {
+    "ko": {
+      "summary": "당신은 아르하의 풍차지기 로아로, 낮 바람을 모아 여러 집의 등을 밝혔습니다.",
+      "hook": "한 집에 밤바람을 보낸 당신은 멀리 작은 집들의 불빛이 차례로 꺼지는 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Roa, an Arha windmill keeper who gathered daytime wind to light the lamps of many homes.",
+      "hook": "After you sent one night's wind to a wealthy household, you watched the distant lights go out one by one."
+    },
+    "th": {
+      "summary": "คุณคือโรอา ผู้ดูแลกังหันลมแห่งอาร์ฮา ผู้รวบรวมลมกลางวันมาจุดตะเกียงให้บ้านหลายหลัง",
+      "hook": "เมื่อคุณส่งลมหนึ่งคืนให้บ้านผู้มั่งคั่ง คุณเห็นแสงจากบ้านไกล ๆ ดับลงทีละหลัง"
+    },
+    "ja": {
+      "summary": "あなたはアルハの風車守ロアで、昼の風を集め、何軒もの家の明かりをともしました。",
+      "hook": "一晩の風を裕福な家へ送ったあなたは、遠い家々の明かりが次々と消えるのを見ました。"
+    }
+  },
+  "HEAVY_BOX": {
+    "ko": {
+      "summary": "당신은 이브란의 수레 극단 짐꾼 해민으로, 무대를 세우며 누구보다 많은 짐을 들었습니다.",
+      "hook": "빈 상자를 연 당신 앞에 미처 작별하지 못한 옛 동료가 나타났지만, 다른 이들은 다른 장면을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Haemin, a porter for an Ivran wagon troupe who carried more than anyone while setting the stage.",
+      "hook": "When you opened the empty chest, you saw a colleague you had left without goodbye, while everyone else saw something different."
+    },
+    "th": {
+      "summary": "คุณคือแฮมิน คนแบกสัมภาระของคณะละครเกวียนแห่งอีบรัน ผู้ยกของมากกว่าใครระหว่างตั้งเวที",
+      "hook": "เมื่อคุณเปิดหีบเปล่า คุณเห็นเพื่อนเก่าที่ไม่ได้กล่าวลา ขณะที่คนอื่นกลับเห็นภาพต่างออกไป"
+    },
+    "ja": {
+      "summary": "あなたはイヴランの荷車一座の荷運び人ヘミンで、舞台を組みながら誰より多くの荷を運びました。",
+      "hook": "空箱を開けたあなたには別れを告げられなかった仲間が見えましたが、皆は違う光景を見ました。"
+    }
+  },
+  "GRAVITY_SEEDS": {
+    "ko": {
+      "summary": "당신은 라모 궤도 고리 4구역에서 씨앗을 지키던 종자 보관사 미라였습니다.",
+      "hook": "중력이 돌아온 단 3분, 당신은 두 봉지 중 하나만 흙에 심을 수 있었습니다."
+    },
+    "en": {
+      "summary": "You were Mira, a seed keeper guarding the seeds of Ring Sector 4 in Lamo Orbit.",
+      "hook": "For three minutes gravity returned, and you could let only one of two seed packets touch the soil."
+    },
+    "th": {
+      "summary": "คุณคือมิรา ผู้ดูแลและปกป้องเมล็ดพันธุ์ประจำเขตวงแหวน 4 ในวงโคจรลาโม",
+      "hook": "ในสามนาทีที่แรงโน้มถ่วงกลับคืนมา คุณให้เมล็ดพันธุ์เพียงหนึ่งในสองซองสัมผัสดินได้"
+    },
+    "ja": {
+      "summary": "あなたはラモ軌道リング第4区で種を守る種子保管士ミラでした。",
+      "hook": "重力が戻る3分間、あなたが土に触れさせられる種は2袋のうち一方だけでした。"
+    }
+  },
+  "PAID_LOSS": {
+    "ko": {
+      "summary": "당신은 마지막 돌을 오래 숙고하던 레도스 자유시의 돌판 경기 선수 아델이었습니다.",
+      "hook": "결승 전날 밤, 당신은 처음으로 이기지 말라는 돈을 받았습니다."
+    },
+    "en": {
+      "summary": "You were Adel, a stone-board player of Redos famed for your long reflection before the final stone.",
+      "hook": "On the night before the final, you were paid for the first time not to win."
+    },
+    "th": {
+      "summary": "คุณคืออาเดล นักกีฬาเกมกระดานหินแห่งนครเสรีเลดอส ผู้ครุ่นคิดเนิ่นนานก่อนวางหินเม็ดสุดท้าย",
+      "hook": "คืนก่อนรอบชิง คุณได้รับเงินเป็นครั้งแรกเพื่อไม่ให้ชนะ"
+    },
+    "ja": {
+      "summary": "あなたは最後の石を長く考えて置く、レドス自由市の石盤競技選手アデルでした。",
+      "hook": "決勝前夜、あなたは初めて、勝たないことへの金を受け取りました。"
+    }
+  },
+  "WARM_STONES": {
+    "ko": {
+      "summary": "당신은 눈길에도 집집마다 빵을 전하던 솔마루 골짜기의 심부름꾼 단우였습니다.",
+      "hook": "늦봄 눈 내린 아침, 당신은 빵을 기다리던 아이에게 따뜻한 돌을 건넸습니다."
+    },
+    "en": {
+      "summary": "You were Danu, a bakery runner who found every hillside home in Solmaru Valley even through snow.",
+      "hook": "On a snowy late-spring morning, you gave a warm stone to a child waiting for bread."
+    },
+    "th": {
+      "summary": "คุณคือดันอู เด็กส่งของร้านขนมปังผู้หาบ้านทุกหลังบนเนินแห่งหุบเขาซลมารูเจอแม้หิมะตก",
+      "hook": "เช้าปลายฤดูใบไม้ผลิที่หิมะตก คุณมอบหินอุ่นให้เด็กที่กำลังรอขนมปัง"
+    },
+    "ja": {
+      "summary": "あなたは雪の日も丘の家々へパンを届ける、ソルマル谷の使い走りダヌでした。",
+      "hook": "晩春の雪の朝、あなたはパンを待つ子どもに温かな石を渡しました。"
+    }
+  },
+  "APOLOGY_COURIER": {
+    "ko": {
+      "summary": "당신은 라메르 운하 양쪽을 오가며 남의 말을 전하던 견습 사과 배달부 테오였습니다.",
+      "hook": "다리가 올라가기 전, 당신은 서로에게 향한 두 통의 사과 편지를 맡았습니다."
+    },
+    "en": {
+      "summary": "You were Theo, an apprentice apology courier carrying others' words across Lamer Canal.",
+      "hook": "Before the bridge rose at sunset, you received two apologies, each addressed to the person on the opposite bank."
+    },
+    "th": {
+      "summary": "คุณคือเทโอ เด็กฝึกงานส่งคำขอโทษผู้ถ่ายทอดถ้อยคำของผู้อื่นข้ามคลองลาแมร์",
+      "hook": "ก่อนสะพานยกยามตะวันตกดิน คุณได้รับคำขอโทษสองฉบับที่ต่างส่งถึงคนบนอีกฝั่ง"
+    },
+    "ja": {
+      "summary": "あなたはラメール運河を渡り、人の言葉を届ける見習い謝罪配達人テオでした。",
+      "hook": "日暮れに橋が上がる前、あなたは対岸の相手へ宛てた謝罪を2通預かりました。"
+    }
+  },
+  "FIRST_FLIGHT_CAMERA": {
+    "ko": {
+      "summary": "당신은 킬데빌힐스 구조소에서 바람과 모래의 해안을 살피던 존 T. 대니얼스였습니다.",
+      "hook": "사진기를 써 본 적 없는 당신에게 하늘을 나는 기계를 찍어 달라는 부탁이 왔습니다."
+    },
+    "en": {
+      "summary": "You were John T. Daniels, a Kill Devil Hills lifesaving crewman watching a coast reshaped by wind and sand.",
+      "hook": "Though you had never used a camera, you were asked to photograph a flying machine as it left the rail."
+    },
+    "th": {
+      "summary": "คุณคือจอห์น ที. แดเนียลส์ เจ้าหน้าที่สถานีช่วยชีวิตคิลเดวิลฮิลส์ ผู้เฝ้าชายฝั่งที่ลมและทรายแปรเปลี่ยน",
+      "hook": "ทั้งที่คุณไม่เคยใช้กล้อง คุณกลับได้รับคำขอให้ถ่ายภาพเครื่องจักรขณะทะยานพ้นราง"
+    },
+    "ja": {
+      "summary": "あなたは風と砂の海岸を見守るキルデビルヒルズ救命所員、ジョン・T・ダニエルズでした。",
+      "hook": "カメラ未経験のあなたは、空飛ぶ機械がレールを離れる瞬間の撮影を託されました。"
+    }
+  },
+  "GYEONGSEONG_SHEARS": {
+    "ko": {
+      "summary": "당신은 경성부 종로 골목에서 작은 사설 전당포를 운영하던 김해원이었습니다.",
+      "hook": "문 닫기 직전, 당신 앞에 하루 늦은 돈과 내일 꼭 필요한 재봉 가위가 놓였습니다."
+    },
+    "en": {
+      "summary": "You were Kim Hae-won, the fictional keeper of a small private pawnshop in an alley of Jongno, Gyeongseong-bu.",
+      "hook": "Just before closing, you faced a one-day-late payment for sewing scissors needed by the next morning."
+    },
+    "th": {
+      "summary": "คุณคือคิมแฮวอน ตัวละครสมมติผู้ดูแลโรงรับจำนำเอกชนเล็ก ๆ ในตรอกจงโน เมืองคยองซอง",
+      "hook": "ก่อนปิดร้าน คุณพบเงินที่ช้าไปหนึ่งวันกับกรรไกรตัดเย็บที่จำเป็นต้องใช้ในเช้าวันรุ่งขึ้น"
+    },
+    "ja": {
+      "summary": "あなたは京城府鍾路の路地で小さな私設質屋を営む架空の人物、キム・ヘウォンでした。",
+      "hook": "閉店直前、あなたの前に一日遅れの金と、明朝必要な裁ちばさみが置かれました。"
+    }
+  },
+  "MOON_SIGNAL_WINDOW": {
+    "ko": {
+      "summary": "당신은 타이타닉호에서 3등실 승객의 옷을 수선하던 재봉사 노라 오루크였습니다.",
+      "hook": "당신은 이름표 없는 아이 외투의 주인을 찾을지, 즉시 갑판으로 갈지 마주했습니다."
+    },
+    "en": {
+      "summary": "You were Nora O'Rourke, a seamstress who mended clothes for third-class passengers aboard RMS Titanic.",
+      "hook": "With an untagged child's coat in your hands, you faced the order to go to the deck at once."
+    },
+    "th": {
+      "summary": "คุณคือนอรา โอรูร์ก ช่างเย็บผ้าผู้ซ่อมเสื้อผ้าให้ผู้โดยสารชั้น 3 บนเรือ RMS ไททานิก",
+      "hook": "เมื่อถือเสื้อคลุมเด็กไร้ป้ายชื่อ คุณต้องเผชิญคำสั่งให้ขึ้นดาดฟ้าทันที"
+    },
+    "ja": {
+      "summary": "あなたはタイタニック号で三等船客の服を繕う裁縫師、ノラ・オルークでした。",
+      "hook": "名札のない子どもの外套を手に、あなたは直ちに甲板へ向かう指示に直面しました。"
+    }
+  },
+  "TIDE_MARK": {
+    "ko": {
+      "summary": "당신은 칠물문 자유시에서 돌벽의 물높이 표지 세 줄을 지키던 라오였습니다.",
+      "hook": "축제 아침, 당신은 경고선과 같은 파란 지느러미 아래 사라진 가운데 선을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Rao, keeper of the three water-level marks on a stone wall in Seven-Gate Free City.",
+      "hook": "On the festival morning, you found the middle warning line hidden beneath a fish's matching blue fin."
+    },
+    "th": {
+      "summary": "คุณคือลาโอ ผู้ดูแลเครื่องหมายระดับน้ำสามเส้นบนกำแพงหินแห่งนครเสรีชิลมุลมุน",
+      "hook": "เช้าวันเทศกาล คุณพบว่าเส้นเตือนตรงกลางหายไปใต้ครีบปลาสีฟ้าที่มีสีเหมือนกัน"
+    },
+    "ja": {
+      "summary": "あなたは七水門自由市で石壁の3本の水位標を守るラオでした。",
+      "hook": "祭りの朝、あなたは目盛と同じ青い魚のひれに隠された真ん中の線を見つけました。"
+    }
+  },
+  "THIRD_KNOCK": {
+    "ko": {
+      "summary": "당신은 오르시 자유시 서쪽 언덕의 옛 관측소를 지키던 야간 경비원 리나였습니다.",
+      "hook": "당신이 배수관을 두 번 치자, 잠긴 지도실에서 세 번의 노크가 돌아왔습니다."
+    },
+    "en": {
+      "summary": "You were Rina, the night watchwoman guarding the old observatory on the western hill of the Free City of Orsi.",
+      "hook": "After you struck the drainpipe twice, three knocks answered from the locked chart room."
+    },
+    "th": {
+      "summary": "คุณคือลีนา ยามกะกลางคืนผู้ดูแลหอดูดาวเก่าบนเนินเขาฝั่งตะวันตกของนครเสรีออร์ซี",
+      "hook": "เมื่อคุณตีท่อระบายน้ำสองครั้ง เสียงเคาะสามครั้งก็ตอบมาจากห้องแผนที่ที่ปิดอยู่"
+    },
+    "ja": {
+      "summary": "あなたはオルシ自由市の西の丘で旧観測所を守る夜間警備員、リナでした。",
+      "hook": "あなたが排水管を2度叩くと、閉ざされた地図室から3度のノックが返りました。"
+    }
+  },
+  "MARKET_CAT_LOT": {
+    "ko": {
+      "summary": "당신은 토람 자유시장에서 고양이의 선택으로 자리를 정하는 추첨 진행자 모진이었습니다.",
+      "hook": "당신은 고도가 늘 고르던 왼쪽 바구니만 햇살에 따뜻해진 것을 알아챘습니다."
+    },
+    "en": {
+      "summary": "You were Mojin, host of Toram Free Market's stall lottery, where a cat chose the first stall.",
+      "hook": "You noticed that sunlight had warmed only the far-left basket Godo always chose."
+    },
+    "th": {
+      "summary": "คุณคือโมจิน ผู้ดำเนินการจับสลากแผงค้าแห่งตลาดเสรีโทรัม ซึ่งให้แมวเลือกแผงแรก",
+      "hook": "คุณสังเกตว่าแสงแดดอุ่นเพียงตะกร้าซ้ายสุดที่โกโดเลือกอยู่เสมอ"
+    },
+    "ja": {
+      "summary": "あなたは猫が最初の露店を選ぶトラム自由市場で、場所抽選を進めるモジンでした。",
+      "hook": "あなたはコドがいつも選ぶ左端の籠だけを、日差しが温めていると気づきました。"
+    }
+  },
+  "TWELVE_LEFT_SHOES": {
+    "ko": {
+      "summary": "당신은 비엘 항구에서 춤꾼들의 신발을 만들던 장인 다린이었습니다.",
+      "hook": "출발 두 시간 전, 당신은 스물네 짝 모두가 왼발 신발인 것을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Darin, a dance-shoe maker in Biel Harbor who tried to inspect every shoe alone.",
+      "hook": "Two hours before departure, you discovered that all twenty-four shoes were made for left feet."
+    },
+    "th": {
+      "summary": "คุณคือดาริน ช่างทำรองเท้าเต้นรำแห่งท่าเรือบีเอล ผู้พยายามตรวจรองเท้าทุกคู่ด้วยตัวเอง",
+      "hook": "สองชั่วโมงก่อนออกเดินทาง คุณพบว่ารองเท้าทั้ง 24 ข้างล้วนทำมาสำหรับเท้าซ้าย"
+    },
+    "ja": {
+      "summary": "あなたはビエル港で踊り手の靴を作り、すべてを一人で確かめようとしたダリンでした。",
+      "hook": "出発2時間前、あなたは24足すべてが左靴だと気づきました。"
+    }
+  },
+  "RAIN_GUTTER": {
+    "ko": {
+      "summary": "당신은 레본 자치시에서 지붕과 빗물의 흐름을 살피던 지붕지기 세린이었습니다.",
+      "hook": "첫비가 쏟아지자, 당신은 위쪽 물은 넘치는데 아래 물그릇은 비어 있는 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Serin, a roof keeper who watched the rooftops and rainwater flow in Levon Autonomous City.",
+      "hook": "When the first rain poured down, you saw the upper cistern overflow while the bowls below stayed empty."
+    },
+    "th": {
+      "summary": "คุณคือเซริน ผู้ดูแลหลังคาและทางไหลของน้ำฝนแห่งนครปกครองตนเองเรบอน",
+      "hook": "เมื่อฝนแรกเทลงมา คุณเห็นอ่างเก็บน้ำด้านบนล้น แต่ภาชนะด้านล่างยังว่างเปล่า"
+    },
+    "ja": {
+      "summary": "あなたはレボン自治市で屋根と雨水の流れを見守る屋根守、セリンでした。",
+      "hook": "初雨の中、あなたは上段の水があふれる一方、下段の水鉢が空のままだと気づきました。"
+    }
+  },
+  "UNSEEN_PORTRAIT": {
+    "ko": {
+      "summary": "당신은 루미 자유시에서 기억을 들은 뒤 얼굴을 그리던 초상화가 도윤이었습니다.",
+      "hook": "서로 다른 어머니를 말하는 세 남매 앞에서, 당신은 나란히 놓인 파란 수건과 붉은 수건을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Doyun, a Lumi Free City portrait painter who listened to people's memories before painting a face.",
+      "hook": "As three siblings recalled three different faces, you found blue and red headscarves hanging side by side in their mother's workshop."
+    },
+    "th": {
+      "summary": "คุณคือโดยุน จิตรกรแห่งนครเสรีลูมี ผู้ฟังความทรงจำของผู้คนก่อนวาดใบหน้า",
+      "hook": "เมื่อพี่น้องสามคนจดจำแม่ต่างกัน คุณกลับพบผ้าสีน้ำเงินกับสีแดงแขวนเคียงกันในห้องย้อมผ้าของแม่"
+    },
+    "ja": {
+      "summary": "あなたはルミ自由市で、人々の記憶を聞いてから顔を描く肖像画家ドユンでした。",
+      "hook": "母の顔を違って語る3人を前に、あなたは染色場で青と赤の頭巾が並ぶのを見ました。"
+    }
+  },
+  "RUNAWAY_WHALE_FLOAT": {
+    "ko": {
+      "summary": "당신은 테반 자치시에서 사람들을 놀라게 할 행렬차를 만들던 장인 우진이었습니다.",
+      "hook": "축제 직전 종이 고래가 내리막길을 달리자, 당신 앞에는 도자기 가판과 빈 짚 터가 나타났습니다."
+    },
+    "en": {
+      "summary": "You were Woojin, a Tevan Autonomous City craftsman who made parade floats that filled people with wonder.",
+      "hook": "When your paper whale rolled downhill before the festival, a pottery stall and an empty straw yard lay in its path."
+    },
+    "th": {
+      "summary": "คุณคืออูจิน ช่างแห่งนครปกครองตนเองเทบัน ผู้สร้างรถขบวนแห่ให้ผู้คนตื่นตา",
+      "hook": "เมื่อวาฬกระดาษของคุณกลิ้งลงเนินก่อนเทศกาล เบื้องล่างมีทั้งแผงเครื่องปั้นดินเผาและลานฟางว่างเปล่า"
+    },
+    "ja": {
+      "summary": "あなたはテバン自治市で、人々を驚かせる祭礼山車を作る職人ウジンでした。",
+      "hook": "祭り直前、紙のクジラが坂を走りだし、あなたの先には陶器露店と空の藁置き場がありました。"
+    }
+  },
+  "CROOKED_KITE": {
+    "ko": {
+      "summary": "당신은 바르 자유시에서 바람의 길을 먼저 살피던 연 제작자 나리였습니다.",
+      "hook": "오빠가 자기 이름만 적은 대회에서, 당신의 비뚤어진 연 앞에 골짜기의 옆바람이 불어왔습니다."
+    },
+    "en": {
+      "summary": "You were Nari, a Bar Free City kite maker who watched where the wind was going before correcting a crooked flight.",
+      "hook": "After your brother entered without you, your uneven-tailed kite met a crosswind rising from the valley."
+    },
+    "th": {
+      "summary": "คุณคือนารี ช่างทำว่าวแห่งนครเสรีบาร์ ผู้มองทางลมก่อนแก้การบินที่ไม่ตรง",
+      "hook": "หลังพี่ชายลงชื่อแข่งโดยไม่มีคุณ ว่าวหางไม่เท่ากันของคุณก็พบลมด้านข้างที่พัดขึ้นจากหุบเขา"
+    },
+    "ja": {
+      "summary": "あなたはバル自由市で、凧を直す前に風の行方を見極める職人ナリでした。",
+      "hook": "兄が自分だけで出場した大会で、あなたの尾の不揃いな凧に谷から横風が吹き上がりました。"
+    }
+  },
+  "HOLLOW_STAGE_WALL": {
+    "ko": {
+      "summary": "당신은 세온 자유시에서 무대 뒤 장인의 이름까지 알리게 된 환상술사 민록이었습니다.",
+      "hook": "옛 동료가 벽을 혼자 만들었다는 광고 앞에서, 당신은 무대 위 증거와 비밀 사이에 놓였습니다."
+    },
+    "en": {
+      "summary": "You were Minrok, a Seon Free City illusionist who came to credit by name the craftspeople behind the stage.",
+      "hook": "When an old colleague claimed sole credit for your wall, you faced a demand for onstage proof that could expose its secret."
+    },
+    "th": {
+      "summary": "คุณคือมินรก นักมายากลแห่งนครเสรีเซอน ผู้เอ่ยชื่อช่างฝีมือที่ทำงานหลังเวที",
+      "hook": "เมื่ออดีตเพื่อนร่วมงานอ้างว่าสร้างฉากกั้นของคุณลำพัง คุณต้องเผชิญหลักฐานบนเวทีที่อาจเปิดเผยความลับ"
+    },
+    "ja": {
+      "summary": "あなたはセオン自由市で、舞台裏の職人も名で紹介するようになった奇術師ミンロクでした。",
+      "hook": "旧友が壁を一人で作ったと名乗り、あなたは舞台上の証明と仕掛けの秘密の間に立たされました。"
+    }
+  },
+  "TWO_FINAL_FERRIES": {
+    "ko": {
+      "summary": "당신은 두림 자유항과 모렌의 말을 잇고 함께 확인할 약속을 만들던 통역사 아정이었습니다.",
+      "hook": "두 번째 종의 뜻이 엇갈린 밤, 당신은 마지막 배를 놓친 손님들 앞에서 속였다는 비난을 받았습니다."
+    },
+    "en": {
+      "summary": "You were Ajeong, an interpreter who connected Durim Free Port and Moren through agreements both sides could verify.",
+      "hook": "When the riverbanks' second bells disagreed, you were accused of deceiving travelers who had missed the last ferry."
+    },
+    "th": {
+      "summary": "คุณคืออาจอง ล่ามผู้เชื่อมท่าเสรีทูริมกับโมเรนด้วยข้อตกลงที่ทั้งสองฝ่ายตรวจสอบร่วมกันได้",
+      "hook": "ในคืนที่ระฆังรอบที่สองของสองฝั่งไม่ตรงกัน คุณถูกกล่าวหาว่าหลอกผู้โดยสารที่พลาดเรือลำสุดท้าย"
+    },
+    "ja": {
+      "summary": "あなたはドゥリム自由港とモレンを、双方が確かめられる約束で結ぶ通訳者アジョンでした。",
+      "hook": "両岸の2度目の鐘が食い違う夜、あなたは最終便を逃した客をだましたと責められました。"
+    }
+  },
+  "FLOATING_ORCHARD": {
+    "ko": {
+      "summary": "당신은 벨로 부유과수원에서 다른 이들과 매듭을 함께 확인하던 밧줄지기 려원이었습니다.",
+      "hook": "견습이 탄 묘목섬의 매듭이 풀리자, 당신은 섬이 동쪽 검은 절벽으로 밀려가는 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Ryeowon, a rope keeper at the Bello Floating Orchard who learned to check every knot with other hands and eyes.",
+      "hook": "When the knot slipped, you watched the sapling island and its stranded apprentice drift toward the black eastern cliffs."
+    },
+    "th": {
+      "summary": "คุณคือรยอวอน ผู้ดูแลเชือกแห่งสวนผลไม้ลอยฟ้าเบลโล ซึ่งเรียนรู้ที่จะตรวจปมร่วมกับมือและสายตาอื่น",
+      "hook": "เมื่อปมลื่นหลุด คุณเห็นเกาะเพาะกล้ากับผู้ฝึกงานลอยไปยังหน้าผาดำทางตะวันออก"
+    },
+    "ja": {
+      "summary": "あなたはベロ浮遊果樹園で、ほかの手と目とともに結び目を確かめる綱守リョウォンでした。",
+      "hook": "結び目が滑り、あなたは見習いを乗せた苗木島が東の黒い断崖へ流れるのを見ました。"
+    }
+  },
+  "SILVER_REED_MONSTER": {
+    "ko": {
+      "summary": "당신은 벨나 수상마을의 길잡이 도후로, 짐승과 배가 비켜 갈 물길을 그렸습니다.",
+      "hook": "당신이 쫓던 은빛 뿔과 붉은 눈은 북쪽 갈대밭에서 뜻밖의 흔적을 남겼습니다."
+    },
+    "en": {
+      "summary": "You were Dohu, a guide of Belna Floating Village who charted waterways where boats and beasts could avoid each other.",
+      "hook": "The silver horns and red eye you pursued left an unexpected trail in the northern reed beds."
+    },
+    "th": {
+      "summary": "คุณคือโดฮู ผู้นำทางแห่งหมู่บ้านกลางน้ำเบลนา ผู้วาดเส้นทางให้เรือกับสัตว์หลีกกันได้",
+      "hook": "เขาสีเงินกับดวงตาแดงที่คุณตามล่า ทิ้งร่องรอยเหนือคาดไว้ในกออ้อทางเหนือ"
+    },
+    "ja": {
+      "summary": "あなたはベルナ水上村の案内人ドフとして、獣と舟が避け合える水路を描きました。",
+      "hook": "あなたが追う銀の角と赤い目は、北の葦原に意外な痕跡を残していました。"
+    }
+  },
+  "GOLDEN_LIE_SLIP": {
+    "ko": {
+      "summary": "당신은 나셀 자유시장에서 금빛 종이 가게를 꾸리며 말의 값을 새로 배운 여담이었습니다.",
+      "hook": "당신의 장난스러운 거짓말이 배고픈 다해의 손에서 반짝이자 시장이 술렁였습니다."
+    },
+    "en": {
+      "summary": "You were Yeodam, owner of a golden paper shop in Nasel Free Market, where you learned the price of words anew.",
+      "hook": "When your playful lie flashed in hungry Dahae's hand, a stir began at the bread stall."
+    },
+    "th": {
+      "summary": "คุณคือยอ-ดัม เจ้าของร้านกระดาษสีทองแห่งตลาดเสรีนาเซล ผู้ได้เรียนรู้คุณค่าของคำพูดเสียใหม่",
+      "hook": "เมื่อคำโกหกเล่นสนุกของคุณเปล่งประกายในมือดาแฮผู้หิวโหย หน้าแผงขนมปังก็เริ่มอื้ออึง"
+    },
+    "ja": {
+      "summary": "あなたはナセル自由市場の金色の紙店主ヨダムとして、言葉の代価を学び直しました。",
+      "hook": "あなたの戯れの嘘が空腹のダヘの手で輝いたとき、パン露店がざわめき始めました。"
+    }
+  },
+  "LAST_STOP_TICKET": {
+    "ko": {
+      "summary": "당신은 런던 서더크의 버스 차장 에디스 리드로, 훗날 노라와 옷 수선집을 열었습니다.",
+      "hook": "당신의 버스에 종점 표를 산 승객은 여덟 해 동안 만나지 못한 동생 로즈였습니다."
+    },
+    "en": {
+      "summary": "You were Edith Reed, a bus conductor in Southwark, London, who later opened a clothing repair shop with Nora.",
+      "hook": "The passenger who bought your ticket to the terminus was Rose, the younger sister you had not seen in eight years."
+    },
+    "th": {
+      "summary": "คุณคืออีดิธ รีด กระเป๋ารถเมล์แห่งซัทเทิร์กในลอนดอน ผู้เปิดร้านซ่อมเสื้อผ้ากับนอราในเวลาต่อมา",
+      "hook": "ผู้โดยสารที่ซื้อตั๋วสุดสายจากคุณคือโรส น้องสาวที่คุณไม่ได้พบมานานแปดปี"
+    },
+    "ja": {
+      "summary": "あなたはロンドン・サザークのバス車掌エディスで、のちにノラと洋服直し店を開きました。",
+      "hook": "あなたから終点行きの切符を買ったのは、8年会えなかった妹ローズでした。"
+    }
+  },
+  "COCHINEAL_SCALE": {
+    "ko": {
+      "summary": "당신은 안테케라의 재배자 마누엘로, 선인장 밭과 도시 운반 일을 오가며 가족을 돌봤습니다.",
+      "hook": "당신의 가운데 자루만 가벼워진 순간, 열여섯 살 이사벨은 무게추에서 작은 소리를 들었습니다."
+    },
+    "en": {
+      "summary": "You were Manuel, an Antequera farmer who tended cactus fields, hauled goods in the city, and raised a family with Juana.",
+      "hook": "When only your middle sack weighed light, sixteen-year-old Isabel heard a faint sound inside the merchant's weight."
+    },
+    "th": {
+      "summary": "คุณคือมานูเอล ผู้เพาะเลี้ยงแห่งอันเตเกรา ทำไร่กระบองเพชร ขนของในเมือง และเลี้ยงลูกร่วมกับฆัวนา",
+      "hook": "เมื่อกระสอบใบกลางของคุณเบาลง อิซาเบลวัยสิบหกปีก็ได้ยินเสียงแผ่วจากตุ้มน้ำหนักของพ่อค้า"
+    },
+    "ja": {
+      "summary": "あなたはアンテケラの農家マヌエルとして、畑と町の運搬仕事を担い家族を育てました。",
+      "hook": "あなたの真ん中の袋だけ軽くなったとき、16歳のイサベルは分銅の音を聞きました。"
+    }
+  },
+  "NIGER_SANDBAR": {
+    "ko": {
+      "summary": "당신은 카바라 나루의 바카리로, 짐꾼과 뱃사공을 거쳐 물가에서 배를 고쳤습니다.",
+      "hook": "당신의 배가 모래톱에 걸려 물이 스미자, 짐과 승객 사이에 말 없는 선택이 놓였습니다."
+    },
+    "en": {
+      "summary": "You were Bakari of Kabala Ferry Landing, rising from porter to boatman before repairing boats by the water.",
+      "hook": "When your boat grounded and began taking on water, an unspoken choice arose between the cargo and the passengers."
+    },
+    "th": {
+      "summary": "คุณคือบาการีแห่งท่าเรือคาบารา จากคนแบกหามสู่คนแจวเรือ ก่อนผันมาซ่อมเรือริมน้ำ",
+      "hook": "เมื่อเรือของคุณติดสันดอนและน้ำเริ่มซึม ทางเลือกระหว่างสัมภาระกับผู้โดยสารก็ปรากฏขึ้น"
+    },
+    "ja": {
+      "summary": "あなたはカバラの渡し場のバカリとして、荷運び人から船頭となり、水辺で舟を直しました。",
+      "hook": "あなたの舟が砂州に乗り上げ浸水すると、荷と乗客の間に言葉なき選択が生まれました。"
+    }
+  },
+  "SWITCHED_FANS": {
+    "ko": {
+      "summary": "당신은 임안의 부채 화가 심란으로, 동생과 가게를 꾸리고 조카에게 색 고르기를 가르쳤습니다.",
+      "hook": "당신이 같은 푸른 끈으로 묶은 두 부채가 서로 어울리지 않는 집에 도착했습니다."
+    },
+    "en": {
+      "summary": "You were Shen Lan, a Lin'an fan painter who ran a shop with your brother and taught your young niece to choose colors.",
+      "hook": "Two fans you tied with identical blue cords arrived at homes where their painted scenes did not belong."
+    },
+    "th": {
+      "summary": "คุณคือเสิ่นหลาน จิตรกรวาดพัดแห่งหลินอัน ผู้เปิดร้านกับน้องชายและสอนหลานสาวเลือกสี",
+      "hook": "พัดสองเล่มที่คุณผูกด้วยเชือกสีน้ำเงินเหมือนกัน กลับไปถึงบ้านที่ภาพบนพัดไม่เข้ากัน"
+    },
+    "ja": {
+      "summary": "あなたは臨安の扇絵師・沈蘭として、弟と店を営み、姪に色選びを教えました。",
+      "hook": "あなたが同じ青い紐で結んだ二本の扇は、絵柄に似合わない家へ届きました。"
+    }
+  },
+  "BROKEN_SWORD_PUPPET": {
+    "ko": {
+      "summary": "당신은 팔레르모에서 마리아와 인형극장을 꾸리고, 인형을 수선하며 딸 루치아에게 무대를 맡겼습니다.",
+      "hook": "결투 직전 기사 인형의 조종 막대가 부러지자, 당신은 환호 속에서 뜻밖의 선택과 마주했습니다."
+    },
+    "en": {
+      "summary": "You were Salvatore Bella, who ran a Palermo puppet theater with Maria, repaired puppets, and later entrusted the stage to your daughter Lucia.",
+      "hook": "When the knight’s control rod broke before the duel, you faced an unexpected choice amid cries of “Fight!”"
+    },
+    "th": {
+      "summary": "คุณคือซัลวาโตเร เบลลา ผู้ทำโรงละครหุ่นเชิดในปาแลร์โมกับมาเรีย รับซ่อมหุ่น และต่อมามอบเวทีให้ลูชา",
+      "hook": "เมื่อก้านบังคับแขนอัศวินหักก่อนฉากดวล คุณต้องเผชิญทางเลือกที่คาดไม่ถึงท่ามกลางเสียงร้องให้สู้"
+    },
+    "ja": {
+      "summary": "あなたはマリアとパレルモの人形劇場を営み、人形を修理し、娘ルチアに舞台を託しました。",
+      "hook": "決闘直前に騎士人形の操作棒が折れ、あなたは「戦え」の声の中で思わぬ選択に直面しました。"
+    }
+  },
+  "RED_SHAWL_CAMP": {
+    "ko": {
+      "summary": "당신은 지진 뒤 샌프란시스코에서 가게를 다시 열고, 사별 뒤 친구 엘런 가까이 산 클라라 워드였습니다.",
+      "hook": "검은 실로 꿰맨 붉은 숄의 노인이 목격됐지만, 당신 앞에는 같은 빛깔의 숄이 여럿 있었습니다."
+    },
+    "en": {
+      "summary": "You were Clara Ward, who reopened a San Francisco shop after the earthquake and later lived near your friend Ellen.",
+      "hook": "An old woman was seen in a red shawl marked by black stitching, yet you found more than one red shawl."
+    },
+    "th": {
+      "summary": "คุณคือคลารา วอร์ด ผู้กลับมาเปิดร้านในซานฟรานซิสโกหลังแผ่นดินไหว และต่อมาอาศัยใกล้เอลเลนเพื่อนของคุณ",
+      "hook": "มีคนเห็นหญิงชราสวมผ้าคลุมแดงที่มีด้ายดำ แต่เมื่อคุณออกตามหา กลับมีผ้าคลุมสีเดียวกันมากกว่าหนึ่งผืน"
+    },
+    "ja": {
+      "summary": "あなたは地震後にサンフランシスコで店を再開し、のちに友人エレンの近くで暮らしたクララでした。",
+      "hook": "黒い縫い糸のある赤いショールの老女が目撃されましたが、あなたの前には同じ色がいくつもありました。"
+    }
+  },
+  "PALM_BEAT_TANGO": {
+    "ko": {
+      "summary": "당신은 부에노스아이레스에서 장부 일로 수입을 얻고, 사고 뒤에도 편지를 이어 간 엘레나 로하스였습니다.",
+      "hook": "라파엘이 첫 음을 놓쳐 당신의 치맛단을 밟자, 웃음 속에서 그는 집에 가자고 말했습니다."
+    },
+    "en": {
+      "summary": "You were Elena Rojas of Buenos Aires, who earned your own income keeping ledgers and continued writing letters after an accident.",
+      "hook": "When Rafael missed the first note and stepped on your hem, laughter rose—and he asked you to go home."
+    },
+    "th": {
+      "summary": "คุณคือเอเลนา โรฮัสแห่งบัวโนสไอเรส ผู้หารายได้จากงานบัญชีและยังเขียนจดหมายต่อไปหลังเกิดอุบัติเหตุ",
+      "hook": "เมื่อราฟาเอลพลาดโน้ตแรกและเหยียบชายกระโปรงของคุณ เสียงหัวเราะก็ดังขึ้น ก่อนเขาจะชวนคุณกลับบ้าน"
+    },
+    "ja": {
+      "summary": "あなたはブエノスアイレスで帳簿の仕事をし、事故の後も手紙を書き続けたエレナ・ロハスでした。",
+      "hook": "ラファエルが最初の音を逃してあなたの裾を踏むと、笑い声の中で彼は帰ろうと言いました。"
+    }
+  },
+  "LOOSE_HEM_RIDE": {
+    "ko": {
+      "summary": "당신은 멜버른에서 수선 일을 이어 가다, 눈이 나빠지자 딸에게 가게를 맡긴 메이벨 코너였습니다.",
+      "hook": "집세 때문에 밑단 시험을 생략한 뒤, 당신이 만든 치마가 애니의 자전거 바퀴로 빨려 들었습니다."
+    },
+    "en": {
+      "summary": "You were Mabel Connor, who worked in alterations in Melbourne and entrusted your shop to your daughter when your eyesight worsened.",
+      "hook": "After you skipped a hem test to meet the rent, Annie’s new cycling skirt was pulled toward the bicycle wheel."
+    },
+    "th": {
+      "summary": "คุณคือเมเบล คอนเนอร์ ผู้รับซ่อมเสื้อผ้าในเมลเบิร์น และมอบร้านให้ลูกสาวเมื่อสายตาของคุณแย่ลง",
+      "hook": "หลังคุณข้ามการทดสอบชายกระโปรงเพราะเร่งหาเงินจ่ายค่าเช่า กระโปรงของแอนนีก็ถูกดึงเข้าหาล้อจักรยาน"
+    },
+    "ja": {
+      "summary": "あなたはメルボルンで仕立て直しを続け、目が悪くなると娘に店を託したメイベル・コナーでした。",
+      "hook": "家賃に追われて裾の試験を省くと、あなたが作ったスカートはアニーの自転車の車輪へ吸い込まれました。"
+    }
+  },
+  "TWO_SPOONS_DABBA": {
+    "ko": {
+      "summary": "당신은 봄베이에서 도시락을 나르다 아내와 차 가게를 열고, 사별 뒤 딸 곁에서 산 고빈드 파틸이었습니다.",
+      "hook": "하리에게 도시락을 직접 건네 달라는 부탁을 받은 날, 당신은 늘 그가 기다리던 자리가 빈 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Govind Patil of Bombay, who delivered lunchboxes, opened a tea shop with your wife, and later lived near your daughter.",
+      "hook": "On the day you were asked to place Hari’s lunchbox directly in his hands, his usual place by the station was empty."
+    },
+    "th": {
+      "summary": "คุณคือโกวินด์ ปาติลแห่งบอมเบย์ ผู้ส่งปิ่นโต เปิดร้านชากับภรรยา และต่อมาอาศัยอยู่ใกล้บุตรสาว",
+      "hook": "ในวันที่คุณได้รับคำขอให้ส่งปิ่นโตถึงมือฮารีโดยตรง ที่ประจำของเขาหน้าสถานีกลับว่างเปล่า"
+    },
+    "ja": {
+      "summary": "あなたはボンベイで弁当を運び、妻と茶店を開き、のちに娘のそばで暮らしたゴヴィンドでした。",
+      "hook": "ハリへ直接弁当を渡すよう頼まれた日、あなたが駅前に着くと、いつもの待ち場所は空でした。"
+    }
+  },
+  "WARM_FLOOR_ROOM": {
+    "ko": {
+      "summary": "당신은 마포나루에서 조카를 키우며 어머니의 주막을 잇고, 노년에 이웃 청년에게 물려준 윤달례였습니다.",
+      "hook": "다시는 오지 말라던 연희가 딸을 업고 돌아왔지만, 당신은 가장 따뜻한 방을 이미 다른 나그네에게 약속했습니다."
+    },
+    "en": {
+      "summary": "You were Yun Dallye, who raised your niece, inherited your mother’s tavern at Mapo Ferry, and later passed it to a young neighbor.",
+      "hook": "Yeonhui returned with her young daughter, but you had already promised the warmest room to another traveler."
+    },
+    "th": {
+      "summary": "คุณคือยุนดัลรเย ผู้เลี้ยงหลานสาว สืบทอดโรงเตี๊ยมของแม่ที่ท่าเรือมาโพ และยกให้ชายหนุ่มข้างบ้านในวัยชรา",
+      "hook": "ยอนฮีกลับมาพร้อมลูกสาวตัวน้อย แต่คุณได้สัญญาจะยกห้องที่อุ่นที่สุดให้นักเดินทางอีกคนแล้ว"
+    },
+    "ja": {
+      "summary": "あなたは姪を育て、麻浦船着き場で母の酒幕を継ぎ、晩年に近所の青年へ譲った尹ダルレでした。",
+      "hook": "ヨニが幼い娘を連れて戻りましたが、あなたは一番暖かい部屋を別の旅人に約束していました。"
+    }
+  },
+  "MISSING_BLUE_TUNIC": {
+    "ko": {
+      "summary": "당신은 오스티아에서 두 아이를 키우며 천을 씻고 기운 리비아 세쿤다였습니다.",
+      "hook": "사라진 푸른 윗옷 아래에서 당신은 밀가루 한 알을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Livia Secunda of Ostia, washing and mending cloth while raising two children.",
+      "hook": "Beneath the line where a customer's blue tunic vanished, you found a single grain of flour."
+    },
+    "th": {
+      "summary": "คุณคือลิเวีย เซคุนดาแห่งออสเทีย ผู้ซักและปะชุนผ้าพร้อมกับเลี้ยงลูกสองคน",
+      "hook": "ใต้ราวที่เสื้อคลุมสีน้ำเงินของลูกค้าหายไป คุณพบเม็ดแป้งเพียงเม็ดเดียว"
+    },
+    "ja": {
+      "summary": "あなたはオスティアで布を洗い、繕いながら2人の子を育てたリウィアでした。",
+      "hook": "青い上着が消えた綱の下で、あなたは小麦粉を一粒見つけました。"
+    }
+  },
+  "FOUR_LOOSE_PAGES": {
+    "ko": {
+      "summary": "당신은 팀북투에서 책을 베끼고 가족을 꾸린 우마르 바였습니다.",
+      "hook": "새벽까지 손님의 책을 마쳐야 하는 밤, 당신은 친구의 마지막 부탁을 받았습니다."
+    },
+    "en": {
+      "summary": "You were Umar Ba of Timbuktu, copying books and raising a family.",
+      "hook": "With a customer's book due by dawn, you received an old friend's request to write down a shared memory before he left for Gao."
+    },
+    "th": {
+      "summary": "คุณคืออูมาร์ บาแห่งทิมบักตู ผู้คัดลอกหนังสือและเลี้ยงดูครอบครัว",
+      "hook": "ในคืนที่ต้องคัดหนังสือให้เสร็จก่อนรุ่งสาง คุณได้รับคำขอจากเพื่อนเก่าให้เขียนความทรงจำก่อนเขาไปเกา"
+    },
+    "ja": {
+      "summary": "あなたはトンブクトゥで書物を書き写し、家庭を築いたウマル・バでした。",
+      "hook": "客の本を夜明けまでに仕上げる夜、あなたは旧友から旅立つ前の頼みを受けました。"
+    }
+  },
+  "KNEELING_PUPPET": {
+    "ko": {
+      "summary": "당신은 오사카에서 두 아이를 키우며 인형을 다룬 오노 겐조였습니다.",
+      "hook": "공연 중 왼팔 막대가 풀려 증서가 떨어지자, 모두가 당신의 다음 움직임을 기다렸습니다."
+    },
+    "en": {
+      "summary": "You were Ono Genzo of Osaka, working puppets while raising two children.",
+      "hook": "When the puppet's left-arm rod came loose and the document fell, the narrator, musician, and audience waited on your next move."
+    },
+    "th": {
+      "summary": "คุณคือโอโนะ เก็นโซแห่งโอซากะ ผู้เชิดหุ่นพร้อมกับเลี้ยงลูกสองคน",
+      "hook": "เมื่อก้านแขนซ้ายหลุดและเอกสารตกลงพื้น ผู้ขับลำนำ นักดนตรี และผู้ชมต่างรอการขยับต่อไปของคุณ"
+    },
+    "ja": {
+      "summary": "あなたは大阪で2人の子を育てながら人形を操った小野源蔵でした。",
+      "hook": "左腕の棒が外れ証文が落ちたとき、語り手も奏者もあなたの次の動きを待ちました。"
+    }
+  },
+  "BROKEN_TWELFTH_STRING": {
+    "ko": {
+      "summary": "당신은 킬와 키시와니에서 구슬 가게와 장부를 꾸린 아미나 빈티 라시드였습니다.",
+      "hook": "열두 줄 중 하나가 끊기자 상인은 반값을 제시했고, 밀물은 돌길 끝에 닿았습니다."
+    },
+    "en": {
+      "summary": "You were Amina binti Rashid of Kilwa Kisiwani, running a bead shop and keeping your own ledgers.",
+      "hook": "When one of twelve bead strands broke, the merchant offered half price as the rising tide reached the stone causeway."
+    },
+    "th": {
+      "summary": "คุณคืออามีนา บินตี ราชิดแห่งคิลวา คิซิวานี ผู้ดูแลร้านลูกปัดและสมุดบัญชีของตน",
+      "hook": "เมื่อลูกปัดหนึ่งในสิบสองสายขาด พ่อค้าเสนอจ่ายครึ่งราคา ขณะที่น้ำขึ้นมาถึงทางหิน"
+    },
+    "ja": {
+      "summary": "あなたはキルワ・キシワニでビーズ店と帳簿を守ったアミナでした。",
+      "hook": "12本のうち1本が切れ、商人が半値を告げるなか、満ち潮は石の道へ迫りました。"
+    }
+  },
+  "OPEN_GOAL_LEFT": {
+    "ko": {
+      "summary": "당신은 폼페이의 세탁·염색 작업장에서 장부를 맡은 루키우스 파우스투스였습니다.",
+      "hook": "잿빛 가루가 뜰에 내리는 동안, 당신은 미뤄 둔 품삯과 피난 사이에 놓였습니다."
+    },
+    "en": {
+      "summary": "You were Lucius Faustus, the bookkeeper of a laundry and dyeing workshop in Pompeii.",
+      "hook": "As gray dust fell into the courtyard, you faced unfinished wages and the need to flee at once."
+    },
+    "th": {
+      "summary": "คุณคือลูคิอุส เฟาสตัส เสมียนบัญชีของโรงซักและย้อมผ้าในปอมเปอี",
+      "hook": "ขณะที่ผงสีเทาโปรยลงในลาน คุณอยู่ระหว่างค่าจ้างที่ยังคำนวณไม่เสร็จกับการอพยพทันที"
+    },
+    "ja": {
+      "summary": "あなたはポンペイの洗濯・染色工房で帳簿を担ったルキウスでした。",
+      "hook": "灰色の粉が中庭に降るなか、あなたは未払い賃金と即時の避難の間に立ちました。"
+    }
+  },
+  "OTHER_BALLOT": {
+    "ko": {
+      "summary": "당신은 크라이스트처치에서 딸을 키우고 재봉 작업실을 연 마거릿 홀이었습니다.",
+      "hook": "여성의 첫 총선 투표일, 당신은 정오의 납기와 문밖의 긴 줄을 마주했습니다."
+    },
+    "en": {
+      "summary": "You were Margaret Hall of Christchurch, raising your daughter through sewing and opening a dressmaking workshop.",
+      "hook": "On the first general election day when women could vote, you faced a noon deadline and the long line outside."
+    },
+    "th": {
+      "summary": "คุณคือมาร์กาเร็ต ฮอลล์แห่งไครสต์เชิร์ช ผู้เลี้ยงลูกสาวด้วยงานเย็บผ้าและเปิดห้องเสื้อ",
+      "hook": "ในวันเลือกตั้งทั่วไปครั้งแรกที่ผู้หญิงได้ลงคะแนน คุณเผชิญทั้งกำหนดส่งตอนเที่ยงและแถวยาวนอกประตู"
+    },
+    "ja": {
+      "summary": "あなたは針仕事で娘を育て、仕立て工房を開いたマーガレットでした。",
+      "hook": "女性初の総選挙投票日、あなたは正午の納期と戸外の長い列に向き合いました。"
+    }
+  },
+  "CRACKED_PIGEON_TOWER": {
+    "ko": {
+      "summary": "당신은 이스파한 외곽에서 다친 발목을 안고 비둘기탑을 돌본 유수프였습니다.",
+      "hook": "새들이 소란을 피운 날, 당신은 파르하드를 의심했지만 깨진 외벽에서 뱀의 흔적을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Yusuf, who tended a pigeon tower outside Isfahan after an injured ankle forced you to change work.",
+      "hook": "When the birds erupted, you suspected Farhad—until you found a snake's marks in a crack in the tower wall."
+    },
+    "th": {
+      "summary": "คุณคือยูซุฟ ผู้ดูแลหอนกพิราบนอกอิสฟาฮาน หลังข้อเท้าบาดเจ็บทำให้คุณต้องเปลี่ยนงาน",
+      "hook": "เมื่อฝูงนกแตกตื่น คุณสงสัยฟาร์ฮัด ก่อนจะพบรอยงูตรงรอยแตกบนผนังหอคอย"
+    },
+    "ja": {
+      "summary": "あなたは足首の負傷で仕事を変え、イスファハーン郊外の鳩塔を守ったユスフでした。",
+      "hook": "鳥が騒いだ日、あなたはファルハドを疑いますが、外壁の割れ目に蛇の跡を見つけました。"
+    }
+  },
+  "SECOND_WAGON": {
+    "ko": {
+      "summary": "당신은 브리타니아에서 옷을 고치고 딸을 키우며 손녀까지 본 마르켈라였습니다.",
+      "hook": "이삿날 딸의 짐만 수레에 없자, 당신은 딸이 남겠다는 사비나의 방을 확인하러 갔습니다."
+    },
+    "en": {
+      "summary": "You were Marcella, a seamstress in Britannia who mended clothes, raised a daughter, and lived to see your granddaughter.",
+      "hook": "When your daughter's bundle was missing from the moving cart, you went to inspect the room where she meant to stay."
+    },
+    "th": {
+      "summary": "คุณคือมาร์เคลลา ช่างเย็บผ้าในบริแทนเนีย ผู้ซ่อมเสื้อผ้า เลี้ยงลูกสาว และมีชีวิตจนได้เห็นหลานสาว",
+      "hook": "เมื่อห่อผ้าของลูกสาวหายไปจากเกวียน คุณจึงไปดูห้องที่เธอตั้งใจจะอยู่กับซาบินา"
+    },
+    "ja": {
+      "summary": "あなたはブリタニアで服を繕い、娘を育て、孫娘を見守った裁縫師マルケラでした。",
+      "hook": "引っ越しの朝、娘の包みだけがなく、あなたは娘が残るというサビナの部屋へ向かいました。"
+    }
+  },
+  "CAKES_ON_ICE": {
+    "ko": {
+      "summary": "당신은 부에노스아이레스에서 과자를 만들어 좌판과 가게를 꾸린 아말리아 로하스였습니다.",
+      "hook": "과자 다섯 개가 얼음 위로 굴러가자, 당신은 남은 일곱 개를 어떻게 내놓을지 결정해야 했습니다."
+    },
+    "en": {
+      "summary": "You were Amalia Rojas, a Buenos Aires confectioner who ran a stall and shop before handing over your business.",
+      "hook": "When five of twelve pastries rolled onto the ice, you had to decide how to serve the seven that remained."
+    },
+    "th": {
+      "summary": "คุณคืออามาเลีย โรฮัส คนทำขนมแห่งบัวโนสไอเรส ผู้เปิดแผงและร้านก่อนยกกิจการให้หลานชาย",
+      "hook": "เมื่อขนม 5 จาก 12 ชิ้นกลิ้งลงลานน้ำแข็ง คุณต้องตัดสินใจว่าจะเสิร์ฟ 7 ชิ้นที่เหลืออย่างไร"
+    },
+    "ja": {
+      "summary": "あなたはブエノスアイレスで菓子の露店と店を営んだアマリア・ロハスでした。",
+      "hook": "12個のうち5個が氷へ転がり、あなたは残る7個をどう出すか決めることになりました。"
+    }
+  },
+  "PULLED_WALL": {
+    "ko": {
+      "summary": "당신은 에도 니혼바시에서 아버지에게 일을 배우고 작업장을 꾸린 목수 겐지였습니다.",
+      "hook": "불길이 다가오자 작업장을 허물라는 명령이 떨어졌고, 안에는 미네의 작은 상자가 남아 있었습니다."
+    },
+    "en": {
+      "summary": "You were Genji, a Nihonbashi carpenter who learned from your father and rebuilt your workshop in Edo.",
+      "hook": "As fire neared, you were ordered to tear down your workshop while Mine's small box remained inside."
+    },
+    "th": {
+      "summary": "คุณคือเก็นจิ ช่างไม้แห่งนิฮงบาชิ เอโดะ ผู้เรียนงานจากพ่อและสร้างโรงงานของคุณขึ้นใหม่",
+      "hook": "เมื่อไฟลามใกล้เข้ามา คุณได้รับคำสั่งให้รื้อโรงงาน ขณะที่หีบใบเล็กของมิเนะยังอยู่ข้างใน"
+    },
+    "ja": {
+      "summary": "あなたは父から技を学び、江戸日本橋で仕事場を再建した大工の源治でした。",
+      "hook": "火が迫るなか仕事場を壊せと命じられ、奥にはミネの小箱が残されていました。"
+    }
+  },
+  "WHITE_SCREEN_TUNE": {
+    "ko": {
+      "summary": "당신은 봄베이의 무성영화관과 극단, 혼례에서 하모니움을 연주한 비말 샤였습니다.",
+      "hook": "추격 장면이 하얗게 멈췄지만, 당신은 고장을 숨기라는 말 속에서 빠른 연주를 이어갔습니다."
+    },
+    "en": {
+      "summary": "You were Vimal Shah, a Bombay harmonium player who made music for silent films, theater troupes, and weddings.",
+      "hook": "When the chase scene vanished into a white screen, you kept playing as the owner urged you to hide the breakdown."
+    },
+    "th": {
+      "summary": "คุณคือวิมัล ชาห์ นักฮาร์โมเนียมแห่งบอมเบย์ ผู้เล่นดนตรีให้หนังเงียบ คณะละคร และงานแต่ง",
+      "hook": "เมื่อฉากไล่ล่ากลายเป็นจอขาว คุณยังเล่นต่อ ขณะเจ้าของโรงสั่งให้คุณปกปิดเหตุขัดข้อง"
+    },
+    "ja": {
+      "summary": "あなたはボンベイで無声映画や劇団、婚礼にハーモニウムを奏でたヴィマル・シャーでした。",
+      "hook": "追跡シーンが白く止まり、あなたは故障を隠すよう求められたまま演奏を続けました。"
+    }
+  },
+  "EMPTY_PHOTO_SEAT": {
+    "ko": {
+      "summary": "당신은 세마랑에서 어머니에게 바틱을 배우고 젊은 일꾼들을 가르친 사리였습니다.",
+      "hook": "사진을 위해 멈춘 순간 밀랍이 천에 떨어지려 하자, 당신 앞에서 와르시가 손을 움직였습니다."
+    },
+    "en": {
+      "summary": "You were Sari, a Semarang batik worker who learned from your mother and later taught young workers.",
+      "hook": "As hot wax was about to drip during a photograph, you saw Warsi move—and heard she would be left out next time."
+    },
+    "th": {
+      "summary": "คุณคือซารี ช่างบาติกแห่งเซอมารัง ผู้เรียนจากแม่และต่อมาได้สอนคนงานรุ่นเยาว์",
+      "hook": "เมื่อขี้ผึ้งร้อนเกือบหยดระหว่างถ่ายภาพ คุณเห็นวาร์ซีขยับมือและได้ยินว่าเธอจะถูกตัดออกจากภาพหน้า"
+    },
+    "ja": {
+      "summary": "あなたは母からバティックを学び、若い働き手を教えたスマランのサリでした。",
+      "hook": "撮影中、蝋が落ちかけてワルシが手を動かすと、あなたは次の写真から外すという言葉を聞きました。"
+    }
+  },
+  "MASKED_FARE": {
+    "ko": {
+      "summary": "당신은 베네치아에서 곤돌라를 몰아 가족을 키우고 루치아의 시장 일을 도운 마테오였습니다.",
+      "hook": "당신 앞에 붉은 매듭을 단 가면의 루치아와 화물을 든 상인이 차례로 나타났습니다."
+    },
+    "en": {
+      "summary": "You were Matteo of Venice, a gondolier who raised a family and later helped Lucia with her market work.",
+      "hook": "You faced Lucia disguised as a masked passenger, followed by the merchant whose cargo you had agreed to carry."
+    },
+    "th": {
+      "summary": "คุณคือมัตเตโอแห่งเวนิส ผู้พายเรือกอนโดลาเลี้ยงครอบครัวและต่อมาช่วยลูเซียทำงานที่ตลาด",
+      "hook": "ตรงหน้าคุณ ลูเซียในหน้ากากพร้อมปมแดงปรากฏตัว ก่อนพ่อค้าที่คุณรับขนสินค้าจะตามมา"
+    },
+    "ja": {
+      "summary": "あなたはヴェネツィアでゴンドラを漕ぎ、家族を養い、ルチアを手伝ったマテオでした。",
+      "hook": "あなたの前に、赤い結び目を携えた仮面のルチアと、荷物を持つ商人が現れました。"
+    }
+  },
+  "SECOND_LANDING": {
+    "ko": {
+      "summary": "당신은 소치밀코의 치남파에서 가족을 키우고 동생과 밭을 나눈 토치틀이었습니다.",
+      "hook": "당신은 밭을 똑같이 나눴지만, 동생 몫에는 수확물을 배로 옮길 길이 없음을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Tochtli of Xochimilco, raising a family on a chinampa and sharing a field with your younger brother.",
+      "hook": "You divided the field equally, only to find that your brother's half had no path to the boat."
+    },
+    "th": {
+      "summary": "คุณคือโตชิตล์แห่งโซชิมิลโก ผู้เลี้ยงครอบครัวบนชินัมปาและแบ่งไร่กับน้องชาย",
+      "hook": "คุณแบ่งไร่เท่ากันทุกประการ แต่ส่วนของน้องชายกลับไม่มีทางขนผลผลิตไปถึงเรือ"
+    },
+    "ja": {
+      "summary": "あなたはソチミルコのチナンパで家族を養い、弟と畑を分けたトチトルでした。",
+      "hook": "あなたは畑を等分しましたが、弟の側には収穫物を舟へ運ぶ道がありませんでした。"
+    }
+  },
+  "CUT_BOW_ROPE": {
+    "ko": {
+      "summary": "당신은 아피아에서 배로 과일을 팔고 가족과 살다가 젊은 이웃을 가르친 멜레였습니다.",
+      "hook": "폭풍 속 당신의 배에서 아버지의 노를 찾던 페니의 손목에 줄이 감겼습니다."
+    },
+    "en": {
+      "summary": "You were Mele of Apia, carrying fruit by boat to sell at the harbor and later teaching a young neighbor.",
+      "hook": "In the storm, you saw the boat's line tighten around Peni's wrist as he reached for his late father's oar."
+    },
+    "th": {
+      "summary": "คุณคือเมเลแห่งอาปีอา ผู้ขนผลไม้ทางเรือไปขายที่ท่าเรือและต่อมาสอนเพื่อนบ้านรุ่นเยาว์",
+      "hook": "กลางพายุ คุณเห็นเชือกเรือพันข้อมือเพนีขณะเขาเอื้อมหาไม้พายของพ่อผู้ล่วงลับ"
+    },
+    "ja": {
+      "summary": "あなたはアピアで果物を舟に積んで売り、のちに若い隣人を教えたメレでした。",
+      "hook": "嵐の中、あなたの舟で亡父の櫂を求めるペニの手首に、綱が巻きつきました。"
+    }
+  },
+  "TWO_BLACK_COATS": {
+    "ko": {
+      "summary": "당신은 피렌체의 공동 화덕과 밀가루 장부를 맡아 배급을 꾸린 빵 굽는 베아트리체였습니다.",
+      "hook": "모두의 생존이 걸린 때, 당신이 오래된 이웃을 먼저 돕던 관행이 문제로 떠올랐습니다."
+    },
+    "en": {
+      "summary": "You were Beatrice, a Florentine baker who kept the communal oven and flour ledger and organized distributions.",
+      "hook": "As everyone's survival came to depend on the flour shares, your custom of helping longtime neighbors first was challenged."
+    },
+    "th": {
+      "summary": "คุณคือเบอาตริเช คนทำขนมปังแห่งฟลอเรนซ์ ผู้ดูแลเตาอบ บัญชีแป้ง และการปันส่วน",
+      "hook": "เมื่อทุกชีวิตขึ้นอยู่กับการปันส่วน ธรรมเนียมที่คุณช่วยเพื่อนบ้านเก่าแก่ก่อนจึงถูกตั้งคำถาม"
+    },
+    "ja": {
+      "summary": "あなたはフィレンツェで共同窯と小麦粉の帳簿を預かり、配給を担ったパン職人でした。",
+      "hook": "皆の生存が配給に懸かるなか、あなたが古い隣人を先に助ける慣習が問われました。"
+    }
+  },
+  "EMPTY_FRONT_ROW": {
+    "ko": {
+      "summary": "당신은 카이로에서 가게를 오래 꾸리고 조카 살마를 키운 파리다였습니다.",
+      "hook": "살마의 첫 연극에서 당신은 자신의 말버릇과 언니에게 한 사적인 말까지 들었습니다."
+    },
+    "en": {
+      "summary": "You were Farida of Cairo, running your family's shop for many years and raising your niece Salma.",
+      "hook": "At Salma's first play, you heard your own favorite expression—and private words you had spoken to your ailing sister."
+    },
+    "th": {
+      "summary": "คุณคือฟารีดาแห่งไคโร ผู้ดูแลร้านของครอบครัวมาหลายปีและเลี้ยงซัลมาหลานสาว",
+      "hook": "ในละครเรื่องแรกของซัลมา คุณได้ยินทั้งคำติดปากและถ้อยคำส่วนตัวที่คุณเคยพูดกับพี่สาวผู้ป่วย"
+    },
+    "ja": {
+      "summary": "あなたはカイロで家族の店を長く切り盛りし、姪のサルマを育てたファリダでした。",
+      "hook": "サルマの初舞台で、あなたは自分の口癖と、病気の姉に告げた私的な言葉を耳にしました。"
+    }
+  },
+  "BALL_UNDER_SLED": {
+    "ko": {
+      "summary": "당신은 하를럼에서 피터르와 여관을 꾸리고 두 아이를 키운 안네케였습니다.",
+      "hook": "모두 얀의 승리를 외칠 때, 당신은 아이의 썰매 아래 더 가까운 공을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Anneke of Haarlem, running an inn with Pieter and raising two children.",
+      "hook": "As everyone hailed Jan's victory, you noticed the cloth merchant's ball hidden beneath a child's sled, closer to the stake."
+    },
+    "th": {
+      "summary": "คุณคืออันเนอเคอแห่งฮาร์เลม ผู้บริหารโรงเตี๊ยมกับปีเตอร์และเลี้ยงลูกสองคน",
+      "hook": "ขณะที่ทุกคนร้องว่ายันชนะ คุณกลับเห็นลูกของพ่อค้าผ้าใต้เลื่อนเด็ก ซึ่งอยู่ใกล้หลักกว่า"
+    },
+    "ja": {
+      "summary": "あなたはハールレムでピーテルと宿屋を営み、2人の子を育てたアンネケでした。",
+      "hook": "皆がヤンの勝利を叫ぶなか、あなたは子どものそりの下に、杭に近い球を見つけました。"
+    }
+  },
+  "TWO_MARKET_VOICES": {
+    "ko": {
+      "summary": "당신은 헤시피의 과일 장수 벤타로, 가족을 돌보며 매대를 이어 갔습니다.",
+      "hook": "목이 쉰 당신 대신 제카가 외친 망고값은 당신이 적어 둔 값과 달랐습니다."
+    },
+    "en": {
+      "summary": "You were Benta, a Recife fruit seller who ran a stall, cared for your family, and later entrusted the stall to young Lia.",
+      "hook": "When you lost your voice after moving stalls, Zeca called out a mango price that differed from the one you had written."
+    },
+    "th": {
+      "summary": "คุณคือเบนตา แม่ค้าผลไม้แห่งเรซีฟี ผู้ดูแลครอบครัวและยกแผงให้ลีอาเมื่อแก่ตัวลง",
+      "hook": "เมื่อคุณเสียงแหบ เซกาช่วยตะโกนขายมะม่วง แต่ราคาที่เขาประกาศกลับไม่ตรงกับที่คุณเขียนไว้"
+    },
+    "ja": {
+      "summary": "あなたはレシフェの果物売りベンタとして、家族を支えながら露店を営みました。",
+      "hook": "声をからしたあなたに代わり、ジェカが叫んだマンゴーの値段は書いた額と違いました。"
+    }
+  },
+  "RED_CORD_TRUNK": {
+    "ko": {
+      "summary": "당신은 베이루트의 항구 노동자 일리야스로, 동생을 돌보고 파라와 가정을 꾸렸습니다.",
+      "hook": "당신이 붉은 끈의 가방을 숨기자, 미리암은 가방 없이도 떠나겠다고 했습니다."
+    },
+    "en": {
+      "summary": "You were Ilyas, a Beirut port worker who cared for your younger sister and built a family with Farah.",
+      "hook": "After you hid Miriam's red-corded bag to keep her from leaving, she said she would go without it."
+    },
+    "th": {
+      "summary": "คุณคืออิลยาส คนงานท่าเรือแห่งเบรุต ผู้ดูแลน้องสาวและสร้างครอบครัวกับฟารา",
+      "hook": "เมื่อคุณซ่อนกระเป๋าผูกเชือกสีแดงเพื่อรั้งมิเรียมไว้ เธอกลับบอกว่าจะไปโดยไม่มีกระเป๋า"
+    },
+    "ja": {
+      "summary": "あなたはベイルートの港で働くイリヤスとして、妹を世話しファラと家庭を築きました。",
+      "hook": "あなたが赤いひものかばんを隠すと、ミリアムは荷物がなくても旅立つと言いました。"
+    }
+  },
+  "SWAYING_SPEAKER": {
+    "ko": {
+      "summary": "당신은 1944년 바르샤바에서 지하 대피소를 잇던 연락원 조피아였습니다.",
+      "hook": "당신 앞에서 신속한 이동과 위험을 알 권리가 서로 맞섰습니다."
+    },
+    "en": {
+      "summary": "You were Zofia Kowalska, a former tram conductor who carried messages between underground shelters in occupied Warsaw.",
+      "hook": "As you marked safe alleys on an old tram ticket, speed came into conflict with people's right to know the danger."
+    },
+    "th": {
+      "summary": "คุณคือโซเฟีย โควาลสกา อดีตพนักงานรถรางผู้ส่งข่าวระหว่างหลุมหลบภัยใต้ดินในวอร์ซอ",
+      "hook": "ขณะคุณเขียนตรอกปลอดภัยหลังตั๋วเก่า ความเร่งด่วนกลับปะทะกับสิทธิที่จะรู้ถึงอันตราย"
+    },
+    "ja": {
+      "summary": "あなたは占領下のワルシャワで地下避難所を結ぶ連絡員、ゾフィアでした。",
+      "hook": "古い切符に安全な路地を記すあなたの前で、速さと危険を知る権利が衝突しました。"
+    }
+  },
+  "ONE_REED_KNOT": {
+    "ko": {
+      "summary": "당신은 앙코르 근처의 농부 다라로, 가족을 꾸리고 평생 논을 일궜습니다.",
+      "hook": "소마의 논이 마른 아침, 당신은 흙 마개에서 자신의 갈대 매듭을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Dara, a rice farmer near Angkor who raised a family and continued farming after your daughter left home.",
+      "hook": "When Soma's field dried and suspicion fell on a child, you saw your own reed knot tied to the earthen plug."
+    },
+    "th": {
+      "summary": "คุณคือดารา ชาวนาใกล้นครวัด ผู้สร้างครอบครัวและยังคงทำนาหลังลูกสาวแยกไปตั้งตัว",
+      "hook": "เช้าวันที่นาของโสมาแห้งและเด็กถูกสงสัย คุณกลับเห็นปมกกของตนบนจุกดิน"
+    },
+    "ja": {
+      "summary": "あなたはアンコール近郊の農夫ダラとして、家族を育てながら水田を耕し続けました。",
+      "hook": "ソマの田が干上がり子どもが疑われる中、あなたは土の栓に自分の葦の結び目を見ました。"
+    }
+  },
+  "CUT_CLOTH_LINE": {
+    "ko": {
+      "summary": "당신은 캘커타의 세탁업자 아샤로, 나빈과 두 아이를 키우며 일했습니다.",
+      "hook": "염소의 목을 조이는 줄을 끊으면, 당신이 배달할 옷은 모두 흙에 떨어질 참이었습니다."
+    },
+    "en": {
+      "summary": "You were Asha, a Calcutta laundry worker who raised two children and continued the family trade with Navin and Mina.",
+      "hook": "As the clothesline tightened around a young goat's neck, you faced the risk of the delivery clothes falling into the dirt."
+    },
+    "th": {
+      "summary": "คุณคืออาชา คนทำงานซักผ้าแห่งกัลกัตตา ผู้เลี้ยงลูกสองคนและสานต่องานของครอบครัว",
+      "hook": "เมื่อเชือกรัดคอลูกแพะ คุณเผชิญความเสี่ยงว่าเสื้อผ้าที่ต้องส่งจะร่วงลงดิน"
+    },
+    "ja": {
+      "summary": "あなたはカルカッタの洗濯人アシャとして、2人の子を育て家業を続けました。",
+      "hook": "子ヤギの首に綱が食い込む中、切ればあなたの配達物が土へ落ちるところでした。"
+    }
+  },
+  "SOUP_OVER_VOTES": {
+    "ko": {
+      "summary": "당신은 폼페이의 음식 장수 사비나로, 페트라와 장사하고 네아폴리스에서 식당을 열었습니다.",
+      "hook": "당신이 열지 않은 지지의 뜻이 식당 벽의 커다란 이름으로 손님들 앞에 나타났습니다."
+    },
+    "en": {
+      "summary": "You were Sabina, a Pompeii food seller who worked with Petra and later opened another eatery in Neapolis.",
+      "hook": "One morning, you found your name painted on the wall as an endorsement you had never given."
+    },
+    "th": {
+      "summary": "คุณคือซาบีนา แม่ค้าอาหารแห่งปอมเปอี ผู้ทำงานกับเปตราและเปิดร้านใหม่ที่เนอาโปลิส",
+      "hook": "เช้าวันหนึ่ง คุณพบชื่อตนบนกำแพงในฐานะคำสนับสนุนผู้สมัครที่คุณไม่เคยให้"
+    },
+    "ja": {
+      "summary": "あなたはポンペイの食べ物商いサビナとして、ペトラと働きネアポリスで食堂を開きました。",
+      "hook": "ある朝、あなたの名が、覚えのない候補者推薦として壁に大きく書かれていました。"
+    }
+  },
+  "ONE_SHIFT_INSIDE": {
+    "ko": {
+      "summary": "당신은 스톡홀름에서 오래 일한 전화 교환원 엘사였습니다.",
+      "hook": "파업 첫날, 당신은 유리창 너머에서 밀린 집세 때문에 일하는 동생을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Elsa, a longtime Stockholm telephone operator who later kept an alterations shop’s books.",
+      "hook": "On the strike’s first morning, you saw your sister working behind the glass to pay overdue rent and feed her daughter."
+    },
+    "th": {
+      "summary": "คุณคือเอลซา พนักงานต่อสายโทรศัพท์ผู้ทำงานมายาวนานในสตอกโฮล์ม ก่อนมาดูแลบัญชีร้านซ่อมเสื้อผ้า",
+      "hook": "เช้าวันแรกของการนัดหยุดงาน คุณเห็นน้องสาวทำงานอยู่หลังกระจกเพื่อหาเงินจ่ายค่าเช่าค้างและค่าอาหารของลูก"
+    },
+    "ja": {
+      "summary": "あなたはストックホルムで長く働き、後に仕立て直し店の帳簿を担った電話交換手エルサでした。",
+      "hook": "スト初日の朝、あなたは滞納家賃と娘の食費のため働く妹をガラス越しに見ました。"
+    }
+  },
+  "WRONG_PIANO_NIGHT": {
+    "ko": {
+      "summary": "당신은 부에노스아이레스에서 피아노를 수리하고 조율한 니콜라스였습니다.",
+      "hook": "첫 탱고 직전, 당신이 한 시간 넘게 조율한 피아노에서 뜻밖의 음이 울렸습니다."
+    },
+    "en": {
+      "summary": "You were Nicolás, a Buenos Aires craftsman who repaired and tuned pianos with skills learned from your father and uncle.",
+      "hook": "Just before the first tango, a wrong note sounded from the piano you were certain you had tuned for over an hour."
+    },
+    "th": {
+      "summary": "คุณคือนิโคลัส ช่างซ่อมและจูนเปียโนแห่งบัวโนสไอเรส ผู้เรียนฝีมือมาจากพ่อและลุง",
+      "hook": "ก่อนแทงโกเพลงแรก เสียงผิดคาดดังจากเปียโนที่คุณมั่นใจว่าใช้เวลาจูนนานกว่าหนึ่งชั่วโมง"
+    },
+    "ja": {
+      "summary": "あなたは父と叔父に学んだ腕でピアノを修理し、調律したブエノスアイレスのニコラスでした。",
+      "hook": "最初のタンゴの直前、あなたが一時間以上調律したはずのピアノから意外な音が響きました。"
+    }
+  },
+  "HOOK_LEFT_BELOW": {
+    "ko": {
+      "summary": "당신은 제주 정의현 바다에서 오래 물질하고 어린 잠녀를 가르친 옥분이었습니다.",
+      "hook": "숨이 얼마 남지 않은 순간, 당신의 빗창과 큰 전복이 함께 바위틈에 걸렸습니다."
+    },
+    "en": {
+      "summary": "You were Okbun, a Jeju jamnyeo who worked in the sea for years, repaired diving tools, and taught young divers.",
+      "hook": "With little breath left, you found both a large abalone and your late mother’s iron bitchang caught in the rock."
+    },
+    "th": {
+      "summary": "คุณคืออ๊กบุน จัมยอแห่งเชจูผู้ทำงานในทะเล ซ่อมเครื่องมือดำน้ำ และสอนนักดำน้ำรุ่นเยาว์",
+      "hook": "เมื่อลมหายใจเหลือน้อย คุณพบทั้งหอยเป๋าฮื้อตัวใหญ่และบิชชังเหล็กของแม่ติดอยู่ในซอกหิน"
+    },
+    "ja": {
+      "summary": "あなたは済州旌義県の海で長く働き、道具を直して若い海女を教えたオクプンでした。",
+      "hook": "息が残りわずかな中、あなたの鉄のピッチャンと大きなアワビが岩間に挟まりました。"
+    }
+  },
+  "TWO_EMPTY_COVERS": {
+    "ko": {
+      "summary": "당신은 카이로에서 평생 책을 엮고 젊은 제본공을 가르친 하산이었습니다.",
+      "hook": "두 자매가 각자의 손때를 말했지만, 당신 앞에는 어머니의 요리 기록 한 묶음뿐이었습니다."
+    },
+    "en": {
+      "summary": "You were Hasan, a Cairo bookbinder who practiced your craft for life and later taught a young bookbinder.",
+      "hook": "Two sisters each claimed the marks of her own hands, but before you lay only one bundle of their mother’s recipe notes."
+    },
+    "th": {
+      "summary": "คุณคือฮะซัน ช่างเย็บเล่มแห่งไคโรผู้ทำงานฝีมือนี้ตลอดชีวิต และสอนช่างหนุ่มในวัยชรา",
+      "hook": "พี่น้องสองคนต่างชี้รอยมือของตน แต่ตรงหน้าคุณมีบันทึกสูตรอาหารของแม่เพียงชุดเดียว"
+    },
+    "ja": {
+      "summary": "あなたはカイロで生涯製本を続け、晩年には若い職人を教えたハサンでした。",
+      "hook": "姉妹はそれぞれ自分の手の跡を訴えましたが、あなたの前には母の料理記録が一束だけありました。"
+    }
+  },
+  "RING_IN_BROOM": {
+    "ko": {
+      "summary": "당신은 전쟁 중 진주 인근에서 옹기와 화로를 굽고 피란길을 안내한 한연옥이었습니다.",
+      "hook": "1593년, 당신은 가족을 먼저 보내고 싶었지만 느린 이웃들도 좁은 가마 길에 있었습니다."
+    },
+    "en": {
+      "summary": "You were Han Yeon-ok, a potter near Jinju who made earthenware and braziers and guided refugees along the kiln path during the war.",
+      "hook": "In 1593, you wanted to send your family ahead, while slower neighbors waited on the narrow path behind the kiln."
+    },
+    "th": {
+      "summary": "คุณคือฮันยอนอ๊ก ช่างปั้นใกล้จินจูผู้เผาไหดินและเตาไฟ ทั้งยังนำทางผู้อพยพในช่วงสงคราม",
+      "hook": "ในปี 1593 คุณอยากส่งครอบครัวไปก่อน ขณะที่เพื่อนบ้านผู้เดินช้ายังรออยู่บนทางแคบหลังเตาเผา"
+    },
+    "ja": {
+      "summary": "あなたは戦時下の晋州近郊で甕や火鉢を焼き、窯道から避難者を導いたハン・ヨノクでした。",
+      "hook": "1593年、あなたは家族を先に逃がしたい一方、窯裏の細道には足の遅い隣人もいました。"
+    }
+  },
+  "FAN_FOR_OTHER_DAUGHTER": {
+    "ko": {
+      "summary": "당신은 교토에서 부채 그림을 그리고 도제에게 붓을 물려준 사요였습니다.",
+      "hook": "어린 딸의 부채를 주문한 손님은 당신을 알아보지 못한 채 돌아온 아버지였습니다."
+    },
+    "en": {
+      "summary": "You were Sayo, a Kyoto fan painter who opened a workshop with your friend and later passed your brush to an apprentice.",
+      "hook": "The customer ordering a fan for his young daughter was your long-absent father, and he did not recognize you."
+    },
+    "th": {
+      "summary": "คุณคือซาโยะ ช่างวาดภาพบนพัดแห่งเกียวโต ผู้เปิดสำนักช่างกับเพื่อนและภายหลังมอบพู่กันให้ศิษย์",
+      "hook": "ลูกค้าที่สั่งพัดให้ลูกสาวตัวน้อยคือพ่อที่จากไปนาน และเขากลับจำคุณไม่ได้"
+    },
+    "ja": {
+      "summary": "あなたは京都で扇絵を描き、友人と工房を営んだ後、弟子に筆を譲ったサヨでした。",
+      "hook": "幼い娘への扇を頼んだ客は、あなたに気づかないまま現れた、長く家を離れていた父でした。"
+    }
+  },
+  "SECOND_POT_OF_SORGHUM": {
+    "ko": {
+      "summary": "당신은 그레이트 짐바브웨 근교에서 밭과 수확을 맡아 두 아이를 키운 타비였습니다.",
+      "hook": "첫 솥은 타고 가족은 도착한 순간, 당신에게 남은 수수는 얼마 없었습니다."
+    },
+    "en": {
+      "summary": "You were Tavi, tending fields and harvests near Great Zimbabwe while raising two children.",
+      "hook": "When the first pot burned and your family arrived, you had only a little sorghum left."
+    },
+    "th": {
+      "summary": "คุณคือทาบี ผู้ดูแลงานไร่และการเก็บเกี่ยวใกล้เกรตซิมบับเว พร้อมเลี้ยงลูกสองคน",
+      "hook": "เมื่อหม้อแรกไหม้และครอบครัวมาถึง คุณเหลือข้าวฟ่างอยู่เพียงน้อยนิด"
+    },
+    "ja": {
+      "summary": "あなたはグレート・ジンバブエ近郊で畑と収穫を担い、2人の子を育てたタビでした。",
+      "hook": "最初の鍋が焦げ、家族が着いたとき、あなたに残されたモロコシはわずかでした。"
+    }
+  },
+  "PIER_BEFORE_WORK": {
+    "ko": {
+      "summary": "당신은 베식타시에서 나무 부품을 고치며 두 아이를 키운 할릴이었습니다.",
+      "hook": "새 일자리를 찾아 탄 배에서, 당신은 감춰 온 사정을 모르는 딸과 마주쳤습니다."
+    },
+    "en": {
+      "summary": "You were Halil of Beşiktaş, repairing wooden parts and raising two children.",
+      "hook": "On the boat to seek new work, you met the daughter who still knew nothing of what you had hidden."
+    },
+    "th": {
+      "summary": "คุณคือฮาลิลแห่งเบชิกทัช ผู้ซ่อมชิ้นส่วนไม้และเลี้ยงลูกสองคน",
+      "hook": "บนเรือที่พาคุณไปหางานใหม่ คุณพบลูกสาวซึ่งยังไม่รู้เรื่องที่คุณปิดบังไว้"
+    },
+    "ja": {
+      "summary": "あなたはベシクタシュで木製部品を修理し、2人の子を育てたハリルでした。",
+      "hook": "新しい仕事を探す船で、あなたは隠してきた事情を知らない娘と出会いました。"
+    }
+  },
+  "WHEEL_NOT_OPEN": {
+    "ko": {
+      "summary": "당신은 시카고에서 인쇄를 배워 친구 아이다와 가게를 꾸린 에스더였습니다.",
+      "hook": "당신의 지도를 믿고 돌아온 손님들은 대관람차가 아직 움직이지 않는다고 했습니다."
+    },
+    "en": {
+      "summary": "You were Esther of Chicago, learning the printing trade and running a shop with your friend Ida.",
+      "hook": "Customers who trusted your map returned to say the Ferris wheel was not moving yet."
+    },
+    "th": {
+      "summary": "คุณคือเอสเธอร์แห่งชิคาโก ผู้เรียนรู้งานพิมพ์และเปิดร้านร่วมกับไอดาเพื่อนของคุณ",
+      "hook": "ลูกค้าที่เชื่อแผนที่ของคุณกลับมาบอกว่า ชิงช้าสวรรค์ยังไม่เคลื่อนเลย"
+    },
+    "ja": {
+      "summary": "あなたはシカゴで印刷を学び、友人アイダと店を営んだエスターでした。",
+      "hook": "あなたの地図を信じた客は、大観覧車がまだ動いていないと戻ってきました。"
+    }
+  },
+  "HOUSE_WITH_WHEELS": {
+    "ko": {
+      "summary": "당신은 가이국에서 마을 징발과 길 경비를 맡은 하급 사무라이 마쓰다 지로베에였습니다.",
+      "hook": "1575년, 군량을 더 거두라는 명령이 당신 앞에서 농가의 내년 생계와 맞섰습니다."
+    },
+    "en": {
+      "summary": "You were Matsuda Jirobei, a low-ranking samurai handling village requisitions and road security in Kai Province.",
+      "hook": "In 1575, an order to collect more provisions set you between your superior and a farming family's next year."
+    },
+    "th": {
+      "summary": "คุณคือมัตสึดะ จิโรเบเอะ ซามูไรชั้นผู้น้อยผู้ดูแลการเกณฑ์สิ่งของและเฝ้าเส้นทางในแคว้นคาอิ",
+      "hook": "ในปี 1575 คำสั่งให้เก็บเสบียงเพิ่มทำให้คุณอยู่ระหว่างผู้บังคับบัญชากับปากท้องปีหน้าของครอบครัวชาวนา"
+    },
+    "ja": {
+      "summary": "あなたは甲斐国で村の徴発と街道警備を担った下級侍、松田次郎兵衛でした。",
+      "hook": "1575年、兵糧を増徴せよとの命令が、あなたの前で農家の翌年の暮らしと衝突しました。"
+    }
+  },
+  "GROOM_UNDER_SAIL": {
+    "ko": {
+      "summary": "당신은 믈라카에서 항구 일을 돕고 여러 집의 잔치에서 북을 연주한 하피즈였습니다.",
+      "hook": "사라진 신랑을 기다리던 당신은 항구에서 그의 붉은 머리띠를 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Hafiz of Melaka, helping at the harbor and drumming at celebrations in many homes.",
+      "hook": "As you waited for the missing groom, you found his red headband at the harbor."
+    },
+    "th": {
+      "summary": "คุณคือฮาฟิซแห่งมะละกา ผู้ช่วยงานท่าเรือและตีกลองในงานเลี้ยงของหลายครอบครัว",
+      "hook": "ขณะรอเจ้าบ่าวที่หายตัวไป คุณพบผ้าคาดศีรษะสีแดงของเขาที่ท่าเรือ"
+    },
+    "ja": {
+      "summary": "あなたはムラカで港を手伝い、祝い事で太鼓を演奏したハフィズでした。",
+      "hook": "消えた花婿を待つあなたは、港で彼の赤い鉢巻きを見つけました。"
+    }
+  },
+  "BOWL_FOR_TWO": {
+    "ko": {
+      "summary": "당신은 코르도바에서 부모의 그릇 일을 이어 두 아이를 키운 누라였습니다.",
+      "hook": "빚을 갚으려 어머니의 그릇을 내놓자, 손님은 당신에게 사라진 짝그릇을 요구했습니다."
+    },
+    "en": {
+      "summary": "You were Nura of Córdoba, carrying on your parents' pottery trade while raising two children.",
+      "hook": "When you offered your mother's old bowl to repay a debt, the customer asked you for its missing match."
+    },
+    "th": {
+      "summary": "คุณคือนูราแห่งกอร์โดบา ผู้สืบทอดงานเครื่องปั้นดินเผาของพ่อแม่และเลี้ยงลูกสองคน",
+      "hook": "เมื่อคุณนำชามเก่าของแม่มาขายใช้หนี้ ลูกค้ากลับถามหาชามอีกใบที่เป็นคู่กัน"
+    },
+    "ja": {
+      "summary": "あなたはコルドバで両親の器作りを継ぎ、2人の子を育てたヌラでした。",
+      "hook": "借金のため母の古い器を売ろうとすると、客はあなたに消えた対の器を求めました。"
+    }
+  },
+  "SECOND_STORYTELLER": {
+    "ko": {
+      "summary": "당신은 이스파한의 카림으로, 천 가게를 돕다 이야기꾼이 되어 젊은이들을 가르쳤습니다.",
+      "hook": "견습생이 당신이 늘 건너뛴 말지기와 다친 말의 행방을 묻자, 익숙한 결말이 흔들렸습니다."
+    },
+    "en": {
+      "summary": "You were Karim of Isfahan, who left cloth-shop work to become a storyteller and teach young performers.",
+      "hook": "When an apprentice asked about the groom you always skipped and the injured horse, you faced whether to keep the familiar ending."
+    },
+    "th": {
+      "summary": "คุณคือคาริมแห่งอิสฟาฮาน ผู้ช่วยงานร้านผ้าก่อนเป็นนักเล่านิทานและสอนการแสดงแก่คนหนุ่มสาว",
+      "hook": "เมื่อเด็กฝึกงานถามถึงคนเลี้ยงม้าที่คุณมักข้ามและม้าที่บาดเจ็บ ตอนจบที่คุ้นเคยก็เริ่มสั่นคลอน"
+    },
+    "ja": {
+      "summary": "あなたはイスファハーンのカリームとして、布屋を手伝ったのち物語師となり、若者に語りの芸を教えました。",
+      "hook": "見習いが、あなたがいつも飛ばす馬丁と傷ついた馬の行方を尋ね、なじみの結末が揺らぎました。"
+    }
+  },
+  "BUNDLE_BEHIND_WALL": {
+    "ko": {
+      "summary": "당신은 테오티우아칸의 나야로, 흑요석 도구를 만들고 딸을 키우며 이웃과 일했습니다.",
+      "hook": "친구의 이삿짐이 사라져 이웃들이 서로를 의심하자, 당신은 꾸러미를 숨긴 벽 뒤를 떠올렸습니다."
+    },
+    "en": {
+      "summary": "You were Naya of Teotihuacan, an obsidian toolmaker who raised a daughter and kept working with your neighbors after your husband's death.",
+      "hook": "When your friend's moving bundle vanished and neighbors began searching, you thought of the place behind the wall where you had hidden it."
+    },
+    "th": {
+      "summary": "คุณคือนายาแห่งเตโอติอัวกาน ผู้ทำเครื่องมือหินออบซิเดียน เลี้ยงลูกสาว และทำงานกับเพื่อนบ้าน",
+      "hook": "เมื่อห่อสัมภาระของเพื่อนหายไปจนทุกคนเริ่มค้นหา คุณก็นึกถึงหลังกำแพงที่คุณซ่อนมันไว้"
+    },
+    "ja": {
+      "summary": "あなたはテオティワカンのナヤとして、黒曜石の道具を作り、娘を育て、隣人たちと働きました。",
+      "hook": "友の引っ越し荷物が消え、隣人たちが調べ始めると、あなたは包みを隠した壁の裏を思いました。"
+    }
+  },
+  "CLOAK_AT_THE_PLAY": {
+    "ko": {
+      "summary": "당신은 시드니의 마사로, 런던에서 바느질을 배우고 형기를 마친 뒤 수선 일을 꾸렸습니다.",
+      "hook": "찢어진 망토를 고치러 무대에 오른 당신을 배우가 극중 인물처럼 맞으며 뜻밖의 장면이 시작됐습니다."
+    },
+    "en": {
+      "summary": "You were Martha of Sydney, who learned needlework in London and built a mending business after completing your sentence.",
+      "hook": "When you stepped onstage to mend a torn cloak, an actor greeted you as a character in the play, and an unexpected scene began."
+    },
+    "th": {
+      "summary": "คุณคือมาร์ธาแห่งซิดนีย์ ผู้เรียนเย็บผ้าในลอนดอนและเปิดกิจการซ่อมเสื้อผ้าหลังพ้นโทษ",
+      "hook": "เมื่อคุณขึ้นเวทีไปซ่อมเสื้อคลุม นักแสดงกลับต้อนรับคุณราวกับเป็นตัวละคร และฉากไม่คาดฝันก็เริ่มขึ้น"
+    },
+    "ja": {
+      "summary": "あなたはシドニーのマーサとして、ロンドンで裁縫を学び、刑期後に服の直し仕事を営みました。",
+      "hook": "破れたマントを直しに舞台へ出たあなたを、役者が劇中人物として迎え、思いがけない場面が始まりました。"
+    }
+  },
+  "WIRE_OUTSIDE_THE_DOOR": {
+    "ko": {
+      "summary": "당신은 고왕국 시대 기자의 메리트로, 건설 노동자 마을에서 빵과 맥주 배급을 맡았습니다.",
+      "hook": "숙련 석공을 우선하던 관행이 실제로 일한 운반조의 몫과 충돌하자, 당신은 선택 앞에 섰습니다."
+    },
+    "en": {
+      "summary": "You were Merit, a bakery worker who distributed bread and beer in the royal construction workers' village at Old Kingdom Giza.",
+      "hook": "When priority for skilled stonemasons conflicted with the shares owed to the porters who had worked, you faced a difficult choice."
+    },
+    "th": {
+      "summary": "คุณคือเมริต คนทำขนมปังผู้แจกจ่ายขนมปังและเบียร์ในหมู่บ้านคนงานก่อสร้างหลวงแห่งกิซา",
+      "hook": "เมื่อธรรมเนียมให้ช่างสกัดหินก่อนขัดกับส่วนแบ่งของกลุ่มขนหินที่ทำงานจริง คุณต้องเผชิญทางเลือกหนึ่ง"
+    },
+    "ja": {
+      "summary": "あなたは古王国時代のギザで、建設労働者の村にパンとビールを配るパン職人メリトでした。",
+      "hook": "熟練石工を優先する慣行が、実際に働いた運搬班の取り分と衝突し、あなたは選択を迫られました。"
+    }
+  },
+  "PIPA_BEFORE_THE_RAIN": {
+    "ko": {
+      "summary": "당신은 장안의 유란으로, 가족을 꾸리고 남편과 사별한 뒤 친구와 찻집을 열었습니다.",
+      "hook": "지붕 수리비를 세던 날, 비파를 안은 딸이 여성 연주자들과 여러 도시로 떠나겠다고 말했습니다."
+    },
+    "en": {
+      "summary": "You were Yuran of Chang'an, who raised a family and opened a teahouse with a friend after your husband's death.",
+      "hook": "As you counted money for the leaking roof, your daughter arrived with her pipa and said she would soon leave with other women musicians."
+    },
+    "th": {
+      "summary": "คุณคือยูรันแห่งฉางอัน ผู้สร้างครอบครัวและเปิดร้านน้ำชากับเพื่อนหลังสามีเสียชีวิต",
+      "hook": "ขณะคุณนับเงินซ่อมหลังคารั่ว ลูกสาวก็อุ้มผีผาเข้ามาบอกว่าจะออกเดินทางกับเหล่านักดนตรีหญิง"
+    },
+    "ja": {
+      "summary": "あなたは長安のユランとして、家庭を築き、夫との死別後は友人と茶店を開きました。",
+      "hook": "屋根の修理代を数えるあなたに、琵琶を抱えた娘が女性奏者たちと旅立つと告げました。"
+    }
+  },
+  "NAIL_IN_THE_FOG_WHISTLE": {
+    "ko": {
+      "summary": "당신은 사우스매니투섬의 엘리어스 워드로, 목공을 배우고 손목을 다친 뒤 의자 가게를 꾸렸습니다.",
+      "hook": "안개 호루라기가 멎고 견습생이 의심받자, 당신은 전날 그 곁에서 잃어버린 못을 떠올렸습니다."
+    },
+    "en": {
+      "summary": "You were Elias Ward of South Manitou Island, a harbor-trained carpenter who later ran a small chair shop on the mainland.",
+      "hook": "When the fog whistle failed and an apprentice drew suspicion, you remembered the nail you had dropped near it the day before."
+    },
+    "th": {
+      "summary": "คุณคืออีไลอัส วอร์ดแห่งเกาะเซาท์แมนิทู ช่างไม้จากท่าเรือผู้เปิดร้านเก้าอี้หลังบาดเจ็บที่ข้อมือ",
+      "hook": "เมื่อหวูดในหมอกเสียและเด็กฝึกงานถูกสงสัย คุณก็นึกถึงตะปูที่คุณทำตกใกล้หวูดเมื่อวันก่อน"
+    },
+    "ja": {
+      "summary": "あなたはサウス・マニトゥー島のエリアス・ウォードとして、木工を学び、のちに椅子店を営みました。",
+      "hook": "霧笛が止まり見習いが疑われると、あなたは前日にその近くで落とした釘を思い出しました。"
+    }
+  },
+  "TWO_WRONG_TILE_WALLS": {
+    "ko": {
+      "summary": "당신은 리스본의 타일 시공자 주앙 마르케스로, 노년에는 후배들을 가르쳤습니다.",
+      "hook": "당신은 선주 집의 항구 그림 끝에서 빵 바구니를 발견했고, 티아구와 달리 바깥 표지만 믿었습니다."
+    },
+    "en": {
+      "summary": "You were João Marques, a Lisbon tile installer who rose from helping at a market stall to teaching younger workers.",
+      "hook": "You found a bread basket in the harbor scene's final row after trusting the outer label instead of what Tiago had seen inside."
+    },
+    "th": {
+      "summary": "คุณคือฌูเอา มาร์เกส ช่างติดกระเบื้องแห่งลิสบอน ผู้เติบโตจากเด็กช่วยแผงลอยและสอนช่างรุ่นน้องในวัยชรา",
+      "hook": "คุณพบลายตะกร้าขนมปังในแถวสุดท้ายของภาพท่าเรือ หลังเชื่อป้ายด้านนอกแทนสิ่งที่ติอาโกเห็นในห่อ"
+    },
+    "ja": {
+      "summary": "あなたはリスボンのタイル職人ジョアン・マルケスで、晩年は後輩を教えました。",
+      "hook": "あなたは外の荷札を信じ、港の絵の最後にパン籠が紛れたことに気づきました。"
+    }
+  },
+  "NAME_BESIDE_THE_NOTICE": {
+    "ko": {
+      "summary": "당신은 호놀룰루의 신문 인쇄소에서 오래 일한 말리아 케알로하였습니다.",
+      "hook": "당신은 아키의 부고에서 그를 오래 돌본 딸 하나의 이름이 빠진 것을 발견했습니다."
+    },
+    "en": {
+      "summary": "You were Malia Kealoha of Honolulu, who raised a family and worked for many years in a newspaper print shop.",
+      "hook": "You found that Aki's paid obituary omitted Hana, the daughter who had cared for him for years."
+    },
+    "th": {
+      "summary": "คุณคือมาเลีย เคอาโลฮาแห่งโฮโนลูลู ผู้สร้างครอบครัวและทำงานในโรงพิมพ์หนังสือพิมพ์มาเนิ่นนาน",
+      "hook": "คุณพบว่าข่าวมรณกรรมที่มิกาจ่ายเงินลงนั้นไม่มีชื่อฮานา ลูกสาวผู้ดูแลอากิมาหลายปี"
+    },
+    "ja": {
+      "summary": "あなたはホノルルの新聞印刷所で長く働いたマリア・ケアロハでした。",
+      "hook": "あなたはアキの訃報に、長年世話をした娘ハナの名がないと気づきました。"
+    }
+  },
+  "FIRST_GARDEN_FLOOD": {
+    "ko": {
+      "summary": "당신은 비자야나가라의 수로를 고치고 후배들을 가르친 라마나였습니다.",
+      "hook": "당신은 집들로 새는 물을 줄일 출구가 딸 가우리의 첫 채소밭으로 이어진 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Ramana of Vijayanagara, raised in riverside fields before repairing the capital's canals and teaching younger workers.",
+      "hook": "You saw that the outlet easing pressure on the cracked canal would send water into Gauri's first garden."
+    },
+    "th": {
+      "summary": "คุณคือรามานาแห่งวิชัยนคร ผู้เติบโตในไร่นาริมแม่น้ำ ซ่อมทางน้ำของเมืองหลวง และสอนงานแก่คนรุ่นหลัง",
+      "hook": "คุณเห็นว่าทางระบายซึ่งช่วยลดแรงดันจากทางน้ำแตกร้าวทอดตรงสู่แปลงผักแรกของเการี"
+    },
+    "ja": {
+      "summary": "あなたは都の水路を直し、後輩を育てたヴィジャヤナガラのラマナでした。",
+      "hook": "あなたは水圧を逃がす出口が、娘ガウリの初めての菜園へ通じると知りました。"
+    }
+  },
+  "ONE_BEAT_LATE_CIRCLE": {
+    "ko": {
+      "summary": "당신은 잔지바르 타운에서 과일 장사를 맡고 동네 모임에서 오래 춤춘 나피사였습니다.",
+      "hook": "당신은 공연 직전 주후라의 아픈 발을 보았고, 대신 설 사람은 초보 살마뿐이었습니다."
+    },
+    "en": {
+      "summary": "You were Nafisa of Zanzibar Town, a fruit seller who danced for years with a neighborhood group.",
+      "hook": "Just before the 1905 performance, you saw Zuhura hiding an injured foot, with only the beginner Salma to take her place."
+    },
+    "th": {
+      "summary": "คุณคือนาฟิซาแห่งแซนซิบาร์ทาวน์ ผู้ค้าผลไม้และเต้นรำกับกลุ่มประจำชุมชนมาอย่างยาวนาน",
+      "hook": "ก่อนการแสดงปี 1905 คุณเห็นซูฮูราซ่อนเท้าที่เจ็บ โดยมีเพียงซัลมามือใหม่ที่อาจยืนแทน"
+    },
+    "ja": {
+      "summary": "あなたは果物を商い、地元の集まりで長く踊ったザンジバルのナフィサでした。",
+      "hook": "公演直前、あなたはズフラの痛む足に気づき、代役は初心者サルマだけでした。"
+    }
+  },
+  "TWO_GAMES_ONE_TICKET": {
+    "ko": {
+      "summary": "당신은 티베트 서부 고원의 사원에서 경전을 필사하고 초심자를 가르친 텐진 도르제였습니다.",
+      "hook": "당신은 두 경전의 같은 구절이 다름을 발견해, 완성과 모름을 남길 책임 사이에 놓였습니다."
+    },
+    "en": {
+      "summary": "You were Tenzin Dorje, a monk who copied scriptures and taught novices at a small monastery on the western Tibetan Plateau.",
+      "hook": "You found the same line written differently in two scriptures, setting completion against the duty to leave uncertainty open."
+    },
+    "th": {
+      "summary": "คุณคือเทนซิน ดอร์เจ พระผู้คัดลอกคัมภีร์และสอนผู้เริ่มต้น ณ อารามเล็กบนที่ราบสูงทิเบตตะวันตก",
+      "hook": "คุณพบข้อความบรรทัดเดียวกันเขียนต่างกันในคัมภีร์สองฉบับ ท่ามกลางแรงกดดันให้ทำหนังสือเสร็จ"
+    },
+    "ja": {
+      "summary": "あなたはチベット西部高原の寺院で経典を筆写し、初心者を教えたテンジンでした。",
+      "hook": "あなたは二つの経典で同じ一行が食い違い、完成と空欄の責任の間に立ちました。"
+    }
+  },
+  "RIVER_WITH_ONE_LESS_OAR": {
+    "ko": {
+      "summary": "당신은 마닐라 비논도에서 가족과 물길을 오가며 짐과 밧줄을 다룬 마리아나였습니다.",
+      "hook": "당신은 로사의 재봉 첫날 아침, 두 사람 몫으로 약속한 짐이 배 앞에 쌓인 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Mariana de la Cruz of Binondo, Manila, handling cargo and ropes as you traveled the waterways with your family.",
+      "hook": "On Rosa's first day of sewing lessons, you found the cargo you had promised for two workers already waiting by your boat."
+    },
+    "th": {
+      "summary": "คุณคือมาเรียนา เด ลา ครูซแห่งบินอนโด ผู้ดูแลสินค้าและเชือกบนเรือขณะเดินทางตามลำน้ำกับครอบครัว",
+      "hook": "เช้าวันแรกที่โรซาจะเรียนตัดเย็บ คุณพบสินค้าสำหรับแรงงานสองคนที่รับปากไว้กองรอหน้าเรือ"
+    },
+    "ja": {
+      "summary": "あなたはマニラの水路で家族と船荷や綱を扱ったマリアナ・デ・ラ・クルスでした。",
+      "hook": "ロサの裁縫初日、あなたの船には二人分と約束した荷がすでに待っていました。"
+    }
+  },
+  "THE_TILE_WITH_NO_TWIN": {
+    "ko": {
+      "summary": "당신은 사마르칸트에서 건축용 무늬를 만들던 도공 유수프였습니다.",
+      "hook": "당신은 별무늬 속 꽃잎 하나가 자신의 견본에서 시작되었음을 알게 됩니다."
+    },
+    "en": {
+      "summary": "You were Yusuf, a Samarkand potter who ran a tile workshop and made patterns for buildings.",
+      "hook": "You find an extra petal among the star-patterned tiles, only to trace it back to a sample you copied."
+    },
+    "th": {
+      "summary": "คุณคือยูซุฟ ช่างปั้นแห่งซามาร์คันด์ผู้เปิดโรงงานกระเบื้องและทำลวดลายประดับอาคาร",
+      "hook": "คุณพบกลีบดอกไม้ที่เกินมาในลายดาว ก่อนจะรู้ว่ามันเริ่มจากแบบที่คุณลอกวาดเอง"
+    },
+    "ja": {
+      "summary": "あなたは建物を彩る文様を作った、サマルカンドの陶工ユースフでした。",
+      "hook": "あなたは星模様の余分な花びらが、自ら写した見本に始まると気づきます。"
+    }
+  },
+  "THREE_DOLLARS_AT_DAWN": {
+    "ko": {
+      "summary": "당신은 컬럼비아에서 광부들에게 빵과 식사를 팔던 로사 베가였습니다.",
+      "hook": "새벽, 당신은 밀가루와 장작을 살 3달러를 동생의 광산 허가에 쓸지 마주합니다."
+    },
+    "en": {
+      "summary": "You were Rosa Vega, a Sonora-born cook who sold bread and meals to miners in Columbia.",
+      "hook": "At dawn, you face your brother's request for the same $3 you need for next week's flour and firewood."
+    },
+    "th": {
+      "summary": "คุณคือโรซา เบกา ผู้เกิดในโซโนราและขายขนมปังกับอาหารให้คนงานเหมืองในโคลัมเบีย",
+      "hook": "ยามรุ่งสาง คุณต้องเผชิญคำขอ 3 ดอลลาร์จากน้องชาย ทั้งที่เงินนั้นมีไว้ซื้อแป้งกับฟืน"
+    },
+    "ja": {
+      "summary": "あなたはコロンビアで鉱夫にパンと食事を売った、ソノラ生まれのロサ・ベガでした。",
+      "hook": "夜明け、あなたは小麦粉と薪に使う3ドルを、弟の採掘許可に求められます。"
+    }
+  },
+  "THE_MOON_ON_THE_STAIRS": {
+    "ko": {
+      "summary": "당신은 발파라이소의 항구에서 일하며 공연 배경을 그린 마누엘 이바라였습니다.",
+      "hook": "당신이 그린 거대한 달은 승강기 문을 못 지나고, 계단으로는 개막에 늦습니다."
+    },
+    "en": {
+      "summary": "You were Manuel Ibarra, a Valparaíso dockworker who painted backdrops for neighborhood performances.",
+      "hook": "Your enormous painted moon will not fit through the funicular door, while the stairs would make you miss showtime."
+    },
+    "th": {
+      "summary": "คุณคือมานูเอล อิบาร์รา คนงานท่าเรือแห่งบัลปาราอีโซผู้วาดฉากให้การแสดงในละแวกบ้าน",
+      "hook": "ดวงจันทร์ที่คุณวาดผ่านประตูลิฟต์ขึ้นเขาไม่ได้ แต่หากขึ้นบันได คุณจะไปไม่ทันเวลาแสดง"
+    },
+    "ja": {
+      "summary": "あなたは港で働き、近所の芝居の背景を描いたマヌエル・イバラでした。",
+      "hook": "あなたの描いた大きな月はケーブルカーを通れず、階段では開演に間に合いません。"
+    }
+  },
+  "THE_UNSENT_INVITATION": {
+    "ko": {
+      "summary": "당신은 옥시링코스에서 시장 기록과 이웃의 편지를 대신 쓴 데메트리오스였습니다.",
+      "hook": "당신은 화난 말이 덧붙은 초대장을 당장 봉하라는 재촉을 받습니다."
+    },
+    "en": {
+      "summary": "You were Demetrios of Oxyrhynchus, a potter's son who recorded market dealings and wrote letters for neighbors.",
+      "hook": "You are urged to seal an invitation at once after its sender adds angry words for an estranged sister."
+    },
+    "th": {
+      "summary": "คุณคือเดเมทริออสแห่งออกซีริงคอส ผู้บันทึกธุรกรรมในตลาดและเขียนจดหมายให้เพื่อนบ้าน",
+      "hook": "คุณถูกเร่งให้ผนึกคำเชิญทันที หลังผู้ส่งเติมถ้อยคำโกรธเคืองถึงน้องสาวที่บาดหมางกัน"
+    },
+    "ja": {
+      "summary": "あなたは市場の記録や近所の手紙を代筆した、オクシュリュンコスのデメトリオスでした。",
+      "hook": "あなたは怒りの言葉が加わった招待状を、今すぐ封じるようせかされます。"
+    }
+  },
+  "THE_OX_AND_THE_HEMP": {
+    "ko": {
+      "summary": "당신은 개경의 장터에서 삼베를 팔고 이웃에게 베 짜기를 가르친 연화였습니다.",
+      "hook": "연등회 날, 당신 앞 좁은 장터길로 놀란 소가 좌판과 사람들을 향해 내달립니다."
+    },
+    "en": {
+      "summary": "You were Yeonhwa of Gaegyeong, a hemp weaver who sold cloth in the capital's market and taught neighbors to weave.",
+      "hook": "During the Lotus Lantern Festival, you see a startled ox charge toward people and lantern-hung stalls."
+    },
+    "th": {
+      "summary": "คุณคือยอนฮวาแห่งแคกยอง ช่างทอผ้าป่านผู้ขายผ้าในตลาดเมืองหลวงและสอนเพื่อนบ้านทอผ้า",
+      "hook": "ในวันเทศกาลโคมไฟ คุณเห็นวัวตกใจวิ่งเข้าหาผู้คนและแผงขายของที่แขวนโคม"
+    },
+    "ja": {
+      "summary": "あなたは都で麻布を売り、近所に織り方を教えた開京の蓮花でした。",
+      "hook": "燃灯会の日、あなたの前で驚いた牛が、人々と灯籠を掛けた露店へ駆け出します。"
+    }
+  },
+  "THE_QUIET_BRIDE_BATH": {
+    "ko": {
+      "summary": "당신은 이스탄불의 하맘에서 수건과 물을 맡아 일한 제이네프였습니다.",
+      "hook": "노래가 시작되려는 순간, 아버지를 잃은 신부가 당신의 소매를 잡고 멈춰 달라 청합니다."
+    },
+    "en": {
+      "summary": "You were Zeynep of Istanbul, who managed towels and water at a hammam and later taught the work to your niece.",
+      "hook": "As the bridal songs are about to begin, you feel the bride catch your sleeve and ask for silence in memory of her father."
+    },
+    "th": {
+      "summary": "คุณคือเซย์เนปแห่งอิสตันบูล ผู้ดูแลผ้าขนหนูกับน้ำในฮัมมัมและถ่ายทอดงานให้หลานสาว",
+      "hook": "เมื่อเพลงแต่งงานกำลังเริ่ม คุณถูกเจ้าสาวคว้าแขนเสื้อและขอความเงียบเพราะคิดถึงบิดาผู้ล่วงลับ"
+    },
+    "ja": {
+      "summary": "あなたはイスタンブルのハマムでタオルと水を受け持ったゼイネプでした。",
+      "hook": "歌が始まる直前、亡き父を思う花嫁があなたの袖をつかみ、止めてほしいと頼みます。"
+    }
+  },
+  "THE_TWO_TRUNKS_AT_LEVUKA": {
+    "ko": {
+      "summary": "당신은 레부카에서 동생 리티아와 작은 숙박집을 꾸려 간 루이사였습니다.",
+      "hook": "당신은 수바행 두 손님의 닮은 상자가 서로 다른 짐 더미에 실린 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Luisa of Levuka, running a small lodging house with your younger sister, Litia.",
+      "hook": "You saw two similar trunks bound for Suva placed on different luggage piles, one holding tableware and the other surveying tools."
+    },
+    "th": {
+      "summary": "คุณคือลุยซาแห่งเลวูกา ผู้ทำบ้านพักเล็ก ๆ ร่วมกับลิเทียน้องสาว",
+      "hook": "คุณเห็นหีบคล้ายกันของแขกสองคนที่จะไปซูวาถูกวางผิดกอง ใบหนึ่งใส่ภาชนะ อีกใบใส่เครื่องมือสำรวจ"
+    },
+    "ja": {
+      "summary": "あなたはレブカで妹リティアと小さな宿を営んだルイサでした。",
+      "hook": "あなたはスバ行きの客2人の似た箱が、別々の荷物の山に積まれるのを見ました。"
+    }
+  },
+  "THE_PIGEON_WITHOUT_A_RING": {
+    "ko": {
+      "summary": "당신은 아그라의 새 장수 집에서 자라 궁정의 비둘기를 돌본 라피크였습니다.",
+      "hook": "당신은 화가가 그릴 두 비둘기 중 한 마리의 금속 발찌가 사라진 것을 알아챘습니다."
+    },
+    "en": {
+      "summary": "You were Rafiq, raised in an Agra bird seller's household and entrusted with the court pigeons.",
+      "hook": "You noticed that one pigeon due to be painted had lost its metal leg band, though only you could tell the two birds apart."
+    },
+    "th": {
+      "summary": "คุณคือราฟิก ผู้เติบโตในบ้านพ่อค้านกแห่งอัคราและดูแลนกพิราบของราชสำนัก",
+      "hook": "คุณพบว่ากำไลข้อเท้าของนกพิราบที่จะเป็นแบบวาดหายไป และมีเพียงคุณที่แยกนกสองตัวออก"
+    },
+    "ja": {
+      "summary": "あなたはアーグラの小鳥商の家で育ち、宮廷の鳩を世話したラフィークでした。",
+      "hook": "あなたは、描かれる鳩の足輪が消え、2羽を見分けられるのは自分だけだと気づきました。"
+    }
+  },
+  "TWO_WAYS_TO_THE_FLOWER_MARKET": {
+    "ko": {
+      "summary": "당신은 소치밀코에서 꽃을 기르고 가족과 밭을 돌본 소치틀이었습니다.",
+      "hook": "당신은 꽃배가 갈림 수로에 이르자 아버지가 익숙한 길과 다른 쪽으로 젓는 것을 보았습니다."
+    },
+    "en": {
+      "summary": "You were Xochitl of Xochimilco, growing flowers and tending the fields with your family.",
+      "hook": "You saw your father steer the flower-laden boat down the wrong canal, insisting the unfamiliar route would still reach the market."
+    },
+    "th": {
+      "summary": "คุณคือโซชิตล์แห่งโซชิมิลโก ผู้ปลูกดอกไม้และดูแลไร่นาร่วมกับครอบครัว",
+      "hook": "คุณเห็นพ่อพายเรือบรรทุกดอกไม้เข้าคลองผิดสาย แต่พ่อยืนยันว่ายังไปถึงตลาดได้"
+    },
+    "ja": {
+      "summary": "あなたはソチミルコで花を育て、家族と畑を世話したソチトルでした。",
+      "hook": "あなたは花舟を違う水路へ進める父に気づきましたが、父は市場へ行けると言い張りました。"
+    }
+  },
+  "THE_FACE_ON_THE_SALON_SIGN": {
+    "ko": {
+      "summary": "당신은 프라하의 약방과 연금술 작업장에서 증류와 약재 기록을 익힌 엘리슈카였습니다.",
+      "hook": "당신은 후원자에게 보일 금빛 조각이 다른 곳에서 온 가짜임을 알고 있었습니다."
+    },
+    "en": {
+      "summary": "You were Eliška Nováková, an assistant in a Prague apothecary and alchemical workshop who learned distillation and medicinal recordkeeping.",
+      "hook": "You knew the golden piece prepared for the patron had come from elsewhere, as funding and your coworkers' jobs hung in the balance."
+    },
+    "th": {
+      "summary": "คุณคือเอลิชกา โนวาโควา ผู้ช่วยร้านขายยาและห้องทดลองเล่นแร่แปรธาตุในกรุงปราก",
+      "hook": "คุณรู้ว่าชิ้นโลหะสีทองที่จะนำไปแสดงต่อผู้อุปถัมภ์ถูกนำมาจากที่อื่น ขณะที่เงินทุนและงานของเพื่อนร่วมงานกำลังแขวนอยู่บนเส้นด้าย"
+    },
+    "ja": {
+      "summary": "あなたはプラハの薬屋と錬金術工房で蒸留と薬材記録を学んだエリシュカでした。",
+      "hook": "あなたは後援者に示す金色の塊が別の場所から持ち込まれたものだと知っていました。"
+    }
+  },
+  "THE_NAME_LEFT_BLANK": {
+    "ko": {
+      "summary": "당신은 크리스티아니아의 직물 작업장에서 천을 재단한 잉가 라르센이었습니다.",
+      "hook": "당신은 국민투표에 뜻을 보탠 리브가 서명지에서 이름을 지워 달라고 한 순간을 마주했습니다."
+    },
+    "en": {
+      "summary": "You were Inga Larsen of Kristiania, a textile worker who learned sewing from your mother and cut cloth in a workshop.",
+      "hook": "You faced the moment Liv asked to erase her name from a signature sheet through which women barred from the referendum expressed their wishes."
+    },
+    "th": {
+      "summary": "คุณคืออิงกา ลาร์เซนแห่งคริสเตียนเนีย ผู้เรียนเย็บผ้าจากแม่และตัดผ้าในโรงงานสิ่งทอ",
+      "hook": "คุณเผชิญช่วงเวลาที่ลีฟขอให้ลบชื่อออกจากรายชื่อที่ผู้หญิงผู้ไม่มีสิทธิ์ลงประชามติใช้แสดงเจตจำนง"
+    },
+    "ja": {
+      "summary": "あなたは母に裁縫を学び、織物作業場で布を裁ったクリスチャニアのインガでした。",
+      "hook": "あなたは国民投票に参加できない女性の署名用紙から、リヴに名前を消してほしいと頼まれました。"
+    }
+  },
+  "THE_SHADE_NO_ONE_OWNED": {
+    "ko": {
+      "summary": "당신은 아보메의 장터에서 차양을 고치며 살아간 조수였습니다.",
+      "hook": "당신은 비구름 아래 풀린 차양을 두고 두 장사꾼이 줄의 주인을 다투는 광경과 마주했습니다."
+    },
+    "en": {
+      "summary": "You were Josu of Abomey, a market worker who repaired awnings after growing up helping in the fields.",
+      "hook": "You faced a loosening awning above two shops as rain neared, while both merchants argued over who had put up the rope first."
+    },
+    "th": {
+      "summary": "คุณคือโจซูแห่งอาโบเม ผู้เติบโตจากเด็กช่วยทำไร่มาเป็นช่างซ่อมกันสาดในตลาด",
+      "hook": "คุณพบปมกันสาดเหนือร้านสองร้านคลายตัวก่อนฝนมา ขณะที่พ่อค้าทั้งคู่เถียงกันว่าใครขึงเชือกก่อน"
+    },
+    "ja": {
+      "summary": "あなたは畑仕事を手伝って育ち、市場の天幕を直したアボメのジョスでした。",
+      "hook": "あなたは雨雲の下で天幕の結び目がほどける中、縄を先に張ったのは誰か争う商人に直面しました。"
+    }
+  },
+  "THE_BIRTHDAY_WITHOUT_CAKE": {
+    "ko": { "summary": "당신은 베를린에서 딸과 작은 빵집을 다시 연 로테 노이만이었습니다.", "hook": "손녀의 일곱 번째 생일, 케이크 재료가 없다는 말을 미루는 사이 초대받은 아이들이 가게 앞에 도착했습니다." },
+    "en": { "summary": "You were Lotte Neumann, who reopened a small Berlin bakery with your daughter.", "hook": "On your granddaughter's seventh birthday, her friends arrived before you could tell her there were no ingredients for a cake." },
+    "th": { "summary": "คุณคือลอทเทอ นอยมันน์ ผู้เปิดร้านขนมปังเล็ก ๆ ในเบอร์ลินอีกครั้งกับลูกสาว", "hook": "ในวันเกิดครบเจ็ดขวบของหลานสาว เพื่อน ๆ มาถึงหน้าร้านก่อนที่คุณจะบอกได้ว่าไม่มีวัตถุดิบทำเค้ก" },
+    "ja": { "summary": "あなたは娘とベルリンの小さなパン屋を再開したロッテ・ノイマンでした。", "hook": "孫娘の七歳の誕生日、ケーキの材料がないと伝える前に、招かれた子どもたちが店にやって来ました。" }
+  },
+  "THE_DONKEY_TURNED_BACK": {
+    "ko": { "summary": "당신은 페스의 골목에서 짐을 나르며 가족을 키운 유수프였습니다.", "hook": "해 지기 전 붉은 천을 전해야 하는데, 하림은 자꾸 옛 주인 사디크의 대문 쪽으로 발길을 돌렸습니다." },
+    "en": { "summary": "You were Yusuf, a porter who raised his family in the alleys of Fez.", "hook": "You had to deliver a bundle of red cloth before dusk, but Harim kept turning toward former owner Sadiq's gate." },
+    "th": { "summary": "คุณคือยูซุฟ คนขนสัมภาระที่เลี้ยงดูครอบครัวในตรอกเมืองเฟซ", "hook": "คุณต้องส่งห่อผ้าแดงก่อนค่ำ แต่ฮาริมกลับเลี้ยวไปทางประตูบ้านของซาดิก เจ้าของเก่าอยู่เรื่อย" },
+    "ja": { "summary": "あなたはフェズの路地で荷を運び、家族を養ったユスフでした。", "hook": "日暮れまでに赤い布を届けたいのに、ハリムは何度も昔の飼い主サディクの門へ向かいました。" }
+  },
+  "THE_QUIET_REHEARSAL": {
+    "ko": { "summary": "당신은 후에의 강가에서 궁중 음악을 연주하며 후배를 가르친 쩐반호아였습니다.", "hook": "내일의 첫 박자가 불안해 밤늦도록 연습하던 당신은 옆집 아기 울음과 지친 이웃의 목소리를 들었습니다." },
+    "en": { "summary": "You were Tran Van Hoa, a court musician in Hue who taught younger players.", "hook": "While rehearsing the opening beat late into the night, you heard the baby next door crying and your weary neighbor speaking." },
+    "th": { "summary": "คุณคือเจิ่นวันฮวา นักดนตรีราชสำนักแห่งเว้ผู้สอนนักดนตรีรุ่นน้อง", "hook": "ขณะซ้อมจังหวะแรกจนดึกเพราะกังวลเรื่องการแสดงพรุ่งนี้ คุณได้ยินเสียงทารกข้างบ้านร้องไห้และเสียงเพื่อนบ้านที่เหนื่อยล้า" },
+    "ja": { "summary": "あなたはフエで宮廷音楽を奏で、後輩を教えたチャン・ヴァン・ホアでした。", "hook": "翌日の最初の拍が不安で夜更けまで稽古するあなたに、隣家の赤ん坊の泣き声と疲れた隣人の声が届きました。" }
+  },
+  "THE_DOG_IN_THE_PORTRAIT": {
+    "ko": { "summary": "당신은 레이캬비크의 사진관에서 사람과 일터의 모습을 담아 온 아스타 욘스도티르였습니다.", "hook": "멀리 보낼 가족사진의 첫 건판을 찍는 순간, 의자 밑에 숨어 있던 개가 뛰어나왔습니다." },
+    "en": { "summary": "You were Asta Jónsdóttir, a Reykjavík photographer who captured people and their workplaces.", "hook": "Just as you exposed the first plate for a family's formal portrait, a hidden dog sprang out from beneath the chair." },
+    "th": { "summary": "คุณคืออาสตา ยอนส์โดตตีร์ ช่างภาพในเรคยาวิกที่บันทึกภาพผู้คนและสถานที่ทำงาน", "hook": "ขณะคุณเปิดรับแสงแผ่นแรกเพื่อถ่ายภาพครอบครัว สุนัขที่ซ่อนใต้เก้าอี้ก็พุ่งออกมา" },
+    "ja": { "summary": "あなたは人々と仕事場を撮ってきた、レイキャヴィークの写真家アスタ・ヨンスドッティルでした。", "hook": "家族写真の最初の乾板を露光した瞬間、椅子の下に隠れていた犬が飛び出しました。" }
+  },
+  "THE_WALL_FOR_TWO_DAYS": {
+    "ko": { "summary": "당신은 바그다드에서 종이를 만들며 작업장을 이어받은 하심 이븐 유수프였습니다.", "hook": "여동생의 혼례 천을 걸 벽에 막 뜬 종이가 붙어 있었고, 그것이 마르려면 이틀은 더 필요했습니다." },
+    "en": { "summary": "You were Hashim ibn Yusuf, a Baghdad papermaker who inherited the family workshop.", "hook": "Your sister's wedding cloth needed a wall, but freshly made paper covered it and would take two more days to dry." },
+    "th": { "summary": "คุณคือฮาชิม อิบน์ ยูซุฟ ช่างทำกระดาษแห่งแบกแดดผู้รับช่วงโรงงานของครอบครัว", "hook": "ผ้าสำหรับงานแต่งของน้องสาวคุณต้องมีที่แขวน แต่กำแพงกลับเต็มไปด้วยกระดาษเปียกที่ต้องตากอีกสองวัน" },
+    "ja": { "summary": "あなたはバグダードで家の工房を継いだ紙職人、ハーシム・イブン・ユースフでした。", "hook": "妹の婚礼の布を掛けたい壁には、漉いたばかりであと二日乾かす必要のある紙が貼られていました。" }
+  },
+  "THE_CORD_BEFORE_THE_BRIDGE": {
+    "ko": { "summary": "당신은 쿠스코 고원에서 풀줄을 꼬아 다리를 잇던 키야였습니다.", "hook": "사람들이 새 줄을 합치려 기다리는데, 어린 조카가 꼰 구간에서 오래된 풀이 바스러졌습니다." },
+    "en": { "summary": "You were Kiya of the Cuzco Highlands, twisting grass rope for a new bridge.", "hook": "As everyone waited to join the ropes, old grass crumbled in the section your young niece had twisted." },
+    "th": { "summary": "คุณคือคียาแห่งที่ราบสูงกุสโก ผู้บิดเชือกหญ้าเพื่อทำสะพานเส้นใหม่", "hook": "ขณะที่ผู้คนรอนำเชือกมารวมกัน หญ้าเก่าในช่วงที่หลานสาวตัวน้อยของคุณบิดไว้กลับร่วนแตก" },
+    "ja": { "summary": "あなたはクスコ高原で新しい橋のために草縄を編んだキヤでした。", "hook": "皆が縄を合わせようと待つ中、幼い姪が編んだ部分で古い草が崩れました。" }
+  }
+}

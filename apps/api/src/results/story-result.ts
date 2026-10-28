@@ -3,6 +3,19 @@ import { BasicResultResponseSchema, ExtendedResultResponseSchema, type ResultPre
 import type { ResultCore } from '@pastlife/scoring';
 import type { z } from 'zod';
 import type { ImageAsset } from '../providers/image.provider.js';
+import storyIntros from './story-intros.json';
+
+function storyIntroPage(storyId: string, locale: ContentLocale) {
+  const intro = (storyIntros as Record<string, Partial<Record<ContentLocale, { summary: string; hook: string }>>>)[storyId]?.[locale];
+  if (!intro) throw new Error(`Missing ${locale} story introduction: ${storyId}`);
+  const labels = {
+    ko: { title: '이야기를 열며', invitation: '이제 옆으로 넘겨 당신의 전생을 천천히 만나보세요.' },
+    en: { title: 'Before the story begins', invitation: 'Now swipe to discover your past life, one page at a time.' },
+    th: { title: 'ก่อนเริ่มเรื่องราว', invitation: 'ตอนนี้ปัดไปด้านข้าง แล้วค่อย ๆ เปิดอ่านเรื่องราวชาติก่อนของคุณ' },
+    ja: { title: '物語のはじまりに', invitation: 'さあ、横にめくって、あなたの前世をゆっくりたどってみましょう。' },
+  }[locale];
+  return { title: labels.title, summary: intro.summary, hook: intro.hook, invitation: labels.invitation };
+}
 
 function selectedSignal(core: ResultCore, card: StoryCard): StorySignal {
   return [...card.signals].sort((left, right) =>
@@ -66,7 +79,7 @@ function presentation(core: ResultCore, image: ImageAsset): z.infer<typeof Resul
       },
     },
     chapters: [
-      { id: 'MEETING', title: '전생의 나', body: renderStoryIdentity(manuscript, card.name), profilePages: manuscript.identity.profilePages ? [...manuscript.identity.profilePages] : undefined, crop: crops[0] },
+      { id: 'MEETING', title: '전생의 나', body: renderStoryIdentity(manuscript, card.name), introPage: storyIntroPage(card.id, 'ko'), profilePages: manuscript.identity.profilePages ? [...manuscript.identity.profilePages] : undefined, crop: crops[0] },
       { id: 'TRIAL', title: '에피소드', body: renderStoryEpisode(manuscript, signal), crop: crops[1] },
       { id: 'CHOICE', title: '삶의 기록', body: renderStoryTimeline(manuscript), crop: crops[2] },
       { id: 'NOW', title: '전생의 기억', body: renderStoryMemories(manuscript), crop: crops[3] },
@@ -154,7 +167,7 @@ function localizedStoryResult(korean: z.infer<typeof BasicResultResponseSchema>,
       lifeLine: manuscript.identity.summary,
     });
     const chapterCopy = [
-      { title: labels.chapters[0], body: identity, profilePages: manuscript.identity.profilePages },
+      { title: labels.chapters[0], body: identity, introPage: storyIntroPage(card.id, locale), profilePages: manuscript.identity.profilePages },
       { title: labels.chapters[1], body: episode },
       { title: labels.chapters[2], body: timeline },
       { title: labels.chapters[3], body: memories },
