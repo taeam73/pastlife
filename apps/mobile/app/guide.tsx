@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Animated, ImageBackground, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Animated, ImageBackground, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
 import { startNewSession } from '../src/session/start';
@@ -50,11 +50,8 @@ export default function GuideScreen() {
     setError(null);
     void (async () => {
       try {
-        const preparation = (async () => {
-          const session = await loadSession();
-          if (!session || session.resultId) await startNewSession(session?.resultId ? 'restart' : 'main');
-        })();
-        await Promise.all([preparation, new Promise((resolve) => setTimeout(resolve, 2000))]);
+        const session = await loadSession();
+        if (!session || session.resultId) await startNewSession(session?.resultId ? 'restart' : 'main');
         if (active) setReady(true);
       } catch {
         if (active) setError(t('질문을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.'));
@@ -78,6 +75,7 @@ export default function GuideScreen() {
           <Text style={styles.body}>{t('너무 오래 고민하지 말고,\n가장 먼저 마음이 가는 것을 선택해 주세요.')}</Text>
           {error ? <View style={styles.retry}><Text accessibilityRole="alert" style={styles.error}>{error}</Text><PrimaryButton onPress={() => setRetry((value) => value + 1)}>{t('다시 시도')}</PrimaryButton></View> : null}
           {ready ? <Animated.View style={[styles.buttonWrap, { opacity: buttonOpacity }]}><PrimaryButton leadingIcon="✦" onPress={() => router.replace('/question/1')}>{t('질문 시작하기')}</PrimaryButton></Animated.View> : null}
+          {!ready && !error ? <View style={styles.preparing} accessibilityRole="progressbar"><ActivityIndicator color={colors.accent} size="small" /><Text style={styles.preparingText}>{t('질문 준비 중')}</Text></View> : null}
         </Animated.View>
       </Screen>
     </View>
@@ -96,4 +94,6 @@ const styles = StyleSheet.create({
   error: { color: colors.error, fontSize: 15, lineHeight: 23, textAlign: 'center', marginBottom: spacing.sm },
   retry: { width: '100%', maxWidth: 420, gap: spacing.sm },
   buttonWrap: { width: '100%', maxWidth: 420, marginTop: spacing.lg },
+  preparing: { width: '100%', maxWidth: 420, minHeight: 52, marginTop: spacing.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
+  preparingText: { color: '#D9DFE8', fontSize: 14, lineHeight: 20 },
 });

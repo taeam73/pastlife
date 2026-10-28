@@ -9,6 +9,12 @@ test('start artwork keeps responsive width on narrow phones and tablets', async 
     expect(box?.height).toBeGreaterThanOrEqual(100);
     expect(box?.width).toBeLessThanOrEqual(width);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    await button.click();
+    await expect(page).toHaveURL(/\/guide$/);
+    await expect(page.getByRole('button', { name: '질문 시작하기' })).toBeVisible();
+    const guideButton = await page.getByRole('button', { name: '질문 시작하기' }).boundingBox();
+    expect(guideButton?.width).toBeLessThanOrEqual(width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   }
 });
 
@@ -23,7 +29,8 @@ test('fresh start responds immediately and final-moment back navigation keeps ex
   await start.click();
   await expect(page).toHaveURL(/\/guide$/, { timeout: 2_000 });
 
-  await expect(page.getByRole('button', { name: '질문 시작하기' })).toHaveCount(0);
+  // The button appears as soon as the session is ready; there is no fixed
+  // two-second delay, so a fast local API may make the loading state brief.
   await page.getByRole('button', { name: '질문 시작하기' }).click();
   for (let stage = 1; stage <= 6; stage += 1) {
     await expect(page).toHaveURL(new RegExp(`/question/${stage}$`));
