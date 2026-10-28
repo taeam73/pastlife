@@ -20,6 +20,7 @@ apps/admin/
 apps/api/
 apps/worker/
 apps/mobile/.expo/
+apps/mobile/android/
 apps/mobile/dist/
 apps/mobile/.eas-archive-inspect/
 apps/mobile/assets/stories/
