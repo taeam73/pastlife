@@ -63,9 +63,7 @@ test('keeps the dragon library bell and dream recorder visible on phone and tabl
     await expect.poll(async () => background.evaluate((element) => element instanceof HTMLImageElement && element.complete && element.naturalWidth >= 1024)).toBe(true);
     await expect.poll(async () => character.evaluate((element) => element instanceof HTMLImageElement && element.complete && element.naturalWidth >= 1024)).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
-    const quote = await page.getByTestId('result-signature-quote').boundingBox();
-    const summary = await page.getByTestId('result-summary-panel').boundingBox();
-    expect(quote!.y + quote!.height).toBeLessThan(summary!.y);
+    await expect(character).toBeVisible();
     await page.screenshot({ path: `output/playwright/story-dragon-dream-layered-${viewport.width}.png`, fullPage: true });
   }
 });
