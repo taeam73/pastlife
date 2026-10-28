@@ -4,6 +4,7 @@ const state = vi.hoisted(() => ({
   files: new Map<string, Uint8Array>(),
   downloads: 0,
   nativeFailure: false,
+  folderExists: false,
 }));
 
 vi.mock('expo-crypto', () => ({
@@ -12,6 +13,11 @@ vi.mock('expo-crypto', () => ({
 }));
 
 vi.mock('expo-file-system', () => {
+  class MockDirectory {
+    get exists() { return state.folderExists; }
+    create() { state.folderExists = true; }
+    delete() { state.files.clear(); state.folderExists = false; }
+  }
   class MockFile {
     uri: string;
     constructor(_directory: unknown, name: string) { this.uri = name; }
@@ -27,13 +33,13 @@ vi.mock('expo-file-system', () => {
       return file;
     }
   }
-  return { File: MockFile, Paths: { cache: 'cache' } };
+  return { Directory: MockDirectory, File: MockFile, Paths: { document: 'document' } };
 });
 
-import { discardStoryArtworkFile, ensureStoryArtworkFile } from './storyArtworkCache';
+import { clearStoryArtworkFiles, discardStoryArtworkFile, ensureStoryArtworkFile } from './storyArtworkCache';
 
 describe('shared story artwork cache', () => {
-  beforeEach(() => { state.files.clear(); state.downloads = 0; state.nativeFailure = false; });
+  beforeEach(() => { state.files.clear(); state.downloads = 0; state.nativeFailure = false; state.folderExists = false; });
 
   it('shares one download across simultaneous screen and PDF requests', async () => {
     const uri = 'https://cdn.example.com/scene.webp';
@@ -67,5 +73,16 @@ describe('shared story artwork cache', () => {
     } finally {
       globalThis.fetch = originalFetch;
     }
+  });
+
+  it('clears previous story artwork when a new session starts', async () => {
+    const uri = 'https://cdn.example.com/scene.jpg';
+    await ensureStoryArtworkFile(uri);
+    expect(state.folderExists).toBe(true);
+    await clearStoryArtworkFiles();
+    expect(state.folderExists).toBe(false);
+    expect(state.files.size).toBe(0);
+    await ensureStoryArtworkFile(uri);
+    expect(state.downloads).toBe(2);
   });
 });

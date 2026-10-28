@@ -1,8 +1,9 @@
 import * as Crypto from 'expo-crypto';
-import { File, Paths } from 'expo-file-system';
+import { Directory, File, Paths } from 'expo-file-system';
 import { remoteAssetSource } from './assetUrl';
 
 const pending = new Map<string, Promise<File>>();
+const artworkFolder = () => new Directory(Paths.document, 'pastlife-story-artwork');
 
 function artworkUrl(uri: string): string {
   const url = uri.startsWith('asset://') ? remoteAssetSource(uri)?.uri : uri;
@@ -40,7 +41,9 @@ async function validImage(file: File): Promise<boolean> {
 
 async function cacheFile(url: string): Promise<File> {
   const hash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, url);
-  const target = new File(Paths.cache, `pastlife-art-${hash}.${imageExtension(url)}`);
+  const folder = artworkFolder();
+  folder.create({ idempotent: true, intermediates: true });
+  const target = new File(folder, `pastlife-art-${hash}.${imageExtension(url)}`);
   if (await validImage(target)) return target;
   if (target.exists) target.delete();
   try {
@@ -63,7 +66,7 @@ async function cacheFile(url: string): Promise<File> {
   }
 }
 
-/** Screen images and PDF export resolve to the same device file. Cache eviction is safe: missing files are fetched again. */
+/** Screen images and PDF export resolve to the same file in app-private persistent storage. */
 export function ensureStoryArtworkFile(uri: string): Promise<File> {
   const url = artworkUrl(uri);
   const existing = pending.get(url);
@@ -77,6 +80,13 @@ export async function discardStoryArtworkFile(uri: string): Promise<void> {
   const url = artworkUrl(uri);
   await pending.get(url)?.catch(() => undefined);
   const hash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, url);
-  const file = new File(Paths.cache, `pastlife-art-${hash}.${imageExtension(url)}`);
+  const file = new File(artworkFolder(), `pastlife-art-${hash}.${imageExtension(url)}`);
   if (file.exists) file.delete();
+}
+
+/** A new session no longer needs the previous story's downloaded artwork. */
+export async function clearStoryArtworkFiles(): Promise<void> {
+  await Promise.allSettled([...pending.values()]);
+  const folder = artworkFolder();
+  if (folder.exists) folder.delete();
 }
