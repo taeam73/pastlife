@@ -87,12 +87,12 @@ try {
     } finally { Pop-Location }
 } finally { Pop-Location }
 
-$config = Get-Content $CredentialsFile -Raw | ConvertFrom-Json
+$config = Get-Content $CredentialsFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $key = $config.android.keystore
 $unsigned = Join-Path $androidRoot 'app\build\outputs\apk\release\app-release.apk'
 $outDir = Join-Path $repoRoot 'output'
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-$app = Get-Content (Join-Path $mobileRoot 'app.json') -Raw | ConvertFrom-Json
+$app = Get-Content (Join-Path $mobileRoot 'app.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $version = $app.expo.version
 $versionCode = $app.expo.android.versionCode
 $output = Join-Path $outDir "pastlife-local-preview-$version-build$versionCode.apk"

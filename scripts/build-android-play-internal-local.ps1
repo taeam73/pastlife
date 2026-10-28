@@ -37,7 +37,7 @@ $env:EXPO_PUBLIC_ADMOB_APP_ID = 'ca-app-pub-3940256099942544~3347511713'
 $env:EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID = 'ca-app-pub-3940256099942544/1033173712'
 $env:EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID = 'ca-app-pub-3940256099942544/5224354917'
 
-$config = Get-Content $CredentialsFile -Raw | ConvertFrom-Json
+$config = Get-Content $CredentialsFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $key = $config.android.keystore
 $env:PASTLIFE_UPLOAD_STORE_FILE = $KeystoreFile
 $env:PASTLIFE_UPLOAD_STORE_PASSWORD = [string]$key.keystorePassword
@@ -76,7 +76,7 @@ try {
 
     $sourceBundle = Join-Path $androidRoot 'app\build\outputs\bundle\release\app-release.aab'
     if (-not (Test-Path $sourceBundle)) { throw 'Signed Android App Bundle was not produced.' }
-    $app = Get-Content (Join-Path $mobileRoot 'app.json') -Raw | ConvertFrom-Json
+    $app = Get-Content (Join-Path $mobileRoot 'app.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $outDir = Join-Path $repoRoot 'output'
     New-Item -ItemType Directory -Force -Path $outDir | Out-Null
     $output = Join-Path $outDir "pastlife-play-internal-$($app.expo.version)-build$($app.expo.android.versionCode).aab"

@@ -38,8 +38,8 @@
 **Files:** `apps/mobile/app.json`, `scripts/build-android-local.ps1` (only if required)
 
 - [x] Increment version code and run complete checks.
-- [ ] Commit the reviewed source.
-- [ ] Deploy the server-side change to development, then build and verify an installable APK.
+- [x] Commit the reviewed source.
+- [x] Deploy the server-side change to development, then build and verify an installable APK.
 - [x] Inspect production environment readiness: production API and live AdMob build settings are missing, so public release is blocked.
-- [ ] Generate a signed AAB for the Play internal testing track, with development API and test ads, and verify target SDK.
+- [x] Generate a signed AAB for the Play internal testing track, with development API and test ads, and verify target SDK.
 - [ ] Report artifact links and any unmet Play Console prerequisites.

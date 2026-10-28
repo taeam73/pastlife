@@ -55,7 +55,7 @@ development build 또는 배포 빌드에서 확인합니다. 실제 비밀값�
 
 AdMob 보상형 광고 단위의 서버 측 확인(SSV) URL은 공개 HTTPS API의 `/api/v1/ads/admob/ssv`입니다. 앱이 발급받은 30분 유효 챌린지를 `custom_data`로 보내면 API가 Google 공개키로 서명과 광고 단위·거래 ID를 확인합니다. AdMob 콘솔에서 Android 앱·광고 단위를 만들고 SSV URL을 등록해야 실제 보상 해제가 동작합니다. 앱을 Play에 연결한 뒤에는 개발자 사이트의 `app-ads.txt` 소유권 확인과 Play Console의 광고 포함 신고도 완료합니다. 대상 연령에 아동이 포함되는지에 따라 광고 정책과 동의 설정을 검토합니다. 테스트 중에는 실광고를 클릭하지 않습니다.
 
-현재 로컬 작업에는 AdMob 계정 값과 Android 네이티브 빌드 환경이 없어 실제 광고 재생과 Google SSV 왕복은 아직 검증되지 않았습니다. 타입·단위·API E2E 검사를 통과해도 이 실기기 검사는 Play 내부 테스트 전에 별도로 필요합니다.
+Android 네이티브 빌드 환경과 EAS 업로드 서명 키는 준비되어 있습니다. `scripts/build-android-local.ps1`은 개발 API와 테스트 광고를 쓰는 직접 설치용 APK를, `scripts/build-android-play-internal-local.ps1`은 같은 소스와 키로 Play Console 내부 테스트용 AAB를 만듭니다. 2026-10-28 기준 빌드 산출물은 `output/pastlife-local-preview-0.1.10-build11.apk`와 `output/pastlife-play-internal-0.1.10-build11.aab`이며, 패키지 ID는 `com.pastlife.archive`, target SDK는 36입니다. 실제 광고 재생과 Google SSV 왕복은 Android 실기기에서 아직 검증해야 합니다. 운영 API와 실광고 설정이 준비되기 전에는 이 AAB를 공개 출시용으로 사용하지 않습니다.
 
 ## 검증
 
