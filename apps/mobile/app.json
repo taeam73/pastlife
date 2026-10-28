@@ -5,7 +5,7 @@
     "version": "0.1.10",
     "orientation": "portrait",
     "icon": "./assets/branding/logo-mark-hourglass.png",
-    "android": { "versionCode": 11 },
+    "android": { "versionCode": 12 },
     "splash": {
       "image": "./assets/branding/logo-mark.png",
       "resizeMode": "contain",

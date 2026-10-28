@@ -107,7 +107,9 @@ const styles = StyleSheet.create({
   frame: { width: '100%', overflow: 'hidden', backgroundColor: colors.surfaceRaised },
   background: { ...StyleSheet.absoluteFill, width: '100%', height: '100%' },
   character: { position: 'absolute', right: 0, bottom: 0, width: '42%', height: '90%', zIndex: 2 },
-  mobileCharacter: { width: '72%', height: '82%', bottom: 50 },
+  // Keep the full illustration visible while giving assets with generous
+  // transparent margins enough room on a phone-sized cover.
+  mobileCharacter: { width: '100%', height: '92%', bottom: 24 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.22)', zIndex: 3 },
   lowerShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 310, backgroundColor: 'rgba(5, 10, 18, 0.56)', zIndex: 3 },
   loading: { position: 'absolute', top: '50%', left: '50%', zIndex: 5 },
