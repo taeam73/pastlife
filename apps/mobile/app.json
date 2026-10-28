@@ -2,10 +2,10 @@
   "expo": {
     "name": "전생록",
     "slug": "past-life-archive",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "orientation": "portrait",
     "icon": "./assets/branding/logo-mark-hourglass.png",
-    "android": { "versionCode": 5 },
+    "android": { "versionCode": 6 },
     "splash": {
       "image": "./assets/branding/logo-mark.png",
       "resizeMode": "contain",

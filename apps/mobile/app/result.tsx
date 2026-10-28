@@ -14,7 +14,7 @@ import { ShareProfileCard } from '../src/components/ShareProfileCard';
 import { renderShareProfileImage } from '../src/results/shareProfileImage';
 import { downloadRecordPdf, renderRecordPdf } from '../src/results/exportRecordPdf';
 import { Screen } from '../src/components/Screen';
-import { loadAuth, loadSession } from '../src/session/store';
+import { loadSession } from '../src/session/store';
 import { startNewSession } from '../src/session/start';
 import { colors, spacing } from '../src/theme/tokens';
 import { trackEvent } from '../src/analytics/track';
@@ -243,7 +243,6 @@ export default function ResultScreen() {
     </View> : null}
     <AsyncActionStatus status={imageShareStatus} loadingText={t('이미지 공유 카드를 만들고 있습니다.')} readyText={t('이미지 파일을 준비했습니다.')} errorText={t('이미지 공유 카드를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.')} onRetry={() => void shareImage()} />
     <View style={styles.secondaryActions}>
-      <View style={styles.secondaryAction}><ParchmentButton tone="muted" label={t('아카이브에 저장하기')} onPress={async () => { const auth = await loadAuth(); if (!auth) { router.push({ pathname: './login', params: { resultId: result.resultId } }); return; } await api.archive(result.resultId, auth.accessToken); const session = await loadSession(); void trackEvent('archive_saved', { ...(session ? { sessionId: session.sessionId, contentVersion: session.contentVersion } : {}), resultId: result.resultId }); router.replace('/archive'); }} /></View>
       <View style={styles.secondaryAction}><ParchmentButton tone="muted" label={t('또 다른 전생 기록 찾아보기')} onPress={() => void restart()} /></View>
     </View>
     <AppNav />

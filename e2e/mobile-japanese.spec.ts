@@ -102,12 +102,7 @@ test('runs Japanese questions, the CLOWN story, final moment, and PDF preview', 
   const image = await imageDownload;
   expect(image.suggestedFilename()).toMatch(/^past-life-archive.*\.png$/u);
   await image.saveAs('output/japanese-pagination/clown-ja-share.png');
-  await page.getByRole('button', { name: 'アーカイブに保存' }).click();
-  await expect(page.getByText('Google アカウントでログイン')).toBeVisible();
-  expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
-  await page.getByRole('button', { name: 'テストアカウントで続行' }).click();
-  await expect(page).toHaveURL(/\/archive$/u);
-  await expect(page.getByRole('button', { name: /前世の記録.*いちばん遅く笑った道化師/u })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'アーカイブに保存' })).toHaveCount(0);
   expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(768);
 });

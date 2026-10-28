@@ -100,12 +100,7 @@ test('runs Thai questions, the CLOWN story, final moment, and PDF preview', asyn
   const image = await imageDownload;
   expect(image.suggestedFilename()).toMatch(/^past-life-archive.*\.png$/u);
   await image.saveAs('output/thai-pagination/clown-th-share.png');
-  await page.getByRole('button', { name: 'บันทึกในคลัง' }).click();
-  await expect(page.getByText('เข้าสู่ระบบด้วยบัญชี Google')).toBeVisible();
-  expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
-  await page.getByRole('button', { name: 'ต่อด้วยบัญชีทดสอบ' }).click();
-  await expect(page).toHaveURL(/\/archive$/u);
-  await expect(page.getByRole('button', { name: /บันทึกชาติก่อน.*ตัวตลกที่หัวเราะเป็นคนสุดท้าย/u })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'บันทึกในคลัง' })).toHaveCount(0);
   expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(768);
 });

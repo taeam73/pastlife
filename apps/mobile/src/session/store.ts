@@ -11,7 +11,6 @@ export type SessionState = { sessionId: string; seed: string; contentVersion: st
 const AUTH_KEY = 'pastlife.auth.v1';
 const DEVICE_KEY = 'pastlife.device.v1';
 const PREFERENCES_KEY = 'pastlife.preferences.v1';
-export type AuthState = { accessToken: string; user: { id: string; email: string; name: string } };
 export type Preferences = { bgmEnabled: boolean; effectsEnabled: boolean; reduceMotion: boolean };
 export const DEFAULT_PREFERENCES: Preferences = { bgmEnabled: true, effectsEnabled: true, reduceMotion: false };
 const preferenceListeners = new Set<(preferences: Preferences) => void>();
@@ -67,20 +66,7 @@ export function subscribePreferences(listener: (preferences: Preferences) => voi
   preferenceListeners.add(listener);
   return () => { preferenceListeners.delete(listener); };
 }
-async function setAuthValue(value: string) {
-  if (Platform.OS === 'web') await AsyncStorage.setItem(AUTH_KEY, value);
-  else await SecureStore.setItemAsync(AUTH_KEY, value, { keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY });
-}
-
-async function getAuthValue() {
-  return Platform.OS === 'web'
-    ? AsyncStorage.getItem(AUTH_KEY)
-    : SecureStore.getItemAsync(AUTH_KEY);
-}
-
-export async function saveAuth(auth: AuthState) { await setAuthValue(JSON.stringify(auth)); }
-export async function loadAuth(): Promise<AuthState | null> { const value = await getAuthValue(); return value ? (JSON.parse(value) as AuthState) : null; }
-export async function clearAuth() {
+export async function clearLegacyAuth() {
   if (Platform.OS === 'web') await AsyncStorage.removeItem(AUTH_KEY);
   else await SecureStore.deleteItemAsync(AUTH_KEY);
 }

@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Switch, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
 import { AppNav } from '../src/components/AppNav';
 import { api } from '../src/api/client';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
 import { SubpageHeader } from '../src/components/SubpageHeader';
 import {
-  clearAuth,
   DEFAULT_PREFERENCES,
-  loadAuth,
   loadPreferences,
   loadSession,
   savePreferences,
   saveSession,
-  type AuthState,
   type Preferences,
 } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
@@ -25,19 +21,13 @@ import { contentLocales, isContentLocaleAvailable, selectableContentLocales, typ
 export default function SettingsScreen() {
   const { locale, setLocale } = useLocale();
   const t = useTranslate();
-  const router = useRouter();
   const [preferences, setPreferences] = useState<Preferences>(DEFAULT_PREFERENCES);
-  const [auth, setAuth] = useState<AuthState | null>(null);
-  const [confirmLogout, setConfirmLogout] = useState(false);
   const [showAdPrivacy, setShowAdPrivacy] = useState(false);
   const [changingLanguage, setChangingLanguage] = useState(false);
   const [languageError, setLanguageError] = useState(false);
 
   useEffect(() => {
-    void Promise.all([loadPreferences(), loadAuth()]).then(([nextPreferences, nextAuth]) => {
-      setPreferences(nextPreferences);
-      setAuth(nextAuth);
-    });
+    void loadPreferences().then(setPreferences);
   }, []);
 
   useEffect(() => { void adPrivacyOptionsRequired().then(setShowAdPrivacy).catch(() => undefined); }, []);
@@ -46,12 +36,6 @@ export default function SettingsScreen() {
     const next = { ...preferences, [key]: value };
     setPreferences(next);
     void savePreferences(next);
-  };
-
-  const logout = async () => {
-    await clearAuth();
-    setAuth(null);
-    setConfirmLogout(false);
   };
 
   const changeLanguage = async (next: ContentLocale) => {
@@ -83,21 +67,6 @@ export default function SettingsScreen() {
     <Text style={styles.note}>{t('음악과 효과음 기본값은 출시 운영 설정으로 연결됩니다. 음소거나 동작 줄이기 선택은 이 기기에 저장됩니다.')}</Text>
     {showAdPrivacy ? <PrimaryButton onPress={() => { void showAdPrivacyOptions(); }}>{t('광고 개인정보 설정')}</PrimaryButton> : null}
 
-    <View style={styles.accountCard}>
-      <Text style={styles.sectionTitle}>{t('계정')}</Text>
-      {auth ? <>
-        <Text style={styles.accountName}>{auth.user.name}</Text>
-        <Text style={styles.accountEmail}>{auth.user.email}</Text>
-        {confirmLogout ? <View style={styles.confirmBox}>
-          <Text style={styles.confirmText}>{t('이 기기의 로그인 정보만 삭제되며 현재 전생 결과는 유지됩니다.')}</Text>
-          <PrimaryButton onPress={() => void logout()}>{t('로그아웃 확인')}</PrimaryButton>
-          <PrimaryButton onPress={() => setConfirmLogout(false)}>{t('취소')}</PrimaryButton>
-        </View> : <PrimaryButton onPress={() => setConfirmLogout(true)}>{t('로그아웃')}</PrimaryButton>}
-      </> : <>
-        <Text style={styles.accountEmail}>{t('로그인하면 저장한 전생 기록을 다시 볼 수 있습니다.')}</Text>
-        <PrimaryButton onPress={() => router.push('/login')}>{t('Google 로그인')}</PrimaryButton>
-      </>}
-    </View>
     <AppNav />
   </Screen>;
 }
@@ -110,11 +79,6 @@ const styles = StyleSheet.create({
   languageRow: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' }, row: { minHeight: 64, padding: spacing.md, borderRadius: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   label: { color: colors.text, fontSize: 17 },
   note: { color: colors.muted, lineHeight: 22 },
-  accountCard: { gap: spacing.sm, padding: spacing.md, borderRadius: 14, backgroundColor: colors.surface },
   sectionTitle: { color: colors.text, fontSize: 20, fontWeight: '700' },
-  accountName: { color: colors.text, fontSize: 17, fontWeight: '600' },
-  accountEmail: { color: colors.muted, lineHeight: 22 },
-  confirmBox: { gap: spacing.sm, marginTop: spacing.sm },
-  confirmText: { color: colors.text, lineHeight: 22 },
   languageError: { color: colors.error, lineHeight: 22 },
 });

@@ -85,14 +85,6 @@ test('runs an English preview from guide through six questions and the CLOWN sto
   const share = await imageDownload;
   expect(share.suggestedFilename()).toMatch(/^past-life-archive.*\.png$/u);
   await share.saveAs('output/english-pagination/clown-en-share.png');
-  await page.getByRole('button', { name: 'Save to archive' }).click();
-  await expect(page.getByText('Sign in with Google')).toBeVisible();
-  expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
-  await page.getByRole('button', { name: 'Continue with test account' }).click();
-  await expect(page).toHaveURL(/\/archive$/u);
-  await expect(page.getByRole('button', { name: /Past life record.*The Clown Who Laughed Last/u })).toBeVisible();
-  expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
-  await page.getByRole('button', { name: /Past life record.*The Clown Who Laughed Last/u }).click();
-  await expect(page.locator('body')).toContainText('The Clown Who Laughed Last');
+  await expect(page.getByRole('button', { name: 'Save to archive' })).toHaveCount(0);
   expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
 });
