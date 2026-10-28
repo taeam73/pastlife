@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('centers the final moment action when the end hint is tapped', async ({ page }) => {
+for (const viewport of [{ width: 320, height: 720 }, { width: 390, height: 844 }, { width: 768, height: 1024 }]) test(`centers the final moment action at ${viewport.width}px`, async ({ page }) => {
   test.setTimeout(90_000);
-  await page.setViewportSize({ width: 390, height: 844 });
+  await page.setViewportSize(viewport);
   await page.goto('/');
   await page.getByRole('button', { name: '나의 전생 찾아보기' }).click();
   await page.getByRole('button', { name: '질문 시작하기' }).click();
@@ -20,6 +20,7 @@ test('centers the final moment action when the end hint is tapped', async ({ pag
   const action = page.getByRole('button', { name: /마지막 순간 보러 가기/ });
   await expect.poll(async () => {
     const box = await action.boundingBox();
-    return box ? Math.abs(box.y + box.height / 2 - 844 / 2) : Infinity;
+    return box ? Math.abs(box.y + box.height / 2 - viewport.height / 2) : Infinity;
   }).toBeLessThan(50);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
 });
