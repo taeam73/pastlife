@@ -26,7 +26,7 @@ export function ShareProfileCard({ name, recordNo, cover, layers, relationship, 
   const characterSource = character && imageSource(character.uri);
   const [loaded, setLoaded] = useState(0);
   const notifiedReady = useRef(false);
-  const expected = (locale === 'ko' ? 1 : 0) + (backgroundSource ? 1 : 0) + (characterSource ? 1 : 0);
+  const expected = (locale === 'ko' || locale === 'en' ? 1 : 0) + (backgroundSource ? 1 : 0) + (characterSource ? 1 : 0);
   const markLoaded = () => setLoaded((count) => Math.min(count + 1, expected));
   useEffect(() => {
     if (loaded < expected || notifiedReady.current) return;
@@ -37,7 +37,7 @@ export function ShareProfileCard({ name, recordNo, cover, layers, relationship, 
     {backgroundSource ? <Image source={backgroundSource} accessibilityLabel={background?.alt} resizeMode="cover" style={styles.background} onLoad={markLoaded} /> : null}
     {characterSource ? <Image source={characterSource} accessibilityLabel={character?.alt} resizeMode="contain" style={[styles.character, character?.uri === 'asset://stories/v3/lagos-bisi-hairdresser.webp' && styles.lowerWalkingCharacter]} onLoad={markLoaded} /> : null}
     <View pointerEvents="none" style={styles.topShade} />
-    {locale !== 'ko' ? <Text style={[styles.logo, styles.englishLogo]}>{locale === 'en' ? 'PAST LIFE ARCHIVE' : t('전생록')}</Text> : <Image source={require('../../assets/branding/title-logo-plain.png')} accessibilityLabel={t('전생록')} resizeMode="contain" style={styles.logo} onLoad={markLoaded} />}
+    {locale === 'ko' || locale === 'en' ? <Image source={locale === 'en' ? require('../../assets/branding/title-logo-en.png') : require('../../assets/branding/title-logo-plain.png')} accessibilityLabel={t('전생록')} resizeMode="contain" style={styles.logo} onLoad={markLoaded} /> : <Text style={[styles.logo, styles.englishLogo]}>{t('전생록')}</Text>}
     <View style={styles.profile}>
       <Text style={styles.eyebrow}>{localeText(locale, { ko: `당신의 ${recordNo}번째 전생은`, en: `Your past life No. ${recordNo}`, th: `ชาติที่แล้วของคุณลำดับ ${recordNo}`, ja: `あなたの第${recordNo}の前世は` })}</Text>
       <Text style={styles.name}>{name} <Text style={styles.years}>({cover.birthYear}~{cover.deathYear})</Text></Text>

@@ -11,10 +11,10 @@ export function Screen({ children, scroll = true, transparent = false, fullBleed
   const insets = useSafeAreaInsets();
   const { width, fontScale } = useWindowDimensions();
   const metrics = mobileMetrics(width, fontScale);
-  const logoStyle = { width: locale === 'ko' ? metrics.logoWidth : Math.max(138, metrics.logoWidth), height: metrics.logoHeight };
-  const logo = (style: typeof styles.inlineLogo | typeof styles.globalLogo) => locale !== 'ko'
-    ? <Text accessibilityLabel={t('전생록')} style={[style, styles.englishLogo]}>{locale === 'en' ? 'PAST LIFE ARCHIVE' : t('전생록')}</Text>
-    : <Image accessibilityLabel={t('전생록')} source={require('../../assets/branding/title-logo-plain.png')} style={style} resizeMode="contain" />;
+  const logoStyle = { width: locale === 'ko' || locale === 'en' ? metrics.logoWidth : Math.max(138, metrics.logoWidth), height: metrics.logoHeight };
+  const logo = (style: typeof styles.inlineLogo | typeof styles.globalLogo) => locale === 'ko' || locale === 'en'
+    ? <Image accessibilityLabel={t('전생록')} source={locale === 'en' ? require('../../assets/branding/title-logo-en.png') : require('../../assets/branding/title-logo-plain.png')} style={style} resizeMode="contain" />
+    : <Text accessibilityLabel={t('전생록')} style={[style, styles.englishLogo]}>{t('전생록')}</Text>;
   const content = <View style={[fullBleed ? styles.fullBleedContent : styles.content, !fullBleed && { maxWidth: metrics.contentMaxWidth, paddingHorizontal: metrics.gutter }, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}>{logoInContent ? logo([styles.inlineLogo, logoStyle] as never) : null}{children}</View>;
   return <View style={[styles.safe, transparent && styles.transparent, { paddingTop: insets.top }]}><StatusBar translucent backgroundColor="transparent" barStyle="light-content" />{logoInContent ? null : <View style={[styles.globalLogoWrap, { top: insets.top + 2, left: metrics.gutter }]}>{logo([styles.globalLogo, logoStyle] as never)}</View>}{scroll ? <ScrollView ref={scrollRef} onScroll={onScroll} scrollEventThrottle={80} contentContainerStyle={styles.scroll}>{content}</ScrollView> : content}{floatingFooter ? <View pointerEvents="box-none" style={[styles.floatingFooter, { bottom: Math.max(insets.bottom, spacing.sm) + spacing.md + 88 }]}>{floatingFooter}</View> : null}</View>;
 }

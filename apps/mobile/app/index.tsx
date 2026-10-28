@@ -65,7 +65,7 @@ export default function StartScreen() {
       <Screen scroll={false} transparent>
         <View style={styles.hero}>
           <Animated.View style={{ opacity: contentOpacity, transform: [{ translateY: contentY }] }}>
-            {locale !== 'ko' ? <Text style={[styles.titleLogo, styles.englishLogo]}>{locale === 'en' ? 'PAST LIFE ARCHIVE' : t('전생록')}</Text> : <Image accessibilityLabel={t('전생록')} source={require('../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.titleLogo} />}
+            {locale === 'ko' || locale === 'en' ? <Image accessibilityLabel={t('전생록')} source={locale === 'en' ? require('../assets/branding/title-logo-en.png') : require('../assets/branding/title-logo-cinematic.png')} resizeMode="contain" style={styles.titleLogo} /> : <Text style={[styles.titleLogo, styles.englishLogo]}>{t('전생록')}</Text>}
             {locale === 'ko' ? <Text style={styles.kicker}>PAST LIFE ARCHIVE</Text> : null}
             <Text style={styles.title}>{t('나는 언제, 어디에서,\n어떤 삶을 살았을까?')}</Text>
             <Text style={styles.copy}>{t('시간 너머의 뜻밖의 이야기에서, 지금의 마음과 닮은 장면을 찾아보세요.')}</Text>

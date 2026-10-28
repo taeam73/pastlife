@@ -67,14 +67,14 @@ test('runs an English preview from guide through six questions and the CLOWN sto
     await page.screenshot({ path: `output/english-pagination/full-flow-${width}.png`, fullPage: true });
   }
   await page.getByRole('button', { name: 'Watch an ad to read the final moment' }).click();
-  await expect(page).toHaveURL(/\/final-moment$/u);
+  await expect(page).toHaveURL(/\/final-moment\?resultId=/u);
   await expect(page.getByText(/Lubo.s\s+final moment/u)).toBeVisible();
   expect(await page.locator('body').innerText()).not.toMatch(/[가-힣]/u);
   await page.screenshot({ path: 'output/english-pagination/final-moment-320.png', fullPage: true });
   await page.setViewportSize({ width: 768, height: 1024 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(768);
   await page.getByRole('button', { name: 'Finish the final moment' }).click();
-  await expect(page).toHaveURL(/\/result$/u);
+  await expect(page).toHaveURL(/\/result\?showExports=1$/u);
   const pdfDownload = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download story PDF' }).click();
   const pdf = await pdfDownload;
