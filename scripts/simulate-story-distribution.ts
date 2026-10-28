@@ -8,7 +8,7 @@ const signals: StorySignal[] = ['notice', 'connect', 'rest', 'explore', 'repair'
 const userCount = 512;
 const sessionsPerUser = 8;
 const contentVersion = '3.0.0';
-type Scenario = 'current' | 'independent' | 'rotation' | 'rotation-and-recent-story';
+type Scenario = 'current' | 'independent' | 'rotation' | 'rotation-and-recent-top-ties' | 'rotation-and-recent-story';
 type AnswerMode = 'stable-preference' | 'uniform-random';
 
 function digest(value: string) {
@@ -46,14 +46,14 @@ function choose(question: Question, preferred: StorySignal[]) {
     preferred.indexOf(a.storySignals?.[0] ?? 'notice') - preferred.indexOf(b.storySignals?.[0] ?? 'notice') || a.id.localeCompare(b.id))[0]!;
 }
 
-function avoidRecentStory(storyId: string, storySignals: StorySignal[], answers: Array<{ stage: Stage; questionId: string; choiceId: string }>, recent: string[]) {
+function avoidRecentStory(storyId: string, storySignals: StorySignal[], answers: Array<{ stage: Stage; questionId: string; choiceId: string }>, recent: string[], tolerance: 0 | 1) {
   if (storyCards.find((card) => card.id === storyId)?.rare) return storyId;
   const signalCount = (signal: StorySignal) => storySignals.filter((value) => value === signal).length;
   const affinities = storyCards.filter((card) => !card.rare).map((card) => ({
     card, score: card.signals.reduce((sum, signal) => sum + Math.min(2, signalCount(signal)), 0),
   }));
   const maximum = Math.max(...affinities.map((item) => item.score));
-  const close = affinities.filter((item) => item.score > 0 && item.score >= maximum - 1).sort((a, b) => a.card.id.localeCompare(b.card.id));
+  const close = affinities.filter((item) => item.score > 0 && item.score >= maximum - tolerance).sort((a, b) => a.card.id.localeCompare(b.card.id));
   if (!recent.includes(storyId)) return storyId;
   const fresh = close.filter((item) => !recent.includes(item.card.id));
   if (!fresh.length) return storyId;
@@ -95,8 +95,8 @@ function simulate(scenario: Scenario, answerMode: AnswerMode) {
       }));
       const result = calculateResult({ answers, sessionSeed: seed, contentVersion });
       const original = result.storyId!;
-      const story = scenario === 'rotation-and-recent-story'
-        ? avoidRecentStory(original, result.storySignals ?? [], answers, stories.slice(-3))
+      const story = scenario === 'rotation-and-recent-story' || scenario === 'rotation-and-recent-top-ties'
+        ? avoidRecentStory(original, result.storySignals ?? [], answers, stories.slice(-3), scenario === 'rotation-and-recent-top-ties' ? 0 : 1)
         : original;
       if (story !== original) repeatAvoided += 1;
       stories.push(story);
@@ -126,4 +126,4 @@ function simulate(scenario: Scenario, answerMode: AnswerMode) {
 }
 
 console.log(JSON.stringify((['stable-preference', 'uniform-random'] as const).flatMap((answerMode) =>
-  (['current', 'independent', 'rotation', 'rotation-and-recent-story'] as const).map((scenario) => simulate(scenario, answerMode))), null, 2));
+  (['current', 'independent', 'rotation', 'rotation-and-recent-top-ties', 'rotation-and-recent-story'] as const).map((scenario) => simulate(scenario, answerMode))), null, 2));
