@@ -19,10 +19,20 @@ async function validImage(file: File): Promise<boolean> {
   if (!file.exists || (file.size ?? 0) < 128) return false;
   try {
     const bytes = await file.bytes();
-    return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff
-      || bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47
-      || bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46
-        && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
+    if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+      return bytes.at(-2) === 0xff && bytes.at(-1) === 0xd9;
+    }
+    if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) {
+      const end = bytes.length - 12;
+      return bytes[end] === 0 && bytes[end + 1] === 0 && bytes[end + 2] === 0 && bytes[end + 3] === 0
+        && bytes[end + 4] === 0x49 && bytes[end + 5] === 0x45 && bytes[end + 6] === 0x4e && bytes[end + 7] === 0x44;
+    }
+    if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46
+      && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50) {
+      const declaredSize = (bytes[4] | bytes[5] << 8 | bytes[6] << 16 | bytes[7] << 24) >>> 0;
+      return declaredSize + 8 === bytes.length;
+    }
+    return false;
   } catch {
     return false;
   }

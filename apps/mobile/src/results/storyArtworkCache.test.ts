@@ -20,7 +20,7 @@ vi.mock('expo-file-system', () => {
     delete() { state.files.delete(this.uri); }
     static async downloadFileAsync(_url: string, file: MockFile) {
       state.downloads += 1;
-      state.files.set(file.uri, new Uint8Array([0xff, 0xd8, 0xff, ...Array(125).fill(1)]));
+      state.files.set(file.uri, new Uint8Array([0xff, 0xd8, 0xff, ...Array(123).fill(1), 0xff, 0xd9]));
       return file;
     }
   }
@@ -44,7 +44,7 @@ describe('shared story artwork cache', () => {
   it('redownloads invalid artwork instead of passing it to the PDF', async () => {
     const uri = 'https://cdn.example.com/scene.webp';
     const first = await ensureStoryArtworkFile(uri);
-    state.files.set(first.uri, new Uint8Array(130));
+    state.files.set(first.uri, new Uint8Array([0xff, 0xd8, 0xff, ...Array(127).fill(1)]));
     await ensureStoryArtworkFile(uri);
     expect(state.downloads).toBe(2);
     await discardStoryArtworkFile(uri);

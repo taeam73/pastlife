@@ -1,6 +1,5 @@
 import { Asset } from 'expo-asset';
 import { File } from 'expo-file-system';
-import * as ImageManipulator from 'expo-image-manipulator';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { resolveLibraryImage } from './libraryImages';
@@ -41,13 +40,8 @@ async function storyImage(uri: string) {
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         const file = await ensureStoryArtworkFile(uri);
-        const optimized = await ImageManipulator.manipulateAsync(file.uri, [{ resize: { width: 1100 } }], {
-          base64: true,
-          compress: 0.82,
-          format: ImageManipulator.SaveFormat.JPEG,
-        });
-        if (!optimized.base64) throw new Error('PDF illustration could not be decoded');
-        return validatedImageDataUri(optimized.base64);
+        const original = await file.base64();
+        return validatedImageDataUri(original);
       } catch (error) {
         lastError = error;
         if (attempt < 2) {
@@ -61,13 +55,23 @@ async function storyImage(uri: string) {
   throw new Error(`PDF illustration is not mapped: ${uri}`);
 }
 
-export type NativeRecordPdfArtwork = { logo: string; background: string; character: string | null; finalArt: string };
+export type NativeRecordPdfArtwork = { logo: string | null; background: string; character: string | null; finalArt: string };
+
+async function namedArtwork(name: string, task: Promise<string>): Promise<string> {
+  try {
+    return await task;
+  } catch (error) {
+    throw new Error(`Could not prepare PDF ${name}: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
+  }
+}
 
 export async function prepareNativeRecordPdfArtwork(record: PdfRecord): Promise<NativeRecordPdfArtwork> {
   if (record.chapters.length !== 4) throw new Error('Complete story chapters are required');
   const [logo, background, character, finalArt] = await Promise.all([
-    assetDataUri(require('../../assets/branding/title-logo-plain.png') as number),
-    storyImage(record.backgroundUri), record.characterUri ? storyImage(record.characterUri) : Promise.resolve(null), storyImage(record.finalMoment.illustrationUri),
+    (record.locale ?? 'ko') === 'ko' ? namedArtwork('logo', assetDataUri(require('../../assets/branding/title-logo-plain.png') as number)) : Promise.resolve(null),
+    namedArtwork('background', storyImage(record.backgroundUri)),
+    record.characterUri ? namedArtwork('character', storyImage(record.characterUri)) : Promise.resolve(null),
+    namedArtwork('final scene', storyImage(record.finalMoment.illustrationUri)),
   ]);
   return { logo, background, character, finalArt };
 }
