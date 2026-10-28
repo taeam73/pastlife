@@ -1,5 +1,6 @@
 import { Asset } from 'expo-asset';
 import { File, Paths } from 'expo-file-system';
+import * as ImageManipulator from 'expo-image-manipulator';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { resolveLibraryImage } from './libraryImages';
@@ -39,8 +40,14 @@ async function storyImage(uri: string) {
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         const file = await File.downloadFileAsync(selected.uri, Paths.cache, { idempotent: true });
-        if (!file.exists || file.size === 0) throw new Error('Downloaded PDF illustration is empty');
-        return validatedImageDataUri(await file.base64());
+        if (!file.exists || file.size < 128) throw new Error('Downloaded PDF illustration is empty');
+        const optimized = await ImageManipulator.manipulateAsync(file.uri, [{ resize: { width: 1100 } }], {
+          base64: true,
+          compress: 0.82,
+          format: ImageManipulator.SaveFormat.JPEG,
+        });
+        if (!optimized.base64) throw new Error('PDF illustration could not be decoded');
+        return validatedImageDataUri(optimized.base64);
       } catch (error) {
         lastError = error;
         if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 600 * (attempt + 1)));
@@ -51,14 +58,21 @@ async function storyImage(uri: string) {
   throw new Error(`PDF illustration is not mapped: ${uri}`);
 }
 
-export async function shareNativeRecordPdf(record: PdfRecord): Promise<void> {
-  const locale = record.locale ?? 'ko';
+export type NativeRecordPdfArtwork = { logo: string; background: string; character: string | null; finalArt: string };
+
+export async function prepareNativeRecordPdfArtwork(record: PdfRecord): Promise<NativeRecordPdfArtwork> {
   if (record.chapters.length !== 4) throw new Error('Complete story chapters are required');
-  if (!await Sharing.isAvailableAsync()) throw new Error('File sharing is unavailable on this device');
   const [logo, background, character, finalArt] = await Promise.all([
     assetDataUri(require('../../assets/branding/title-logo-plain.png') as number),
     storyImage(record.backgroundUri), record.characterUri ? storyImage(record.characterUri) : Promise.resolve(null), storyImage(record.finalMoment.illustrationUri),
   ]);
+  return { logo, background, character, finalArt };
+}
+
+export async function shareNativeRecordPdf(record: PdfRecord, artwork: NativeRecordPdfArtwork): Promise<void> {
+  const locale = record.locale ?? 'ko';
+  if (!await Sharing.isAvailableAsync()) throw new Error('File sharing is unavailable on this device');
+  const { logo, background, character, finalArt } = artwork;
   const cover = record.cover;
   const chapterHtml = record.chapters.map((chapter, index) => {
     const number = String(index + 1).padStart(2, '0');

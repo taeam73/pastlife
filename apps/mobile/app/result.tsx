@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Platform, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -34,10 +34,13 @@ export default function ResultScreen() {
   const router = useRouter();
   const { showExports } = useLocalSearchParams<{ showExports?: string }>();
   const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
   const [result, setResult] = useState<BasicResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [imageShareStatus, setImageShareStatus] = useState<AsyncStatus>('IDLE');
   const [pdfStatus, setPdfStatus] = useState<AsyncStatus>('IDLE');
+  const [pdfStage, setPdfStage] = useState<'ARTWORK' | 'PDF'>('ARTWORK');
+  const [pdfFailureStage, setPdfFailureStage] = useState<'ARTWORK' | 'PDF'>('ARTWORK');
   const [showShareCard, setShowShareCard] = useState(false);
   const [deepUnlocked, setDeepUnlocked] = useState(false);
   const [atStoryEnd, setAtStoryEnd] = useState(false);
@@ -158,8 +161,12 @@ export default function ResultScreen() {
   };
   const downloadPdf = async () => {
     if (!result || !result.finalMomentRead || result.presentation?.version !== 3 || !result.presentation.hero.cover) return;
+    setPdfStage('ARTWORK');
+    setPdfFailureStage('ARTWORK');
     setPdfStatus('LOADING');
+    let currentStage: 'ARTWORK' | 'PDF' = 'ARTWORK';
     try {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
       const finalMoment = await api.finalMoment(result.resultId);
       const record = {
         locale,
@@ -173,22 +180,29 @@ export default function ResultScreen() {
         finalMoment: { year: finalMoment.year, place: finalMoment.place, scene: finalMoment.scene, afterword: finalMoment.afterword, illustrationUri: finalMoment.illustration.uri },
       };
       if (Platform.OS === 'web') {
+        currentStage = 'PDF';
+        setPdfStage('PDF');
         const pdf = await renderRecordPdf(record);
         downloadRecordPdf(pdf, result.character?.name ?? t('전생의 나'), result.resultId, locale);
       } else {
-        const { shareNativeRecordPdf } = await import('../src/results/exportNativeRecordPdf');
-        await shareNativeRecordPdf(record);
+        const { prepareNativeRecordPdfArtwork, shareNativeRecordPdf } = await import('../src/results/exportNativeRecordPdf');
+        const artwork = await prepareNativeRecordPdfArtwork(record);
+        currentStage = 'PDF';
+        setPdfStage('PDF');
+        await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        await shareNativeRecordPdf(record, artwork);
       }
       setPdfStatus('READY');
     } catch (error) {
-      console.error('Past life PDF export failed', error);
+      console.error(`Past life PDF export failed during ${currentStage}`, error);
+      setPdfFailureStage(currentStage);
       setPdfStatus('ERROR');
     }
   };
   const restart = async () => { await startNewSession('restart'); router.replace('/guide'); };
   const scrollToFinalAction = () => {
-    finalActionRef.current?.measureInWindow((_x, y) => {
-      pageScrollRef.current?.scrollTo({ y: Math.max(0, scrollOffsetRef.current + y - insets.top - spacing.lg), animated: true });
+    finalActionRef.current?.measureInWindow((_x, y, _width, height) => {
+      pageScrollRef.current?.scrollTo({ y: Math.max(0, scrollOffsetRef.current + y + height / 2 - windowHeight / 2), animated: true });
     });
   };
 
@@ -214,7 +228,7 @@ export default function ResultScreen() {
       {!result.finalMomentRead ? <Text style={[styles.lockNotice, styles.combinedLockNotice]}>{t('마지막 순간을 보고 나면 이미지 공유/전생기록 다운로드가 활성화됩니다.')}</Text> : null}
       <PrimaryButton disabled={imageShareStatus === 'LOADING' || !result.finalMomentRead} showWhenDisabled onPress={() => void shareImage()}>{t('이미지 공유')}</PrimaryButton>
       <PrimaryButton disabled={pdfStatus === 'LOADING' || !result.finalMomentRead} showWhenDisabled onPress={() => void downloadPdf()}>{t('전생기록 다운로드')}</PrimaryButton>
-      <AsyncActionStatus status={pdfStatus} loadingText={localeText(locale, { ko: '그림을 불러와 전생기록 PDF를 만들고 있습니다.', en: 'Loading artwork and preparing your PDF.', th: 'กำลังโหลดภาพและจัดทำ PDF บันทึกชาติก่อน', ja: '画像を読み込み、前世の記録PDFを作成しています。' })} readyText={t(Platform.OS === 'web' ? '전생기록 PDF를 저장했습니다.' : 'PDF 공유창을 열었습니다. 저장 위치를 선택해 주세요.')} errorText={t('PDF를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.')} onRetry={() => void downloadPdf()} />
+      <AsyncActionStatus status={pdfStatus} loadingText={pdfStage === 'ARTWORK' ? localeText(locale, { ko: '전생기록 PDF를 준비 중입니다. 그림을 불러오고 있습니다.', en: 'Preparing your PDF. Loading artwork first.', th: 'กำลังเตรียม PDF และโหลดภาพประกอบ', ja: 'PDFを準備しています。先に画像を読み込んでいます。' }) : localeText(locale, { ko: '그림이 준비되었습니다. PDF를 만들고 있습니다.', en: 'Artwork is ready. Creating your PDF.', th: 'โหลดภาพเสร็จแล้ว กำลังสร้าง PDF', ja: '画像の準備ができました。PDFを作成しています。' })} readyText={t(Platform.OS === 'web' ? '전생기록 PDF를 저장했습니다.' : 'PDF 공유창을 열었습니다. 저장 위치를 선택해 주세요.')} errorText={pdfFailureStage === 'ARTWORK' ? localeText(locale, { ko: '그림을 불러오지 못했습니다. 네트워크를 확인하고 다시 시도해 주세요.', en: 'Could not load artwork. Check your connection and try again.', th: 'โหลดภาพไม่สำเร็จ โปรดตรวจสอบเครือข่ายแล้วลองใหม่', ja: '画像を読み込めませんでした。通信状態を確認して再試行してください。' }) : t('PDF를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.')} onRetry={() => void downloadPdf()} />
     </View>
     {showShareCard && result.presentation?.version === 3 && result.presentation.hero.cover ? <View ref={shareCardRef} collapsable={false} style={styles.shareCardFrame}>
       <ShareProfileCard name={result.character?.name ?? t('전생의 나')} recordNo={result.recordNo} cover={result.presentation.hero.cover} layers={result.image.layers ?? []} relationship={result.presentation.chapters.find((chapter) => chapter.id === 'MEETING')?.profilePages?.flatMap((page) => page.body.split('\n')).find((line) => /^(가까운 사람|가족|친구|곁에 있던 사람|People close to him)\s*[·:]/u.test(line)) ?? ''} onImagesReady={() => { shareCardReadyRef.current = true; shareCardReadyResolverRef.current?.(); shareCardReadyResolverRef.current = null; }} />
