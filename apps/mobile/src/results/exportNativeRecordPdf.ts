@@ -67,12 +67,10 @@ async function namedArtwork(name: string, task: Promise<string>): Promise<string
 
 export async function prepareNativeRecordPdfArtwork(record: PdfRecord): Promise<NativeRecordPdfArtwork> {
   if (record.chapters.length !== 4) throw new Error('Complete story chapters are required');
-  const [logo, background, character, finalArt] = await Promise.all([
-    (record.locale ?? 'ko') === 'ko' ? namedArtwork('logo', assetDataUri(require('../../assets/branding/title-logo-plain.png') as number)) : Promise.resolve(null),
-    namedArtwork('background', storyImage(record.backgroundUri)),
-    record.characterUri ? namedArtwork('character', storyImage(record.characterUri)) : Promise.resolve(null),
-    namedArtwork('final scene', storyImage(record.finalMoment.illustrationUri)),
-  ]);
+  const logo = (record.locale ?? 'ko') === 'ko' ? await namedArtwork('logo', assetDataUri(require('../../assets/branding/title-logo-plain.png') as number)) : null;
+  const background = await namedArtwork('background', storyImage(record.backgroundUri));
+  const character = record.characterUri ? await namedArtwork('character', storyImage(record.characterUri)) : null;
+  const finalArt = await namedArtwork('final scene', storyImage(record.finalMoment.illustrationUri));
   return { logo, background, character, finalArt };
 }
 

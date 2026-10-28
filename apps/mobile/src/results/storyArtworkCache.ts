@@ -44,12 +44,22 @@ async function cacheFile(url: string): Promise<File> {
   if (await validImage(target)) return target;
   if (target.exists) target.delete();
   try {
-    await File.downloadFileAsync(url, target);
-    if (!await validImage(target)) throw new Error(`Story artwork is incomplete: ${url}`);
+    await File.downloadFileAsync(url, target, { idempotent: true });
+    if (!await validImage(target)) throw new Error('Downloaded file failed image validation');
     return target;
-  } catch (error) {
+  } catch (nativeError) {
     if (target.exists) target.delete();
-    throw error;
+    try {
+      const response = await fetch(url, { headers: { Accept: 'image/*' } });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      target.write(bytes);
+      if (!await validImage(target)) throw new Error('Fetched file failed image validation');
+      return target;
+    } catch (fetchError) {
+      if (target.exists) target.delete();
+      throw new Error(`Artwork download failed for ${new URL(url).pathname}: native=${String(nativeError)}; fetch=${String(fetchError)}`);
+    }
   }
 }
 
