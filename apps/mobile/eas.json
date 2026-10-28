@@ -10,6 +10,15 @@
         "EXPO_PUBLIC_ASSET_BASE_URL": "https://dev.pastlife-assets.pages.dev"
       }
     },
+    "play-internal": {
+      "distribution": "store",
+      "android": { "buildType": "app-bundle" },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://pastlife-api-dev-36h6kgjkxq-du.a.run.app/api/v1",
+        "EXPO_PUBLIC_ADMOB_TEST_ADS": "true",
+        "EXPO_PUBLIC_ASSET_BASE_URL": "https://dev.pastlife-assets.pages.dev"
+      }
+    },
     "production": {
       "autoIncrement": true,
       "android": { "buildType": "app-bundle" },

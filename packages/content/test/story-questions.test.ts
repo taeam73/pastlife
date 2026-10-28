@@ -58,6 +58,15 @@ describe('story-first questions', () => {
     expect(fresh.id).not.toBe(first.id);
   });
 
+  it('varies stages independently across first-time readers', () => {
+    const routes = new Set(Array.from({ length: 4096 }, (_, index) =>
+      ([1, 2, 3, 4, 5, 6] as const)
+        .map((stage) => selectQuestion({ stage, sessionSeed: `reader-${index}`, contentVersion: '3.0.0', excludedQuestionIds: [] }).id)
+        .join(','),
+    ));
+    expect(routes.size).toBeGreaterThan(400);
+  });
+
   it('keeps a complete human-led card library with authored response moments', () => {
     expect(storyCards.length).toBeGreaterThanOrEqual(12);
     expect(storyCards.filter((card) => card.rare)).toHaveLength(1);

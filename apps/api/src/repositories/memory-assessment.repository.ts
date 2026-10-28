@@ -48,6 +48,15 @@ export class MemoryAssessmentRepository implements AssessmentRepository {
       .flatMap((session) => session.questions.map(({ questionId }) => questionId));
   }
 
+  async getRecentStoryIds(subjectKey: string, excludeSessionId: string, resultLimit: number) {
+    return [...this.sessions.values()]
+      .filter((session) => session.anonymousId === subjectKey && session.id !== excludeSessionId && session.resultId)
+      .reverse()
+      .map((session) => this.results.get(session.resultId!)?.core.storyId)
+      .filter((storyId): storyId is string => Boolean(storyId))
+      .slice(0, resultLimit);
+  }
+
   async setViewMode(sessionId: string, viewMode: 'VIDEO' | 'TEXT') {
     this.requireSession(sessionId).viewMode = viewMode;
     return viewMode;

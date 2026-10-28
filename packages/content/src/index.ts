@@ -41,6 +41,13 @@ function stableHash(value: string): number {
     hash ^= character.codePointAt(0) ?? 0;
     hash = Math.imul(hash, 16777619);
   }
+  // Mix high bits into the low bits before the four-way question choice.
+  // FNV's low two bits alone couple otherwise separate stage selections.
+  hash ^= hash >>> 16;
+  hash = Math.imul(hash, 0x85ebca6b);
+  hash ^= hash >>> 13;
+  hash = Math.imul(hash, 0xc2b2ae35);
+  hash ^= hash >>> 16;
   return hash >>> 0;
 }
 

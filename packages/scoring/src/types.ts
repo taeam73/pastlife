@@ -39,4 +39,5 @@ export type CalculateResultInput = {
   answers: AnswerInput[];
   sessionSeed: string;
   contentVersion: string;
+  recentStoryIds?: readonly string[];
 };

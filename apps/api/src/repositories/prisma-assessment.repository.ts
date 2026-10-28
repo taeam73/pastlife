@@ -72,6 +72,18 @@ export class PrismaAssessmentRepository implements AssessmentRepository {
     return sessions.flatMap((session) => session.questions.map(({ questionId }) => questionId));
   }
 
+  async getRecentStoryIds(subjectKey: string, excludeSessionId: string, resultLimit: number) {
+    const sessions = await this.prisma.session.findMany({
+      where: { anonymousId: subjectKey, id: { not: excludeSessionId }, result: { isNot: null } },
+      orderBy: { createdAt: 'desc' },
+      take: resultLimit,
+      include: { result: true },
+    });
+    return sessions
+      .map((session) => (session.result?.coreJson as ResultCore | undefined)?.storyId)
+      .filter((storyId): storyId is string => Boolean(storyId));
+  }
+
   async setViewMode(sessionId: string, viewMode: 'VIDEO' | 'TEXT') {
     const session = await this.prisma.session.update({ where: { id: sessionId }, data: { viewMode } });
     return session.viewMode;

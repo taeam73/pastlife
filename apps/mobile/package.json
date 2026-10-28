@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "expo start --port 8081",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --exclude '**/.eas-archive-inspect/**' --passWithNoTests"
   },
   "dependencies": {
     "@pastlife/content": "workspace:*",

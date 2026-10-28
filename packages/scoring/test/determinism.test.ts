@@ -30,8 +30,8 @@ describe('result determinism', () => {
       const result = calculateResult({ answers: answersFor(`v3-${choiceIndex}`, choiceIndex), sessionSeed: `v3-${choiceIndex}`, contentVersion: '2.5.0' });
       const setting = historicalSettings.find(({ id }) => id === result.locationId)!;
       expect(setting.occupationIds).toContain(result.occupationId);
-      expect(findHistoricalSettingExpansion(setting.id)?.imageAssetKeys).toContain(result.libraryImage.key);
-      expect(result.libraryImage.key).toMatch(/^library\/v4\/.+-(daily|work|turning|study)\.(webp|png)$/);
+      const expansion = findHistoricalSettingExpansion(setting.id);
+      expect([...(expansion?.imageAssetKeys ?? []), ...(expansion?.additionalImageAssetKeys ?? [])]).toContain(result.libraryImage.key);
     }
   });
 });

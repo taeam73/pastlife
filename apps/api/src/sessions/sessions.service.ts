@@ -97,8 +97,9 @@ export class SessionsService {
     if (existing) return { resultId: existing.id, status: 'RESULT_READY' };
     if (session.answers.length !== 6) throw new ConflictException({ code: 'INVALID_STATE', message: 'Six answers are required before completion' });
 
+    const recentStoryIds = await this.repository.getRecentStoryIds(session.anonymousId, session.id, 3);
     await this.repository.setSessionStatus(sessionId, 'CALCULATING');
-    const core = calculateResult({ answers: session.answers, sessionSeed: session.seed, contentVersion: session.contentVersion });
+    const core = calculateResult({ answers: session.answers, sessionSeed: session.seed, contentVersion: session.contentVersion, recentStoryIds });
     await this.repository.setSessionStatus(sessionId, 'NARRATIVE_GENERATING');
     const narrative = await this.narrativeProvider.createBasic(core);
     const result = await this.repository.saveResult({ id: randomUUID(), sessionId, status: 'READY', core, blocks: narrative.blocks, storyProfile: narrative.storyProfile });

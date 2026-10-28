@@ -20,7 +20,7 @@ import { calculateScores } from './score.js';
 import { deterministicIndex } from './prng.js';
 import type { CalculateResultInput, ResultCore } from './types.js';
 
-export function calculateResult({ answers, contentVersion }: CalculateResultInput): ResultCore {
+export function calculateResult({ answers, contentVersion, recentStoryIds = [] }: CalculateResultInput): ResultCore {
   if (contentVersion.startsWith('3.') && answers.some(({ questionId }) => !questionId.startsWith('SQ'))) {
     throw new Error('Content 3.x results require story-first questions');
   }
@@ -38,9 +38,17 @@ export function calculateResult({ answers, contentVersion }: CalculateResultInpu
   const affinities = storyCards.filter((card) => !card.rare).map((card) => ({ card, score: card.signals.reduce((total, signal) => total + Math.min(2, signalCount(signal)), 0) }));
   const maxAffinity = Math.max(...affinities.map(({ score }) => score));
   const closeMatches = affinities.filter(({ score }) => score > 0 && score >= maxAffinity - 1).sort((a, b) => a.card.id.localeCompare(b.card.id));
-  const storyId = contentVersion.startsWith('3.')
+  let storyId = contentVersion.startsWith('3.')
     ? rareCard?.id ?? closeMatches[Number.parseInt(hashText(`${seed}:story-pick`).slice(0, 8), 16) % closeMatches.length]?.card.id
     : undefined;
+  if (storyId && !rareCard && recentStoryIds.includes(storyId)) {
+    const freshBest = affinities
+      .filter(({ card, score }) => score === maxAffinity && !recentStoryIds.includes(card.id))
+      .sort((left, right) => left.card.id.localeCompare(right.card.id));
+    if (freshBest.length > 0) {
+      storyId = freshBest[Number.parseInt(hashText(`${seed}:fresh-story-pick`).slice(0, 8), 16) % freshBest.length]!.card.id;
+    }
+  }
   if (contentVersion.startsWith('3.') && !storyId) throw new Error('No story card matched the answers');
 
   const location = pickCandidate(historicalLocations, scores.tags, `${seed}:location`, historicalLocations);

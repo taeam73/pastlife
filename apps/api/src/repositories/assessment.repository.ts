@@ -54,6 +54,7 @@ export interface AssessmentRepository {
   saveAnswer(sessionId: string, answer: AnswerInput): Promise<StoredSession>;
   lockQuestion(sessionId: string, stage: number, questionId: string): Promise<string>;
   getQuestionHistory(subjectKey: string, excludeSessionId: string, sessionLimit: number): Promise<string[]>;
+  getRecentStoryIds(subjectKey: string, excludeSessionId: string, resultLimit: number): Promise<string[]>;
   setViewMode(sessionId: string, viewMode: 'VIDEO' | 'TEXT'): Promise<'VIDEO' | 'TEXT'>;
   setSessionStatus(sessionId: string, status: string): Promise<void>;
   saveResult(result: StoredResult): Promise<StoredResult>;
