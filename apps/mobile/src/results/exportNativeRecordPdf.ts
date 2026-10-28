@@ -1,9 +1,10 @@
 import { Asset } from 'expo-asset';
-import { File, Paths } from 'expo-file-system';
+import { File } from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { resolveLibraryImage } from './libraryImages';
+import { discardStoryArtworkFile, ensureStoryArtworkFile } from './storyArtworkCache';
 import type { PdfRecord } from './exportRecordPdf';
 import { localeText, translate } from '../i18n/locale';
 
@@ -39,8 +40,7 @@ async function storyImage(uri: string) {
     let lastError: unknown;
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
-        const file = await File.downloadFileAsync(selected.uri, Paths.cache, { idempotent: true });
-        if (!file.exists || file.size < 128) throw new Error('Downloaded PDF illustration is empty');
+        const file = await ensureStoryArtworkFile(uri);
         const optimized = await ImageManipulator.manipulateAsync(file.uri, [{ resize: { width: 1100 } }], {
           base64: true,
           compress: 0.82,
@@ -50,7 +50,10 @@ async function storyImage(uri: string) {
         return validatedImageDataUri(optimized.base64);
       } catch (error) {
         lastError = error;
-        if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 600 * (attempt + 1)));
+        if (attempt < 2) {
+          await discardStoryArtworkFile(uri);
+          await new Promise((resolve) => setTimeout(resolve, 600 * (attempt + 1)));
+        }
       }
     }
     throw lastError;

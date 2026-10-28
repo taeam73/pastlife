@@ -17,7 +17,9 @@ function warmResultArtwork(resultId: string) {
       .filter((uri): uri is string => Boolean(uri))
       .map((uri) => uri.startsWith('asset://') ? remoteAssetSource(uri)?.uri : /^https?:\/\//u.test(uri) ? uri : undefined)
       .filter((uri): uri is string => Boolean(uri));
-    void Promise.allSettled([...new Set(urls)].map((uri) => Image.prefetch(uri)));
+    if (Platform.OS === 'web') void Promise.allSettled([...new Set(urls)].map((uri) => Image.prefetch(uri)));
+    else void import('../src/results/storyArtworkCache').then(({ ensureStoryArtworkFile }) =>
+      Promise.allSettled([...new Set(urls)].map((uri) => ensureStoryArtworkFile(uri)))).catch(() => undefined);
   }).catch(() => undefined);
 }
 

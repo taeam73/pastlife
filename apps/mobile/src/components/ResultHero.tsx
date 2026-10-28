@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
-import { resolveLibraryImage } from '../results/libraryImages';
+import { useStoryArtworkSource } from '../results/useStoryArtworkSource';
 import { ParchmentSummary } from './ParchmentSummary';
 import { localeText, useLocale } from '../i18n/locale';
 import { ParchmentReader } from './ParchmentReader';
@@ -30,8 +30,9 @@ type Props = {
   onPageCountChange?: ((count: number) => void) | undefined;
 };
 
-function sourceFor(uri: string) {
-  return resolveLibraryImage(uri) ?? (/^https?:\/\//.test(uri) ? { uri } : undefined);
+function CachedCharacter({ layer, mobile }: { layer: Layer; mobile: boolean }) {
+  const source = useStoryArtworkSource(layer.uri);
+  return source ? <Image accessibilityLabel={layer.alt} source={source} resizeMode="contain" style={[styles.character, mobile && styles.mobileCharacter]} /> : null;
 }
 
 export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, chapterTitle, chapterId, chapterDetail, profilePages, introductionSummary, index, standaloneProfile = false, pageIndex = 0, onPageChange, onPageCountChange }: Props) {
@@ -43,13 +44,14 @@ export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, ch
   const [summaryHeight, setSummaryHeight] = useState(0);
   const sourceUri = compositeUri ?? imageUri;
   const [loadedSourceUri, setLoadedSourceUri] = useState<string | null>(null);
-  const source = sourceFor(sourceUri);
-  if (!source) return null;
+  const source = useStoryArtworkSource(sourceUri);
+  const backgroundSource = useStoryArtworkSource(imageUri);
+  if (!source) return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}><ActivityIndicator color={colors.accent} size="large" style={styles.loading} /></View>;
   const characterLayers = compositeUri ? [] : layers?.filter((layer) => layer.role === 'CHARACTER') ?? [];
   return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}>
-    <Image testID="result-hero-background" accessibilityLabel={imageAlt} blurRadius={isIntroduction ? 2 : 0} source={compositeUri ? source : sourceFor(imageUri) ?? source} resizeMode="cover" onLoad={() => setLoadedSourceUri(sourceUri)} onError={() => setLoadedSourceUri(sourceUri)} style={styles.background} />
+    <Image testID="result-hero-background" accessibilityLabel={imageAlt} blurRadius={isIntroduction ? 2 : 0} source={compositeUri ? source : backgroundSource ?? source} resizeMode="cover" onLoad={() => setLoadedSourceUri(sourceUri)} onError={() => setLoadedSourceUri(sourceUri)} style={styles.background} />
     {loadedSourceUri !== sourceUri ? <ActivityIndicator color={colors.accent} size="large" style={styles.loading} /> : null}
-    {isIntroduction ? characterLayers.map((layer) => { const characterSource = sourceFor(layer.uri); return characterSource ? <Image key={layer.uri} accessibilityLabel={layer.alt} source={characterSource} resizeMode="contain" style={[styles.character, mobile && styles.mobileCharacter]} /> : null; }) : null}
+    {isIntroduction ? characterLayers.map((layer) => <CachedCharacter key={layer.uri} layer={layer} mobile={mobile} />) : null}
     <View pointerEvents="none" style={styles.shade} />
     {isIntroduction && loadedSourceUri === sourceUri ? <View style={[styles.copy, mobile && styles.mobileCopy, { bottom: Math.max(mobile ? 190 : 170, summaryHeight + spacing.md * 2) }]}>
       <Text style={styles.eyebrow}>{localeText(locale, { ko: '당신의 전생은', en: 'Your past life was', th: 'ชาติที่แล้วของคุณคือ', ja: 'あなたの前世は' })}</Text>

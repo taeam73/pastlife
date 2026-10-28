@@ -75,6 +75,14 @@ export default function ResultScreen() {
   }, [result]);
 
   useEffect(() => {
+    if (Platform.OS === 'web' || !result?.presentation || result.presentation.version !== 3) return;
+    const { backgroundUri, characterUri } = result.presentation.hero;
+    void import('../src/results/storyArtworkCache').then(({ ensureStoryArtworkFile }) =>
+      Promise.allSettled([backgroundUri, characterUri].filter((uri): uri is string => Boolean(uri)).map(ensureStoryArtworkFile))
+    ).catch(() => undefined);
+  }, [result?.resultId, result?.presentation]);
+
+  useEffect(() => {
     if (showExports !== '1' || !result?.finalMomentRead) return;
     const frame = requestAnimationFrame(() => {
       exportActionsRef.current?.measureInWindow((_x, y) => {

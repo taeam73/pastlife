@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { resolveLibraryImage } from '../results/libraryImages';
+import { useStoryArtworkSource } from '../results/useStoryArtworkSource';
 import { cropLayout, type Crop } from '../results/crop';
 
 export function CroppedScene({ uri, crop, accessibilityLabel }: { uri: string; crop: Crop; accessibilityLabel: string }) {
-  const source = resolveLibraryImage(uri) ?? (/^https?:\/\//.test(uri) ? { uri } : undefined);
+  const source = useStoryArtworkSource(uri);
   // Native `require()` images are numeric asset IDs. Resolve them before
   // calculating chapter crops; asking getSize() for an asset:// URI fails.
   const resolved = source

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { resolveLibraryImage } from '../results/libraryImages';
+import { useStoryArtworkSource } from '../results/useStoryArtworkSource';
 import { loadPreferences } from '../session/store';
 import { colors, spacing } from '../theme/tokens';
 import { localeText, useLocale } from '../i18n/locale';
@@ -8,19 +8,20 @@ import { localeText, useLocale } from '../i18n/locale';
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 export type Cover = { era: string; place: string; role: string; birthYear: string; deathYear: string; lifeLine: string };
 
-function sourceFor(uri: string) {
-  return resolveLibraryImage(uri) ?? (/^https?:\/\//.test(uri) ? { uri } : undefined);
+function CachedCharacter({ layer, style, onReady }: { layer: Layer; style: React.ComponentProps<typeof Animated.Image>['style']; onReady: () => void }) {
+  const source = useStoryArtworkSource(layer.uri);
+  return source ? <Animated.Image accessibilityLabel={layer.alt} source={source} resizeMode="contain" onLoad={onReady} onError={onReady} style={style} /> : null;
 }
 
 export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover }: { imageUri: string; imageAlt: string; layers?: Layer[] | undefined; name: string; recordNo: number; cover: Cover }) {
   const { locale } = useLocale();
   const { width } = useWindowDimensions();
   const mobile = width < 768;
-  const background = sourceFor(imageUri);
+  const background = useStoryArtworkSource(imageUri);
   const [loadedBackgroundUri, setLoadedBackgroundUri] = useState<string | null>(null);
   const [loadedCharacters, setLoadedCharacters] = useState<string[]>([]);
   const characterLayers = layers?.filter((layer) => layer.role === 'CHARACTER') ?? [];
-  const artworkReady = loadedBackgroundUri === imageUri && characterLayers.every((layer) => !sourceFor(layer.uri) || loadedCharacters.includes(layer.uri));
+  const artworkReady = loadedBackgroundUri === imageUri && characterLayers.every((layer) => loadedCharacters.includes(layer.uri));
   const backgroundOpacity = useRef(new Animated.Value(0)).current;
   const characterOpacity = useRef(new Animated.Value(0)).current;
   const characterY = useRef(new Animated.Value(20)).current;
@@ -80,12 +81,11 @@ export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover 
     };
   }, [artworkReady, backgroundOpacity, characterOpacity, characterY, lines]);
 
-  if (!background) return null;
+  if (!background) return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}><ActivityIndicator color={colors.accent} size="large" style={styles.loading} /></View>;
   return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}>
     <Animated.Image accessibilityLabel={imageAlt} source={background} resizeMode="cover" onLoad={() => setLoadedBackgroundUri(imageUri)} onError={() => setLoadedBackgroundUri(imageUri)} style={[styles.background, { opacity: backgroundOpacity }]} />
     {characterLayers.map((layer) => {
-      const source = sourceFor(layer.uri);
-      return source ? <Animated.Image key={layer.uri} accessibilityLabel={layer.alt} source={source} resizeMode="contain" onLoad={() => setLoadedCharacters((current) => current.includes(layer.uri) ? current : [...current, layer.uri])} onError={() => setLoadedCharacters((current) => current.includes(layer.uri) ? current : [...current, layer.uri])} style={[styles.character, mobile && styles.mobileCharacter, { opacity: characterOpacity, transform: [{ translateY: characterY }] }]} /> : null;
+      return <CachedCharacter key={layer.uri} layer={layer} onReady={() => setLoadedCharacters((current) => current.includes(layer.uri) ? current : [...current, layer.uri])} style={[styles.character, mobile && styles.mobileCharacter, { opacity: characterOpacity, transform: [{ translateY: characterY }] }]} />;
     })}
     <View pointerEvents="none" style={styles.shade} />
     <View pointerEvents="none" style={styles.lowerShade} />

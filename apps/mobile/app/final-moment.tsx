@@ -6,7 +6,7 @@ import { StoryFinalMomentResponseSchema } from '@pastlife/contracts';
 import { api } from '../src/api/client';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
-import { resolveLibraryImage } from '../src/results/libraryImages';
+import { useStoryArtworkSource } from '../src/results/useStoryArtworkSource';
 import { loadSession } from '../src/session/store';
 import { colors, spacing } from '../src/theme/tokens';
 import { localeText, useLocale, useTranslate } from '../src/i18n/locale';
@@ -20,6 +20,7 @@ export default function FinalMomentScreen() {
   const params = useLocalSearchParams<{ resultId?: string }>();
   const { width } = useWindowDimensions();
   const [moment, setMoment] = useState<FinalMoment | null>(null);
+  const illustration = useStoryArtworkSource(moment?.illustration.uri);
   const [error, setError] = useState<string | null>(null);
   const [finishBusy, setFinishBusy] = useState(false);
   const [finishError, setFinishError] = useState<string | null>(null);
@@ -41,10 +42,9 @@ export default function FinalMomentScreen() {
 
   if (error) return <Screen><Text style={styles.error}>{error}</Text><PrimaryButton onPress={() => router.replace('/result')}>{t('결과로 돌아가기')}</PrimaryButton></Screen>;
   if (!moment) return <Screen scroll={false}><ActivityIndicator color={colors.accent} /></Screen>;
-  const illustration = resolveLibraryImage(moment.illustration.uri) ?? { uri: moment.illustration.uri };
   return <Screen logoInContent>
     <View style={styles.head}><Text style={styles.kicker}>{moment.year} · {moment.place}</Text><Text style={styles.heading}>{localeText(locale, { ko: `${moment.protagonist}의\n마지막 순간`, en: `${moment.protagonist}’s\nfinal moment`, th: `ช่วงสุดท้าย\nของ${moment.protagonist}`, ja: `${moment.protagonist}の\n最期の瞬間` })}</Text></View>
-    <Image source={illustration} accessibilityLabel={moment.illustration.alt} resizeMode="cover" style={[styles.illustration, { height: Math.round(Math.min(width - spacing.lg * 2, 712) * 2 / 3) }]} />
+    {illustration ? <Image source={illustration} accessibilityLabel={moment.illustration.alt} resizeMode="cover" style={[styles.illustration, { height: Math.round(Math.min(width - spacing.lg * 2, 712) * 2 / 3) }]} /> : <ActivityIndicator color={colors.accent} style={[styles.illustration, { height: Math.round(Math.min(width - spacing.lg * 2, 712) * 2 / 3) }]} />}
     <View testID="final-moment-parchment" style={styles.parchment} onLayout={({ nativeEvent: { layout } }) => {
       const width = Math.ceil(layout.width);
       const height = Math.ceil(layout.height);
