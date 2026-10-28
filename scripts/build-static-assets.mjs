@@ -24,6 +24,8 @@ export async function buildStaticAssets({
   await rm(output, { recursive: true, force: true });
   await mkdir(path.join(output, 'assets'), { recursive: true });
   await cp(source, path.join(output, 'assets'), { recursive: true });
+  await mkdir(path.join(output, 'privacy'), { recursive: true });
+  await cp(path.join(repositoryRoot, 'scripts/static-pages/privacy/index.html'), path.join(output, 'privacy/index.html'));
 
   const files = await walk(source);
   const assets = {};
@@ -55,6 +57,9 @@ export async function buildStaticAssets({
     '',
     '/health.json',
     '  Cache-Control: no-store',
+    '',
+    '/privacy/*',
+    '  Cache-Control: public, max-age=300',
     '',
   ].join('\n'));
   return manifest;

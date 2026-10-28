@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { Linking, StyleSheet, Switch, Text, View } from 'react-native';
 import { AppNav } from '../src/components/AppNav';
 import { api } from '../src/api/client';
 import { PrimaryButton } from '../src/components/PrimaryButton';
@@ -66,6 +66,7 @@ export default function SettingsScreen() {
     <Setting label={t('동작 줄이기')} value={preferences.reduceMotion} onChange={(value) => change('reduceMotion', value)} />
     <Text style={styles.note}>{t('음악과 효과음 기본값은 출시 운영 설정으로 연결됩니다. 음소거나 동작 줄이기 선택은 이 기기에 저장됩니다.')}</Text>
     {showAdPrivacy ? <PrimaryButton onPress={() => { void showAdPrivacyOptions(); }}>{t('광고 개인정보 설정')}</PrimaryButton> : null}
+    <PrimaryButton onPress={() => { void Linking.openURL(`https://pastlife-assets.pages.dev/privacy/?lang=${locale}`); }}>{t('개인정보처리방침')}</PrimaryButton>
 
     <AppNav />
   </Screen>;

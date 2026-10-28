@@ -15,7 +15,7 @@ export const english: Record<string, string> = {
   '다시 시도': 'Try again', '요청에 실패했습니다.': 'The request failed.',
   '배경 음악': 'Background music', '효과음': 'Sound effects', '동작 줄이기': 'Reduce motion',
   '음악과 효과음 기본값은 출시 운영 설정으로 연결됩니다. 음소거나 동작 줄이기 선택은 이 기기에 저장됩니다.': 'Sound and motion preferences are saved on this device.',
-  '광고 개인정보 설정': 'Ad privacy settings', '계정': 'Account',
+  '광고 개인정보 설정': 'Ad privacy settings', '개인정보처리방침': 'Privacy policy', '계정': 'Account',
   '이 기기의 로그인 정보만 삭제되며 현재 전생 결과는 유지됩니다.': 'Only this device’s sign-in details will be removed. Your current result will remain.',
   '로그아웃 확인': 'Confirm sign out', '취소': 'Cancel', '로그아웃': 'Sign out',
   '로그인하면 저장한 전생 기록을 다시 볼 수 있습니다.': 'Sign in to revisit your saved past life stories.',
