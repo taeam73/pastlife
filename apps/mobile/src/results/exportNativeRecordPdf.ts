@@ -51,17 +51,28 @@ async function fileImageDataUri(file: File): Promise<string> {
   }
 }
 
-async function assetDataUri(module: number | string) {
+export async function assetDataUri(module: number | string): Promise<string | null> {
   const asset = await Asset.fromModule(module).downloadAsync();
   const localUri = asset.localUri ?? asset.uri;
-  if (!localUri) throw new Error('PDF illustration is unavailable on this device');
-  return fileImageDataUri(new File(localUri));
+  // Android can expose a bundled drawable by its resource name (for example,
+  // "titlelogoplain") instead of a readable file URI. The cover has a text
+  // wordmark for that case; a decorative logo must not block the whole PDF.
+  if (!localUri || !/^file:\/\//u.test(localUri)) return null;
+  try {
+    return await fileImageDataUri(new File(localUri));
+  } catch {
+    return null;
+  }
 }
 
 async function storyImage(uri: string) {
   const mapped = resolveLibraryImage(uri) ?? (/^https:\/\//u.test(uri) ? { uri } : undefined);
   const selected = Array.isArray(mapped) ? mapped[0] : mapped;
-  if (typeof selected === 'number') return assetDataUri(selected);
+  if (typeof selected === 'number') {
+    const image = await assetDataUri(selected);
+    if (image) return image;
+    throw new Error(`PDF illustration is not readable: ${uri}`);
+  }
   if (selected && typeof selected === 'object' && 'uri' in selected && selected.uri) {
     let lastError: unknown;
     for (let attempt = 0; attempt < 3; attempt += 1) {
@@ -93,7 +104,7 @@ async function namedArtwork(name: string, task: Promise<string>): Promise<string
 
 export async function prepareNativeRecordPdfArtwork(record: PdfRecord): Promise<NativeRecordPdfArtwork> {
   if (record.chapters.length !== 4) throw new Error('Complete story chapters are required');
-  const logo = (record.locale ?? 'ko') === 'ko' ? await namedArtwork('logo', assetDataUri(require('../../assets/branding/title-logo-plain.png') as number)) : null;
+  const logo = (record.locale ?? 'ko') === 'ko' ? await assetDataUri(require('../../assets/branding/title-logo-plain.png') as number) : null;
   const background = await namedArtwork('background', storyImage(record.backgroundUri));
   const character = record.characterUri ? await namedArtwork('character', storyImage(record.characterUri)) : null;
   const finalArt = await namedArtwork('final scene', storyImage(record.finalMoment.illustrationUri));

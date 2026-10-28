@@ -4,10 +4,11 @@ const state = vi.hoisted(() => ({
   formats: new Map<string, string>(),
   bytes: new Map<string, Uint8Array>(),
   assetDownloads: 0,
+  logoUri: 'file://logo.png',
 }));
 
 vi.mock('expo-asset', () => ({
-  Asset: { fromModule: () => ({ downloadAsync: async () => { state.assetDownloads += 1; return { localUri: 'file://logo.png' }; } }) },
+  Asset: { fromModule: () => ({ downloadAsync: async () => { state.assetDownloads += 1; return { localUri: state.logoUri }; } }) },
 }));
 vi.mock('expo-file-system', () => ({
   File: class {
@@ -32,7 +33,7 @@ vi.mock('./storyArtworkCache', () => ({
   discardStoryArtworkFile: async () => undefined,
 }));
 
-import { prepareNativeRecordPdfArtwork } from './exportNativeRecordPdf';
+import { assetDataUri, prepareNativeRecordPdfArtwork } from './exportNativeRecordPdf';
 import type { PdfRecord } from './exportRecordPdf';
 
 const record: PdfRecord = {
@@ -46,7 +47,7 @@ const record: PdfRecord = {
 
 describe('native PDF artwork preparation', () => {
   beforeEach(() => {
-    state.formats.clear(); state.bytes.clear(); state.assetDownloads = 0;
+    state.formats.clear(); state.bytes.clear(); state.assetDownloads = 0; state.logoUri = 'file://logo.png';
     state.formats.set(record.backgroundUri, '/9j/background');
     state.formats.set(record.characterUri!, 'UklGRcharacter');
     state.formats.set(record.finalMoment.illustrationUri, 'iVBORw0KGgofinal');
@@ -65,6 +66,12 @@ describe('native PDF artwork preparation', () => {
     state.bytes.set(record.backgroundUri, new Uint8Array([0xff, 0xd8, 0xff, 0xd9]));
     const artwork = await prepareNativeRecordPdfArtwork(record);
     expect(artwork.background).toBe('data:image/jpeg;base64,/9j/2Q==');
+  });
+
+  it('continues with a text wordmark when Android exposes the bundled logo as a relative resource name', async () => {
+    state.logoUri = 'title_logo_plain';
+    expect(await assetDataUri(42)).toBeNull();
+    expect(state.assetDownloads).toBe(1);
   });
 
 });

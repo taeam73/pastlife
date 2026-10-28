@@ -20,6 +20,10 @@ web-build/
 apps/mobile/.expo/
 apps/mobile/dist/
 apps/mobile/.eas-archive-inspect/
+apps/mobile/android/
+apps/mobile/credentials/
+apps/mobile/credentials.json
+apps/mobile/*.jks
 prisma/*.db
 prisma/*.db-journal
 .git-codex-backup/
