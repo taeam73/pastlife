@@ -24,15 +24,42 @@ function validatedImageDataUri(base64: string) {
   return `data:${mimeType};base64,${base64}`;
 }
 
+function encodeBase64(bytes: Uint8Array): string {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  let encoded = '';
+  for (let index = 0; index < bytes.length; index += 3) {
+    const a = bytes[index]!;
+    const b = bytes[index + 1];
+    const c = bytes[index + 2];
+    encoded += alphabet[a >> 2];
+    encoded += alphabet[((a & 3) << 4) | ((b ?? 0) >> 4)];
+    encoded += b === undefined ? '=' : alphabet[((b & 15) << 2) | ((c ?? 0) >> 6)];
+    encoded += c === undefined ? '=' : alphabet[c & 63];
+  }
+  return encoded;
+}
+
+async function fileImageDataUri(file: File): Promise<string> {
+  try {
+    return validatedImageDataUri(await file.base64());
+  } catch (nativeError) {
+    try {
+      return validatedImageDataUri(encodeBase64(await file.bytes()));
+    } catch (fallbackError) {
+      throw new Error(`Could not read saved artwork: native=${String(nativeError)}; bytes=${String(fallbackError)}`);
+    }
+  }
+}
+
 async function assetDataUri(module: number | string) {
   const asset = await Asset.fromModule(module).downloadAsync();
   const localUri = asset.localUri ?? asset.uri;
   if (!localUri) throw new Error('PDF illustration is unavailable on this device');
-  return validatedImageDataUri(await new File(localUri).base64());
+  return fileImageDataUri(new File(localUri));
 }
 
 async function storyImage(uri: string) {
-  const mapped = resolveLibraryImage(uri);
+  const mapped = resolveLibraryImage(uri) ?? (/^https:\/\//u.test(uri) ? { uri } : undefined);
   const selected = Array.isArray(mapped) ? mapped[0] : mapped;
   if (typeof selected === 'number') return assetDataUri(selected);
   if (selected && typeof selected === 'object' && 'uri' in selected && selected.uri) {
@@ -40,8 +67,7 @@ async function storyImage(uri: string) {
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
         const file = await ensureStoryArtworkFile(uri);
-        const original = await file.base64();
-        return validatedImageDataUri(original);
+        return await fileImageDataUri(file);
       } catch (error) {
         lastError = error;
         if (attempt < 2) {

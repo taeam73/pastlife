@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const state = vi.hoisted(() => ({
   formats: new Map<string, string>(),
+  bytes: new Map<string, Uint8Array>(),
   assetDownloads: 0,
 }));
 
@@ -12,6 +13,7 @@ vi.mock('expo-file-system', () => ({
   File: class {
     constructor(readonly uri: string) {}
     async base64() { return state.formats.get(this.uri) ?? 'iVBORw0KGgo'; }
+    async bytes() { return state.bytes.get(this.uri) ?? new Uint8Array(); }
   },
 }));
 vi.mock('expo-print', () => ({}));
@@ -19,7 +21,14 @@ vi.mock('expo-sharing', () => ({}));
 vi.mock('../i18n/locale', () => ({ localeText: () => '', translate: () => '' }));
 vi.mock('./libraryImages', () => ({ resolveLibraryImage: (uri: string) => ({ uri }) }));
 vi.mock('./storyArtworkCache', () => ({
-  ensureStoryArtworkFile: async (uri: string) => ({ uri, base64: async () => state.formats.get(uri) ?? '/9j/original' }),
+  ensureStoryArtworkFile: async (uri: string) => ({
+    uri,
+    base64: async () => {
+      if (state.bytes.has(uri)) throw new Error('native base64 unavailable');
+      return state.formats.get(uri) ?? '/9j/original';
+    },
+    bytes: async () => state.bytes.get(uri) ?? new Uint8Array(),
+  }),
   discardStoryArtworkFile: async () => undefined,
 }));
 
@@ -37,7 +46,7 @@ const record: PdfRecord = {
 
 describe('native PDF artwork preparation', () => {
   beforeEach(() => {
-    state.formats.clear(); state.assetDownloads = 0;
+    state.formats.clear(); state.bytes.clear(); state.assetDownloads = 0;
     state.formats.set(record.backgroundUri, '/9j/background');
     state.formats.set(record.characterUri!, 'UklGRcharacter');
     state.formats.set(record.finalMoment.illustrationUri, 'iVBORw0KGgofinal');
@@ -50,6 +59,12 @@ describe('native PDF artwork preparation', () => {
     expect(artwork.character).toBe('data:image/webp;base64,UklGRcharacter');
     expect(artwork.finalArt).toBe('data:image/png;base64,iVBORw0KGgofinal');
     expect(state.assetDownloads).toBe(0);
+  });
+
+  it('reads saved image bytes when native base64 reading fails', async () => {
+    state.bytes.set(record.backgroundUri, new Uint8Array([0xff, 0xd8, 0xff, 0xd9]));
+    const artwork = await prepareNativeRecordPdfArtwork(record);
+    expect(artwork.background).toBe('data:image/jpeg;base64,/9j/2Q==');
   });
 
 });

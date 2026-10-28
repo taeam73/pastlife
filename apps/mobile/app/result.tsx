@@ -40,7 +40,8 @@ export default function ResultScreen() {
   const [imageShareStatus, setImageShareStatus] = useState<AsyncStatus>('IDLE');
   const [pdfStatus, setPdfStatus] = useState<AsyncStatus>('IDLE');
   const [pdfStage, setPdfStage] = useState<'ARTWORK' | 'PDF'>('ARTWORK');
-  const [pdfFailureStage, setPdfFailureStage] = useState<'ARTWORK' | 'PDF'>('ARTWORK');
+  const [pdfFailureStage, setPdfFailureStage] = useState<'RECORD' | 'ARTWORK' | 'PDF'>('RECORD');
+  const [pdfFailureDetail, setPdfFailureDetail] = useState<string | null>(null);
   const [showShareCard, setShowShareCard] = useState(false);
   const [deepUnlocked, setDeepUnlocked] = useState(false);
   const [atStoryEnd, setAtStoryEnd] = useState(false);
@@ -170,9 +171,10 @@ export default function ResultScreen() {
   const downloadPdf = async () => {
     if (!result || !result.finalMomentRead || result.presentation?.version !== 3 || !result.presentation.hero.cover) return;
     setPdfStage('ARTWORK');
-    setPdfFailureStage('ARTWORK');
+    setPdfFailureStage('RECORD');
+    setPdfFailureDetail(null);
     setPdfStatus('LOADING');
-    let currentStage: 'ARTWORK' | 'PDF' = 'ARTWORK';
+    let currentStage: 'RECORD' | 'ARTWORK' | 'PDF' = 'RECORD';
     try {
       await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
       const finalMoment = await api.finalMoment(result.resultId);
@@ -194,6 +196,7 @@ export default function ResultScreen() {
         downloadRecordPdf(pdf, result.character?.name ?? t('전생의 나'), result.resultId, locale);
       } else {
         const { prepareNativeRecordPdfArtwork, shareNativeRecordPdf } = await import('../src/results/exportNativeRecordPdf');
+        currentStage = 'ARTWORK';
         const artwork = await prepareNativeRecordPdfArtwork(record);
         currentStage = 'PDF';
         setPdfStage('PDF');
@@ -204,6 +207,10 @@ export default function ResultScreen() {
     } catch (error) {
       console.error(`Past life PDF export failed during ${currentStage}`, error);
       setPdfFailureStage(currentStage);
+      if (process.env.EXPO_PUBLIC_ADMOB_TEST_ADS === 'true') {
+        const message = error instanceof Error ? error.message : String(error);
+        setPdfFailureDetail(message.slice(0, 400));
+      }
       setPdfStatus('ERROR');
     }
   };
@@ -236,7 +243,8 @@ export default function ResultScreen() {
       {!result.finalMomentRead ? <Text style={[styles.lockNotice, styles.combinedLockNotice]}>{t('마지막 순간을 보고 나면 이미지 공유/전생기록 다운로드가 활성화됩니다.')}</Text> : null}
       <PrimaryButton disabled={imageShareStatus === 'LOADING' || !result.finalMomentRead} showWhenDisabled onPress={() => void shareImage()}>{t('이미지 공유')}</PrimaryButton>
       <PrimaryButton disabled={pdfStatus === 'LOADING' || !result.finalMomentRead} showWhenDisabled onPress={() => void downloadPdf()}>{t('전생기록 다운로드')}</PrimaryButton>
-      <AsyncActionStatus status={pdfStatus} loadingText={pdfStage === 'ARTWORK' ? localeText(locale, { ko: '전생기록 PDF를 준비 중입니다. 그림을 불러오고 있습니다.', en: 'Preparing your PDF. Loading artwork first.', th: 'กำลังเตรียม PDF และโหลดภาพประกอบ', ja: 'PDFを準備しています。先に画像を読み込んでいます。' }) : localeText(locale, { ko: '그림이 준비되었습니다. PDF를 만들고 있습니다.', en: 'Artwork is ready. Creating your PDF.', th: 'โหลดภาพเสร็จแล้ว กำลังสร้าง PDF', ja: '画像の準備ができました。PDFを作成しています。' })} readyText={t(Platform.OS === 'web' ? '전생기록 PDF를 저장했습니다.' : 'PDF 공유창을 열었습니다. 저장 위치를 선택해 주세요.')} errorText={pdfFailureStage === 'ARTWORK' ? localeText(locale, { ko: '그림을 불러오지 못했습니다. 네트워크를 확인하고 다시 시도해 주세요.', en: 'Could not load artwork. Check your connection and try again.', th: 'โหลดภาพไม่สำเร็จ โปรดตรวจสอบเครือข่ายแล้วลองใหม่', ja: '画像を読み込めませんでした。通信状態を確認して再試行してください。' }) : t('PDF를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.')} onRetry={() => void downloadPdf()} />
+      <AsyncActionStatus status={pdfStatus} loadingText={pdfStage === 'ARTWORK' ? localeText(locale, { ko: '전생기록 PDF를 준비 중입니다. 그림을 불러오고 있습니다.', en: 'Preparing your PDF. Loading artwork first.', th: 'กำลังเตรียม PDF และโหลดภาพประกอบ', ja: 'PDFを準備しています。先に画像を読み込んでいます。' }) : localeText(locale, { ko: '그림이 준비되었습니다. PDF를 만들고 있습니다.', en: 'Artwork is ready. Creating your PDF.', th: 'โหลดภาพเสร็จแล้ว กำลังสร้าง PDF', ja: '画像の準備ができました。PDFを作成しています。' })} readyText={t(Platform.OS === 'web' ? '전생기록 PDF를 저장했습니다.' : 'PDF 공유창을 열었습니다. 저장 위치를 선택해 주세요.')} errorText={pdfFailureStage === 'ARTWORK' ? localeText(locale, { ko: '그림을 불러오지 못했습니다. 네트워크를 확인하고 다시 시도해 주세요.', en: 'Could not load artwork. Check your connection and try again.', th: 'โหลดภาพไม่สำเร็จ โปรดตรวจสอบเครือข่ายแล้วลองใหม่', ja: '画像を読み込めませんでした。通信状態を確認して再試行してください。' }) : pdfFailureStage === 'RECORD' ? localeText(locale, { ko: '마지막 순간 기록을 불러오지 못했습니다. 다시 시도해 주세요.', en: 'Could not load the final moment record. Try again.', th: 'โหลดบันทึกช่วงสุดท้ายไม่สำเร็จ โปรดลองอีกครั้ง', ja: '最期の瞬間の記録を読み込めませんでした。再試行してください。' }) : t('PDF를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.')} onRetry={() => void downloadPdf()} />
+      {pdfStatus === 'ERROR' && pdfFailureDetail ? <Text selectable style={styles.pdfDiagnostic}>{pdfFailureDetail}</Text> : null}
     </View>
     {showShareCard && result.presentation?.version === 3 && result.presentation.hero.cover ? <View ref={shareCardRef} collapsable={false} style={styles.shareCardFrame}>
       <ShareProfileCard name={result.character?.name ?? t('전생의 나')} recordNo={result.recordNo} cover={result.presentation.hero.cover} layers={result.image.layers ?? []} relationship={result.presentation.chapters.find((chapter) => chapter.id === 'MEETING')?.profilePages?.flatMap((page) => page.body.split('\n')).find((line) => /^(가까운 사람|가족|친구|곁에 있던 사람|People close to him)\s*[·:]/u.test(line)) ?? ''} onImagesReady={() => { shareCardReadyRef.current = true; shareCardReadyResolverRef.current?.(); shareCardReadyResolverRef.current = null; }} />
@@ -251,4 +259,4 @@ export default function ResultScreen() {
   </Screen>;
 }
 
-const styles = StyleSheet.create({ resultReveal: { width: '100%' }, endHint: { alignItems: 'center', justifyContent: 'center', gap: 2, paddingVertical: 6, paddingHorizontal: spacing.md, borderRadius: 16, backgroundColor: 'rgba(7, 13, 27, 0.86)' }, endHintArrow: { color: colors.accent, fontSize: 34, lineHeight: 32, fontWeight: '700' }, endHintText: { color: colors.accent, fontSize: 14, lineHeight: 20, fontWeight: '700', textAlign: 'center' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.md }, exportActions: { width: '100%', gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'column', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { width: '100%', minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, error: { color: colors.error, fontSize: 16 } });
+const styles = StyleSheet.create({ resultReveal: { width: '100%' }, endHint: { alignItems: 'center', justifyContent: 'center', gap: 2, paddingVertical: 6, paddingHorizontal: spacing.md, borderRadius: 16, backgroundColor: 'rgba(7, 13, 27, 0.86)' }, endHintArrow: { color: colors.accent, fontSize: 34, lineHeight: 32, fontWeight: '700' }, endHintText: { color: colors.accent, fontSize: 14, lineHeight: 20, fontWeight: '700', textAlign: 'center' }, actionRail: { width: '100%', maxWidth: 760, alignSelf: 'center', paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.md }, exportActions: { width: '100%', gap: spacing.md }, secondaryActions: { width: '100%', flexDirection: 'column', alignItems: 'stretch', gap: spacing.sm }, secondaryAction: { width: '100%', minWidth: 0, justifyContent: 'center' }, shareCardFrame: { width: '100%', maxWidth: 480, alignSelf: 'center' }, resultHeader: { display: 'none' }, headerSpacer: { flex: 1 }, eyebrow: { color: colors.accent, fontSize: 14, lineHeight: 20, opacity: 0.9, textAlign: 'right' }, headline: { display: 'none' }, lockNotice: { color: colors.muted, fontSize: 14, lineHeight: 21 }, combinedLockNotice: { textAlign: 'center' }, videoNotice: { display: 'none' }, pdfDiagnostic: { color: colors.muted, fontSize: 11, lineHeight: 15 }, error: { color: colors.error, fontSize: 16 } });
