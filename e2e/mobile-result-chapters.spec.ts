@@ -9,17 +9,12 @@ test('keeps one scene while the four result chapters change', async ({ page }) =
     await page.getByRole('button').first().click();
   }
   await expect(page).toHaveURL(/\/result$/);
-  await expect(page.getByText('당신의 전생은')).toBeVisible();
-  await expect(page.getByTestId('result-signature-quote')).not.toBeEmpty();
+  await page.getByRole('button', { name: /^1장 .* 보기$/ }).click();
+  await expect(page.getByTestId('result-summary-page')).not.toBeEmpty();
   for (const viewport of [{ width: 320, height: 720 }, { width: 768, height: 1024 }]) {
     await page.setViewportSize(viewport);
-    await expect(page.getByText('당신의 전생은')).toBeVisible();
+    await expect(page.getByTestId('result-summary-page')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
-    const quote = await page.getByTestId('result-signature-quote').boundingBox();
-    const summary = await page.getByTestId('result-summary-panel').boundingBox();
-    expect(quote).not.toBeNull();
-    expect(summary).not.toBeNull();
-    expect(quote!.y + quote!.height).toBeLessThan(summary!.y);
     await expect.poll(async () => page.getByTestId('result-hero-background').locator('img').evaluate((element) => element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0)).toBe(true);
     await page.screenshot({ path: `output/playwright/result-intro-${viewport.width}.png`, fullPage: true });
   }

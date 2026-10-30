@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { useStoryArtworkSource } from '../results/useStoryArtworkSource';
+import { useStoryArtwork } from '../results/useStoryArtworkSource';
 import { cropLayout, type Crop } from '../results/crop';
 
 export function CroppedScene({ uri, crop, accessibilityLabel }: { uri: string; crop: Crop; accessibilityLabel: string }) {
-  const source = useStoryArtworkSource(uri);
+  const artwork = useStoryArtwork(uri);
+  const source = artwork.source;
   // Native `require()` images are numeric asset IDs. Resolve them before
   // calculating chapter crops; asking getSize() for an asset:// URI fails.
   const resolved = source
@@ -20,14 +21,14 @@ export function CroppedScene({ uri, crop, accessibilityLabel }: { uri: string; c
     if (!resolved?.uri || (resolved.width && resolved.height)) return;
     Image.getSize(resolved.uri, (width, height) => setSourceSize({ width, height }), () => undefined);
   }, [uri, resolved?.width, resolved?.height]);
-  if (!source) return null;
+  if (!source || artwork.status === 'error') return null;
   const sourceWidth = resolved?.width ?? sourceSize.width;
   const sourceHeight = resolved?.height ?? sourceSize.height;
   const layout = cropLayout(sourceWidth, sourceHeight, frame.width, frame.height, crop);
   return <View style={styles.frame} onLayout={(event) => setFrame({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
     {layout
-      ? <Image accessibilityLabel={accessibilityLabel} source={source} resizeMode="stretch" style={[styles.image, layout]} />
-      : <Image accessibilityLabel={accessibilityLabel} source={source} resizeMode="cover" style={StyleSheet.absoluteFill} />}
+      ? <Image key={`${uri}-${artwork.attempt}`} accessibilityLabel={accessibilityLabel} source={source} resizeMode="stretch" onLoad={artwork.markLoaded} onError={artwork.markFailed} style={[styles.image, layout]} />
+      : <Image key={`${uri}-${artwork.attempt}`} accessibilityLabel={accessibilityLabel} source={source} resizeMode="cover" onLoad={artwork.markLoaded} onError={artwork.markFailed} style={StyleSheet.absoluteFill} />}
   </View>;
 }
 

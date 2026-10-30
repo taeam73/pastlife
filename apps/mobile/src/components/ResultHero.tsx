@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { colors, spacing } from '../theme/tokens';
-import { useStoryArtworkSource } from '../results/useStoryArtworkSource';
+import { useStoryArtwork } from '../results/useStoryArtworkSource';
 import { ParchmentSummary } from './ParchmentSummary';
 import { localeText, useLocale } from '../i18n/locale';
 import { ParchmentReader } from './ParchmentReader';
+import { StoryArtworkStatus } from './StoryArtworkStatus';
 
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 
@@ -33,8 +34,16 @@ type Props = {
 };
 
 function CachedCharacter({ layer, mobile }: { layer: Layer; mobile: boolean }) {
-  const source = useStoryArtworkSource(layer.uri);
-  return source ? <Image accessibilityLabel={layer.alt} source={source} resizeMode="contain" style={[styles.character, mobile && styles.mobileCharacter]} /> : null;
+  const artwork = useStoryArtwork(layer.uri);
+  return artwork.source && artwork.status !== 'error' ? <Image
+    key={`${layer.uri}-${artwork.attempt}`}
+    accessibilityLabel={layer.alt}
+    source={artwork.source}
+    resizeMode="contain"
+    onLoad={artwork.markLoaded}
+    onError={artwork.markFailed}
+    style={[styles.character, mobile && styles.mobileCharacter]}
+  /> : null;
 }
 
 export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, chapterTitle, chapterId, chapterDetail, episodeReadAloudText, introPage, profilePages, introductionSummary, index, standaloneProfile = false, pageIndex = 0, onPageChange, onPageCountChange }: Props) {
@@ -45,24 +54,24 @@ export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, ch
   const mobile = width < 768;
   const [summaryHeight, setSummaryHeight] = useState(0);
   const sourceUri = compositeUri ?? imageUri;
-  const [loadedSourceUri, setLoadedSourceUri] = useState<string | null>(null);
-  const source = useStoryArtworkSource(sourceUri);
-  const backgroundSource = useStoryArtworkSource(imageUri);
-  if (!source) return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}><ActivityIndicator color={colors.accent} size="large" style={styles.loading} /></View>;
+  const artwork = useStoryArtwork(sourceUri);
+  if (!artwork.source || artwork.status === 'error') return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}>
+    <StoryArtworkStatus status={artwork.status} onRetry={artwork.retry} />
+  </View>;
   const characterLayers = compositeUri ? [] : layers?.filter((layer) => layer.role === 'CHARACTER') ?? [];
   return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}>
-    <Image testID="result-hero-background" accessibilityLabel={imageAlt} blurRadius={isIntroduction ? 2 : 0} source={compositeUri ? source : backgroundSource ?? source} resizeMode="cover" onLoad={() => setLoadedSourceUri(sourceUri)} onError={() => setLoadedSourceUri(sourceUri)} style={styles.background} />
-    {loadedSourceUri !== sourceUri ? <ActivityIndicator color={colors.accent} size="large" style={styles.loading} /> : null}
+    <Image key={`${sourceUri}-${artwork.attempt}`} testID="result-hero-background" accessibilityLabel={imageAlt} blurRadius={isIntroduction ? 2 : 0} source={artwork.source} resizeMode="cover" onLoad={artwork.markLoaded} onError={artwork.markFailed} style={styles.background} />
+    {artwork.status !== 'ready' ? <StoryArtworkStatus status={artwork.status} onRetry={artwork.retry} /> : null}
     {isIntroduction ? characterLayers.map((layer) => <CachedCharacter key={layer.uri} layer={layer} mobile={mobile} />) : null}
     <View pointerEvents="none" style={styles.shade} />
-    {isIntroduction && loadedSourceUri === sourceUri ? <View style={[styles.copy, mobile && styles.mobileCopy, { bottom: Math.max(mobile ? 190 : 170, summaryHeight + spacing.md * 2) }]}>
+    {isIntroduction && artwork.status === 'ready' ? <View style={[styles.copy, mobile && styles.mobileCopy, { bottom: Math.max(mobile ? 190 : 170, summaryHeight + spacing.md * 2) }]}>
       <Text style={styles.eyebrow}>{localeText(locale, { ko: '당신의 전생은', en: 'Your past life was', th: 'ชาติที่แล้วของคุณคือ', ja: 'あなたの前世は' })}</Text>
       <Text style={styles.characterLabel}>{characterLabel ?? chapterTitle}</Text>
       {roleLabel || placeLabel ? <Text style={styles.placeLabel}>{[roleLabel, placeLabel].filter(Boolean).join(' · ')}</Text> : null}
       <Text style={styles.title}>{title}</Text>
       <Text testID="result-signature-quote" style={styles.description}>{characterDescription ?? localeText(locale, { ko: '당신의 전생을 살아간 인물의 기록입니다.', en: 'The story of a person from your imagined past life.', th: 'เรื่องราวของคนคนหนึ่งในชาติที่แล้วจากจินตนาการ', ja: '想像上の前世を生きた人物の物語です。' })}</Text>
     </View> : null}
-    <View testID={isIntroduction ? 'result-summary-panel' : undefined} onLayout={isIntroduction ? (event) => setSummaryHeight(event.nativeEvent.layout.height) : undefined} style={[styles.parchment, !isIntroduction && styles.readingParchment, !isIntroduction && mobile && styles.mobileReadingParchment]}>{loadedSourceUri !== sourceUri ? null : isIntroduction || isProfile
+    <View testID={isIntroduction ? 'result-summary-panel' : undefined} onLayout={isIntroduction ? (event) => setSummaryHeight(event.nativeEvent.layout.height) : undefined} style={[styles.parchment, !isIntroduction && styles.readingParchment, !isIntroduction && mobile && styles.mobileReadingParchment]}>{artwork.status !== 'ready' ? null : isIntroduction || isProfile
       ? <ParchmentSummary title={isProfile ? `01 ${chapterTitle}` : chapterTitle} body={chapterDetail || introductionSummary} introPage={introPage} pages={profilePages} fullPage={isProfile} pageIndex={pageIndex} onPageChange={onPageChange} onPageCountChange={onPageCountChange} />
       : <ParchmentReader chapterKey={chapterId} title={`${String(index + 1).padStart(2, '0')} ${chapterTitle}`} body={chapterDetail} episodeReadAloudText={episodeReadAloudText} pageIndex={pageIndex} onPageChange={onPageChange} onPageCountChange={onPageCountChange} />}</View>
   </View>;
@@ -71,7 +80,6 @@ export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, ch
 const styles = StyleSheet.create({
   frame: { width: '100%', overflow: 'hidden', backgroundColor: colors.surfaceRaised, justifyContent: 'flex-end' },
   background: { ...StyleSheet.absoluteFill, width: '100%', height: '100%' },
-  loading: { position: 'absolute', top: '50%', left: '50%', zIndex: 5 },
   character: { position: 'absolute', right: 0, bottom: 0, width: '42%', height: '90%', zIndex: 2 },
   mobileCharacter: { width: '72%', height: '82%', bottom: 82 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.22)', zIndex: 3 },

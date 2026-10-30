@@ -1,27 +1,36 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { useStoryArtworkSource } from '../results/useStoryArtworkSource';
+import { Animated, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useStoryArtwork } from '../results/useStoryArtworkSource';
 import { loadPreferences } from '../session/store';
 import { colors, spacing } from '../theme/tokens';
 import { localeText, useLocale } from '../i18n/locale';
+import { StoryArtworkStatus } from './StoryArtworkStatus';
 
 type Layer = { uri: string; role: 'BACKGROUND' | 'CHARACTER' | 'EFFECT'; alt: string };
 export type Cover = { era: string; place: string; role: string; birthYear: string; deathYear: string; lifeLine: string };
 
 function CachedCharacter({ layer, style, onReady }: { layer: Layer; style: React.ComponentProps<typeof Animated.Image>['style']; onReady: () => void }) {
-  const source = useStoryArtworkSource(layer.uri);
-  return source ? <Animated.Image accessibilityLabel={layer.alt} source={source} resizeMode="contain" onLoad={onReady} onError={onReady} style={style} /> : null;
+  const artwork = useStoryArtwork(layer.uri);
+  useEffect(() => { if (artwork.status === 'error') onReady(); }, [artwork.status, onReady]);
+  return artwork.source ? <Animated.Image
+    key={`${layer.uri}-${artwork.attempt}`}
+    accessibilityLabel={layer.alt}
+    source={artwork.source}
+    resizeMode="contain"
+    onLoad={() => { artwork.markLoaded(); onReady(); }}
+    onError={() => { artwork.markFailed(); onReady(); }}
+    style={style}
+  /> : null;
 }
 
 export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover }: { imageUri: string; imageAlt: string; layers?: Layer[] | undefined; name: string; recordNo: number; cover: Cover }) {
   const { locale } = useLocale();
   const { width } = useWindowDimensions();
   const mobile = width < 768;
-  const background = useStoryArtworkSource(imageUri);
-  const [loadedBackgroundUri, setLoadedBackgroundUri] = useState<string | null>(null);
+  const background = useStoryArtwork(imageUri);
   const [loadedCharacters, setLoadedCharacters] = useState<string[]>([]);
   const characterLayers = layers?.filter((layer) => layer.role === 'CHARACTER') ?? [];
-  const artworkReady = loadedBackgroundUri === imageUri && characterLayers.every((layer) => loadedCharacters.includes(layer.uri));
+  const artworkReady = background.status === 'ready' && characterLayers.every((layer) => loadedCharacters.includes(layer.uri));
   const backgroundOpacity = useRef(new Animated.Value(0)).current;
   const characterOpacity = useRef(new Animated.Value(0)).current;
   const characterY = useRef(new Animated.Value(20)).current;
@@ -81,15 +90,17 @@ export function ResultCover({ imageUri, imageAlt, layers, name, recordNo, cover 
     };
   }, [artworkReady, backgroundOpacity, characterOpacity, characterY, lines]);
 
-  if (!background) return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}><ActivityIndicator color={colors.accent} size="large" style={styles.loading} /></View>;
+  if (!background.source || background.status === 'error') return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}>
+    <StoryArtworkStatus status={background.status} onRetry={background.retry} />
+  </View>;
   return <View style={[styles.frame, { height: mobile ? 690 : 680 }]}>
-    <Animated.Image accessibilityLabel={imageAlt} source={background} resizeMode="cover" onLoad={() => setLoadedBackgroundUri(imageUri)} onError={() => setLoadedBackgroundUri(imageUri)} style={[styles.background, { opacity: backgroundOpacity }]} />
+    <Animated.Image key={`${imageUri}-${background.attempt}`} accessibilityLabel={imageAlt} source={background.source} resizeMode="cover" onLoad={background.markLoaded} onError={background.markFailed} style={[styles.background, { opacity: backgroundOpacity }]} />
     {characterLayers.map((layer) => {
       return <CachedCharacter key={layer.uri} layer={layer} onReady={() => setLoadedCharacters((current) => current.includes(layer.uri) ? current : [...current, layer.uri])} style={[styles.character, mobile && styles.mobileCharacter, { opacity: characterOpacity, transform: [{ translateY: characterY }] }]} />;
     })}
     <View pointerEvents="none" style={styles.shade} />
     <View pointerEvents="none" style={styles.lowerShade} />
-    {!artworkReady ? <ActivityIndicator color={colors.accent} size="large" style={styles.loading} /> : null}
+    {!artworkReady ? <StoryArtworkStatus status="loading" onRetry={background.retry} /> : null}
     <View style={[styles.copy, mobile && styles.mobileCopy]}>
       <Text style={styles.eyebrow}>{lines[0]!.slice(0, typedLengths[0])}</Text>
       <View style={styles.nameRow}>
@@ -112,7 +123,6 @@ const styles = StyleSheet.create({
   mobileCharacter: { width: '100%', height: '92%', bottom: 24 },
   shade: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(5, 10, 18, 0.22)', zIndex: 3 },
   lowerShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 310, backgroundColor: 'rgba(5, 10, 18, 0.56)', zIndex: 3 },
-  loading: { position: 'absolute', top: '50%', left: '50%', zIndex: 5 },
   copy: { position: 'absolute', zIndex: 4, left: spacing.lg, right: spacing.lg, bottom: 82, maxWidth: 560, gap: 5 },
   mobileCopy: { left: spacing.md, right: spacing.md, bottom: 82 },
   eyebrow: { color: '#e8c676', fontSize: 13, fontWeight: '700', textShadowColor: '#000', textShadowRadius: 5 },
