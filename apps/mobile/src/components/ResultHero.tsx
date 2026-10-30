@@ -21,6 +21,7 @@ type Props = {
   chapterTitle: string;
   chapterId: string;
   chapterDetail: string;
+  episodeReadAloudText?: string | undefined;
   introPage?: { title: string; summary: string; hook: string; invitation: string } | undefined;
   profilePages?: { title: string; body: string }[] | undefined;
   introductionSummary: string;
@@ -36,7 +37,7 @@ function CachedCharacter({ layer, mobile }: { layer: Layer; mobile: boolean }) {
   return source ? <Image accessibilityLabel={layer.alt} source={source} resizeMode="contain" style={[styles.character, mobile && styles.mobileCharacter]} /> : null;
 }
 
-export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, chapterTitle, chapterId, chapterDetail, introPage, profilePages, introductionSummary, index, standaloneProfile = false, pageIndex = 0, onPageChange, onPageCountChange }: Props) {
+export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, characterLabel, roleLabel, placeLabel, characterDescription, chapterTitle, chapterId, chapterDetail, episodeReadAloudText, introPage, profilePages, introductionSummary, index, standaloneProfile = false, pageIndex = 0, onPageChange, onPageCountChange }: Props) {
   const { locale } = useLocale();
   const { width } = useWindowDimensions();
   const isIntroduction = index === 0 && !standaloneProfile;
@@ -63,7 +64,7 @@ export function ResultHero({ imageUri, imageAlt, compositeUri, layers, title, ch
     </View> : null}
     <View testID={isIntroduction ? 'result-summary-panel' : undefined} onLayout={isIntroduction ? (event) => setSummaryHeight(event.nativeEvent.layout.height) : undefined} style={[styles.parchment, !isIntroduction && styles.readingParchment, !isIntroduction && mobile && styles.mobileReadingParchment]}>{loadedSourceUri !== sourceUri ? null : isIntroduction || isProfile
       ? <ParchmentSummary title={isProfile ? `01 ${chapterTitle}` : chapterTitle} body={chapterDetail || introductionSummary} introPage={introPage} pages={profilePages} fullPage={isProfile} pageIndex={pageIndex} onPageChange={onPageChange} onPageCountChange={onPageCountChange} />
-      : <ParchmentReader chapterKey={chapterId} title={`${String(index + 1).padStart(2, '0')} ${chapterTitle}`} body={chapterDetail} pageIndex={pageIndex} onPageChange={onPageChange} onPageCountChange={onPageCountChange} />}</View>
+      : <ParchmentReader chapterKey={chapterId} title={`${String(index + 1).padStart(2, '0')} ${chapterTitle}`} body={chapterDetail} episodeReadAloudText={episodeReadAloudText} pageIndex={pageIndex} onPageChange={onPageChange} onPageCountChange={onPageCountChange} />}</View>
   </View>;
 }
 

@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import * as Speech from 'expo-speech';
 import { separateDialogueParagraphs, splitDialogueSegments } from '../results/dialogue';
 import { spacing } from '../theme/tokens';
 import { ParchmentLineReveal } from './ParchmentLineReveal';
@@ -48,9 +49,12 @@ function FormattedPage({ chapterKey, body, measuring }: { chapterKey: string; bo
   return <ProsePage body={body} separateDialogue={chapterKey === 'TRIAL'} measuring={measuring} />;
 }
 
-export function ParchmentReader({ title, body, chapterKey, pageIndex = 0, onPageChange, onPageCountChange }: { title: string; body: string; chapterKey: string; pageIndex?: number; onPageChange?: ((index: number) => void) | undefined; onPageCountChange?: ((count: number) => void) | undefined }) {
+export function ParchmentReader({ title, body, chapterKey, episodeReadAloudText, pageIndex = 0, onPageChange, onPageCountChange }: { title: string; body: string; chapterKey: string; episodeReadAloudText?: string | undefined; pageIndex?: number; onPageChange?: ((index: number) => void) | undefined; onPageCountChange?: ((count: number) => void) | undefined }) {
   const { locale } = useLocale();
   const [pageCount, setPageCount] = useState(1);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const speechLanguage = locale === 'ko' ? 'ko-KR' : locale === 'th' ? 'th-TH' : locale === 'ja' ? 'ja-JP' : 'en-US';
+  useEffect(() => () => { void Speech.stop(); }, []);
   const pageBody = chapterKey === 'TRIAL' ? separateDialogueParagraphs(body) : body;
   const sources = useMemo(() => [{ body: pageBody }], [pageBody]);
   const onCount = useCallback((count: number) => { setPageCount(count); onPageCountChange?.(count); }, [onPageCountChange]);
@@ -60,9 +64,32 @@ export function ParchmentReader({ title, body, chapterKey, pageIndex = 0, onPage
     const next = Math.max(0, Math.min(pageCount - 1, index));
     onPageChange?.(next);
   };
+  const toggleSpeech = () => {
+    if (isSpeaking) {
+      void Speech.stop();
+      setIsSpeaking(false);
+      return;
+    }
+    const text = episodeReadAloudText?.trim();
+    if (!text) return;
+    void Speech.stop();
+    setIsSpeaking(true);
+    Speech.speak(text, {
+      language: speechLanguage,
+      rate: 0.92,
+      onDone: () => setIsSpeaking(false),
+      onStopped: () => setIsSpeaking(false),
+      onError: () => setIsSpeaking(false),
+    });
+  };
   return <View testID="chapter-reader-panel" style={styles.panel}>
     <Image source={require('../../assets/parchment/reader-texture.png')} resizeMode="stretch" style={styles.texture} accessibilityIgnoresInvertColors />
     <Text style={styles.title}>{title}</Text>
+    {chapterKey === 'TRIAL' && episodeReadAloudText ? <View style={styles.listenRow}>
+      <Pressable accessibilityRole="button" accessibilityLabel={localeText(locale, { ko: isSpeaking ? '에피소드 낭독 중지' : '에피소드 듣기', en: isSpeaking ? 'Stop episode narration' : 'Listen to episode', th: isSpeaking ? 'หยุดอ่านเรื่อง' : 'ฟังเรื่อง', ja: isSpeaking ? 'エピソードの読み上げを停止' : 'エピソードを聴く' })} accessibilityState={{ selected: isSpeaking }} onPress={toggleSpeech} style={styles.listenButton}>
+        <Text style={styles.listenButtonText}>{localeText(locale, { ko: isSpeaking ? '■ 읽기 중지' : '▶ 에피소드 듣기', en: isSpeaking ? '■ Stop reading' : '▶ Listen to episode', th: isSpeaking ? '■ หยุดอ่าน' : '▶ ฟังเรื่อง', ja: isSpeaking ? '■ 読み上げ停止' : '▶ エピソードを聴く' })}</Text>
+      </Pressable>
+    </View> : null}
     <View style={styles.pages} accessibilityLabel={localeText(locale, { ko: `${chapterKey} 내용`, en: `${title} content`, th: `เนื้อหา ${title}`, ja: `${title}の本文` })}>
       <View style={styles.page}><MeasuredPageFlow testID="chapter-text-page" sources={sources} pageIndex={visibleIndex} onPageCountChange={onCount} renderPage={renderPage} /></View>
     </View>
@@ -78,7 +105,10 @@ const styles = StyleSheet.create({
   panel: { width: '100%', maxWidth: 980, height: '100%', paddingTop: spacing.lg * 2, paddingBottom: spacing.md, borderRadius: 16, borderWidth: 2, borderColor: '#a4783d', backgroundColor: '#dcc79a', overflow: 'hidden', shadowColor: '#000', shadowOpacity: 0.45, shadowRadius: 16, shadowOffset: { width: 0, height: 8 } },
   texture: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
   title: { color: '#4a321e', fontSize: 24, lineHeight: 32, fontWeight: '800', textAlign: 'center', paddingHorizontal: spacing.md },
-  pages: { width: '100%', flex: 1, marginTop: spacing.sm },
+  listenRow: { width: '100%', alignItems: 'center', paddingHorizontal: spacing.md, marginTop: spacing.xs },
+  listenButton: { minHeight: 42, maxWidth: '100%', paddingHorizontal: spacing.md, borderRadius: 22, borderWidth: 1, borderColor: 'rgba(90, 58, 32, 0.4)', backgroundColor: 'rgba(255, 248, 232, 0.68)', alignItems: 'center', justifyContent: 'center' },
+  listenButtonText: { color: '#51351f', fontSize: 14, lineHeight: 20, fontWeight: '800', textAlign: 'center' },
+  pages: { width: '100%', flex: 1, marginTop: spacing.xs },
   page: { flex: 1, justifyContent: 'flex-start', paddingHorizontal: spacing.md, paddingTop: spacing.md },
   proseList: { width: '100%', gap: 10 },
   body: { color: '#3f2b1c', fontSize: 16, lineHeight: 27, textAlign: 'left' },

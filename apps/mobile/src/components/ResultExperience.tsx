@@ -58,6 +58,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     ? presentation.chapters.map((chapter) => ({ id: chapter.id, title: chapter.title, summary: '', detail: chapter.body, introPage: chapter.id === 'MEETING' ? chapter.introPage : undefined, profilePages: chapter.id === 'MEETING' ? chapter.profilePages : undefined, crop: chapter.crop }))
     : legacyHighlights?.length ? presentChapters(legacyHighlights, sceneUri).map((chapter) => ({ id: chapter.id, title: chapter.shortTitle, summary: chapter.lead, detail: chapter.body, crop: chapter.crop }))
       : blocks.map((block, index) => ({ id: block.id, title: block.title, summary: '', detail: block.body, crop: { focusX: (index + 1) / (blocks.length + 1), focusY: 0.5, zoom: 1.55 } }));
+  const episodeReadAloudText = chapters.filter((chapter) => ['TRIAL', 'CHOICE', 'NOW'].includes(chapter.id)).map((chapter) => chapter.detail.trim()).filter(Boolean).join('\n\n');
   const selectChapter = (index: number, nextPageIndex = 0) => {
     setPosition({ chapterIndex: index, pageIndex: nextPageIndex });
     onChapterSelect?.();
@@ -67,6 +68,7 @@ export const ResultExperience = forwardRef<View, ResultExperienceProps>(function
     {chapters.length > 0 ? <>
       <CinematicChapterPager
         chapters={chapters}
+        episodeReadAloudText={episodeReadAloudText}
         imageUri={sceneUri}
         imageAlt={image.alt}
         layers={layers}
