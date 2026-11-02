@@ -96,6 +96,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/deploy.ps1 -Environm
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/deploy.ps1 -Environment prod -ConfirmProduction
 ```
 
+Cloud Run API를 변경하지 않고 Cloudflare Pages 정적 자산만 배포할 때는
+`-AssetsOnly`를 사용한다. 일반 배포와 동일하게 검사, 정적 자산 빌드, 배포 브랜치
+푸시와 Cloudflare 상태 확인을 수행하지만 Cloud Run 빌드·migration·서비스 배포와
+API 상태 확인은 실행하지 않는다.
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/deploy.ps1 -Environment dev -AssetsOnly
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/deploy.ps1 -Environment prod -AssetsOnly -ConfirmProduction
+```
+
 운영 커밋은 먼저 `origin/dev`에 존재해야 한다. 작업 트리가 더럽거나 검사, migration,
 Cloud Run 배포, API 상태 확인, Cloudflare 상태 확인 중 하나라도 실패하면 성공으로 보고하지
 않는다. 강제 푸시는 사용하지 않는다.

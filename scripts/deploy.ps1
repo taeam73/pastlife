@@ -5,6 +5,7 @@ param(
   [string]$Environment,
   [switch]$DryRun,
   [switch]$ConfirmProduction,
+  [switch]$AssetsOnly,
   [switch]$SkipChecks
 )
 
@@ -81,6 +82,11 @@ try {
   }
 
   Invoke-Native git @('push', 'origin', "HEAD:refs/heads/$Environment")
+  if ($AssetsOnly) {
+    Wait-ForUrl 'Cloudflare assets' $assetHealth
+    Write-Host "Pastlife $Environment assets-only deployment completed for commit $(& git rev-parse --short HEAD)."
+    return
+  }
   Invoke-Native powershell @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'scripts/deploy-cloud-run.ps1', '-Environment', $Environment)
   if (-not $DryRun -and $apiHealth -match 'configure-') {
     $gcloud = 'C:\Users\jyahn\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd'
