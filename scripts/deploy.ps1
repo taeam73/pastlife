@@ -47,6 +47,7 @@ $repositoryRoot = (& git rev-parse --show-toplevel 2>$null)
 if ($LASTEXITCODE -ne 0 -or -not $repositoryRoot) { throw 'Run this command inside the Pastlife Git repository.' }
 Push-Location $repositoryRoot
 try {
+  if ($Environment -eq 'dev') { $env:USE_MOCK_GOOGLE = 'true' }
   $dirty = & git status --porcelain
   if (-not $DryRun -and $dirty) { throw 'The working tree must be clean before deployment.' }
 
