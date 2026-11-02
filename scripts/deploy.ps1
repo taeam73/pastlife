@@ -61,6 +61,7 @@ try {
   }
 
   if (-not $SkipChecks) {
+    Invoke-Native corepack @('pnpm', 'exec', 'prisma', 'generate', '--schema', 'prisma/schema.prisma')
     Invoke-Native corepack @('pnpm', 'typecheck')
     Invoke-Native corepack @('pnpm', 'test')
     Invoke-Native corepack @('pnpm', 'assets:test')
