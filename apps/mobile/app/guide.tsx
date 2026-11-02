@@ -5,13 +5,15 @@ import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
 import { startNewSession } from '../src/session/start';
 import { loadPreferences, loadSession } from '../src/session/store';
+import { syncCurrentSessionLocale } from '../src/session/localeSync';
 import { colors, spacing } from '../src/theme/tokens';
-import { useTranslate } from '../src/i18n/locale';
+import { useLocale, useTranslate } from '../src/i18n/locale';
 
 const backgrounds = [
   require('../assets/branding/cinematic-start-bg.png'),
 ];
 export default function GuideScreen() {
+  const { locale } = useLocale();
   const t = useTranslate();
   const router = useRouter();
   const { width, height } = useWindowDimensions();
@@ -52,13 +54,14 @@ export default function GuideScreen() {
       try {
         const session = await loadSession();
         if (!session || session.resultId) await startNewSession(session?.resultId ? 'restart' : 'main');
+        else await syncCurrentSessionLocale(locale);
         if (active) setReady(true);
       } catch {
         if (active) setError(t('질문을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.'));
       }
     })();
     return () => { active = false; };
-  }, [buttonOpacity, retry, t]);
+  }, [buttonOpacity, locale, retry, t]);
 
   useEffect(() => {
     if (!ready) return;

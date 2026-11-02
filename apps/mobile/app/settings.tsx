@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Linking, StyleSheet, Switch, Text, View } from 'react-native';
 import { AppNav } from '../src/components/AppNav';
-import { api } from '../src/api/client';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
 import { SubpageHeader } from '../src/components/SubpageHeader';
 import {
   DEFAULT_PREFERENCES,
   loadPreferences,
-  loadSession,
   savePreferences,
-  saveSession,
   type Preferences,
 } from '../src/session/store';
+import { syncCurrentSessionLocale } from '../src/session/localeSync';
 import { colors, spacing } from '../src/theme/tokens';
 import { adPrivacyOptionsRequired, showAdPrivacyOptions } from '../src/ads/admob';
 import { localeText, useLocale, useTranslate } from '../src/i18n/locale';
@@ -43,12 +41,8 @@ export default function SettingsScreen() {
     setChangingLanguage(true);
     setLanguageError(false);
     try {
-      const session = await loadSession();
-      if (session) {
-        await api.setSessionLocale(session.sessionId, next);
-        await saveSession({ ...session, locale: next });
-      }
       await setLocale(next);
+      void syncCurrentSessionLocale(next).catch(() => undefined);
     } catch {
       setLanguageError(true);
     } finally {
@@ -60,7 +54,7 @@ export default function SettingsScreen() {
     <SubpageHeader title={t('설정')} />
     <Text style={styles.sectionTitle}>{t('언어')}</Text>
     <View style={styles.languageRow}>{selectableContentLocales(process.env.NODE_ENV === 'production').map((choice) => <PrimaryButton key={choice} disabled={changingLanguage} onPress={() => void changeLanguage(choice)}>{locale === choice ? '✓ ' : ''}{t(contentLocales[choice].uiNameKey)}{!isContentLocaleAvailable(choice, true) ? ` (${t('미리보기')})` : ''}</PrimaryButton>)}</View>
-    {languageError ? <Text accessibilityRole="alert" style={styles.languageError}>{localeText(locale, { ko: '언어를 변경하지 못했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.', en: 'Could not change the language. Check your connection and try again.', th: 'เปลี่ยนภาษาไม่ได้ โปรดตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง', ja: '言語を変更できませんでした。通信状態を確認して、もう一度お試しください。' })}</Text> : null}
+    {languageError ? <Text accessibilityRole="alert" style={styles.languageError}>{localeText(locale, { ko: '언어 설정을 저장하지 못했습니다. 다시 시도해 주세요.', en: 'Could not save the language setting. Please try again.', th: 'บันทึกการตั้งค่าภาษาไม่ได้ โปรดลองอีกครั้ง', ja: '言語設定を保存できませんでした。もう一度お試しください。' })}</Text> : null}
     <Setting label={t('배경 음악')} value={preferences.bgmEnabled} onChange={(value) => change('bgmEnabled', value)} />
     <Setting label={t('효과음')} value={preferences.effectsEnabled} onChange={(value) => change('effectsEnabled', value)} />
     <Setting label={t('동작 줄이기')} value={preferences.reduceMotion} onChange={(value) => change('reduceMotion', value)} />
