@@ -1,7 +1,7 @@
 import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { AD_PROVIDER, type AdProvider } from '../providers/ad.provider.js';
 import { ASSESSMENT_REPOSITORY, type AssessmentRepository } from '../repositories/assessment.repository.js';
-import { createAdChallenge, verifyAdMobCallback, type AdMobKey } from './admob-ssv.js';
+import { createAdChallenge, isAdMobVerificationProbe, verifyAdMobCallback, verifyAdMobSignature, type AdMobKey } from './admob-ssv.js';
 import { resolveAdsRuntimeConfig } from '../config/ads.js';
 
 @Injectable()
@@ -47,6 +47,12 @@ export class AdsService {
     if (!adUnit) throw new ServiceUnavailableException({ code: 'AD_NOT_CONFIGURED', message: 'AdMob rewarded unit is not configured' });
     const keyId = new URLSearchParams(rawQuery).get('key_id');
     const keys = await this.publicKeys(keyId);
+    try {
+      const params = verifyAdMobSignature({ rawQuery, keys });
+      if (isAdMobVerificationProbe(params)) return { verified: true, test: true };
+    } catch {
+      throw new ForbiddenException({ code: 'AD_NOT_VERIFIED', message: 'Invalid AdMob callback' });
+    }
     let event: ReturnType<typeof verifyAdMobCallback>;
     try {
       event = verifyAdMobCallback({ rawQuery, keys, secret: process.env.JWT_SECRET ?? 'dev-secret', expectedAdUnitId: adUnit });

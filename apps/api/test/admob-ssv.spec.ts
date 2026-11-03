@@ -1,6 +1,6 @@
 import { createPrivateKey, generateKeyPairSync, sign } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { createAdChallenge, verifyAdMobCallback } from '../src/ads/admob-ssv.js';
+import { createAdChallenge, isAdMobVerificationProbe, verifyAdMobCallback, verifyAdMobSignature } from '../src/ads/admob-ssv.js';
 
 const now = Date.parse('2026-10-27T08:00:00Z');
 const secret = 'an-isolated-ssv-test-secret-with-more-than-32-characters';
@@ -25,6 +25,14 @@ function callback(overrides: Record<string, string> = {}) {
   return `${signedPart}&signature=${signature}&key_id=1234`;
 }
 
+function verificationProbe(overrides: Record<string, string> = {}) {
+  return callback({
+    ad_unit: '1234567890',
+    transaction_id: '123456789',
+    ...overrides,
+  });
+}
+
 describe('AdMob rewarded SSV', () => {
   it('accepts a signed, current reward bound to a session and slot', () => {
     expect(verifyAdMobCallback({ rawQuery: callback(), keys, secret, expectedAdUnitId: adUnitId, now })).toEqual({
@@ -45,5 +53,12 @@ describe('AdMob rewarded SSV', () => {
   it('rejects a forged challenge even when the callback has a valid AdMob signature', () => {
     const forged = createAdChallenge('session-b', 2, 'wrong-secret', now);
     expect(() => verifyAdMobCallback({ rawQuery: callback({ custom_data: forged }), keys, secret, expectedAdUnitId: adUnitId, now })).toThrow('Invalid ad challenge');
+  });
+
+  it('accepts only the signed AdMob console verification probe without granting a reward', () => {
+    const params = verifyAdMobSignature({ rawQuery: verificationProbe(), keys });
+    expect(isAdMobVerificationProbe(params)).toBe(true);
+    expect(isAdMobVerificationProbe(verifyAdMobSignature({ rawQuery: verificationProbe({ transaction_id: 'other' }), keys }))).toBe(false);
+    expect(() => verifyAdMobSignature({ rawQuery: verificationProbe().replace('reward_amount=1', 'reward_amount=9'), keys })).toThrow();
   });
 });
