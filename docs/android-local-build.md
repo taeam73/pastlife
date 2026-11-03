@@ -29,3 +29,26 @@ cd E:\Project_taeam\pastlife\pastlife
 ```
 
 기기를 연결하지 않았다면 APK 파일을 휴대폰으로 옮겨 직접 설치할 수 있다. 이 빌드의 서명·버전은 PC에서 검증했으며, 휴대폰 실기기 동작은 별도로 확인해야 한다.
+
+## AdMob 운영 후보 APK
+
+운영 광고 ID로 실제 요청 경로를 확인할 때는 일반 preview APK 대신 별도 후보 빌드를 사용한다. 이 빌드는 등록된 테스트 기기 해시가 없으면 시작 전에 중단하며, 광고 화면에는 반드시 `Test Ad` 표시가 보여야 한다. 광고 소재는 절대 클릭하지 않는다.
+
+다음 사용자 환경 변수를 먼저 설정한다. 값은 저장소나 문서에 기록하지 않는다.
+
+- `PASTLIFE_PROD_API_URL`: 운영 HTTPS API의 `/api/v1` 주소
+- `PASTLIFE_PROD_ADMOB_APP_ID`: 운영 AdMob 앱 ID
+- `PASTLIFE_PROD_ADMOB_INTERSTITIAL_UNIT_ID`: 운영 전면 광고 단위 ID
+- `PASTLIFE_PROD_ADMOB_REWARDED_UNIT_ID`: 운영 보상형 광고 단위 ID
+- `PASTLIFE_ADMOB_TEST_DEVICE_IDS`: AdMob SDK 로그에서 확인해 등록한 테스트 기기 해시(여러 개면 쉼표 구분)
+
+앱 및 콘텐츠 변경을 먼저 커밋한 뒤 실행한다.
+
+```powershell
+corepack pnpm admob:candidate:test
+.\scripts\build-android-admob-candidate-local.ps1
+```
+
+완료 파일: `output\pastlife-admob-candidate-<version>-build<versionCode>.apk`
+
+이 APK는 직접 설치하는 QA 전용 파일이다. Play Console 제출에는 APK가 아니라 별도의 AAB를 사용한다.
