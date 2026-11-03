@@ -52,3 +52,17 @@ corepack pnpm admob:candidate:test
 완료 파일: `output\pastlife-admob-candidate-<version>-build<versionCode>.apk`
 
 이 APK는 직접 설치하는 QA 전용 파일이다. Play Console 제출에는 APK가 아니라 별도의 AAB를 사용한다.
+
+## Google Play 정식 출시 AAB
+
+정식 출시용 AAB는 개발 API와 Google 테스트 광고를 사용하는 내부 테스트 빌드와 완전히 분리한다. 위의 운영 API 및 운영 AdMob 환경 변수 네 개가 모두 설정된 상태에서 실행한다. 테스트 광고 플래그나 테스트 기기 ID가 남아 있으면 스크립트가 제거하며, Google 데모 광고 ID가 들어오면 빌드를 중단한다.
+
+먼저 같은 Git 커밋으로 `build-android-local.ps1`을 한 번 실행해 짧은 빌드 경로를 준비한 뒤 정식 AAB를 만든다. 정식 빌드 단계에서 운영 AdMob 앱 ID가 Android 설정에 반영되도록 네이티브 프로젝트를 다시 생성한다.
+
+```powershell
+.\scripts\build-android-play-production-local.ps1
+```
+
+완료 파일: `output\pastlife-play-production-<version>-build<versionCode>.aab`
+
+`build-android-play-internal-local.ps1`은 계속 개발 API와 Google 테스트 광고만 사용하며 내부 테스트 트랙에만 올린다. 정식 AAB는 운영 API, 운영 자산 CDN, 운영 AdMob ID를 사용한다.

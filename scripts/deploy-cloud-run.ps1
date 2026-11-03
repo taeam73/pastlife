@@ -124,6 +124,7 @@ $baseEnvironment = if ($Environment -eq 'dev') {
   if ($rewardedUnitId -notmatch '^ca-app-pub-\d{16}/\d+$') { throw 'Set a valid PASTLIFE_PROD_ADMOB_REWARDED_UNIT_ID before production deployment.' }
   "NODE_ENV=production,USE_IN_MEMORY_DB=false,USE_MOCK_GOOGLE=false,CONTENT_VERSION=3.0.0,GOOGLE_CLIENT_IDS=$googleClientIds,ADMOB_REWARDED_UNIT_ID=$rewardedUnitId"
 }
+$minInstances = if ($Environment -eq 'prod') { '1' } else { '0' }
 
 Invoke-Gcloud @(
   'run', 'jobs', 'deploy', $migrationJob,
@@ -138,7 +139,7 @@ Invoke-Gcloud @(
   'run', 'deploy', $service,
   "--project=$project", "--region=$region", "--image=$image", '--platform=managed',
   '--allow-unauthenticated', '--port=8080', '--cpu=1', '--memory=1Gi',
-  '--min-instances=0', '--max-instances=3', '--concurrency=40',
+  "--min-instances=$minInstances", '--max-instances=3', '--concurrency=40',
   "--service-account=$runtimeServiceAccount",
   "--set-secrets=$secretBindings", "--set-env-vars=$baseEnvironment",
   '--quiet'

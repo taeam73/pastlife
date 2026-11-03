@@ -2,7 +2,9 @@ param(
     [string]$ShortBuildRoot = 'E:\p',
     [string]$ToolchainRoot = 'E:\AndroidToolchain',
     [string]$CredentialsFile = 'E:\AndroidToolchain\signing\eas-credentials.json',
-    [string]$KeystoreFile = 'E:\AndroidToolchain\signing\pastlife-eas-downloaded.jks'
+    [string]$KeystoreFile = 'E:\AndroidToolchain\signing\pastlife-eas-downloaded.jks',
+    [ValidateSet('internal', 'production')]
+    [string]$BuildTarget = 'internal'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -29,13 +31,51 @@ $env:TEMP = Join-Path $ToolchainRoot 'tmp'
 $env:TMP = $env:TEMP
 $env:JAVA_TOOL_OPTIONS = "-Djava.io.tmpdir=$env:TEMP"
 $env:Path = "$(Join-Path $jdk 'bin');$env:Path"
-$env:EAS_BUILD_PROFILE = 'play-internal'
-$env:EXPO_PUBLIC_API_URL = 'https://pastlife-api-dev-36h6kgjkxq-du.a.run.app/api/v1'
-$env:EXPO_PUBLIC_ASSET_BASE_URL = 'https://dev.pastlife-assets.pages.dev'
-$env:EXPO_PUBLIC_ADMOB_TEST_ADS = 'true'
-$env:EXPO_PUBLIC_ADMOB_APP_ID = 'ca-app-pub-3940256099942544~3347511713'
-$env:EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID = 'ca-app-pub-3940256099942544/1033173712'
-$env:EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID = 'ca-app-pub-3940256099942544/5224354917'
+if ($BuildTarget -eq 'production') {
+    function Get-RequiredUserVariable([string]$Name) {
+        $value = [Environment]::GetEnvironmentVariable($Name, 'User')
+        if ([string]::IsNullOrWhiteSpace($value)) { throw "Required user environment variable is missing: $Name" }
+        return $value.Trim()
+    }
+    $apiUrl = Get-RequiredUserVariable 'PASTLIFE_PROD_API_URL'
+    $adMobAppId = Get-RequiredUserVariable 'PASTLIFE_PROD_ADMOB_APP_ID'
+    $interstitialId = Get-RequiredUserVariable 'PASTLIFE_PROD_ADMOB_INTERSTITIAL_UNIT_ID'
+    $rewardedId = Get-RequiredUserVariable 'PASTLIFE_PROD_ADMOB_REWARDED_UNIT_ID'
+    if ($apiUrl -notmatch '^https://.+/api/v1/?$') { throw 'PASTLIFE_PROD_API_URL must be an HTTPS /api/v1 URL.' }
+    if ($adMobAppId -notmatch '^ca-app-pub-\d+~\d+$' -or
+        $interstitialId -notmatch '^ca-app-pub-\d+/\d+$' -or
+        $rewardedId -notmatch '^ca-app-pub-\d+/\d+$') {
+        throw 'Production AdMob app and unit IDs are malformed.'
+    }
+    if ($adMobAppId.StartsWith('ca-app-pub-3940256099942544') -or
+        $interstitialId.StartsWith('ca-app-pub-3940256099942544') -or
+        $rewardedId.StartsWith('ca-app-pub-3940256099942544')) {
+        throw 'Google demo AdMob IDs are not allowed in a production build.'
+    }
+    $env:EAS_BUILD_PROFILE = 'production'
+    $env:EXPO_PUBLIC_API_URL = $apiUrl.TrimEnd('/')
+    $env:EXPO_PUBLIC_ASSET_BASE_URL = 'https://pastlife-assets.pages.dev'
+    $env:EXPO_PUBLIC_ADMOB_APP_ID = $adMobAppId
+    $env:EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID = $interstitialId
+    $env:EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID = $rewardedId
+    Remove-Item Env:EXPO_PUBLIC_ADMOB_TEST_ADS,Env:EXPO_PUBLIC_ADMOB_TEST_DEVICE_IDS -ErrorAction SilentlyContinue
+} else {
+    $env:EAS_BUILD_PROFILE = 'play-internal'
+    $env:EXPO_PUBLIC_API_URL = 'https://pastlife-api-dev-36h6kgjkxq-du.a.run.app/api/v1'
+    $env:EXPO_PUBLIC_ASSET_BASE_URL = 'https://dev.pastlife-assets.pages.dev'
+    $env:EXPO_PUBLIC_ADMOB_TEST_ADS = 'true'
+    $env:EXPO_PUBLIC_ADMOB_APP_ID = 'ca-app-pub-3940256099942544~3347511713'
+    $env:EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID = 'ca-app-pub-3940256099942544/1033173712'
+    $env:EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID = 'ca-app-pub-3940256099942544/5224354917'
+}
+
+if ($BuildTarget -eq 'production') {
+    Push-Location $mobileRoot
+    try {
+        & corepack pnpm exec expo prebuild --platform android --no-install
+        if ($LASTEXITCODE -ne 0) { throw 'Expo production prebuild failed.' }
+    } finally { Pop-Location }
+}
 
 $config = Get-Content $CredentialsFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $key = $config.android.keystore
@@ -79,12 +119,17 @@ try {
     $app = Get-Content (Join-Path $mobileRoot 'app.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $outDir = Join-Path $repoRoot 'output'
     New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-    $output = Join-Path $outDir "pastlife-play-internal-$($app.expo.version)-build$($app.expo.android.versionCode).aab"
+    $artifactName = if ($BuildTarget -eq 'production') { 'pastlife-play-production' } else { 'pastlife-play-internal' }
+    $output = Join-Path $outDir "$artifactName-$($app.expo.version)-build$($app.expo.android.versionCode).aab"
     Copy-Item -LiteralPath $sourceBundle -Destination $output -Force
     & (Join-Path $jdk 'bin\jarsigner.exe') -verify $output
     if ($LASTEXITCODE -ne 0) { throw 'App Bundle signature verification failed.' }
     Write-Output "AAB: $output"
-    Write-Output 'Track: Play Console internal testing only (development API and Google test ads).'
+    if ($BuildTarget -eq 'production') {
+        Write-Output 'Track: Play Console production release (production API and live AdMob IDs).'
+    } else {
+        Write-Output 'Track: Play Console internal testing only (development API and Google test ads).'
+    }
 } finally {
     Remove-Item Env:PASTLIFE_UPLOAD_STORE_FILE,Env:PASTLIFE_UPLOAD_STORE_PASSWORD,Env:PASTLIFE_UPLOAD_KEY_ALIAS,Env:PASTLIFE_UPLOAD_KEY_PASSWORD -ErrorAction SilentlyContinue
 }
