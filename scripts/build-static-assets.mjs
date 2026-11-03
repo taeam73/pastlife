@@ -26,7 +26,8 @@ export async function buildStaticAssets({
   await cp(source, path.join(output, 'assets'), { recursive: true });
   await mkdir(path.join(output, 'privacy'), { recursive: true });
   await cp(path.join(repositoryRoot, 'scripts/static-pages/privacy/index.html'), path.join(output, 'privacy/index.html'));
-  await cp(path.join(repositoryRoot, 'scripts/static-pages/app-ads.txt'), path.join(output, 'app-ads.txt'));
+  const sellerRecord = await readFile(path.join(repositoryRoot, 'scripts/static-pages/app-ads.txt'), 'utf8');
+  await writeFile(path.join(output, 'app-ads.txt'), `${sellerRecord.trimEnd()}\n`);
 
   const files = await walk(source);
   const assets = {};
