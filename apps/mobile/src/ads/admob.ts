@@ -9,6 +9,8 @@ import mobileAds, {
   TestIds,
 } from 'react-native-google-mobile-ads';
 
+import { parseTestDeviceIds } from './config';
+
 let initialization: Promise<void> | undefined;
 const useDemoUnits = __DEV__ || process.env.EXPO_PUBLIC_ADMOB_TEST_ADS === 'true';
 
@@ -16,7 +18,10 @@ async function initializeAds() {
   initialization ??= (async () => {
     const consent = await AdsConsent.gatherConsent();
     if (!consent.canRequestAds) throw new Error('Ads are unavailable without consent');
-    await mobileAds().setRequestConfiguration({ maxAdContentRating: MaxAdContentRating.T });
+    await mobileAds().setRequestConfiguration({
+      maxAdContentRating: MaxAdContentRating.T,
+      testDeviceIdentifiers: parseTestDeviceIds(process.env.EXPO_PUBLIC_ADMOB_TEST_DEVICE_IDS),
+    });
     await mobileAds().initialize();
   })().catch((error: unknown) => { initialization = undefined; throw error; });
   await initialization;

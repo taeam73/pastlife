@@ -4,11 +4,20 @@ const androidPackage = process.env.EXPO_PUBLIC_ANDROID_PACKAGE || 'com.pastlife.
 const appLinkHost = process.env.EXPO_PUBLIC_APP_LINK_HOST;
 const demoAdMobAppId = 'ca-app-pub-3940256099942544~3347511713';
 const adMobAppId = process.env.EXPO_PUBLIC_ADMOB_APP_ID || demoAdMobAppId;
+const buildProfile = process.env.EAS_BUILD_PROFILE;
+const testDeviceIds = (process.env.EXPO_PUBLIC_ADMOB_TEST_DEVICE_IDS || '')
+  .split(',')
+  .map((value) => value.trim())
+  .filter(Boolean);
 
-if (process.env.EAS_BUILD_PROFILE === 'production' &&
+if ((buildProfile === 'production' || buildProfile === 'production-candidate') &&
     (adMobAppId === demoAdMobAppId || !process.env.EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID ||
       !process.env.EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID || process.env.EXPO_PUBLIC_ADMOB_TEST_ADS === 'true')) {
-  throw new Error('Production Android build requires live AdMob app and unit IDs');
+  throw new Error(`${buildProfile} Android build requires live AdMob app and unit IDs`);
+}
+
+if (buildProfile === 'production-candidate' && testDeviceIds.length === 0) {
+  throw new Error('Production-candidate Android build requires at least one registered AdMob test device');
 }
 
 module.exports = {
