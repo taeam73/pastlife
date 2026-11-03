@@ -21,7 +21,13 @@ export function verifyAdMobSignature(input: {
   const keyIdText = rawQuery.slice(keyAt + keyMarker.length);
   if (!/^[A-Za-z0-9_-]+$/u.test(signatureText) || !/^\d+$/u.test(keyIdText)) throw new Error('Invalid callback signature fields');
   const key = keys.find((candidate) => candidate.keyId === Number(keyIdText));
-  if (!key || !verify('sha256', Buffer.from(signedPart, 'utf8'), key.pem, Buffer.from(signatureText, 'base64url'))) {
+  let decodedSignedPart: string;
+  try {
+    decodedSignedPart = decodeURIComponent(signedPart.replace(/\+/gu, ' '));
+  } catch {
+    throw new Error('Invalid callback encoding');
+  }
+  if (!key || !verify('sha256', Buffer.from(decodedSignedPart, 'utf8'), key.pem, Buffer.from(signatureText, 'base64url'))) {
     throw new Error('Unverified AdMob callback');
   }
   return new URLSearchParams(signedPart);

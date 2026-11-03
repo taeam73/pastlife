@@ -15,13 +15,13 @@ function callback(overrides: Record<string, string> = {}) {
     ad_unit: '9876543210',
     custom_data: createAdChallenge('session-a', 2, secret, now),
     reward_amount: '1',
-    reward_item: 'final_moment',
+    reward_item: '마지막 순간',
     timestamp: String(now),
     transaction_id: 'abcdef0123456789abcdef0123456789',
     ...overrides,
   });
   const signedPart = params.toString();
-  const signature = sign('sha256', Buffer.from(signedPart), privateKey).toString('base64url');
+  const signature = sign('sha256', Buffer.from(decodeURIComponent(signedPart.replace(/\+/gu, ' '))), privateKey).toString('base64url');
   return `${signedPart}&signature=${signature}&key_id=1234`;
 }
 
