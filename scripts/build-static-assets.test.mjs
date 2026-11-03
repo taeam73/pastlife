@@ -23,6 +23,11 @@ test('builds a deterministic Cloudflare Pages asset directory', async () => {
     });
     assert.match(await readFile(path.join(output, '_headers'), 'utf8'), /max-age=31536000, immutable/u);
     assert.match(await readFile(path.join(output, 'privacy', 'index.html'), 'utf8'), /gysoft@gimmyoung\.com/u);
+    assert.equal(
+      await readFile(path.join(output, 'app-ads.txt'), 'utf8'),
+      'google.com, pub-4438190626695994, DIRECT, f08c47fec0942fa0\n',
+    );
+    assert.match(await readFile(path.join(output, '_headers'), 'utf8'), /\/app-ads\.txt[\s\S]*text\/plain/u);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

@@ -10,6 +10,13 @@
 4. 운영 AAB에는 실제 `EXPO_PUBLIC_ADMOB_APP_ID`, `EXPO_PUBLIC_ADMOB_INTERSTITIAL_UNIT_ID`, `EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID`를 설정한다. 운영 서버는 클라이언트의 가짜 광고 완료 요청을 거부한다.
 5. Play 내부 테스트에서 여섯 번째 답변→화면 전환 광고→기본 결과, 보상형 광고 완료→마지막 순간, 조기 닫기·광고 없음·SSV 지연·재시도·앱 재시작을 실제 Android 기기에서 확인한다. AdMob 앱 검토 및 `app-ads.txt`, Play Console 광고/대상 연령 신고가 끝나기 전에는 실광고 수익을 출시 완료로 세지 않는다.
 
+### AdMob 판매자 파일과 Play 연결
+
+- 정적 자산 배포에는 `app-ads.txt`가 사이트 루트에 포함된다. 운영 주소는 `https://pastlife-assets.pages.dev/app-ads.txt`이며 AdMob 게시자 ID `pub-4438190626695994`만 선언한다.
+- Play Console의 개발자 웹사이트는 `https://pastlife-assets.pages.dev`로 등록한다. 개인정보처리방침 주소는 기존 `https://pastlife-assets.pages.dev/privacy/`를 유지한다.
+- 앱이 Google Play 프로덕션에 공개되어 검색 가능한 상태가 된 뒤 AdMob에서 스토어 등록정보를 연결하고 `app-ads.txt` 확인을 다시 실행한다. 비공개 테스트 중에는 스토어 검색과 최종 확인이 완료되지 않을 수 있다.
+- 판매자 파일이 바뀌면 `corepack pnpm assets:test`와 `corepack pnpm assets:build`를 통과시킨 뒤 정적 자산을 배포하고, 공개 URL의 본문과 `Content-Type: text/plain`을 확인한다.
+
 
 Neon을 사용하는 경우 Docker/PostgreSQL 없이도 API DB를 실행할 수 있습니다. Neon Dashboard의 Connect 메뉴에서 pooled URL을 복사하고, migration 시에는 direct(non-pooler) URL을 사용합니다. Neon은 pooled URL을 애플리케이션 연결에, direct URL을 migration 같은 세션 의존 작업에 권장합니다. [Neon connection pooling 문서](https://neon.com/docs/connect/connection-pooling)
 
