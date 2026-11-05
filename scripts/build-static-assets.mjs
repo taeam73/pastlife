@@ -26,6 +26,8 @@ export async function buildStaticAssets({
   await cp(source, path.join(output, 'assets'), { recursive: true });
   await mkdir(path.join(output, 'privacy'), { recursive: true });
   await cp(path.join(repositoryRoot, 'scripts/static-pages/privacy/index.html'), path.join(output, 'privacy/index.html'));
+  await mkdir(path.join(output, 'terms'), { recursive: true });
+  await cp(path.join(repositoryRoot, 'scripts/static-pages/terms/index.html'), path.join(output, 'terms/index.html'));
   const sellerRecord = await readFile(path.join(repositoryRoot, 'scripts/static-pages/app-ads.txt'), 'utf8');
   await writeFile(path.join(output, 'app-ads.txt'), `${sellerRecord.trimEnd()}\n`);
 
@@ -61,6 +63,9 @@ export async function buildStaticAssets({
     '  Cache-Control: no-store',
     '',
     '/privacy/*',
+    '  Cache-Control: public, max-age=300',
+    '',
+    '/terms/*',
     '  Cache-Control: public, max-age=300',
     '',
     '/app-ads.txt',
